@@ -2,8 +2,8 @@
 function getDatabaseConnection() {
     $host = 'localhost';
     $db = 'umt096nh_jimpitan';
-    $user = 'dafm5634_ag';
-    $pass = 'Ag7us777__';
+    $user = 'umt096nh_admin';
+    $pass = 'A7biy777__';
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
