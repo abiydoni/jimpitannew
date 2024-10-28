@@ -1,7 +1,7 @@
 <?php
 function getDatabaseConnection() {
     $host = 'localhost';
-    $db = 'dafm5634_jimpitan';
+    $db = 'umt096nh_jimpitan';
     $user = 'dafm5634_ag';
     $pass = 'Ag7us777__';
     $charset = 'utf8mb4';
