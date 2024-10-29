@@ -30,7 +30,7 @@ if (isset($_POST['tanggal'])) {
 date_default_timezone_set('Asia/Jakarta');
 
 // Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
-$tanggalSekarang = date("Y-m-d");
+$tanggalSekarang = date("d/m/Y");
 ?>
 
 <!DOCTYPE html>
