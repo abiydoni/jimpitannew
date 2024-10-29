@@ -37,7 +37,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Query untuk menghitung jumlah data
 $sql = "SELECT COUNT(*) AS total FROM master_kk";
 $result = $pdo->query($sql);
-
+$result->execute();
 // Ambil hasil query
 $row = $result->fetch_assoc();
 $jumlahData = $row['total'];
