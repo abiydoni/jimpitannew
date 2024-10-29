@@ -34,6 +34,14 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Query untuk menghitung jumlah data
+$sql = "SELECT COUNT(*) AS total FROM master_kk";
+$result = $pdo->query($sql);
+
+// Ambil hasil query
+$row = $result->fetch_assoc();
+$jumlahData = $row['total'];
+
 ?>
 
 
@@ -110,7 +118,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta">0</h3>
+                        <h3 id="totalPeserta"><?php echo $jumlahData?></h3>
                         <p>Total KK</p>
                     </span>
                 </li>
