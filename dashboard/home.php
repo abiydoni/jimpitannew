@@ -43,7 +43,7 @@ $row = $result->fetch_assoc();
 $jumlahData = $row['total'];
 
 // Tutup koneksi
-$conn->close();
+//$conn->close();
 
 
 ?>
