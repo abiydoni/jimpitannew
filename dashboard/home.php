@@ -122,7 +122,7 @@ $jumlahData = $row['total'];
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><?php echo $jumlahData;?></h3>
+                        <h3 id="total"><?php echo $jumlahData; ?></h3>
                         <p>Total KK</p>
                     </span>
                 </li>
