@@ -130,26 +130,21 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody id="table-body">
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
-                                        <td>
-                                            <input type="checkbox" class="print-checkbox">    
-                                        </td>
-                                    </tr>
-                                <?php endforeach; 
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
-                            <div class="mt-4">
-                                <p class="text-lg font-semibold">
-                                Jumlah Data KK: <span id="jumlah-data">0</span>
-                                </p>
-                            </div>
+                            <?php
+                                if ($data) {
+                                    foreach ($data as $row): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
+                                            <td>
+                                                <input type="checkbox" class="print-checkbox">    
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; 
+                                } else {
+                                    echo '<tr><td colspan="3">No data available</td></tr>';
+                                }
+                            ?>
                             <script>
                                 // JavaScript untuk menghitung jumlah baris dalam tabel
                                 function hitungJumlahData() {
