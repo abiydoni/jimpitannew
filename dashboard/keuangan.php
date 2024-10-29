@@ -177,7 +177,7 @@ $tanggalSekarang = date("d/m/Y");
                     </div>
                     <div class="mb-4">
                         <label for="kode" class="block text-sm font-medium">Kode</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" readonly>
+                        <input value="disabled" type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" readonly>
                     </div>
                     <div class="mb-4" id="debitBox" style="display: none;">
                         <label for="debitTextbox" class="block text-sm font-medium">Debit</label>
