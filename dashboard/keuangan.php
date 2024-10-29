@@ -30,7 +30,7 @@ if (isset($_POST['tanggal'])) {
 date_default_timezone_set('Asia/Jakarta');
 
 // Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
-$tanggalSekarang = date("d/m/Y");
+$tanggalSekarang = date("d-m-Y");
 ?>
 
 <!DOCTYPE html>
@@ -177,7 +177,7 @@ $tanggalSekarang = date("d/m/Y");
                     </div>
                     <div class="mb-4">
                         <label for="kode" class="block text-sm font-medium">Kode</label>
-                        <input value="disabled" type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" readonly>
+                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" readonly>
                     </div>
                     <div class="mb-4" id="debitBox" style="display: none;">
                         <label for="debitTextbox" class="block text-sm font-medium">Debit</label>
@@ -253,7 +253,7 @@ $tanggalSekarang = date("d/m/Y");
 
         // Date picker initialization
         flatpickr("#datePicker", {
-            dateFormat: "Y-m-d",
+            dateFormat: "d-m-Y",
             onChange: function(selectedDates, dateStr) {
                 filterTableByDate(dateStr);
             }
@@ -295,7 +295,7 @@ $tanggalSekarang = date("d/m/Y");
 
         // Date picker initialization
         flatpickr("#modalDatePicker", {
-            dateFormat: "Y-m-d"
+            dateFormat: "d-m-Y"
         });
 
         // Handle form submission
@@ -353,7 +353,7 @@ $tanggalSekarang = date("d/m/Y");
             if (selectedValue === "IN") { // For Debit IN
                 baseCode = "100-000-"; // Base code for debit
             } else if (selectedValue === "OUT") { // For Kredit OUT
-                baseCode = "100-100-"; // Base code for kredit
+                baseCode = "100-000-"; // Base code for kredit
             } else {
                 return ''; // Return empty if no valid option is selected
             }
