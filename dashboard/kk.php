@@ -138,7 +138,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                             <div class="mt-4">
                                 <p class="text-lg font-semibold">
-                                Jumlah Data: <span id="jumlah-data">0</span>
+                                Jumlah Data KK: <span id="jumlah-data">0</span>
                                 </p>
                             </div>
                             <script>
