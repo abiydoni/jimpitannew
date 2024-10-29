@@ -123,34 +123,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <i class='bx bxs-file-export'></i> Unduh
                             </button>
                     </div>
-                    <!-- <table id="example" class="display" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Nama KK</th>
-                                <th>Code</th>
-                                <th>Tanggal</th>
-                                <th>Nominal</th>
-                                <th>Input By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                if ($data) {
-                                    foreach ($data as $row): ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["report_id"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["collector"]); ?></td>
-                                        </tr>
-                                    <?php endforeach; 
-                                } else {
-                                    echo '<tr><td colspan="5" class="px-6 py-4 text-center">No data available</td></tr>';
-                                }
-                            ?>
-                        </tbody>
-                    </table> -->
                     <div class="m-4"> <!-- Margin di sekitar tabel -->
                     <table id="example" class="display" style="width:100%">
                         <thead>
