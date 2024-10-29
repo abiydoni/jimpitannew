@@ -162,16 +162,16 @@ if (isset($_POST['tanggal'])) {
                         <input type="text" id="modalDatePicker" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Pilih Tanggal" name="tanggal" required>
                     </div>
                     <div class="mb-4">
-                        <label for="kode" class="block text-sm font-medium">Kode</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" required>
-                    </div>
-                    <div class="mb-4">
                         <label for="dropdown" class="block text-sm font-medium">Reff</label>
                         <select id="dropdown" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" required>
                             <option value="" disabled selected>-- Pilih Opsi --</option>
                             <option value="IN">Debet</option>
                             <option value="OUT">Kredit</option>
                         </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="kode" class="block text-sm font-medium">Kode</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 disabled" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" required>
                     </div>
                     <div class="mb-4" id="debitBox" style="display: none;">
                         <label for="debitTextbox" class="block text-sm font-medium">Debit</label>
