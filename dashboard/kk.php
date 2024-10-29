@@ -59,7 +59,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <li class="active"><a href="#"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
             <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
             <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
-            <li><a href="buku_kas.php"><i class='bx bxs-badge-check'></i><span class="text">Buku Kas</span></a></li>
         </ul>
         <ul class="side-menu">
             <li><a href="setting.php"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
