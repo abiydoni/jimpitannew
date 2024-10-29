@@ -165,7 +165,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th style="text-align: center;">Input By</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
+                        <tbody>
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
@@ -181,24 +181,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     echo '<tr><td colspan="5" class="px-6 py-4 text-center">No data available</td></tr>';
                                 }
                             ?>
-                            <div class="mt-4">
-                                <p class="text-lg font-semibold">
-                                Jumlah Data: <span id="jumlah-data">0</span>
-                                </p>
-                            </div>
-                            <script>
-                                // JavaScript untuk menghitung jumlah baris dalam tabel
-                                function hitungJumlahData() {
-                                    const tableBody = document.getElementById('table-body');
-                                    const jumlahData = tableBody.getElementsByTagName('tr').length;
-
-                                    // Tampilkan jumlah data ke elemen HTML
-                                    document.getElementById('jumlah-data').innerText = jumlahData;
-                                }
-
-                                // Panggil fungsi hitung saat halaman selesai dimuat
-                                document.addEventListener('DOMContentLoaded', hitungJumlahData);
-                            </script>
                         </tbody>
                     </table>
                     </div>
