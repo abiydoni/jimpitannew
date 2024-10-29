@@ -100,6 +100,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
+            <ul class="box-info">
+                <li>
+                    <i class='bx bxs-group bx-lg' ></i>
+                    <span class="text">
+                        <h3 id="totalPeserta">0</h3>
+                        <p>Total KK</p>
+                    </span>
+                </li>
+            </ul>
 
             <div class="table-data">
                 <div class="order">
