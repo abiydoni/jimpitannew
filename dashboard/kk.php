@@ -104,7 +104,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta">0</h3>
+                        <h3 id="totalPeserta"><span id="jumlah-data">0</span></h3>
                         <p>Total KK</p>
                     </span>
                 </li>
