@@ -155,10 +155,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </tbody>
                     </table> -->
                     <div class="m-4"> <!-- Margin di sekitar tabel -->
-                    <table id="dataTable" class="display" style="width:100%">
+                    <table id="example" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th style="text-align: Left;">NO</th> <!-- Kolom pertama rata kiri -->
                                 <th style="text-align: Left;">Nama KK</th> <!-- Kolom pertama rata kiri -->
                                 <th style="text-align: center;">Code</th>
                                 <th style="text-align: center;" id="sort-date">Tanggal</th>
@@ -166,12 +165,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th style="text-align: center;">Input By</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
+                        <tbody>
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
                                         <tr>
-                                            <td></td> <!-- Rata kiri -->
                                             <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> <!-- Rata kiri -->
                                             <td><?php echo htmlspecialchars($row["report_id"]); ?></td> <!-- Rata tengah -->
                                             <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
@@ -273,17 +271,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
       // Update simbol panah untuk indikasi sorting
       sortDateButton.querySelector('span').innerHTML = ascending ? '&#9660;' : '&#9650;';
     });
-
-
-    // JavaScript untuk menambahkan nomor urut ke setiap baris
-    const tableBody = document.getElementById('tableBody');
-    const rows = tableBody.getElementsByTagName('tr');
-
-    for (let i = 0; i < rows.length; i++) {
-      const noCell = rows[i].getElementsByTagName('td')[0];
-      noCell.textContent = i + 1;  // Menambahkan nomor urut
-    }
-
   </script>
 
 </body>
