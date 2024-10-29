@@ -25,6 +25,12 @@ if (isset($_POST['tanggal'])) {
     $tanggal = htmlspecialchars($_POST['tanggal']); // Sanitize input
     echo "<div class='alert alert-success mt-3'>Tanggal yang dipilih: <strong>$tanggal</strong></div>";
 }
+
+// Mengatur timezone agar waktu sesuai dengan Indonesia
+date_default_timezone_set('Asia/Jakarta');
+
+// Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
+$tanggalSekarang = date("Y-m-d");
 ?>
 
 <!DOCTYPE html>
@@ -159,7 +165,7 @@ if (isset($_POST['tanggal'])) {
                 <form id="dataForm">
                     <div class="mb-4">
                         <label for="tanggal" class="block text-sm font-medium">Tanggal</label>
-                        <input type="text" id="modalDatePicker" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Pilih Tanggal" name="tanggal" required>
+                        <input value="<?php echo $tanggalSekarang; ?>" type="text" id="modalDatePicker" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Pilih Tanggal" name="tanggal" required>
                     </div>
                     <div class="mb-4">
                         <label for="dropdown" class="block text-sm font-medium">Reff</label>
@@ -171,7 +177,7 @@ if (isset($_POST['tanggal'])) {
                     </div>
                     <div class="mb-4">
                         <label for="kode" class="block text-sm font-medium">Kode</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300 disabled" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" required>
+                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px; disabled;" id="kode" name="kode" required>
                     </div>
                     <div class="mb-4" id="debitBox" style="display: none;">
                         <label for="debitTextbox" class="block text-sm font-medium">Debit</label>
