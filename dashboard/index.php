@@ -128,7 +128,7 @@ include 'api/get_info.php';
                                 }
 
                                 // Contoh penggunaan
-                                $saldo = &totalSaldo;
+                                $saldo = $totalSaldo;
                                 echo formatRupiah($saldo); // Output: Rp 1.500.000
                             ?>
                         </h3>
