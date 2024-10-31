@@ -8,8 +8,8 @@ fetch('api/get_saldo.php')
 
 function createChart(saldoData) {
     const data = {
-        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-                'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember'],
+        //labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+        //        'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember'],
         datasets: [{
             label: 'Saldo Akhir Kas RT.07',
             data: saldoData,
