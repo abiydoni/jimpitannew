@@ -1,7 +1,7 @@
 <?php
 // Query untuk menghitung jumlah data
 $sql = "SELECT COUNT(*) AS total_rows FROM nama_tabel";
-$result = $conn->query($sql);
+$result = $pdo->query($sql);
 
 // Mengambil jumlah data
 if ($result->num_rows > 0) {
