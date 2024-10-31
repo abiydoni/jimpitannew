@@ -34,6 +34,7 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+include 'api/get_info.php';
 ?>
 
 
