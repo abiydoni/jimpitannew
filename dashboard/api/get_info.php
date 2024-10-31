@@ -1,12 +1,12 @@
 <?php
 // Query untuk menghitung jumlah data
-$sql = "SELECT COUNT(*) AS total_rows FROM nama_tabel";
-$result = $pdo->query($sql);
+$sqlkk = "SELECT COUNT(*) AS total_rows FROM master_kk";
+$resultkk = $pdo->query($sqlkk);
 
 // Mengambil jumlah data
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    echo json_encode(["total" => $row["total_rows"]]);
+if ($resultkk->num_rows > 0) {
+    $rowkk = $resultkk->fetch_assoc();
+    echo json_encode(["total" => $rowkk["total_rows"]]);
 } else {
     echo json_encode(["total" => 0]);
 }
