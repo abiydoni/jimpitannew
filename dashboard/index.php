@@ -121,7 +121,17 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-badge-check bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalSaldo"><?php echo $totalSaldo; ?></h3>
+                        <h3 id="totalSaldo">
+                            <?php 
+                                function formatRupiah($angka) {
+                                    return "Rp " . number_format($angka, 0, ',', '.');
+                                }
+
+                                // Contoh penggunaan
+                                $saldo = &totalSaldo;
+                                echo formatRupiah($saldo); // Output: Rp 1.500.000
+                            ?>
+                        </h3>
                         <p>Saldo KAS per bulan ini</p>
                     </span>
                 </li>
