@@ -119,7 +119,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php include "js/crud_users.js"
                         <?php
                             if ($data) {
                                 foreach ($data as $row): ?>
@@ -159,6 +158,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
+	<script src="js/crud_users.js"></script>
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
