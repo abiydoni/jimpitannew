@@ -16,12 +16,12 @@ try {
 
 try {
     // Query untuk mendapatkan total saldo
-    $sql = "SELECT (SUM(debet) - SUM(kredit)) AS total_saldo FROM kas_umum";
-    $result = $pdo->query($sql);
+    $sqlsd = "SELECT (SUM(debet) - SUM(kredit)) AS total_saldo FROM kas_umum";
+    $resultsd = $pdo->query($sqlsd);
 
 
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    echo json_encode(["saldo" => $row["total_saldo"]]);
+    $rowsd = $stmtsd->fetch(PDO::FETCH_ASSOC);
+    echo json_encode(["saldo" => $rowsd["total_saldo"]]);
 
 } catch(PDOException $e) {
     echo json_encode(["error" => $e->getMessage()]);
