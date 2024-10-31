@@ -108,23 +108,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             
-            <?php
-            $query1 = "SELECT COUNT(*) AS jumlah_data FROM master_kk";
-            $result1 = $pdo->query($query1);
-
-            if ($result1->num_rows > 0) {
-                $row1 = $result1->fetch_assoc();
-                echo "<p>Jumlah data di tabel kas_umum: " . $row1['jumlah_data'] . "</p>";
-            } else {
-                echo "<p>Tidak ada data ditemukan.</p>";
-            }
-            ?>
 
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><?php . $row1['jumlah_data'] . ?></h3>
+                        <h3 id="totalPeserta">0</h3>
                         <p>Total KK</p>
                     </span>
                 </li>
