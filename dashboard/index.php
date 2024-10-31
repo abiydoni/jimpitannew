@@ -122,37 +122,57 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <p>Checked</p>
                     </span>
                 </li>
+                <li>
+                    <i class='bx bxs-info-circle bx-lg'></i>
+                    <span class="text">
+                        <h3 id="totalUncheck">0</h3>
+                        <p>Unchecked</p>
+                    </span>
+                </li>
             </ul>
 
-
-            <div class="table-data">
-				<div class="order">
-					<div class="head">
-                    <h3>Jaga Malam</h3>
-					</div>
-					<table id="checkin-table">
-						<thead>
-							<tr>
-								<th>NAMA</th>
-								<th>SHIFT</th>
-							</tr>
-						</thead>
-						<tbody>
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
+            <ul class="box-info">
+                <li>
+                    <div class="table-data">
+                        <div class="order">
+                            <div class="head">
+                            <h3>Jaga Malam</h3>
+                            </div>
+                            <table id="checkin-table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <th>NAMA</th>
+                                        <th>SHIFT</th>
                                     </tr>
-                                <?php endforeach;
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
-						</tbody>
-					</table>
-                </div>
+                                </thead>
+                                <tbody>
+                                <?php
+                                    if ($data) {
+                                        foreach ($data as $row): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                            </tr>
+                                        <?php endforeach;
+                                    } else {
+                                        echo '<tr><td colspan="3">No data available</td></tr>';
+                                    }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </li>
+                <li>
+                    <i class='bx bxs-info-circle bx-lg'></i>
+                    <span class="text">
+                        <h3 id="totalUncheck">0</h3>
+                        <p>Unchecked</p>
+                    </span>
+                </li>
+
+                </ul>
 
                     <!-- <div class="todo">
                         <div class="head">
@@ -173,7 +193,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </li>
                                 </ul>
                             </div> -->
-                        </div>
                     </main>
             <!-- MAIN -->
         </section>
