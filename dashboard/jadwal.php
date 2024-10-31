@@ -127,10 +127,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                         <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                         <td style="text-align: center;">
-                                            <button onclick="editData(${item.id})" class="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
+                                            <button onclick="editData" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded mr-2">
                                                 Edit
                                             </button>
-                                            <button onclick="deleteData(${item.id})" class="bg-red-500 text-white px-2 py-1 rounded">
+                                            <button onclick="deleteData" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
                                                 Hapus
                                             </button>
                                         </td>
@@ -157,8 +157,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
+    <script src="js/crud_users.js"></script>
 	<script src="js/qrcode.min.js"></script>
-	<script src="js/crud_users.js"></script>
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
