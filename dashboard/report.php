@@ -124,7 +124,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </button>
                     </div>
                     <div class="m-4"> <!-- Margin di sekitar tabel -->
-                    <table>
+                    <table class="display" style="width:100%">
                         <thead>
                             <tr>
                                 <th style="text-align: Left;">Nama KK</th> <!-- Kolom pertama rata kiri -->
