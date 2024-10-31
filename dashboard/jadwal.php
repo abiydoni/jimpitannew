@@ -112,14 +112,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table id="example" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">No</th>
                                 <th style="text-align: left;">Kode ID</th>
                                 <th style="text-align: center;">Nama</th>
                                 <th style="text-align: center;">Shift</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
+                        <tbody>
                         <?php
                             if ($data) {
                                 foreach ($data as $row): ?>
@@ -145,7 +144,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             </div>
-
         </main>
         <!-- MAIN -->
     </section>
