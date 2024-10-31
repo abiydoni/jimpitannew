@@ -112,34 +112,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table id="example" class="display" style="width:100%">
                         <thead>
                             <tr>
+                                <th style="text-align: left;">No</th>
                                 <th style="text-align: left;">Kode ID</th>
                                 <th style="text-align: center;">Nama</th>
                                 <th style="text-align: center;">Shift</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                        <td style="text-align: center;">
-                                            <button onclick="editData" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded mr-2">
-                                                Edit
-                                            </button>
-                                            <button onclick="deleteData" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
-                                                Hapus
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; 
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
+                        <tbody id="tableBody">
+                            <script src="js/crud_users.js"></script>
                         </tbody>
                     </table>
                 </div>
@@ -157,7 +138,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
-    <script src="js/crud_users.js"></script>
 	<script src="js/qrcode.min.js"></script>
 
     <script>
