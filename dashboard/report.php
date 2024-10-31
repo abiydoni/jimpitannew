@@ -219,7 +219,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         })
     </script>
 
-<script>
+<!-- <script>
     // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
     const tableBody = document.getElementById('table-body');
     const sortDateButton = document.getElementById('sort-date');
@@ -240,7 +240,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
       // Update simbol panah untuk indikasi sorting
     //   sortDateButton.querySelector('span').innerHTML = ascending ? '&#9660;' : '&#9650;';
     });
-  </script>
+  </script> -->
 
 </body>
 </html>
