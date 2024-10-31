@@ -22,7 +22,7 @@ try {
     $stmt = $pdo->prepare("INSERT INTO kas_umum (coa_code, date_trx, Disc_trx, reff, debet, kredit) VALUES (?, ?, ?, ?, ?, ?)");
     
     // Execute the statement with data
-    $stmt->execute([$coa_code, $date_trx, $Disc_trx, $reff, $debet, $kredit]);
+    $stmt->execute([$coa_code, $date_trx, $Desc_trx, $reff, $debet, $kredit]);
     
     // Respond with success
     echo json_encode(['success' => true, 'message' => 'Data berhasil disimpan.']);
