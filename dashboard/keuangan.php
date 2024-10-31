@@ -30,7 +30,7 @@ if (isset($_POST['tanggal'])) {
 date_default_timezone_set('Asia/Jakarta');
 
 // Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
-$tanggalSekarang = date("d-m-Y");
+$tanggalSekarang = date("Y-m-d");
 ?>
 
 <!DOCTYPE html>
@@ -253,7 +253,7 @@ $tanggalSekarang = date("d-m-Y");
 
         // Date picker initialization
         flatpickr("#datePicker", {
-            dateFormat: "d-m-Y",
+            dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
                 filterTableByDate(dateStr);
             }
@@ -295,7 +295,7 @@ $tanggalSekarang = date("d-m-Y");
 
         // Date picker initialization
         flatpickr("#modalDatePicker", {
-            dateFormat: "d-m-Y"
+            dateFormat: "Y-m-d"
         });
 
         // Handle form submission
