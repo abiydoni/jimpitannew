@@ -46,6 +46,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- My CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -165,13 +167,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </li>
                 <li>
-                    <i class='bx bxs-info-circle bx-lg'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>Unchecked</p>
-                    </span>
                 </li>
-
+                    <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
                 </ul>
 
                     <!-- <div class="todo">
@@ -201,6 +198,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script src="js/script.js"></script>
+    <script src="js/grafik.js"></script>
 
 </body>
 </html>
