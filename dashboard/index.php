@@ -114,7 +114,7 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalKK; ?>" KK"</h3>
+                        <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
                         <p>Total Kepala Keluarga</p>
                     </span>
                 </li>
@@ -129,7 +129,7 @@ include 'api/get_info.php';
 
                                 // Contoh penggunaan
                                 $saldo = $totalSaldo;
-                                echo formatRupiah($saldo); // Output: Rp 1.500.000
+                                echo formatRupiah($saldo)",-"; // Output: Rp 1.500.000
                             ?>
                         </h3>
                         <p>Saldo KAS per bulan ini</p>
