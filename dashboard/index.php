@@ -121,7 +121,7 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-badge-check bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalCheck">0</h3>
+                        <h3 id="totalSaldo"><?php echo $row["total_saldo"]; ?></h3>
                         <p>Saldo KAS per bulan ini</p>
                     </span>
                 </li>
