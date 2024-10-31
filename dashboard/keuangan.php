@@ -124,9 +124,9 @@ $tanggalSekarang = date("d-m-Y");
                                 <th style="text-align: left;">Kode</th>
                                 <th style="text-align: center;">Tanggal</th>
                                 <th style="text-align: center;">Reff</th>
-                                <th style="text-align: center;">Keterangan</th>
-                                <th style="text-align: center;">Debet</th>
-                                <th style="text-align: center;">Kredit</th>
+                                <th style="text-align: left;">Keterangan</th>
+                                <th style="text-align: right;">Debet</th>
+                                <th style="text-align: right;">Kredit</th>
                             </tr>
                         </thead>
                         <tbody>
