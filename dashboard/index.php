@@ -141,7 +141,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="head">
                                 <h3>Jaga Malam Hari ini</h3>
                             </div>
-                            <h4>
                                 <?php
                                     // Mengatur locale ke bahasa Indonesia
                                     setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
@@ -152,7 +151,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
-                            </h4>
 
                             <table id="checkin-table">
                                 <thead>
