@@ -18,14 +18,6 @@ $(document).ready(function() {
 				"targets": 2,  // Kolom ke-3 (indeks mulai dari 0)
 				"className": "text-left" 
 			}
-			{ 
-				"targets": 3,  // Kolom ke-4 (indeks mulai dari 0)
-				"className": "text-center" 
-			}
-			{ 
-				"targets": 4,  // Kolom ke-5 (indeks mulai dari 0)
-				"className": "text-center" 
-			}
 		],
 		language: {
             lengthMenu: "_MENU_ Entri per halaman",
