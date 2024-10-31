@@ -55,7 +55,7 @@ include 'api/get_info.php';
 
     <title>Jimpitan - RT07 Salatiga</title>
 </head>
-<body onload="fetchTotalData()">
+<body>
     <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="#" class="brand">
@@ -114,7 +114,7 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><p id="totalKK"></p></h3>
+                        <h3 id="totalPeserta">0</h3>
                         <p>Total KK</p>
                     </span>
                 </li>
@@ -211,20 +211,6 @@ include 'api/get_info.php';
 
     <script src="js/script.js"></script>
     <script src="js/grafik.js"></script>
-    <script>
-        // Fungsi JavaScript untuk mengambil jumlah data dan menampilkan di box-info
-        function fetchTotalData() {
-            fetch('countData.php')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('totalKK').innerText = "Total Data KK: " + data.total;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
-
 
 </body>
 </html>
