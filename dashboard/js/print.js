@@ -4,7 +4,7 @@ $(document).ready(function() {
 		pageLength: 10, // Set the default number of records per page to 10
         lengthMenu: [10, 25, 50, 100], // Options for the dropdown
 		searching: true, // Aktifkan pencarian
-		order: [[1, 'asc']], // Urutkan berdasarkan kolom kedua (indeks 1), urutan ascending
+		order: [[2, 'asc']], // Urutkan berdasarkan kolom kedua (indeks 1), urutan ascending
 		columnDefs: [
 			{ 
 				"orderable": false, 
@@ -12,11 +12,11 @@ $(document).ready(function() {
 			},
 			{ 
 				"targets": 1,  // Kolom ke-2 (indeks mulai dari 0)
-				"className": "text-center" 
+				"className": "text-left" 
 			},
 			{ 
 				"targets": 2,  // Kolom ke-3 (indeks mulai dari 0)
-				"className": "text-center" 
+				"className": "text-left" 
 			}
 		],
 		language: {

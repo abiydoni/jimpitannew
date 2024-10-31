@@ -219,7 +219,7 @@ $tanggalSekarang = date("d-m-Y");
                 { targets: 0, className: "text-left" },
                 { targets: 1, className: "text-center" },
                 { targets: 2, className: "text-center" },
-                { targets: 3, className: "text-center" },
+                { targets: 3, className: "text-left" },
                 { targets: 4, className: "text-right" },
                 { targets: 5, className: "text-right" }
             ],
