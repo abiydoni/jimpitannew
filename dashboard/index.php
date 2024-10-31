@@ -167,8 +167,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </li>
                 <li>
+                <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
                 </li>
-                    <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
                 </ul>
 
                     <!-- <div class="todo">
