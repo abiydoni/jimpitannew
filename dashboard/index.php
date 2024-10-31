@@ -34,6 +34,12 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Mengatur locale ke bahasa Indonesia
+setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
+// setlocale(LC_TIME, 'ind'); // Untuk Windows
+// Mengambil tanggal sekarang
+$tanggal_sekarang = strftime("%A, %d %B %Y");
+
 ?>
 
 
@@ -138,7 +144,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="table-data">
                         <div class="order">
                             <div class="head">
-                            <h3>Jaga Malam</h3>
+                            <h3>Jaga Malam Hari ini</h3>
+                            <h3><?php $tanggal_sekarang ?></h3>
                             </div>
                             <table id="checkin-table">
                                 <thead>
