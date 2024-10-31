@@ -114,7 +114,7 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalKK; ?></h3>
+                        <h3 id="totalPeserta"><?php echo $totalKK; ?>" KK"</h3>
                         <p>Total Kepala Keluarga</p>
                     </span>
                 </li>
