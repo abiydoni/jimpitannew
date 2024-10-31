@@ -114,14 +114,14 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta"><?php echo $row["total_rows"]; ?></h3>
+                        <h3 id="totalPeserta"><?php echo $totalKK; ?></h3>
                         <p>Total Kepala Keluarga</p>
                     </span>
                 </li>
                 <li>
                     <i class='bx bxs-badge-check bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalSaldo">0</h3>
+                        <h3 id="totalSaldo"><?php echo $totalSaldo; ?></h3>
                         <p>Saldo KAS per bulan ini</p>
                     </span>
                 </li>
