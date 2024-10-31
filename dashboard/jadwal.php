@@ -120,11 +120,48 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            <script src="js/crud_users.js"></script>
+                        <?php
+                            if ($data) {
+                                foreach ($data as $row): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <td style="text-align: center;">
+                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded mr-2">
+                                                Edit
+                                            </button>
+                                            <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
+                                                Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; 
+                            } else {
+                                echo '<tr><td colspan="3">No data available</td></tr>';
+                            }
+                        ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <!-- Modal -->
+            <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg w-1/3 p-6">
+                    <h2 id="modalTitle" class="text-xl font-bold mb-4">Tambah/Edit Data</h2>
+                    <label class="block mb-2">Kode:</label>
+                    <input id="nameInput" type="text" class="border p-2 w-full mb-4">
+                    <label class="block mb-2">Nama:</label>
+                    <input id="nameInput" type="text" class="border p-2 w-full mb-4">
+                    <label class="block mb-2">Shift:</label>
+                    <input id="emailInput" type="email" class="border p-2 w-full mb-4">
+                    <div class="flex justify-end">
+                        <button id="cancelBtn" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Batal</button>
+                        <button id="saveBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+                    </div>
+                </div>
+            </div>
+
         </main>
         <!-- MAIN -->
     </section>
