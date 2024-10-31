@@ -1,4 +1,5 @@
 <?php
+include 'db.php';
 // Query untuk menghitung jumlah data
 $sqlkk = "SELECT COUNT(*) AS total_rows FROM master_kk";
 $resultkk = $pdo->query($sqlkk);
