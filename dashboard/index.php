@@ -106,6 +106,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             
+
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
@@ -119,13 +120,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span class="text">
                         <h3 id="totalCheck">0</h3>
                         <p>Checked</p>
-                    </span>
-                </li>
-                <li>
-                    <i class='bx bxs-info-circle bx-lg'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>Unchecked</p>
                     </span>
                 </li>
             </ul>
