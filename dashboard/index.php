@@ -140,17 +140,18 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="order">
                             <div class="head">
                             <h3>Jaga Malam Hari ini</h3>
-                            <?php
-                                // Mengatur locale ke bahasa Indonesia
-                                setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
-                                // setlocale(LC_TIME, 'ind'); // Untuk Windows
+                            <h3>
+                                <?php
+                                    // Mengatur locale ke bahasa Indonesia
+                                    setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
+                                    // setlocale(LC_TIME, 'ind'); // Untuk Windows
 
-                                // Mengambil tanggal sekarang
-                                $tanggal_sekarang = strftime("%A, %d %B %Y");
+                                    // Mengambil tanggal sekarang
+                                    $tanggal_sekarang = strftime("%A, %d %B %Y");
 
-                                echo "<p>$tanggal_sekarang</p>";
-                            ?>
-
+                                    echo "<p>$tanggal_sekarang</p>";
+                                ?>
+                            </h3>
                             </div>
                             <table id="checkin-table">
                                 <thead>
