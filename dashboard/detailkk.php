@@ -144,8 +144,8 @@ $stmt = null;
                 
                 <!-- Contact Information -->
                 <div class="text-center text-gray-600">
-                    <p><strong>Alamat:</strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
-                    <p><strong>No HP:</strong><?= htmlspecialchars($data['kk_hp']) ?></p>
+                    <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
+                    <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
                 </div>
                 
                 <!-- Social Media Links -->
@@ -161,6 +161,10 @@ $stmt = null;
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
             </div>
+                <div class="flex justify-center space-x-4 mt-4 text-gray-500">
+                    <a href="#" class="hover:text-blue-500">Cetak</a>
+                </div>
+
             </div>
 
         </main>
