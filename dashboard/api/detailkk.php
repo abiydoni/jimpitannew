@@ -124,7 +124,23 @@ $stmt = null;
                     </ul>
                 </div>
             </div>
-            
+            <ul class="box-info">
+                <li>
+                    <i class='bx bxs-group bx-lg' ></i>
+                    <span class="text">
+                        <h3 id="totalPeserta">0</h3>
+                        <p>Total Kepala Keluarga</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-info-circle bx-lg'></i>
+                    <span class="text">
+                        <h3 id="totalUncheck">0</h3>
+                        <p>QR Code</p>
+                    </span>
+                </li>
+            </ul>
+
         </main>
         <!-- MAIN -->
     </section>
