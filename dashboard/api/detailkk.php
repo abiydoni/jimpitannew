@@ -13,7 +13,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 // Include the database connection
-include 'db.php';
+include 'api/db.php';
 
 // Prepare and execute the SQL statement
 $stmt = $pdo->prepare("SELECT kk_name, code_id FROM master_kk"); // Update 'your_table'
@@ -102,11 +102,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="table-data">
                 <div class="order">
-                    <!-- isi di sisni -->
+                    <div class="head">
+                        <h3>KK</h3>
+						<button type="button" id="printSelectedBtn" class="btn-download">
+							<i class='bx bxs-printer' style="font-size:24px"></i>
+						</button>
+                        
+                    </div>
 
-
-
-                    
                 </div>
             </div>
         </main>
