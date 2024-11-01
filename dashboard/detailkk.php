@@ -130,7 +130,7 @@ $stmt = null;
                 </div>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-15 p-4">
+            <div class="flex flex-wrap justify-center gap-8 p-4">
             <!-- Card Container -->
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
