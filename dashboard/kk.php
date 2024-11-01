@@ -125,6 +125,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($data as $row): ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
+                                                <a href="detail.php?id=1" class="text-blue-500 hover:underline">Lihat Detail</a>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
                                             <td>
                                                 <input type="checkbox" class="print-checkbox">    
