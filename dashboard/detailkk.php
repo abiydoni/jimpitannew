@@ -160,10 +160,10 @@ $stmt = null;
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
-            </div>
                 <div class="flex justify-center space-x-4 mt-4 text-gray-500">
                     <a href="#" class="hover:text-blue-500">Cetak</a>
                 </div>
+            </div>
 
             </div>
 
