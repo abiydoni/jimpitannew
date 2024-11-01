@@ -15,34 +15,10 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'db.php';
 
-// Mengambil parameter nama dari URL
-$nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
-
-// ... existing code ...
-
-if ($nama_dicari) {
-    // Query untuk mencari data berdasarkan nama
-    $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
-    $stmt->execute();
-    
-    // Cek apakah data ditemukan
-    if ($stmt->rowCount() > 0) {
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
-        echo "Data tidak ditemukan.";
-        exit;
-    }
-} else {
-    echo "Nama tidak valid.";
-    exit;
-}
-
-// Menutup statement (tidak perlu menutup koneksi PDO secara manual)
-$stmt = null;
-
-// ... existing code ...
+// Prepare and execute the SQL statement
+$stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM users"); // Update 'your_table'
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -79,8 +55,8 @@ $stmt = null;
         </a>
         <ul class="side-menu top">
             <li><a href="index.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
-            <li class="active"><a href="#"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
+            <li class="active"><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
+            <li><a href="kk.php"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
             <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
             <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
         </ul>
@@ -115,7 +91,7 @@ $stmt = null;
                     <h1>Jimpitan - RT07 Salatiga</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">KK</a>
+                            <a href="#">Users</a>
                         </li>
                         <li><i class='bx bx-chevron-right' ></i></li>
                         <li>
@@ -124,23 +100,50 @@ $stmt = null;
                     </ul>
                 </div>
             </div>
-            <ul class="box-info">
-                <li>
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta">0</h3>
-                        <p>Total Kepala Keluarga</p>
-                    </span>
-                </li>
-                <li>
-                    <i class='bx bxs-info-circle bx-lg'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>QR Code</p>
-                    </span>
-                </li>
-            </ul>
 
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Jadwal Jaga</h3>
+						<button type="button" id="printSelectedBtn" class="btn-download">
+							<i class='bx bxs-printer' style="font-size:24px"></i>
+						</button>
+                    </div>
+                    <table id="example" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Kode ID</th>
+                                <th style="text-align: center;">Nama</th>
+                                <th style="text-align: center;">Shift</th>
+                                <th style="text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            if ($data) {
+                                foreach ($data as $row): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <td style="text-align: center;">
+                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded mr-2">
+                                                Edit
+                                            </button>
+                                            <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
+                                                Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; 
+                            } else {
+                                echo '<tr><td colspan="3">No data available</td></tr>';
+                            }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
         <!-- MAIN -->
     </section>
