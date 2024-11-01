@@ -132,7 +132,7 @@ include 'api/get_info.php';
                                 echo formatRupiah($saldo); // Output: Rp 1.500.000
                             ?>
                         </h3>
-                        <p>Saldo KAS per bulan ini</p>
+                        <a href="keuangan.php">Saldo KAS per bulan ini</a>
                     </span>
                 </li>
                 <li>
