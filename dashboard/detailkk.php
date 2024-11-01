@@ -130,7 +130,7 @@ $stmt = null;
                 </div>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-8 p-4">
+            <div class="flex flex-wrap justify-center gap-15 p-4">
             <!-- Card Container -->
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
@@ -171,7 +171,7 @@ $stmt = null;
                 </div>
                 <!-- Tombol Cetak -->
                 <button onclick="printPage()" 
-                        class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
                     <!-- Ikon Cetak -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
