@@ -124,11 +124,13 @@ $stmt = null;
                     </ul>
                 </div>
             </div>
-                                <!-- Card Container -->
+            
+            <div class="flex flex-wrap justify-center gap-8 p-4">
+            <!-- Card Container -->
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
                 <div class="flex items-center justify-center">
-                    <img src="https://via.placeholder.com/100" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
                 </div>
                 
                 <!-- Name and Position -->
@@ -160,6 +162,7 @@ $stmt = null;
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
                 </div>
+            </div>
             </div>
 
         </main>
