@@ -128,8 +128,12 @@ $stmt = null;
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <div class="mb-4">
+                        <label class="block text-gray-700">Kode:</label>
+                        <input type="text" name="nama" value="<?= htmlspecialchars($data['code_id']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
+                    </div>
+                    <div class="mb-4">
                         <label class="block text-gray-700">Nama:</label>
-                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_name']) ?>" class="w-full p-2 border border-gray-300 rounded">
+                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_name']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
                     </div>
                 </li>
                 <li>
