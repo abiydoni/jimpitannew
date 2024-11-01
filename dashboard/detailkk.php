@@ -15,10 +15,34 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'api/db.php';
 
-// Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT kk_name, code_id FROM master_kk"); // Update 'your_table'
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Mengambil parameter nama dari URL
+$nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
+
+// ... existing code ...
+
+if ($nama_dicari) {
+    // Query untuk mencari data berdasarkan nama
+    $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
+    $stmt->execute();
+    
+    // Cek apakah data ditemukan
+    if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        echo "Data tidak ditemukan.";
+        exit;
+    }
+} else {
+    echo "Nama tidak valid.";
+    exit;
+}
+
+// Menutup statement (tidak perlu menutup koneksi PDO secara manual)
+$stmt = null;
+
+// ... existing code ...
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +66,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function printPage() {
+            window.print(); // Fungsi untuk mencetak halaman
+        }
+    </script>
 
     <title>KK</title>
 </head>
@@ -100,49 +129,61 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
-            <div class="table-data">
-                <div class="order">
-                    <div class="head">
-                        <h3>KK</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
-                    </div>
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th style="text-align: left;">Nama KK</th>
-                                <th style="text-align: center;">Code</th>
-                                <th style="text-align: center;">
-                                    <input type="checkbox" id="selectAllCheckbox" style="display:none">
-                                    <label for="selectAllCheckbox" style="font-size:24px"><i class='bx bx-check-double'></i></label>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <?php
-                                if ($data) {
-                                    foreach ($data as $row): ?>
-                                        <tr>
-                                            <td>
-                                                <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
-                                                    <?php echo htmlspecialchars($row["kk_name"]); ?>
-                                                </a>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
-                                            <td>
-                                                <input type="checkbox" class="print-checkbox">    
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; 
-                                } else {
-                                    echo '<tr><td colspan="3">No data available</td></tr>';
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+            
+            <div class="flex flex-wrap justify-center gap-8 p-4">
+            <!-- Card Container -->
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                <!-- Profile Image -->
+                <div class="flex items-center justify-center">
+                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
                 </div>
+                
+                <!-- Name and Position -->
+                <div class="text-center mt-4">
+                    <h1 class="text-2xl font-bold text-gray-800"><?= htmlspecialchars($data['kk_name']) ?></h1>
+                    <p class="text-blue-500 text-sm font-medium"><?= htmlspecialchars($data['code_id']) ?></p>
+                </div>
+                
+                <!-- Divider -->
+                <hr class="my-4 border-gray-300">
+                
+                <!-- Contact Information -->
+                <div class="text-center text-gray-600">
+                    <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
+                    <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
+                </div>
+                <hr class="my-4 border-gray-300">
+
+                <a href="javascript:history.back()" 
+                    class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    <!-- Icon Panah -->
+                    <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Kembali
+                </a>
             </div>
+
+            <!-- Card Container -->
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                <!-- Profile Image -->
+                <div class="flex items-center justify-center">
+                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
+                </div>
+                <hr class="my-4 border-gray-300">
+                <!-- Tombol Cetak -->
+                <button onclick="printPage()" 
+                    class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    <!-- Ikon Cetak -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
+                    </svg>
+                    Cetak
+                </button>
+            </div>
+
+            </div>
+
         </main>
         <!-- MAIN -->
     </section>

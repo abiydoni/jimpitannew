@@ -30,7 +30,7 @@ if (isset($_POST['tanggal'])) {
 date_default_timezone_set('Asia/Jakarta');
 
 // Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
-$tanggalSekarang = date("d-m-Y");
+$tanggalSekarang = date("Y-m-d");
 ?>
 
 <!DOCTYPE html>
@@ -124,9 +124,9 @@ $tanggalSekarang = date("d-m-Y");
                                 <th style="text-align: left;">Kode</th>
                                 <th style="text-align: center;">Tanggal</th>
                                 <th style="text-align: center;">Reff</th>
-                                <th style="text-align: center;">Keterangan</th>
-                                <th style="text-align: center;">Debet</th>
-                                <th style="text-align: center;">Kredit</th>
+                                <th style="text-align: left;">Keterangan</th>
+                                <th style="text-align: right;">Debet</th>
+                                <th style="text-align: right;">Kredit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -219,7 +219,7 @@ $tanggalSekarang = date("d-m-Y");
                 { targets: 0, className: "text-left" },
                 { targets: 1, className: "text-center" },
                 { targets: 2, className: "text-center" },
-                { targets: 3, className: "text-center" },
+                { targets: 3, className: "text-left" },
                 { targets: 4, className: "text-right" },
                 { targets: 5, className: "text-right" }
             ],
@@ -253,7 +253,7 @@ $tanggalSekarang = date("d-m-Y");
 
         // Date picker initialization
         flatpickr("#datePicker", {
-            dateFormat: "d-m-Y",
+            dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
                 filterTableByDate(dateStr);
             }
@@ -295,7 +295,7 @@ $tanggalSekarang = date("d-m-Y");
 
         // Date picker initialization
         flatpickr("#modalDatePicker", {
-            dateFormat: "d-m-Y"
+            dateFormat: "Y-m-d"
         });
 
         // Handle form submission

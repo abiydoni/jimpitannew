@@ -34,6 +34,7 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+include 'api/get_info.php';
 ?>
 
 
@@ -46,6 +47,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- My CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -106,19 +109,30 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             
+
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalPeserta">0</h3>
-                        <p>Total KK</p>
+                        <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
+                        <a href="kk.php">Total Kepala Keluarga</a>
                     </span>
                 </li>
                 <li>
                     <i class='bx bxs-badge-check bx-lg' ></i>
                     <span class="text">
-                        <h3 id="totalCheck">0</h3>
-                        <p>Checked</p>
+                        <h3 id="totalSaldo">
+                            <?php 
+                                function formatRupiah($angka) {
+                                    return "Rp " . number_format($angka, 0, ',', '.');
+                                }
+
+                                // Contoh penggunaan
+                                $saldo = $totalSaldo;
+                                echo formatRupiah($saldo); // Output: Rp 1.500.000
+                            ?>
+                        </h3>
+                        <a href="keuangan.php">Saldo KAS per bulan ini</a>
                     </span>
                 </li>
                 <li>
@@ -130,35 +144,54 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </li>
             </ul>
 
+            <ul class="box-info">
+                <li>
+                    <div class="table-data">
+                        <div class="order">
+                            <div class="head">
+                                <h3>Jaga Malam Hari ini</h3>
+                            </div>
+                                <?php
+                                    // Mengatur locale ke bahasa Indonesia
+                                    setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
+                                    // setlocale(LC_TIME, 'ind'); // Untuk Windows
 
-            <div class="table-data">
-				<div class="order">
-					<div class="head">
-                    <h3>Jaga Malam</h3>
-					</div>
-					<table id="checkin-table">
-						<thead>
-							<tr>
-								<th>NAMA</th>
-								<th>SHIFT</th>
-							</tr>
-						</thead>
-						<tbody>
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
+                                    // Mengambil tanggal sekarang
+                                    $tanggal_sekarang = strftime("%A, %d %B %Y");
+
+                                    echo "<p>$tanggal_sekarang</p>";
+                                ?>
+
+                            <table id="checkin-table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <th>NAMA</th>
+                                        <th>SHIFT</th>
                                     </tr>
-                                <?php endforeach;
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
-						</tbody>
-					</table>
-                </div>
+                                </thead>
+                                <tbody>
+                                <?php
+                                    if ($data) {
+                                        foreach ($data as $row): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                            </tr>
+                                        <?php endforeach;
+                                    } else {
+                                        echo '<tr><td colspan="3">No data available</td></tr>';
+                                    }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </li>
+                <li>
+                <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
+                </li>
+                </ul>
 
                     <!-- <div class="todo">
                         <div class="head">
@@ -179,7 +212,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </li>
                                 </ul>
                             </div> -->
-                        </div>
                     </main>
             <!-- MAIN -->
         </section>
@@ -188,6 +220,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script src="js/script.js"></script>
+    <script src="js/grafik.js"></script>
 
 </body>
 </html>

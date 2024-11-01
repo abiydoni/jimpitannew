@@ -11,7 +11,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Extract input data
 $coa_code = isset($data['kode']) ? $data['kode'] : null; // COA code
 $date_trx = isset($data['tanggal']) ? $data['tanggal'] : null; // Transaction date
-$Disc_trx = isset($data['keterangan']) ? $data['keterangan'] : null; // Description
+$Desc_trx = isset($data['keterangan']) ? $data['keterangan'] : null; // Description
 $reff = isset($data['reff']) ? $data['reff'] : null; // Reference
 $debet = !empty($data['debit']) ? $data['debit'] : 0; // Default to 0 if not set
 $kredit = !empty($data['kredit']) ? $data['kredit'] : 0; // Default to 0 if not set
@@ -19,10 +19,10 @@ $kredit = !empty($data['kredit']) ? $data['kredit'] : 0; // Default to 0 if not 
 // Insert data into the kas_umum table
 try {
     // Prepare the SQL statement
-    $stmt = $pdo->prepare("INSERT INTO kas_umum (coa_code, date_trx, Disc_trx, reff, debet, kredit) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO kas_umum (coa_code, date_trx, Desc_trx, reff, debet, kredit) VALUES (?, ?, ?, ?, ?, ?)");
     
     // Execute the statement with data
-    $stmt->execute([$coa_code, $date_trx, $Disc_trx, $reff, $debet, $kredit]);
+    $stmt->execute([$coa_code, $date_trx, $desc_trx, $reff, $debet, $kredit]);
     
     // Respond with success
     echo json_encode(['success' => true, 'message' => 'Data berhasil disimpan.']);

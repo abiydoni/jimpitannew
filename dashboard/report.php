@@ -56,7 +56,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabel Urut Tanggal Terbaru</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 </head>
 <body>
 
@@ -219,7 +219,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         })
     </script>
 
-<script>
+<!-- <script>
     // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
     const tableBody = document.getElementById('table-body');
     const sortDateButton = document.getElementById('sort-date');
@@ -238,9 +238,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
       rows.forEach(row => tableBody.appendChild(row)); // Re-attach rows yang sudah diurutkan
 
       // Update simbol panah untuk indikasi sorting
-      sortDateButton.querySelector('span').innerHTML = ascending ? '&#9660;' : '&#9650;';
+    //   sortDateButton.querySelector('span').innerHTML = ascending ? '&#9660;' : '&#9650;';
     });
-  </script>
+  </script> -->
 
 </body>
 </html>
