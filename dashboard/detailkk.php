@@ -13,7 +13,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 // Include the database connection
-include 'db.php';
+include 'api/db.php';
 
 // Mengambil parameter nama dari URL
 $nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
