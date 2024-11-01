@@ -108,6 +108,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<button type="button" id="printSelectedBtn" class="btn-download">
 							<i class='bx bxs-printer' style="font-size:24px"></i>
 						</button>
+                        <!-- Tombol Tambah Data -->
+                        <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
+
                     </div>
                     <table id="example" class="display" style="width:100%">
                         <thead>
@@ -127,9 +130,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                         <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                         <td style="text-align: center;">
-                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded mr-2">
-                                                Edit
-                                            </button>
+                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>', '<?= $row['alam   at'] ?>')">Edit</button>
                                             <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
                                                 Hapus
                                             </button>
@@ -144,6 +145,45 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             </div>
+
+            <!-- Modal untuk Tambah Data -->
+            <div id="addModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+                <div class="bg-white w-1/3 rounded-lg p-6">
+                    <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
+                    <form method="POST" action="tambah.php">
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Kode</label>
+                            <input type="text" name="nama" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">User Name</label>
+                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Nama Lengkap</label>
+                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Password</label>
+                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Jadwal Jaga</label>
+                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Role</label>
+                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
         </main>
         <!-- MAIN -->
     </section>
@@ -190,5 +230,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
+        <script>
+            function openModal() {
+                document.getElementById('addModal').classList.remove('hidden');
+            }
+
+            function closeModal() {
+                document.getElementById('addModal').classList.add('hidden');
+            }
+        </script>
+
 </body>
 </html>
