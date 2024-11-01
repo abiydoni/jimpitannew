@@ -125,35 +125,41 @@ $stmt = null;
                 </div>
             </div>
                                 <!-- Card Container -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
-                        <!-- Profile Image -->
-                        <div class="flex items-center justify-center">
-                            <img src="https://via.placeholder.com/100" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
-                        </div>
-                        
-                        <!-- Name and Position -->
-                        <div class="text-center mt-4">
-                            <h1 class="text-2xl font-bold text-gray-800">John Doe</h1>
-                            <p class="text-blue-500 text-sm font-medium">Senior Developer</p>
-                        </div>
-                        
-                        <!-- Divider -->
-                        <hr class="my-4 border-gray-300">
-                        
-                        <!-- Contact Information -->
-                        <div class="text-center text-gray-600">
-                            <p><strong>Phone:</strong> (123) 456-7890</p>
-                            <p><strong>Email:</strong> johndoe@example.com</p>
-                            <p><strong>Address:</strong> 123 Business St, Cityville</p>
-                        </div>
-                        
-                        <!-- Social Media Links -->
-                        <div class="flex justify-center space-x-4 mt-4 text-gray-500">
-                            <a href="#" class="hover:text-blue-500">LinkedIn</a>
-                            <a href="#" class="hover:text-blue-500">Twitter</a>
-                            <a href="#" class="hover:text-blue-500">Website</a>
-                        </div>
-                    </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                <!-- Profile Image -->
+                <div class="flex items-center justify-center">
+                    <img src="https://via.placeholder.com/100" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                </div>
+                
+                <!-- Name and Position -->
+                <div class="text-center mt-4">
+                    <h1 class="text-2xl font-bold text-gray-800"><?= htmlspecialchars($data['kk_name']) ?></h1>
+                    <p class="text-blue-500 text-sm font-medium"><?= htmlspecialchars($data['code_id']) ?></p>
+                </div>
+                
+                <!-- Divider -->
+                <hr class="my-4 border-gray-300">
+                
+                <!-- Contact Information -->
+                <div class="text-center text-gray-600">
+                    <p><strong>Alamat:</strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
+                    <p><strong>No HP:</strong><?= htmlspecialchars($data['kk_hp']) ?></p>
+                </div>
+                
+                <!-- Social Media Links -->
+                <div class="flex justify-center space-x-4 mt-4 text-gray-500">
+                    <a href="#" class="hover:text-blue-500">LinkedIn</a>
+                    <a href="#" class="hover:text-blue-500">Twitter</a>
+                    <a href="#" class="hover:text-blue-500">Website</a>
+                </div>
+            </div>
+
+            <!-- Card Container -->
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                <!-- Profile Image -->
+            </div>
+
+
 
             <ul class="box-info">
                 <li>
