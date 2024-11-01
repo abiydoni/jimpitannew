@@ -125,7 +125,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($data as $row): ?>
                                         <tr>
                                             <td>
-                                                <a href="api/detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
+                                                <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
                                                     <?php echo htmlspecialchars($row["kk_name"]); ?>
                                                 </a>
                                             </td>
