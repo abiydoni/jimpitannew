@@ -111,13 +111,15 @@ include 'api/get_info.php';
             
 
             <ul class="box-info">
-                <li href="kk.php">
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
-                        <p>Total Kepala Keluarga</p>
-                    </span>
-                </li>
+                <li>
+                    <a href="kk.php">
+                        <i class='bx bxs-group bx-lg'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
+                            <p>Total Kepala Keluarga</p>
+                        </span>
+                    </a>
+                </li>                
                 <li>
                     <i class='bx bxs-badge-check bx-lg' ></i>
                     <span class="text">
