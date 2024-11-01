@@ -15,10 +15,34 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'db.php';
 
-// Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT kk_name, code_id FROM master_kk"); // Update 'your_table'
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Mengambil parameter nama dari URL
+$nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
+
+// ... existing code ...
+
+if ($nama_dicari) {
+    // Query untuk mencari data berdasarkan nama
+    $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
+    $stmt->execute();
+    
+    // Cek apakah data ditemukan
+    if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        echo "Data tidak ditemukan.";
+        exit;
+    }
+} else {
+    echo "Nama tidak valid.";
+    exit;
+}
+
+// Menutup statement (tidak perlu menutup koneksi PDO secara manual)
+$stmt = null;
+
+// ... existing code ...
 ?>
 
 <!DOCTYPE html>
@@ -100,18 +124,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
-            <div class="table-data">
-                <div class="order">
-                    <div class="head">
-                        <h3>KK</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
-
-                    </div>
-
-                </div>
-            </div>
+            
         </main>
         <!-- MAIN -->
     </section>
