@@ -13,7 +13,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 // Include the database connection
-include 'api/db.php';
+include 'db.php';
 
 // Prepare and execute the SQL statement
 $stmt = $pdo->prepare("SELECT kk_name, code_id FROM master_kk"); // Update 'your_table'
@@ -103,6 +103,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <!-- isi di sisni -->
+
+
+
+                    
                 </div>
             </div>
         </main>
