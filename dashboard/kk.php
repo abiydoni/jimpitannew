@@ -125,7 +125,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($data as $row): ?>
                                         <tr>
                                             <td>
-                                                <a href="detailkk.php?id=1" class="text-blue-500 hover:underline">
+                                                <a href="detailkk.php" class="text-blue-500 hover:underline">
                                                     <?php echo htmlspecialchars($row["kk_name"]); ?>
                                                 </a>
                                             </td>
