@@ -11,7 +11,7 @@ function createChart(saldoData) {
         //labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
         //        'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember'],
         datasets: [{
-            label: 'Saldo Akhir Kas RT.07',
+            label: 'Analisa Pemasukan dan Pengeluaran per Bulan',
             data: saldoData,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
