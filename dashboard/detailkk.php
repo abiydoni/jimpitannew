@@ -152,7 +152,8 @@ $stmt = null;
                     <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
                     <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
                 </div>
-                
+                <hr class="my-4 border-gray-300">
+
                 <a href="javascript:history.back()" 
                     class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
                     <!-- Icon Panah -->
@@ -169,6 +170,7 @@ $stmt = null;
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
+                <hr class="my-4 border-gray-300">
                 <!-- Tombol Cetak -->
                 <button onclick="printPage()" 
                     class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
