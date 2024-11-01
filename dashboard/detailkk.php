@@ -127,22 +127,30 @@ $stmt = null;
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Kode:</label>
-                        <input type="text" name="nama" value="<?= htmlspecialchars($data['code_id']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                    </div>
+                    <p>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Kode:</label>
+                            <input type="text" name="nama" value="<?= htmlspecialchars($data['code_id']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
+                        </div>
+                    </p>
+                    <p>
                     <div class="mb-4">
                         <label class="block text-gray-700">Nama:</label>
                         <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_name']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Alamat:</label>
-                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_alamat']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">No HP:</label>
-                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_hp']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                    </div>
+                    </p>
+                    <p>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Alamat:</label>
+                            <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_alamat']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">No HP:</label>
+                            <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_hp']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
+                        </div>
+                    </p>
                 </li>
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
