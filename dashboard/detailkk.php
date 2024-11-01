@@ -150,14 +150,12 @@ $stmt = null;
                 
                 <!-- Social Media Links -->
                 <div class="flex justify-center space-x-4 mt-4 text-gray-500">
-                    <a href="#" class="hover:text-blue-500">LinkedIn</a>
-                    <a href="#" class="hover:text-blue-500">Twitter</a>
-                    <a href="#" class="hover:text-blue-500">Website</a>
+                    <a href="kk.php" class="hover:text-blue-500">Kembali</a>
                 </div>
             </div>
 
             <!-- Card Container -->
-            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+            <div class="bg-white shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
