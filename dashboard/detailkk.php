@@ -151,6 +151,37 @@ $stmt = null;
                             <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_hp']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
                         </div>
                     </p>
+
+                    <!-- Card Container -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                        <!-- Profile Image -->
+                        <div class="flex items-center justify-center">
+                            <img src="https://via.placeholder.com/100" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                        </div>
+                        
+                        <!-- Name and Position -->
+                        <div class="text-center mt-4">
+                            <h1 class="text-2xl font-bold text-gray-800">John Doe</h1>
+                            <p class="text-blue-500 text-sm font-medium">Senior Developer</p>
+                        </div>
+                        
+                        <!-- Divider -->
+                        <hr class="my-4 border-gray-300">
+                        
+                        <!-- Contact Information -->
+                        <div class="text-center text-gray-600">
+                            <p><strong>Phone:</strong> (123) 456-7890</p>
+                            <p><strong>Email:</strong> johndoe@example.com</p>
+                            <p><strong>Address:</strong> 123 Business St, Cityville</p>
+                        </div>
+                        
+                        <!-- Social Media Links -->
+                        <div class="flex justify-center space-x-4 mt-4 text-gray-500">
+                            <a href="#" class="hover:text-blue-500">LinkedIn</a>
+                            <a href="#" class="hover:text-blue-500">Twitter</a>
+                            <a href="#" class="hover:text-blue-500">Website</a>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
