@@ -157,47 +157,10 @@ $stmt = null;
             <!-- Card Container -->
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
+                <div class="flex items-center justify-center">
+                    <img src="https://via.placeholder.com/100" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                </div>
             </div>
-
-
-
-            <ul class="box-info">
-                <li>
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <p>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Kode:</label>
-                            <input type="text" name="nama" value="<?= htmlspecialchars($data['code_id']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                        </div>
-                    </p>
-                    <p>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Nama:</label>
-                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_name']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                    </div>
-                    </p>
-                    <p>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Alamat:</label>
-                            <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_alamat']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                        </div>
-                    </p>
-                    <p>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">No HP:</label>
-                            <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_hp']) ?>" class="w-full p-2 border border-gray-300 rounded" readonly>
-                        </div>
-                    </p>
-
-                </li>
-                <li>
-                    <i class='bx bxs-info-circle bx-lg'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>QR Code</p>
-                    </span>
-                </li>
-            </ul>
 
         </main>
         <!-- MAIN -->
