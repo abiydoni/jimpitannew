@@ -150,7 +150,7 @@ $stmt = null;
                 
                 <!-- Social Media Links -->
                 <div class="flex justify-center space-x-4 mt-4 text-gray-500">
-                    <a href="kk.php" class="hover:text-blue-500">Kembali</a>
+                    <a href="kk.php" class="text-blue-500 hover:underline">Kembali</a>
                 </div>
             </div>
 
@@ -161,7 +161,7 @@ $stmt = null;
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
                 <div class="flex justify-center space-x-4 mt-4 text-gray-500">
-                    <a href="#" class="hover:text-blue-500">Cetak</a>
+                    <a href="#" class="text-blue-500 hover:underline">Cetak</a>
                 </div>
             </div>
 
