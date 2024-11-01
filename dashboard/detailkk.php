@@ -127,10 +127,10 @@ $stmt = null;
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta">0</h3>
-                        <p>Total Kepala Keluarga</p>
-                    </span>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Nama:</label>
+                        <input type="text" name="nama" value="<?= htmlspecialchars($data['kk_name']) ?>" class="w-full p-2 border border-gray-300 rounded">
+                    </div>
                 </li>
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
