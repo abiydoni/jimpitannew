@@ -66,6 +66,11 @@ $stmt = null;
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function printPage() {
+            window.print(); // Fungsi untuk mencetak halaman
+        }
+    </script>
 
     <title>KK</title>
 </head>
@@ -164,9 +169,15 @@ $stmt = null;
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
-                <div class="flex justify-center space-x-4 mt-4 text-gray-500">
-                    <a href="#" class="text-blue-500 hover:underline">Cetak</a>
-                </div>
+                <!-- Tombol Cetak -->
+                <button onclick="printPage()" 
+                        class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    <!-- Ikon Cetak -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
+                    </svg>
+                    Cetak
+                </button>
             </div>
 
             </div>
