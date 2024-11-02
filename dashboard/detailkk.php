@@ -1,46 +1,46 @@
 <?php
-session_start();
+    session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-// Check if user is admin
-if ($_SESSION['user']['role'] !== 'admin') {
-    header('Location: ../login.php'); // Redirect to unauthorized page
-    exit;
-}
-// Include the database connection
-include 'api/db.php';
-
-// Mengambil parameter nama dari URL
-$nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
-
-// ... existing code ...
-
-if ($nama_dicari) {
-    // Query untuk mencari data berdasarkan nama
-    $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
-    $stmt->execute();
-    
-    // Cek apakah data ditemukan
-    if ($stmt->rowCount() > 0) {
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
-        echo "Data tidak ditemukan.";
+    // Check if user is logged in
+    if (!isset($_SESSION['user'])) {
+        header('Location: ../login.php'); // Redirect to login page
         exit;
     }
-} else {
-    echo "Nama tidak valid.";
-    exit;
-}
 
-// Menutup statement (tidak perlu menutup koneksi PDO secara manual)
-$stmt = null;
+    // Check if user is admin
+    if ($_SESSION['user']['role'] !== 'admin') {
+        header('Location: ../login.php'); // Redirect to unauthorized page
+        exit;
+    }
+    // Include the database connection
+    include 'api/db.php';
+
+    // Mengambil parameter nama dari URL
+    $nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
+
+    // ... existing code ...
+
+    if ($nama_dicari) {
+        // Query untuk mencari data berdasarkan nama
+        $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        // Cek apakah data ditemukan
+        if ($stmt->rowCount() > 0) {
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            echo "Data tidak ditemukan.";
+            exit;
+        }
+    } else {
+        echo "Nama tidak valid.";
+        exit;
+    }
+
+    // Menutup statement (tidak perlu menutup koneksi PDO secara manual)
+    $stmt = null;
 
 // ... existing code ...
 ?>
@@ -71,6 +71,7 @@ $stmt = null;
             window.print(); // Fungsi untuk mencetak halaman
         }
     </script>
+    <script src="js/qrcode.min.js"></script>
 
     <title>KK</title>
 </head>
@@ -170,7 +171,8 @@ $stmt = null;
                 <div class="flex items-center justify-center">
                     <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
                 </div>
-                <hr class="my-4 border-gray-300">
+                <div id="qrcode-container" class="space-y-4"></div>
+                
                 <!-- Tombol Cetak -->
                 <button onclick="printPage()" 
                     class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
@@ -230,5 +232,32 @@ $stmt = null;
             }
         })
     </script>
+<script>
+function generateQRCodes() {
+    // Ambil code_id langsung dari data PHP
+    const codeId = "<?= htmlspecialchars($data['code_id']) ?>";
+    
+    // Kosongkan konten QR code sebelumnya
+    const qrContainer = document.getElementById("qrcode-container");
+    qrContainer.innerHTML = "";
+
+    // Buat elemen div untuk QR code
+    const qrDiv = document.createElement("div");
+    qrContainer.appendChild(qrDiv);
+
+    // Generate QR code
+    new QRCode(qrDiv, {
+        text: codeId,
+        width: 150,
+        height: 150,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
+
+// Panggil generateQRCodes() saat halaman selesai dimuat
+window.onload = generateQRCodes;
+</script>
 </body>
 </html>
