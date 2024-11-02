@@ -131,7 +131,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                         <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                         <td style="text-align: center;">
-                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>', '<?= $row['alam   at'] ?>')">Edit</button>
+                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>')">Edit</button>
                                             <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
                                                 Hapus
                                             </button>
@@ -158,27 +158,27 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form method="POST" action="tambah.php">
                 <div class="mb-4">
                     <label class="block text-gray-700">Kode</label>
-                    <input type="text" name="nama" class="w-full p-2 border rounded" required>
+                    <input type="text" name="kode" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">User Name</label>
-                    <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                    <input type="text" name="username" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Nama Lengkap</label>
-                    <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                    <input type="text" name="nama" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Password</label>
-                    <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                    <input type="password" name="password" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Jadwal Jaga</label>
-                    <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                    <input type="text" name="shift" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Role</label>
-                    <input type="text" name="alamat" class="w-full p-2 border rounded" required>
+                    <input type="text" name="role" class="w-full p-2 border rounded" required>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
