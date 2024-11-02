@@ -174,8 +174,8 @@ include 'api/get_info.php';
                                     if ($data) {
                                         foreach ($data as $row): ?>
                                             <tr class="border-b hover:bg-gray-100">
-                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["user_name"]); ?></td>
-                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else {
