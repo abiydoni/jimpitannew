@@ -20,7 +20,7 @@ $currentDay = date('l'); // 'l' gives full textual representation of the day
 
 // Prepare the SQL statement to select only today's shift
 $stmt = $pdo->prepare("
-    SELECT user_name, shift 
+    SELECT name, shift 
     FROM users 
     WHERE shift = :currentDay
 ");
@@ -174,7 +174,7 @@ include 'api/get_info.php';
                                     if ($data) {
                                         foreach ($data as $row): ?>
                                             <tr class="border-b hover:bg-gray-100">
-                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
