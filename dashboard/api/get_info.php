@@ -13,7 +13,7 @@ try {
     $totalSaldo = $stmtSaldo->fetch(PDO::FETCH_ASSOC)["total_saldo"];
 
     // Query untuk total saldo
-    $sqlUsers = "SELECT COALESCE(SUM(debet), 0) AS total_users FROM users";
+    $sqlUsers = "SELECT COUNT(*) AS total_users FROM users";
     $stmtUsers = $pdo->query($sqlUsers);
     $totalUsers = $stmtUsers->fetch(PDO::FETCH_ASSOC)["total_users"];
 
