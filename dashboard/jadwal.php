@@ -129,9 +129,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             if ($data) {
                                 foreach ($data as $row): ?>
                                     <tr class="border-b hover:bg-gray-100">
-                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["id_code"]); ?></td>
+                                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["name"]); ?></td>
+                                        <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
                                         <td style="text-align: center;">
                                             <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>')">Edit</button>
                                             <button onclick="deleteData(<?= $row['id_code'] ?>)" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
