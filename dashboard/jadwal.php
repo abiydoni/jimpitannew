@@ -124,16 +124,24 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th style="text-align: center;">Shift</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
+                            <table id="example" class="display w-full text-left border border-gray-300">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-2 px-4">Kode ID</th>
+                                <th class="py-2 px-4">Nama</th>
+                                <th class="py-2 px-4">Shift</th>
+                                <th class="py-2 px-4">Aksi</th>
+                            </tr>
                         </thead>
                         <tbody>
                         <?php
                             if ($data) {
                                 foreach ($data as $row): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                        <td style="text-align: center;">
+                                    <tr class="border-b hover:bg-gray-100">
+                                        <td class="py-2 px-4"><?php echo htmlspecialchars($row["id_code"]); ?></td>
+                                        <td class="py-2 px-4"><?php echo htmlspecialchars($row["name"]); ?></td>
+                                        <td class="py-2 px-4"><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                        <td class="py-2 px-4 text-center">
                                             <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>')">Edit</button>
                                             <button onclick="deleteData(<?= $row['id_code'] ?>)" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
                                                 Hapus
@@ -142,11 +150,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </tr>
                                 <?php endforeach; 
                             } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
+                                echo '<tr><td colspan="4" class="text-center py-2">No data available</td></tr>';
                             }
                         ?>
                         </tbody>
-                    </table>
+                    </table>                
                 </div>
             </div>
 
