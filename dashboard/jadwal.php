@@ -19,6 +19,10 @@ include 'api/db.php';
 $stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM users"); // Update 'your_table'
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Query untuk mengambil data dari tabel users
+$sql = "SELECT id_code, name, shift FROM users";
+$result = $pdo->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +109,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
+						<button type="button" id="printReport" class="btn-download">
 							<i class='bx bxs-printer' style="font-size:24px"></i>
 						</button>
                         <!-- Tombol Tambah Data -->
