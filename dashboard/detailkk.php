@@ -247,8 +247,8 @@ function generateQRCodes() {
     // Generate QR code
     new QRCode(qrDiv, {
         text: codeId,
-        width: 150,
-        height: 150,
+        width: 300,
+        height: 300,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
