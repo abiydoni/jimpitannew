@@ -162,11 +162,11 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
 
-                            <table id="checkin-table">
+                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200">
                                 <thead>
                                     <tr>
-                                        <th>NAMA</th>
-                                        <th>SHIFT</th>
+                                        <th class="border border-gray-300 px-4 py-2">NAMA</th>
+                                        <th class="border border-gray-300 px-4 py-2">SHIFT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,8 +174,8 @@ include 'api/get_info.php';
                                     if ($data) {
                                         foreach ($data as $row): ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
-                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else {
