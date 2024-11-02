@@ -178,7 +178,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["shift"]); ?></td>
-                                <td class="flex space-x-2">
+                                <td class="flex justify-center space-x-2">
                                     <button onclick="editUser(<?php echo $user['id']; ?>, '<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
                                     <a href="crud_users.php?delete=<?php echo $user['id']; ?>" onclick="return confirm('Yakin ingin menghapus data ini?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
                                 </td>
