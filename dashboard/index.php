@@ -162,7 +162,7 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
 
-                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                                 <thead class="bg-gray-200">
                                     <tr>
                                         <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>

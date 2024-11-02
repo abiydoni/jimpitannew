@@ -107,8 +107,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<button type="button" id="printSelectedBtn" class="btn-download">
 							<i class='bx bxs-printer' style="font-size:24px"></i>
 						</button>
-                    </div class="m-4">
-                    <table id="example" class="display w-full text-left shadow-lg border border-gray-300" style="width:100%">
+                    </div>
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Nama KK</th>

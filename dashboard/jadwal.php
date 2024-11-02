@@ -115,7 +115,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
                         </div>
                     </div>
-                    <table id="example" class="display w-full text-left shadow-lg border border-gray-300" style="width:100%">
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Kode ID</th>
