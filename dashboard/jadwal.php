@@ -167,6 +167,30 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
                         </div>
                     </div>
+
+    <!-- Form untuk Menambah atau Edit Data -->
+    <div id="userForm" style="margin-bottom: 20px;">
+        <h2 id="formTitle">Tambah Pengguna</h2>
+        <form method="POST" action="crud_users.php">
+            <input type="hidden" id="userId" name="id">
+            <label>ID Code:</label>
+            <input type="text" id="idCode" name="id_code" required><br><br>
+            <label>Username:</label>
+            <input type="text" id="userName" name="user_name" required><br><br>
+            <label>Nama:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label>Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <label>Shift:</label>
+            <input type="text" id="shift" name="shift"><br><br>
+            <label>Role:</label>
+            <input type="text" id="role" name="role"><br><br>
+            <button type="submit">Simpan</button>
+            <button type="button" onclick="cancelEdit()">Batal</button>
+        </form>
+    </div>
+
+
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
