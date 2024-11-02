@@ -104,9 +104,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>KK</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
+                        <div class="mb-4 text-center">
+                            <button type="button" id="printSelectedBtn" class="btn-download">
+                                <i class='bx bxs-printer' style="font-size:24px"></i>
+                            </button>
+                        </div>
                     </div>
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
