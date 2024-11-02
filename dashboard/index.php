@@ -162,28 +162,28 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
 
-                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200">
-                                <thead>
+                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+                                <thead class="bg-gray-200">
                                     <tr>
-                                        <th class="border border-gray-300 px-4 py-2">NAMA</th>
-                                        <th class="border border-gray-300 px-4 py-2">SHIFT</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                     if ($data) {
                                         foreach ($data as $row): ?>
-                                            <tr>
+                                            <tr class="hover:bg-gray-100">
                                                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["user_name"]); ?></td>
                                                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else {
-                                        echo '<tr><td colspan="3">No data available</td></tr>';
+                                        echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
                                     }
                                 ?>
                                 </tbody>
-                            </table>
+                            </table>                        
                         </div>
                     </div>
 
