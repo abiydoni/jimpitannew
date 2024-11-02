@@ -24,6 +24,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button onclick="printTable()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Cetak Laporan
             </button>
+            <button >
+                <a href="../jadwal.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    < Kembali
+                </a>
+            </button>
+            </button>
         </div>
         <!-- Tabel Data Users -->
         <div id="printableTable">
