@@ -138,8 +138,8 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
                     <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>Unchecked</p>
+                        <h3 id="totalUncheck"><?php echo $totalUsers; ?> Orang</h3>
+                        <a href="jadwal.php">Total Users JAGA</a>
                     </span>
                 </li>
             </ul>

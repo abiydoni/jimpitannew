@@ -12,9 +12,16 @@ try {
     $stmtSaldo = $pdo->query($sqlSaldo);
     $totalSaldo = $stmtSaldo->fetch(PDO::FETCH_ASSOC)["total_saldo"];
 
+    // Query untuk total saldo
+    $sqlUsers = "SELECT COALESCE(SUM(debet), 0) AS total_users FROM users";
+    $stmtUsers = $pdo->query($sqlUsers);
+    $totalUsers = $stmtUsers->fetch(PDO::FETCH_ASSOC)["total_users"];
+
+
     echo json_encode([
         "total_kk" => $totalKK,
-        "total_saldo" => $totalSaldo
+        "total_saldo" => $totalSaldo,
+        "total_users" => $totalUsers
     ]);
     
 } catch(PDOException $e) {
