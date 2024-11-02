@@ -149,44 +149,45 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </main>
         <!-- MAIN -->
+        <!-- Modal untuk Tambah Data -->
+        <div id="addModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white w-1/3 rounded-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
+                <form method="POST" action="tambah.php">
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Kode</label>
+                        <input type="text" name="kode" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">User Name</label>
+                        <input type="text" name="username" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Nama Lengkap</label>
+                        <input type="text" name="nama" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Password</label>
+                        <input type="password" name="password" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Jadwal Jaga</label>
+                        <input type="text" name="shift" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Role</label>
+                        <input type="text" name="role" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </section>
     <!-- CONTENT --> 
-    <!-- Modal untuk Tambah Data -->
-    <div id="addModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white w-1/3 rounded-lg p-6">
-            <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
-            <form method="POST" action="tambah.php">
-                <div class="mb-4">
-                    <label class="block text-gray-700">Kode</label>
-                    <input type="text" name="kode" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">User Name</label>
-                    <input type="text" name="username" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Nama Lengkap</label>
-                    <input type="text" name="nama" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Password</label>
-                    <input type="password" name="password" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Jadwal Jaga</label>
-                    <input type="text" name="shift" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Role</label>
-                    <input type="text" name="role" class="w-full p-2 border rounded" required>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
    
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
