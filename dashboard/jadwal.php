@@ -22,13 +22,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fungsi Insert atau Update data
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'] ?? null;
-    $id_code = $_POST['id_code'] ?? ''; // Tambahkan validasi
+    $id_code = $_POST['id_code'] ?? null; // Tambahkan validasi
     $user_name = $_POST['user_name'] ?? ''; // Tambahkan validasi
     $name = $_POST['name'] ?? ''; // Tambahkan validasi
     $shift = $_POST['shift'] ?? ''; // Tambahkan validasi
     $role = $_POST['role'] ?? ''; // Tambahkan validasi
-    if (empty($id_code) || empty($user_name) || empty($name) || empty($shift) || empty($role)) {
+    if (empty($user_name) || empty($name) || empty($shift) || empty($role)) {
         // Tampilkan pesan kesalahan
         echo "Semua field harus diisi!";
         exit();
@@ -37,15 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Hanya hash password jika ada perubahan
     $password = isset($_POST['password']) && !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
-    if ($id) {
+    if ($id_code) {
         // Update data
-        $sql = "UPDATE users SET id_code=?, user_name=?, name=?, shift=?, role=?". ($password ? ", password=?" : "") ." WHERE id=?";
+        $sql = "UPDATE users SET user_name=?, name=?, shift=?, role=?". ($password ? ", password=?" : "") ." WHERE id_code=?";
         $stmt = $pdo->prepare($sql);
-        $params = [$id_code, $user_name, $name, $shift, $role];
+        $params = [$user_name, $name, $shift, $role];
         if ($password) {
             $params[] = $password; // Tambahkan password jika ada
         }
-        $params[] = $id;
+        $params[] = $id_code;
         $stmt->execute($params);
     } else {
         // Insert data baru
@@ -59,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Fungsi untuk menghapus data
 if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
+    $id_code = $_GET['delete'];
     $sql = "DELETE FROM users WHERE id=?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id]);
+    $stmt->execute([$id_code]);
 
     header("Location: crud_users.php");
     exit();
@@ -184,8 +183,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($user["name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["shift"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="editUser(<?php echo $user['id']; ?>, '<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
-                                    <a href="crud_users.php?delete=<?php echo $user['id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
+                                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
+                                    <a href="crud_users.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -251,8 +250,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
     <script>
-        function editUser(id, idCode, userName, name, shift, role) {
-            document.getElementById('userId').value = id;
+        function editUser(idCode, userName, name, shift, role) {
             document.getElementById('idCode').value = idCode;
             document.getElementById('userName').value = userName;
             document.getElementById('name').value = name;
@@ -263,7 +261,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         function cancelEdit() {
-            document.getElementById('userId').value = "";
             document.getElementById('idCode').value = "";
             document.getElementById('userName').value = "";
             document.getElementById('name').value = "";
