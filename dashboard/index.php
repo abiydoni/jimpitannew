@@ -173,7 +173,7 @@ include 'api/get_info.php';
                                 <?php
                                     if ($data) {
                                         foreach ($data as $row): ?>
-                                            <tr class="hover:bg-gray-100">
+                                            <tr class="border-b hover:bg-gray-100">
                                                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["user_name"]); ?></td>
                                                 <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
