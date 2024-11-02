@@ -185,6 +185,13 @@
             </div>
 
             </div>
+            <style>
+                @media print {
+                    .bg-white.rounded-lg.shadow-lg.p-6.max-w-xs button {
+                        display: none; // Sembunyikan tombol saat mencetak
+                    }
+                }
+            </style>
 
         </main>
         <!-- MAIN -->
@@ -261,16 +268,9 @@ window.onload = generateQRCodes;
 </script>
         <script>
             function printPage() {
-                const printContent = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg.p-6.max-w-xs'); // Ambil semua konten yang ingin dicetak
+                const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
                 const originalContent = document.body.innerHTML; // Simpan konten asli
-                let combinedContent = ''; // Variabel untuk menyimpan konten gabungan
-
-                // Gabungkan konten dari semua elemen yang dipilih
-                printContent.forEach(content => {
-                    combinedContent += content.innerHTML; // Tambahkan konten ke variabel
-                });
-
-                document.body.innerHTML = combinedContent; // Ganti konten dengan yang ingin dicetak
+                document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
                 window.print(); // Panggil fungsi cetak
                 document.body.innerHTML = originalContent; // Kembalikan konten asli
             }
