@@ -109,9 +109,11 @@ $result = $pdo->query($sql);
                 <div class="order">
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
-						<button type="button" id="printReport" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
+                        <div class="mb-4 text-center">
+                            <button onclick="printReport()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Print Report
+                            </button>
+                        </div>
                         <!-- Tombol Tambah Data -->
                         <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
 
