@@ -44,7 +44,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>KK</title>
+    <title>Jadwal Jaga</title>
 </head>
 <body>
 
@@ -101,7 +101,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
-
             <div class="table-data">
                 <div class="order">
                     <div class="head">
@@ -250,6 +249,5 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 });
             });
         </script>
-
 </body>
 </html>
