@@ -172,9 +172,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="userForm" style="margin-bottom: 20px;">
         <h2 id="formTitle">Tambah Pengguna</h2>
         <form method="POST" action="crud_users.php">
-            <input type="hidden" id="userId" name="id">
-            <label>ID Code:</label>
-            <input type="text" id="idCode" name="id_code" required><br><br>
+            <input type="hidden" id="idCode" name="id_code">
             <label>Username:</label>
             <input type="text" id="userName" name="user_name" required><br><br>
             <label>Nama:</label>
