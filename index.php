@@ -130,7 +130,7 @@ if (!isset($_SESSION['user'])) {
         // Mengambil tanggal sekarang
         $tanggal_sekarang = strftime("%A, %d %B %Y");
 
-        echo "<p>"Hari : " $tanggal_sekarang</p>";
+        echo "<p>Hari :  $tanggal_sekarang</p>";
     ?>
   </p>
   <div class="floating-button" style="margin-right : 70px;">
