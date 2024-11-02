@@ -191,5 +191,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
+    <script>
+        // Tambahkan ini setelah script yang ada
+        $(document).ready(function() {
+            $('#example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+
 </body>
 </html>
