@@ -185,14 +185,6 @@
             </div>
 
             </div>
-            <style>
-                @media print {
-                    .bg-white.rounded-lg.shadow-lg.p-6.max-w-xs button {
-                        display: none; // Sembunyikan tombol saat mencetak
-                    }
-                }
-            </style>
-
         </main>
         <!-- MAIN -->
     </section>
@@ -266,6 +258,19 @@ function generateQRCodes() {
 // Panggil generateQRCodes() saat halaman selesai dimuat
 window.onload = generateQRCodes;
 </script>
+        <style>
+            @media print {
+                .flex {
+                    display: flex;
+                    flex-direction: row; /* Mengatur arah flex menjadi baris */
+                    justify-content: space-between; /* Menyebar item secara merata */
+                }
+                .flex > div {
+                    flex: 1; /* Membuat setiap item flex memiliki lebar yang sama */
+                    margin: 0 10px; /* Menambahkan margin antar item */
+                }
+            }
+        </style>
         <script>
             function printPage() {
                 const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
@@ -275,5 +280,5 @@ window.onload = generateQRCodes;
                 document.body.innerHTML = originalContent; // Kembalikan konten asli
             }
         </script>
-</body>
+    </body>
 </html>
