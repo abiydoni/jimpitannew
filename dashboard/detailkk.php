@@ -261,12 +261,11 @@ window.onload = generateQRCodes;
 </script>
         <script>
             function printPage() {
-                const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
+                const printContent = document.querySelector('.bg-white.rounded-lg.shadow-lg.p-6.max-w-xs.w-full'); // Ambil konten yang ingin dicetak
                 const originalContent = document.body.innerHTML; // Simpan konten asli
                 document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
                 window.print(); // Panggil fungsi cetak
                 document.body.innerHTML = originalContent; // Kembalikan konten asli
             }
-        </script>
-</body>
+        </script></body>
 </html>
