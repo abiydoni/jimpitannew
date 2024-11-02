@@ -18,11 +18,11 @@ try {
     $totalUsers = $stmtUsers->fetch(PDO::FETCH_ASSOC)["total_users"];
 
 
-    echo json_encode([
-        "total_kk" => $totalKK,
-        "total_saldo" => $totalSaldo,
-        "total_users" => $totalUsers
-    ]);
+    //echo json_encode([
+    //    "total_kk" => $totalKK,
+    //    "total_saldo" => $totalSaldo,
+    //    "total_users" => $totalUsers
+    //]);
     
 } catch(PDOException $e) {
     echo json_encode(["error" => $e->getMessage()]);
