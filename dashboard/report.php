@@ -139,11 +139,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 if ($data) {
                                     foreach ($data as $row): ?>
                                         <tr class="border-b hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["kk_name"]); ?></td> <!-- Rata kiri -->
-                                            <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["report_id"]); ?></td> <!-- Rata tengah -->
-                                            <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
-                                            <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["nominal"]); ?></td>
-                                            <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["collector"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> <!-- Rata kiri -->
+                                            <td><?php echo htmlspecialchars($row["report_id"]); ?></td> <!-- Rata tengah -->
+                                            <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["collector"]); ?></td>
                                         </tr>
                                     <?php endforeach; 
                                 } else {
