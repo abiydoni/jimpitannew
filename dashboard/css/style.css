@@ -814,3 +814,15 @@ table .dataTable {
     transform: translateY(0); /* Kembali ke posisi normal */
     opacity: 1; /* Akhirnya muncul */
 }
+/* Cetak QR per orang */
+@media print {
+	.flex {
+		display: flex;
+		flex-direction: row; /* Mengatur arah flex menjadi baris */
+		justify-content: space-between; /* Menyebar item secara merata */
+	}
+	.flex > div {
+		flex: 1; /* Membuat setiap item flex memiliki lebar yang sama */
+		margin: 0 10px; /* Menambahkan margin antar item */
+	}
+}

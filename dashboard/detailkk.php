@@ -258,22 +258,9 @@ function generateQRCodes() {
 // Panggil generateQRCodes() saat halaman selesai dimuat
 window.onload = generateQRCodes;
 </script>
-        <style>
-            @media print {
-                .flex {
-                    display: flex;
-                    flex-direction: row; /* Mengatur arah flex menjadi baris */
-                    justify-content: space-between; /* Menyebar item secara merata */
-                }
-                .flex > div {
-                    flex: 1; /* Membuat setiap item flex memiliki lebar yang sama */
-                    margin: 0 10px; /* Menambahkan margin antar item */
-                }
-            }
-        </style>
         <script>
             function printPage() {
-                const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
+                const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-2'); // Ambil konten yang ingin dicetak
                 const originalContent = document.body.innerHTML; // Simpan konten asli
                 document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
                 window.print(); // Panggil fungsi cetak
