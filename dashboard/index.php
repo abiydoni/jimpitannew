@@ -115,7 +115,7 @@ include 'api/get_info.php';
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
                         <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
-                        <a href="kk.php">Total Kepala Keluarga</a>
+                        <a href="kk.php">Kepala Keluarga</a>
                     </span>
                 </li>
                 <li>
@@ -132,14 +132,14 @@ include 'api/get_info.php';
                                 echo formatRupiah($saldo); // Output: Rp 1.500.000
                             ?>
                         </h3>
-                        <a href="keuangan.php">Saldo KAS per bulan ini</a>
+                        <a href="keuangan.php">Saldo KAS</a>
                     </span>
                 </li>
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
                     <span class="text">
                         <h3 id="totalUncheck"><?php echo $totalUsers; ?> Orang</h3>
-                        <a href="jadwal.php">Total Users JAGA</a>
+                        <a href="jadwal.php">Users JAGA</a>
                     </span>
                 </li>
             </ul>
