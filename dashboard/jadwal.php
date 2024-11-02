@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id_code, $user_name, $name, $password, $shift, $role]);
     }
-    header("Location: crud_users.php");
+    header("Location: api/crud_users.php");
     exit();
 }
 
