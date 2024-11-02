@@ -259,5 +259,18 @@ function generateQRCodes() {
 // Panggil generateQRCodes() saat halaman selesai dimuat
 window.onload = generateQRCodes;
 </script>
+<script>
+        function printPage() {
+            const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
+            const newWindow = window.open('', '', 'height=600,width=800'); // Buka jendela baru
+            newWindow.document.write('<html><head><title>Cetak</title>'); // Tulis header
+            newWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">'); // Tambahkan CSS
+            newWindow.document.write('</head><body>');
+            newWindow.document.write(printContent.innerHTML); // Tulis konten yang ingin dicetak
+            newWindow.document.write('</body></html>');
+            newWindow.document.close(); // Tutup dokumen
+            newWindow.print(); // Panggil fungsi cetak
+        }
+    </script>
 </body>
 </html>
