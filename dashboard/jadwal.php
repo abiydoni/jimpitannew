@@ -110,13 +110,11 @@ $result = $pdo->query($sql);
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button onclick="printReport()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button onclick="printUsers()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Print Report
                             </button>
+                            <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
                         </div>
-                        <!-- Tombol Tambah Data -->
-                        <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
-
                     </div>
                     <table id="example" class="display" style="width:100%">
                         <thead>

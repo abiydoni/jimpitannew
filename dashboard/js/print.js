@@ -204,7 +204,7 @@ $(document).ready(function() {
 		};
 	}
 	
-	function printReport() {
+	function printUsers() {
 		const printContent = document.getElementById("printableTable").innerHTML;
 		const originalContent = document.body.innerHTML;
 	
