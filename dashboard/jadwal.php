@@ -107,13 +107,16 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button onclick="printUsers()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Print Report
+                            <button>
+                                <a href="api/print_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Print Report
+                                </a>
+                            </button>
                             </button>
                             <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
                         </div>
                     </div>
-                    <table id="contoh" class="display" style="width:100%">
+                    <table id="example" class="display" style="width:100%">
                         <thead>
                             <tr>
                                 <th style="text-align: left;">Kode ID</th>
@@ -132,9 +135,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                         <td style="text-align: center;">
                                             <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>')">Edit</button>
-                                            <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
+                                            <button onclick="deleteData(<?= $row['id_code'] ?>)" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
                                                 Hapus
-                                            </button>
+                                            </button>                                        
                                         </td>
                                     </tr>
                                 <?php endforeach; 
@@ -198,6 +201,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
+
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
