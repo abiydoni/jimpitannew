@@ -123,9 +123,10 @@ if (!isset($_SESSION['user'])) {
   <p>RT07 SALATIGA</p>
   <p>
     <?php
-    date_default_timezone_set('Asia/Jakarta');
-    $tanggal_sekarang=date('l, j F Y');
-    echo"Tanggal: ".$tanggal_sekarang;
+      setlocale(LC_TIME, 'id_ID.UTF-8'); // Mengatur locale ke bahasa Indonesia
+      date_default_timezone_set('Asia/Jakarta');
+      $tanggal_sekarang = strftime('%A, %e %B %Y'); // Menggunakan strftime untuk format tanggal
+      echo "Tanggal: " . $tanggal_sekarang;
     ?>
   </p>
   <div class="floating-button" style="margin-right : 70px;">
