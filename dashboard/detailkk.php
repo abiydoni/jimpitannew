@@ -66,11 +66,6 @@
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function printPage() {
-            window.print(); // Fungsi untuk mencetak halaman
-        }
-    </script>
     <script src="js/qrcode.min.js"></script>
 
     <title>KK</title>
