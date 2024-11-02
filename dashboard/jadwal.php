@@ -15,11 +15,60 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'api/db.php';
 
-// Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM users"); // Update 'your_table'
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Mengambil data dari tabel users
+$sql = "SELECT * FROM users"; // Pastikan ini sesuai dengan yang diinginkan
+$stmt = $pdo->query($sql);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fungsi Insert atau Update data
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = $_POST['id'] ?? null;
+    $id_code = $_POST['id_code'] ?? ''; // Tambahkan validasi
+    $user_name = $_POST['user_name'] ?? ''; // Tambahkan validasi
+    $name = $_POST['name'] ?? ''; // Tambahkan validasi
+    $shift = $_POST['shift'] ?? ''; // Tambahkan validasi
+    $role = $_POST['role'] ?? ''; // Tambahkan validasi
+
+    // Hanya hash password jika ada perubahan
+    $password = isset($_POST['password']) && !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
+
+    if ($id) {
+        // Update data
+        $sql = "UPDATE users SET id_code=?, user_name=?, name=?, shift=?, role=?". ($password ? ", password=?" : "") ." WHERE id=?";
+        $stmt = $pdo->prepare($sql);
+        $params = [$id_code, $user_name, $name, $shift, $role];
+        if ($password) {
+            $params[] = $password; // Tambahkan password jika ada
+        }
+        $params[] = $id;
+        $stmt->execute($params);
+    } else {
+        // Insert data baru
+        $sql = "INSERT INTO users (id_code, user_name, name, password, shift, role) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id_code, $user_name, $name, $password, $shift, $role]);
+    }
+    header("Location: crud_users.php");
+    exit();
+}
+
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $sql = "DELETE FROM users WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+
+    header("Location: crud_users.php");
+    exit();
+}
+
+// Mengambil data dari tabel users
+$sql = "SELECT * FROM users";
+$stmt = $pdo->query($sql);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -124,67 +173,23 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
-                                    <tr class="border-b hover:bg-gray-100">
-                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                        <td style="text-align: center;">
-                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>')">Edit</button>
-                                            <button onclick="deleteData(<?= $row['id_code'] ?>)" class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
-                                                Hapus
-                                            </button>                                        
-                                        </td>
-                                    </tr>
-                                <?php endforeach; 
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
+                        <?php foreach($users as $user): ?>
+                            <tr class="border-b hover:bg-gray-100">
+                                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                                <td><?php echo htmlspecialchars($user["name"]); ?></td>
+                                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
+                                <td>
+                                    <button onclick="editUser(<?php echo $user['id']; ?>, '<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')">Edit</button>
+                                    <a href="crud_users.php?delete=<?php echo $user['id']; ?>" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </main>
-        <!-- MAIN -->
-        <!-- Modal untuk Tambah Data -->
-        <div id="addModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-            <div class="bg-white w-1/3 rounded-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
-                <form method="POST" action="tambah.php">
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Kode</label>
-                        <input type="text" name="kode" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">User Name</label>
-                        <input type="text" name="username" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Nama Lengkap</label>
-                        <input type="text" name="nama" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Password</label>
-                        <input type="password" name="password" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Jadwal Jaga</label>
-                        <input type="text" name="shift" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Role</label>
-                        <input type="text" name="role" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    </div>
 
     </section>
     <!-- CONTENT --> 
@@ -198,6 +203,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
+    <script src="js/crud.js"></script>
 	<script src="js/qrcode.min.js"></script>
 
 
@@ -251,3 +257,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </script>
 </body>
 </html>
+
+<?php
+// Tutup koneksi
+$pdo = null;
+?>

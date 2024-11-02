@@ -18,7 +18,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto mt-10">
-        <h1 class="text-3xl font-bold mb-5 text-center">Report Users</h1>
+        <h1 class="text-3xl font-bold mb-5 text-center">Report Jatwal Jaga</h1>
         <!-- Tambah tombol cetak -->
         <div class="mb-5 text-center">
             <button onclick="printTable()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
