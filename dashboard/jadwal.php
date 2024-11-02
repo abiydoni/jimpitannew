@@ -28,6 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'] ?? ''; // Tambahkan validasi
     $shift = $_POST['shift'] ?? ''; // Tambahkan validasi
     $role = $_POST['role'] ?? ''; // Tambahkan validasi
+    if (empty($id_code) || empty($user_name) || empty($name) || empty($shift) || empty($role)) {
+        // Tampilkan pesan kesalahan
+        echo "Semua field harus diisi!";
+        exit();
+    }
 
     // Hanya hash password jika ada perubahan
     $password = isset($_POST['password']) && !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
