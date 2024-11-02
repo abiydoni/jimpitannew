@@ -262,16 +262,11 @@ window.onload = generateQRCodes;
         <script>
             function printPage() {
                 const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
-                const newWindow = window.open('', '', 'height=600,width=800'); // Buka jendela baru
-                newWindow.document.write('<html><head><title>Cetak</title>'); // Tulis header
-                newWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">'); // Tambahkan CSS
-                newWindow.document.write('<style>body { font-size: 10px; }</style>'); // Menambahkan CSS untuk mengubah ukuran font
-                newWindow.document.write('</head><body>');
-                newWindow.document.write(printContent.innerHTML); // Tulis konten yang ingin dicetak
-                newWindow.document.write('</body></html>');
-                newWindow.document.close(); // Tutup dokumen
-                newWindow.print(); // Panggil fungsi cetak
+                const originalContent = document.body.innerHTML; // Simpan konten asli
+                document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
+                window.print(); // Panggil fungsi cetak
+                document.body.innerHTML = originalContent; // Kembalikan konten asli
             }
         </script>
-    </body>
+</body>
 </html>
