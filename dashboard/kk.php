@@ -107,7 +107,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<button type="button" id="printSelectedBtn" class="btn-download">
 							<i class='bx bxs-printer' style="font-size:24px"></i>
 						</button>
-                    </div>
+                    </div class="m-4">
                     <table id="example" class="display w-full text-left shadow-lg border border-gray-300" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
@@ -119,7 +119,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
+                        <tbody>
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
