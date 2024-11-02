@@ -136,7 +136,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                 <!-- Profile Image -->
                 <div class="flex items-center justify-center">
-                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-35 h-35 rounded-full border-4 border-blue-500 shadow-md">
                 </div>
                 
                 <!-- Name and Position -->
