@@ -20,9 +20,6 @@ $stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM us
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Query untuk mengambil data dari tabel users
-$sql = "SELECT id_code, name, shift FROM users";
-$result = $pdo->query($sql);
 ?>
 
 <!DOCTYPE html>
