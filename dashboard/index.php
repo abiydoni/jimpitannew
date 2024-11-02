@@ -162,11 +162,11 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
 
-                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200">
+                            <table id="checkin-table">
                                 <thead>
-                                    <tr class="bg-gray-100">
-                                        <th class="border border-gray-300 px-4 py-2">NAMA</th>
-                                        <th class="border border-gray-300 px-4 py-2">SHIFT</th>
+                                    <tr>
+                                        <th>NAMA</th>
+                                        <th>SHIFT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,12 +174,12 @@ include 'api/get_info.php';
                                     if ($data) {
                                         foreach ($data as $row): ?>
                                             <tr>
-                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["user_name"]); ?></td>
-                                                <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else {
-                                        echo '<tr><td colspan="2" class="border border-gray-300 px-4 py-2">No data available</td></tr>';
+                                        echo '<tr><td colspan="3">No data available</td></tr>';
                                     }
                                 ?>
                                 </tbody>
