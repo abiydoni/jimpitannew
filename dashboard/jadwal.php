@@ -19,7 +19,6 @@ include 'api/db.php';
 $stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM users"); // Update 'your_table'
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
