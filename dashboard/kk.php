@@ -123,7 +123,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
-                                        <tr>
+                                        <tr class="border-b hover:bg-gray-100">
                                             <td>
                                                 <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
                                                     <?php echo htmlspecialchars($row["kk_name"]); ?>
