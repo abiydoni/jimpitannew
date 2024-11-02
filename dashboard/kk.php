@@ -108,8 +108,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							<i class='bx bxs-printer' style="font-size:24px"></i>
 						</button>
                     </div>
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
+                    <table id="example" class="display w-full text-left border border-gray-300" style="width:100%">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Nama KK</th>
                                 <th style="text-align: center;">Code</th>
