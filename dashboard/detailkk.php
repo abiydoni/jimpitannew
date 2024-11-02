@@ -261,7 +261,7 @@ window.onload = generateQRCodes;
 </script>
         <script>
             function printPage() {
-                const printContent = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg.p-6.max-w-xs.w-full'); // Ambil semua konten yang ingin dicetak
+                const printContent = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg.p-6.max-w-xs'); // Ambil semua konten yang ingin dicetak
                 const originalContent = document.body.innerHTML; // Simpan konten asli
                 let combinedContent = ''; // Variabel untuk menyimpan konten gabungan
 
