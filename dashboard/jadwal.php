@@ -128,7 +128,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php
                             if ($data) {
                                 foreach ($data as $row): ?>
-                                    <tr>
+                                    <tr class="hover:bg-gray-100">
                                         <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
                                         <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                         <td><?php echo htmlspecialchars($row["shift"]); ?></td>
