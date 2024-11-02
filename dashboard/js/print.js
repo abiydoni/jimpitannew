@@ -205,12 +205,54 @@ $(document).ready(function() {
 	}
 	
 	function printUsers() {
-		const printContent = document.getElementById("printableTable").innerHTML;
-		const originalContent = document.body.innerHTML;
-	
-		document.body.innerHTML = printContent;
-		window.print();
-		document.body.innerHTML = originalContent;
-		window.location.reload();
+		// Ambil tabel yang akan dicetak
+		const table = document.getElementById('example');
+		
+		// Buat window baru untuk preview cetak
+		const printWindow = window.open('', '_blank');
+		
+		// Buat HTML untuk halaman cetak
+		printWindow.document.write(`
+			<html>
+			<head>
+				<title>Jadwal Jaga - Print Preview</title>
+				<style>
+					table {
+						width: 100%;
+						border-collapse: collapse;
+						margin-bottom: 20px;
+					}
+					th, td {
+						border: 1px solid #ddd;
+						padding: 8px;
+						text-align: left;
+					}
+					th {
+						background-color: #f2f2f2;
+					}
+					h2 {
+						text-align: center;
+						margin-bottom: 20px;
+					}
+					@media print {
+						.no-print {
+							display: none;
+						}
+					}
+				</style>
+			</head>
+			<body>
+				<h2>Jadwal Jaga RT07 Salatiga</h2>
+				${table.outerHTML}
+				<div class="no-print">
+					<button onclick="window.print()">Cetak</button>
+					<button onclick="window.close()">Tutup</button>
+				</div>
+			</body>
+			</html>
+		`);
+		
+		// Hapus kolom aksi dari tabel cetak
+		const actionCells = printWindow.document.querySelectorAll('th:last-child, td:last-child');
+		actionCells.forEach(cell => cell.remove());
 	}
-	
