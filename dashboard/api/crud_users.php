@@ -62,6 +62,10 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
+// Mengambil data dari tabel users
+$sql = "SELECT * FROM users";
+$stmt = $pdo->query($sql);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -144,22 +148,44 @@ if (isset($_GET['delete'])) {
             <div id="userForm" style="margin-bottom: 20px;">
                 <h2 id="formTitle">Tambah Pengguna</h2>
                 <form method="POST" action="crud_users.php">
-                    <input type="hidden" id="userId" name="id">
-                    <label>ID Code:</label>
-                    <input type="text" id="idCode" name="id_code" required><br><br>
-                    <label>Username:</label>
-                    <input type="text" id="userName" name="user_name" required><br><br>
-                    <label>Nama:</label>
-                    <input type="text" id="name" name="name" required><br><br>
-                    <label>Password:</label>
-                    <input type="password" id="password" name="password" required><br><br>
-                    <label>Shift:</label>
-                    <input type="text" id="shift" name="shift"><br><br>
-                    <label>Role:</label>
-                    <input type="text" id="role" name="role"><br><br>
-                    <button type="submit">Simpan</button>
-                    <button type="button" onclick="cancelEdit()">Batal</button>
-                </form>
+            <input type="hidden" id="idCode" name="id_code">
+            <label>Username:</label>
+            <input type="text" id="userName" name="user_name" required><br><br>
+            <label>Nama:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label>Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+            <label>Shift:</label>
+            <input type="text" id="shift" name="shift"><br><br>
+            <label>Role:</label>
+            <input type="text" id="role" name="role"><br><br>
+            <button type="submit">Simpan</button>
+        </form>
+
+        <h2>Daftar Pengguna</h2>
+        <table border="1">
+            <tr>
+                <th>ID Code</th>
+                <th>Username</th>
+                <th>Nama</th>
+                <th>Shift</th>
+                <th>Role</th>
+                <th>Aksi</th>
+            </tr>
+            <?php foreach($users as $user): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                <td><?php echo htmlspecialchars($user["user_name"]); ?></td>
+                <td><?php echo htmlspecialchars($user["name"]); ?></td>
+                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
+                <td><?php echo htmlspecialchars($user["role"]); ?></td>
+                <td>
+                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')">Edit</button>
+                    <a href="crud_users.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')">Hapus</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
             </div>
         </main>
 

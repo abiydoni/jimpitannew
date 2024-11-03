@@ -105,6 +105,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
+                        <a href="api/crud_users.php">Kelola Pengguna</a> <!-- Link ke CRUD Users -->
                         <div class="mb-4 text-center">
                             <button>
                                 <a href="api/print_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
