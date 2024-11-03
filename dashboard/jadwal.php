@@ -16,58 +16,6 @@ if ($_SESSION['user']['role'] !== 'admin') {
 include 'api/db.php';
 
 // Mengambil data dari tabel users
-$sql = "SELECT * FROM users"; // Pastikan ini sesuai dengan yang diinginkan
-$stmt = $pdo->query($sql);
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fungsi Insert atau Update data
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_code = $_POST['id_code'] ?? null; // Tambahkan validasi
-    $user_name = $_POST['user_name'] ?? ''; // Tambahkan validasi
-    $name = $_POST['name'] ?? ''; // Tambahkan validasi
-    $shift = $_POST['shift'] ?? ''; // Tambahkan validasi
-    $role = $_POST['role'] ?? ''; // Tambahkan validasi
-    if (empty($user_name) || empty($name) || empty($shift) || empty($role)) {
-        // Tampilkan pesan kesalahan
-        echo "Semua field harus diisi!";
-        exit();
-    }
-
-    // Hanya hash password jika ada perubahan
-    $password = isset($_POST['password']) && !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
-
-    if ($id_code) {
-        // Update data
-        $sql = "UPDATE users SET user_name=?, name=?, shift=?, role=?". ($password ? ", password=?" : "") ." WHERE id_code=?";
-        $stmt = $pdo->prepare($sql);
-        $params = [$user_name, $name, $shift, $role];
-        if ($password) {
-            $params[] = $password; // Tambahkan password jika ada
-        }
-        $params[] = $id_code;
-        $stmt->execute($params);
-    } else {
-        // Insert data baru
-        $sql = "INSERT INTO users (id_code, user_name, name, password, shift, role) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_code, $user_name, $name, $password, $shift, $role]);
-    }
-    header("Location: api/crud_users.php");
-    exit();
-}
-
-// Fungsi untuk menghapus data
-if (isset($_GET['delete'])) {
-    $id_code = $_GET['delete'];
-    $sql = "DELETE FROM users WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_code]);
-
-    header("Location: crud_users.php");
-    exit();
-}
-
-// Mengambil data dari tabel users
 $sql = "SELECT * FROM users";
 $stmt = $pdo->query($sql);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -167,28 +115,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
                         </div>
                     </div>
-
-    <!-- Form untuk Menambah atau Edit Data -->
-    <div id="userForm" style="margin-bottom: 20px;">
-        <h2 id="formTitle">Tambah Pengguna</h2>
-        <form method="POST" action="crud_users.php">
-            <input type="hidden" id="idCode" name="id_code">
-            <label>Username:</label>
-            <input type="text" id="userName" name="user_name" required><br><br>
-            <label>Nama:</label>
-            <input type="text" id="name" name="name" required><br><br>
-            <label>Password:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <label>Shift:</label>
-            <input type="text" id="shift" name="shift"><br><br>
-            <label>Role:</label>
-            <input type="text" id="role" name="role"><br><br>
-            <button type="submit">Simpan</button>
-            <button type="button" onclick="cancelEdit()">Batal</button>
-        </form>
-    </div>
-
-
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
@@ -270,27 +196,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 responsive: true
             });
         });
-    </script>
-    <script>
-        function editUser(idCode, userName, name, shift, role) {
-            document.getElementById('idCode').value = idCode;
-            document.getElementById('userName').value = userName;
-            document.getElementById('name').value = name;
-            document.getElementById('password').value = ""; // Kosongkan password saat edit
-            document.getElementById('shift').value = shift;
-            document.getElementById('role').value = role;
-            document.getElementById('formTitle').innerText = "Edit Pengguna";
-        }
-
-        function cancelEdit() {
-            document.getElementById('idCode').value = "";
-            document.getElementById('userName').value = "";
-            document.getElementById('name').value = "";
-            document.getElementById('password').value = "";
-            document.getElementById('shift').value = "";
-            document.getElementById('role').value = "";
-            document.getElementById('formTitle').innerText = "Tambah Pengguna";
-        }
     </script>
 </body>
 </html>
