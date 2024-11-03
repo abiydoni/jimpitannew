@@ -15,6 +15,18 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'api/db.php';
 
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $id_code = $_GET['delete'];
+    $sql = "DELETE FROM users WHERE id_code=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_code]);
+
+    header("Location: jadwal.php");
+    exit();
+}
+
+
 // Mengambil data dari tabel users
 $sql = "SELECT * FROM users";
 $stmt = $pdo->query($sql);
