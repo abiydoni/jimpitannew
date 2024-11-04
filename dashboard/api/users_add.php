@@ -91,28 +91,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h1>Jimpitan - RT07 Salatiga</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">KK</a>
+                            <a href="#">Users</a>
                         </li>
                         <li><i class='bx bx-chevron-right' ></i></li>
                         <li>
                             <a class="active" href="index.php">Home</a>
                         </li>
                     </ul>
-                </div>
-            </div>
-            <div class="table-data">
-                <div class="order">
-                    <div class="head">
-                        <h3>KK</h3>
-                        <div class="mb-4 text-center">
-                            <button type="button" id="printSelectedBtn" class="btn-download">
-                                <i class='bx bxs-printer' style="font-size:24px"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div> 
-
-                    </dive>
                 </div>
             </div>
         </main>
