@@ -110,7 +110,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </button>
                         </div>
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                    <table id="contoh" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Nama KK</th>
@@ -194,7 +194,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script>
         // Tambahkan ini setelah script yang ada
         $(document).ready(function() {
-            $('#example').DataTable({
+            $('#contoh').DataTable({
                 responsive: true
             });
         });
