@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
                     </div>
                     <div>
-                        <form action="insert.php" method="POST" class="space-y-4">
+                        <form action="users_save.php" method="POST" class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
                                 <label class="block text-sm font-medium text-gray-700">ID Code:</label>
                                 <input type="number" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
@@ -160,12 +160,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </form>                    
                     </div>
                 </div>
-                <div class="order">
-                    <div class="head">
-                        <img src="../images/user.gif" alt="Loading..." class="w-32 h-auto mx-auto"> <!-- Ganti dengan path GIF Anda -->
-                    </div>
-                </div>
-
             </div>        
         </main>
         <!-- MAIN -->

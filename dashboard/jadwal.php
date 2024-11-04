@@ -117,11 +117,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button> 
-                                <a href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    Tambah Data
-                                </a>
-                            </button>
+                            <button id="openModal" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Tambah Data</button>
                             <button>
                                 <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     Print Report
@@ -156,6 +152,41 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </main>
     </div>
+
+    <div id="myModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg shadow-md">
+            <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3>
+            <form action="users_save.php" method="POST" class="space-y-4">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">ID Code:</label>
+                    <input type="number" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Shift:</label>
+                    <input type="text" name="shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Role:</label>
+                    <input type="text" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Submit</button>
+            </form>
+        </div>
+    </div>
+
 
     </section>
     <!-- CONTENT --> 
@@ -214,8 +245,34 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     });
 </script>
+
+<script>
+    const modal = document.getElementById("myModal");
+    const openModal = document.getElementById("openModal");
+    const closeModal = document.getElementById("closeModal");
+
+    openModal.onclick = function() {
+        modal.classList.remove("hidden");
+    }
+
+    closeModal.onclick = function() {
+        modal.classList.add("hidden");
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.classList.add("hidden");
+        }
+    }
+</script>
+
+
+
 </body>
+
+
 </html>
+
 
 <?php
 // Tutup koneksi
