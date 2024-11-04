@@ -100,6 +100,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Input Data Users</h3>
+                    </div>
+                </div>
+            </div>
         </main>
         <!-- MAIN -->
     </section>
