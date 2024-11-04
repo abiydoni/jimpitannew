@@ -30,9 +30,10 @@ try {
     
     // Execute the statement with data
     $stmt->execute([$coa_code, $date_trx, $desc_trx, $reff, $debet, $kredit]);
-    
     // Respond with success
+    header("Location: keuangan.php"); // Pindah sebelum mengeluarkan output
     echo json_encode(['success' => true, 'message' => 'Data berhasil disimpan.']);
+    exit; // Pastikan untuk keluar setelah pengalihan
 } catch (PDOException $e) {
     // Handle any database errors
     echo json_encode(['success' => false, 'message' => 'Gagal menyimpan data: ' . $e->getMessage()]);
