@@ -13,26 +13,38 @@ if ($_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 // Include the database connection
-include 'api/db.php';
+include 'db.php';
+// Prepare and execute the SQL statement
+$stmt = $pdo->prepare("SELECT * FROM users"); // Update 'your_table'
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fungsi untuk menghapus data
-if (isset($_GET['delete'])) {
-    $id_code = $_GET['delete'];
-    $sql = "DELETE FROM users WHERE id_code=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_code]);
+// Validasi input
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_code = filter_input(INPUT_POST, 'id_code', FILTER_VALIDATE_INT);
+    $user_name = filter_input(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $shift = filter_input(INPUT_POST, 'shift', FILTER_SANITIZE_STRING);
+    $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
 
-    header("Location: jadwal.php");
-    exit();
+    // Pastikan semua input valid
+    if ($id_code === false || empty($user_name) || empty($name) || empty($password) || empty($shift) || empty($role)) {
+        // Tangani kesalahan validasi
+        echo "Input tidak valid!";
+        exit;
+    }
+
+    // Menyisipkan data ke database
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (id_code, user_name, name, password, shift, role) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$id_code, $user_name, $name, password_hash($password, PASSWORD_DEFAULT), $shift, $role]);
+    } catch (PDOException $e) {
+        echo "Kesalahan: " . $e->getMessage();
+        exit;
+    }
 }
-
-
-// Mengambil data dari tabel users
-$sql = "SELECT * FROM users";
-$stmt = $pdo->query($sql);
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,13 +62,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>Jadwal Jaga</title>
+    <title>KK</title>
 </head>
 <body>
 
@@ -89,6 +101,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="form-input">
                     <input type="search" id="search-input" placeholder="Search...">
                     <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+					<!-- <button type="button" class="clear-btn"><i class='bx bx-reset' ></i></button> -->
                 </div>
             </form>
             <input type="checkbox" id="switch-mode" hidden>
@@ -115,51 +128,49 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Data User dan Jadwal Jaga</h3>
-                        <div class="mb-4 text-center">
-                            <button> 
-                                <a href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    Tambah Data
-                                </a>
-                            </button>
-                            <button>
-                                <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Print Report
-                                </a>
-                            </button>
-                        </div>
+                        <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th style="text-align: left;">Kode ID</th>
-                                <th style="text-align: center;">Nama</th>
-                                <th style="text-align: center;">Shift</th>
-                                <th style="text-align: center;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach($users as $user): ?>
-                            <tr class="border-b hover:bg-gray-100">
-                                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["name"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
-                                <td class="flex justify-center space-x-2">
-                                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
-                                    <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                    <div>
+                        <form action="insert.php" method="POST" class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">ID Code:</label>
+                                <input type="number" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Username:</label>
+                                <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Name:</label>
+                                <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Password:</label>
+                                <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Shift:</label>
+                                <input type="text" name="shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Role:</label>
+                                <input type="text" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <button type="submit" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Menambahkan transisi -->
+                        </form>                    
+                    </div>
                 </div>
-            </div>
-        </main>
-    </div>
+                <div class="order">
+                    <div class="head">
+                        <img src="../images/user.gif" alt="Loading..." class="w-32 h-auto mx-auto"> <!-- Ganti dengan path GIF Anda -->
+                    </div>
+                </div>
 
+            </div>        
+        </main>
+        <!-- MAIN -->
     </section>
-    <!-- CONTENT --> 
-   
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -167,10 +178,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
 
-    <script src="js/script.js"></script>
-    <script src="js/print.js"></script>
-	<script src="js/qrcode.min.js"></script>
-
+    <script src="../js/script.js"></script>
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
@@ -203,21 +211,5 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-<script>
-    // Tambahkan ini setelah script yang ada
-    $(document).ready(function() {
-        // Cek apakah DataTable sudah diinisialisasi
-        if (!$.fn.DataTable.isDataTable('#example')) {
-            $('#example').DataTable({
-                responsive: true
-            });
-        }
-    });
-</script>
 </body>
 </html>
-
-<?php
-// Tutup koneksi
-$pdo = null;
-?>
