@@ -117,7 +117,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5">Tambah Data</button>
+                            <button> 
+                                <a href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    Tambah Data
+                                </a>
+                            </button>
                             <button>
                                 <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     Print Report
