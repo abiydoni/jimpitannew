@@ -130,6 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="head">
                         <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
                     </div>
+                </div>
+
+                <div class="order">
+                    <div class="head">
+                        <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
+                    </div>
                     <div>
                         <form action="insert.php" method="POST" class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
