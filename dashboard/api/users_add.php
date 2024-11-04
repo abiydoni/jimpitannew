@@ -37,7 +37,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -55,7 +55,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <ul class="side-menu top">
             <li><a href="index.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li class="active"><a href="#"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
+            <li class="active"><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
             <li><a href="kk.php"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
             <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
             <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
@@ -105,19 +105,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
-                            <button> 
-                                <a href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    Tambah Data
-                                </a>
-                            </button>
-                            <button>
-                                <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Print Report
-                                </a>
+                            <button type="button" id="printSelectedBtn" class="btn-download">
+                                <i class='bx bxs-printer' style="font-size:24px"></i>
                             </button>
                         </div>
-<!-- Isikan tabel dan isian disini -->
                     </div>
+                    <div> 
+
+                    </dive>
                 </div>
             </div>
         </main>
@@ -131,7 +126,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
 
-    <script src="js/script.js"></script>
+    <script src="../js/script.js"></script>
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
@@ -164,5 +159,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
+<script>
+    // Tambahkan ini setelah script yang ada
+    $(document).ready(function() {
+        // Cek apakah DataTable sudah diinisialisasi
+        if (!$.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable({
+                responsive: true
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
