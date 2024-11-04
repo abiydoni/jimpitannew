@@ -17,8 +17,8 @@ $debet = !empty($data['debit']) ? $data['debit'] : 0; // Default to 0 if not set
 $kredit = !empty($data['kredit']) ? $data['kredit'] : 0; // Default to 0 if not set
 
 // Validasi input data
-if (is_null($coa_code) || is_null($date_trx) || $debet < 0 || $kredit < 0) {
-    echo json_encode(['success' => false, 'message' => 'Kode COA, tanggal transaksi, debit, dan kredit harus diisi dan tidak boleh negatif.']);
+if (is_null($coa_code) || is_null($date_trx)) {
+    echo json_encode(['success' => false, 'message' => 'Kode COA, tanggal transaksi, debit, dan kredit harus diisi.']);
     exit;
 }
 
