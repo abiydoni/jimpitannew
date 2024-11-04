@@ -104,9 +104,20 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>KK</h3>
-                    </div>
+                        <div class="mb-4 text-center">
+                            <button> 
+                                <a href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    Tambah Data
+                                </a>
+                            </button>
+                            <button>
+                                <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Print Report
+                                </a>
+                            </button>
+                        </div>
 <!-- Isikan tabel dan isian disini -->
-
+                    </div>
                 </div>
             </div>
         </main>

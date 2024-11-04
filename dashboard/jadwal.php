@@ -127,7 +127,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     Print Report
                                 </a>
                             </button>
-                            </button>
                         </div>
                     </div>
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
