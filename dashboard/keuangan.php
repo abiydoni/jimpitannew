@@ -17,7 +17,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
 include 'api/db.php';
 
 // Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT * FROM kas_umum ORDER BY date_trx ASC");
+$stmt = $pdo->prepare("SELECT * FROM kas_umum ORDER BY date_trx DESC");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -214,7 +214,7 @@ $tanggalSekarang = date("Y-m-d");
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
             searching: true,
-            order: [[2, 'desc']],
+            order: [[1, 'desc']],
             columnDefs: [
                 { targets: 0, className: "text-left" },
                 { targets: 1, className: "text-center" },
