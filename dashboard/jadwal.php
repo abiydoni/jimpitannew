@@ -15,11 +15,24 @@ if ($_SESSION['user']['role'] !== 'admin') {
 // Include the database connection
 include 'api/db.php';
 
-// Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT id_code,user_name,name,password,shift,role FROM users"); // Update 'your_table'
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $id_code = $_GET['delete'];
+    $sql = "DELETE FROM users WHERE id_code=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_code]);
+
+    header("Location: jadwal.php");
+    exit();
+}
+
+
+// Mengambil data dari tabel users
+$sql = "SELECT * FROM users";
+$stmt = $pdo->query($sql);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +56,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>KK</title>
+    <title>Jadwal Jaga</title>
 </head>
 <body>
 
@@ -100,20 +113,23 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </div>
             </div>
-
             <div class="table-data">
                 <div class="order">
                     <div class="head">
                         <h3>Jadwal Jaga</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
-                        <!-- Tombol Tambah Data -->
-                        <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
-
+                        <a href="api/crud_users.php">Kelola Pengguna</a> <!-- Link ke CRUD Users -->
+                        <div class="mb-4 text-center">
+                            <button>
+                                <a href="api/print_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Print Report
+                                </a>
+                            </button>
+                            </button>
+                            <button class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5" onclick="openModal()">Tambah Data</button>
+                        </div>
                     </div>
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Kode ID</th>
                                 <th style="text-align: center;">Nama</th>
@@ -122,72 +138,27 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                            if ($data) {
-                                foreach ($data as $row): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row["id_code"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                        <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                        <td style="text-align: center;">
-                                            <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="openModal(<?= $row['id_code'] ?>, '<?= $row['user_name'] ?>', '<?= $row['alam   at'] ?>')">Edit</button>
-                                            <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded">
-                                                Hapus
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; 
-                            } else {
-                                echo '<tr><td colspan="3">No data available</td></tr>';
-                            }
-                        ?>
+                        <?php foreach($users as $user): ?>
+                            <tr class="border-b hover:bg-gray-100">
+                                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                                <td><?php echo htmlspecialchars($user["name"]); ?></td>
+                                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
+                                <td class="flex justify-center space-x-2">
+                                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
+                                    <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- Modal untuk Tambah Data -->
-            <div id="addModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white w-1/3 rounded-lg p-6">
-                    <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
-                    <form method="POST" action="tambah.php">
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Kode</label>
-                            <input type="text" name="nama" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">User Name</label>
-                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Nama Lengkap</label>
-                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Password</label>
-                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Jadwal Jaga</label>
-                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Role</label>
-                            <input type="text" name="alamat" class="w-full p-2 border rounded" required>
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2" onclick="closeModal()">Batal</button>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
         </main>
-        <!-- MAIN -->
+    </div>
+
     </section>
-    <!-- CONTENT -->    
+    <!-- CONTENT --> 
+   
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -198,6 +169,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="js/script.js"></script>
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
+
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
@@ -230,15 +202,18 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-        <script>
-            function openModal() {
-                document.getElementById('addModal').classList.remove('hidden');
-            }
-
-            function closeModal() {
-                document.getElementById('addModal').classList.add('hidden');
-            }
-        </script>
-
+    <script>
+        // Tambahkan ini setelah script yang ada
+        $(document).ready(function() {
+            $('#example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
 </body>
 </html>
+
+<?php
+// Tutup koneksi
+$pdo = null;
+?>

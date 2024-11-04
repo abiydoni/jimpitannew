@@ -124,8 +124,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </button>
                     </div>
                     <div class="m-4"> <!-- Margin di sekitar tabel -->
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: Left;">Nama KK</th> <!-- Kolom pertama rata kiri -->
                                 <th style="text-align: center;">Code</th>
@@ -138,7 +138,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
-                                        <tr>
+                                        <tr class="border-b hover:bg-gray-100">
                                             <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> <!-- Rata kiri -->
                                             <td><?php echo htmlspecialchars($row["report_id"]); ?></td> <!-- Rata tengah -->
                                             <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>

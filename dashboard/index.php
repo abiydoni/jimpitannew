@@ -20,7 +20,7 @@ $currentDay = date('l'); // 'l' gives full textual representation of the day
 
 // Prepare the SQL statement to select only today's shift
 $stmt = $pdo->prepare("
-    SELECT user_name, shift 
+    SELECT name, shift 
     FROM users 
     WHERE shift = :currentDay
 ");
@@ -115,7 +115,7 @@ include 'api/get_info.php';
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
                         <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
-                        <a href="kk.php">Total Kepala Keluarga</a>
+                        <a href="kk.php">Kepala Keluarga</a>
                     </span>
                 </li>
                 <li>
@@ -132,14 +132,14 @@ include 'api/get_info.php';
                                 echo formatRupiah($saldo); // Output: Rp 1.500.000
                             ?>
                         </h3>
-                        <a href="keuangan.php">Saldo KAS per bulan ini</a>
+                        <a href="keuangan.php">Saldo KAS</a>
                     </span>
                 </li>
                 <li>
                     <i class='bx bxs-info-circle bx-lg'></i>
                     <span class="text">
-                        <h3 id="totalUncheck">0</h3>
-                        <p>Unchecked</p>
+                        <h3 id="totalUncheck"><?php echo $totalUsers; ?> Orang</h3>
+                        <a href="jadwal.php">Users JAGA</a>
                     </span>
                 </li>
             </ul>
@@ -162,28 +162,28 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
 
-                            <table id="checkin-table">
-                                <thead>
+                            <table id="checkin-table" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                                <thead class="bg-gray-200">
                                     <tr>
-                                        <th>NAMA</th>
-                                        <th>SHIFT</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                     if ($data) {
                                         foreach ($data as $row): ?>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($row["user_name"]); ?></td>
+                                            <tr class="border-b hover:bg-gray-100">
+                                                <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["shift"]); ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else {
-                                        echo '<tr><td colspan="3">No data available</td></tr>';
+                                        echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
                                     }
                                 ?>
                                 </tbody>
-                            </table>
+                            </table>                        
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	// table initialize
-	var table = new DataTable('#example', {
+	var table = new DataTable('#contoh', {
 		pageLength: 10, // Set the default number of records per page to 10
         lengthMenu: [10, 25, 50, 100], // Options for the dropdown
 		searching: true, // Aktifkan pencarian
@@ -202,4 +202,5 @@ $(document).ready(function() {
 				document.body.removeChild(iframe);
 			}, 100);
 		};
-	}		
+	}
+	

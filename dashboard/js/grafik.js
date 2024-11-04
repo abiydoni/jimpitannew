@@ -27,9 +27,14 @@ function createChart(saldoData) {
                 y: {
                     beginAtZero: true
                 }
-            }
+            },
+            // Menambahkan pengaturan tinggi grafik
+            responsive: true,
+            maintainAspectRatio: false, // Mengizinkan perubahan rasio aspek
         }
     };
+    // Menentukan tinggi grafik
+    document.getElementById('myChart').style.height = '400px'; // Ubah tinggi sesuai kebutuhan
     // Render grafik ke elemen canvas dengan id "myChart"
     const myChart = new Chart(
         document.getElementById('myChart'),

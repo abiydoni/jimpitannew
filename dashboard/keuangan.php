@@ -118,8 +118,8 @@ $tanggalSekarang = date("Y-m-d");
                             <i class="bx bx-x-circle" style="font-size: 24px; color: red;"></i>
                             </button>
                     </div>
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Kode</th>
                                 <th style="text-align: center;">Tanggal</th>
@@ -133,7 +133,7 @@ $tanggalSekarang = date("Y-m-d");
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
-                                        <tr>
+                                        <tr class="border-b hover:bg-gray-100">
                                             <td><?php echo htmlspecialchars($row["coa_code"]); ?></td>
                                             <td><?php echo htmlspecialchars($row["date_trx"]); ?></td>
                                             <td><?php echo htmlspecialchars($row["reff"]); ?></td>

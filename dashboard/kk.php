@@ -104,26 +104,28 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>KK</h3>
-						<button type="button" id="printSelectedBtn" class="btn-download">
-							<i class='bx bxs-printer' style="font-size:24px"></i>
-						</button>
+                        <div class="mb-4 text-center">
+                            <button type="button" id="printSelectedBtn" class="btn-download">
+                                <i class='bx bxs-printer' style="font-size:24px"></i>
+                            </button>
+                        </div>
                     </div>
-                    <table id="example" class="display" style="width:100%">
-                        <thead>
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Nama KK</th>
-                                <th style="text-align: center;">Code</th>
+                                <th style="text-align: left;">Code</th>
                                 <th style="text-align: center;">
                                     <input type="checkbox" id="selectAllCheckbox" style="display:none">
                                     <label for="selectAllCheckbox" style="font-size:24px"><i class='bx bx-check-double'></i></label>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
+                        <tbody>
                             <?php
                                 if ($data) {
                                     foreach ($data as $row): ?>
-                                        <tr>
+                                        <tr class="border-b hover:bg-gray-100">
                                             <td>
                                                 <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
                                                     <?php echo htmlspecialchars($row["kk_name"]); ?>
@@ -146,7 +148,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </main>
         <!-- MAIN -->
     </section>
-    <!-- CONTENT -->    
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -189,5 +191,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
+    <script>
+        // Tambahkan ini setelah script yang ada
+        $(document).ready(function() {
+            $('#example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+
 </body>
 </html>

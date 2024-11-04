@@ -1,46 +1,46 @@
 <?php
-session_start();
+    session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-// Check if user is admin
-if ($_SESSION['user']['role'] !== 'admin') {
-    header('Location: ../login.php'); // Redirect to unauthorized page
-    exit;
-}
-// Include the database connection
-include 'api/db.php';
-
-// Mengambil parameter nama dari URL
-$nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
-
-// ... existing code ...
-
-if ($nama_dicari) {
-    // Query untuk mencari data berdasarkan nama
-    $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
-    $stmt->execute();
-    
-    // Cek apakah data ditemukan
-    if ($stmt->rowCount() > 0) {
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
-        echo "Data tidak ditemukan.";
+    // Check if user is logged in
+    if (!isset($_SESSION['user'])) {
+        header('Location: ../login.php'); // Redirect to login page
         exit;
     }
-} else {
-    echo "Nama tidak valid.";
-    exit;
-}
 
-// Menutup statement (tidak perlu menutup koneksi PDO secara manual)
-$stmt = null;
+    // Check if user is admin
+    if ($_SESSION['user']['role'] !== 'admin') {
+        header('Location: ../login.php'); // Redirect to unauthorized page
+        exit;
+    }
+    // Include the database connection
+    include 'api/db.php';
+
+    // Mengambil parameter nama dari URL
+    $nama_dicari = isset($_GET['nama']) ? $_GET['nama'] : '';
+
+    // ... existing code ...
+
+    if ($nama_dicari) {
+        // Query untuk mencari data berdasarkan nama
+        $query = "SELECT * FROM master_kk WHERE kk_name = :nama";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':nama', $nama_dicari, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        // Cek apakah data ditemukan
+        if ($stmt->rowCount() > 0) {
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            echo "Data tidak ditemukan.";
+            exit;
+        }
+    } else {
+        echo "Nama tidak valid.";
+        exit;
+    }
+
+    // Menutup statement (tidak perlu menutup koneksi PDO secara manual)
+    $stmt = null;
 
 // ... existing code ...
 ?>
@@ -66,11 +66,7 @@ $stmt = null;
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function printPage() {
-            window.print(); // Fungsi untuk mencetak halaman
-        }
-    </script>
+    <script src="js/qrcode.min.js"></script>
 
     <title>KK</title>
 </head>
@@ -154,36 +150,36 @@ $stmt = null;
                 </div>
                 <hr class="my-4 border-gray-300">
 
-                <a href="javascript:history.back()" 
-                    class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-                    <!-- Icon Panah -->
-                    <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Kembali
-                </a>
             </div>
 
             <!-- Card Container -->
-            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
-                <!-- Profile Image -->
-                <div class="flex items-center justify-center">
-                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="border-4 border-blue-500 shadow-md">
-                </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full flex flex-col items-center space-y-2">
+
+                <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
+                <hr class="my-4 border-gray-300">
+
                 <hr class="my-4 border-gray-300">
                 <!-- Tombol Cetak -->
                 <button onclick="printPage()" 
-                    class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full max-w-[200px]">
                     <!-- Ikon Cetak -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
                     </svg>
                     Cetak
                 </button>
+                <hr class="my-4 border-gray-300">
+                <a href="javascript:history.back()" 
+                    class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                    <!-- Icon Panah -->
+                    <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2 w-full max-w-[200px]">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Kembali
+                </a>
             </div>
 
             </div>
-
         </main>
         <!-- MAIN -->
     </section>
@@ -230,5 +226,41 @@ $stmt = null;
             }
         })
     </script>
-</body>
+<script>
+function generateQRCodes() {
+    // Ambil code_id langsung dari data PHP
+    const codeId = "<?= htmlspecialchars($data['code_id']) ?>";
+    
+    // Kosongkan konten QR code sebelumnya
+    const qrContainer = document.getElementById("qrcode-container");
+    qrContainer.innerHTML = "";
+
+    // Buat elemen div untuk QR code
+    const qrDiv = document.createElement("div");
+    qrContainer.appendChild(qrDiv);
+
+    // Generate QR code
+    new QRCode(qrDiv, {
+        text: codeId,
+        width: 250,
+        height: 250,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
+
+// Panggil generateQRCodes() saat halaman selesai dimuat
+window.onload = generateQRCodes;
+</script>
+        <script>
+            function printPage() {
+                const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
+                const originalContent = document.body.innerHTML; // Simpan konten asli
+                document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
+                window.print(); // Panggil fungsi cetak
+                document.body.innerHTML = originalContent; // Kembalikan konten asli
+            }
+        </script>
+    </body>
 </html>
