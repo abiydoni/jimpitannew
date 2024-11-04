@@ -104,6 +104,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>Input Data Users</h3>
+                        <form action="insert.php" method="POST">
+                            <label>ID Code: </label><input type="number" name="id_code"><br>
+                            <label>Username: </label><input type="text" name="user_name" required><br>
+                            <label>Name: </label><input type="text" name="name" required><br>
+                            <label>Password: </label><input type="password" name="password" required><br>
+                            <label>Shift: </label><input type="text" name="shift" required><br>
+                            <label>Role: </label><input type="text" name="role" required><br>
+                            <button type="submit">Submit</button>
+                        </form>
                     </div>
                 </div>
             </div>
