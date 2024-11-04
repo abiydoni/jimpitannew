@@ -159,17 +159,5 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-<script>
-    // Tambahkan ini setelah script yang ada
-    $(document).ready(function() {
-        // Cek apakah DataTable sudah diinisialisasi
-        if (!$.fn.DataTable.isDataTable('#example')) {
-            $('#example').DataTable({
-                responsive: true
-            });
-        }
-    });
-</script>
-
 </body>
 </html>
