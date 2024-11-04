@@ -14,11 +14,36 @@ if ($_SESSION['user']['role'] !== 'admin') {
 }
 // Include the database connection
 include 'db.php';
-
 // Prepare and execute the SQL statement
 $stmt = $pdo->prepare("SELECT * FROM users"); // Update 'your_table'
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Validasi input
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_code = filter_input(INPUT_POST, 'id_code', FILTER_VALIDATE_INT);
+    $user_name = filter_input(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $shift = filter_input(INPUT_POST, 'shift', FILTER_SANITIZE_STRING);
+    $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
+
+    // Pastikan semua input valid
+    if ($id_code === false || empty($user_name) || empty($name) || empty($password) || empty($shift) || empty($role)) {
+        // Tangani kesalahan validasi
+        echo "Input tidak valid!";
+        exit;
+    }
+
+    // Menyisipkan data ke database
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (id_code, user_name, name, password, shift, role) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$id_code, $user_name, $name, password_hash($password, PASSWORD_DEFAULT), $shift, $role]);
+    } catch (PDOException $e) {
+        echo "Kesalahan: " . $e->getMessage();
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -103,21 +128,39 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Input Data Users</h3>
+                        <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
                     </div>
                     <div>
-                        <form action="insert.php" method="POST">
-                            <label>ID Code: </label><input type="number" name="id_code"><br>
-                            <label>Username: </label><input type="text" name="user_name" required><br>
-                            <label>Name: </label><input type="text" name="name" required><br>
-                            <label>Password: </label><input type="password" name="password" required><br>
-                            <label>Shift: </label><input type="text" name="shift" required><br>
-                            <label>Role: </label><input type="text" name="role" required><br>
-                            <button type="submit">Submit</button>
-                        </form>
+                        <form action="insert.php" method="POST" class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">ID Code:</label>
+                                <input type="number" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Username:</label>
+                                <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Name:</label>
+                                <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Password:</label>
+                                <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Shift:</label>
+                                <input type="text" name="shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md"> <!-- Menambahkan latar belakang dan bayangan -->
+                                <label class="block text-sm font-medium text-gray-700">Role:</label>
+                                <input type="text" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            </div>
+                            <button type="submit" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Menambahkan transisi -->
+                        </form>                    
                     </div>
                 </div>
-            </div>
+            </div>        
         </main>
         <!-- MAIN -->
     </section>
