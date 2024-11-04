@@ -104,6 +104,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>Input Data Users</h3>
+                    </div>
+                    <div>
                         <form action="insert.php" method="POST">
                             <label>ID Code: </label><input type="number" name="id_code"><br>
                             <label>Username: </label><input type="text" name="user_name" required><br>
