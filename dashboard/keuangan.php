@@ -321,6 +321,7 @@ $tanggalSekarang = date("Y-m-d");
                 success: function(response) {
                     if (response.success) {
                         Swal.fire('Data saved!', '', 'success');
+                        header("Location: keuangan.php");
                     } else {
                         Swal.fire('Error', response.message, 'error');
                     }
