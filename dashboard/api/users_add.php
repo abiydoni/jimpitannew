@@ -162,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="order">
                     <div class="head">
-                        <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3> <!-- Mengubah ukuran dan ketebalan teks -->
+                        <img src="../images/user.gif" alt="Loading..." class="w-32 h-auto mx-auto"> <!-- Ganti dengan path GIF Anda -->
                     </div>
                 </div>
 
