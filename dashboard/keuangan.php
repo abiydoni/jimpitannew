@@ -320,7 +320,9 @@ $tanggalSekarang = date("Y-m-d");
                 data: JSON.stringify(dataToSend),
                 success: function(response) {
                     if (response.success) {
-                        Swal.fire('Data saved!', '', 'success');
+                        Swal.fire('Data saved!', '', 'success').then(() => {
+                            window.location.href = 'keuangan.php'; // Arahkan ke halaman keuangan setelah menyimpan
+                        });
                     } else {
                         Swal.fire('Error', response.message, 'error');
                     }
