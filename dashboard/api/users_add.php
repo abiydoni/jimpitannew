@@ -13,26 +13,13 @@ if ($_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 // Include the database connection
-include 'api/db.php';
+include 'db.php';
 
-// Fungsi untuk menghapus data
-if (isset($_GET['delete'])) {
-    $id_code = $_GET['delete'];
-    $sql = "DELETE FROM users WHERE id_code=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_code]);
-
-    header("Location: jadwal.php");
-    exit();
-}
-
-
-// Mengambil data dari tabel users
-$sql = "SELECT * FROM users";
-$stmt = $pdo->query($sql);
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Prepare and execute the SQL statement
+$stmt = $pdo->prepare("SELECT * FROM users"); // Update 'your_table'
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +43,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>Jadwal Jaga</title>
+    <title>KK</title>
 </head>
 <body>
 
@@ -68,7 +55,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <ul class="side-menu top">
             <li><a href="index.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li class="active"><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
+            <li class="active"><a href="#"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
             <li><a href="kk.php"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
             <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
             <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
@@ -89,6 +76,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="form-input">
                     <input type="search" id="search-input" placeholder="Search...">
                     <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+					<!-- <button type="button" class="clear-btn"><i class='bx bx-reset' ></i></button> -->
                 </div>
             </form>
             <input type="checkbox" id="switch-mode" hidden>
@@ -103,7 +91,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h1>Jimpitan - RT07 Salatiga</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">Users</a>
+                            <a href="#">KK</a>
                         </li>
                         <li><i class='bx bx-chevron-right' ></i></li>
                         <li>
@@ -115,48 +103,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Data User dan Jadwal Jaga</h3>
-                        <div class="mb-4 text-center">
-                            <button href="api/users_add.php" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-5">Tambah Data</button>
-                            <button>
-                                <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Print Report
-                                </a>
-                            </button>
-                            </button>
-                        </div>
+                        <h3>KK</h3>
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th style="text-align: left;">Kode ID</th>
-                                <th style="text-align: center;">Nama</th>
-                                <th style="text-align: center;">Shift</th>
-                                <th style="text-align: center;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach($users as $user): ?>
-                            <tr class="border-b hover:bg-gray-100">
-                                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["name"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
-                                <td class="flex justify-center space-x-2">
-                                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
-                                    <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
+<!-- Isikan tabel dan isian disini -->
+
                 </div>
             </div>
         </main>
-    </div>
-
+        <!-- MAIN -->
     </section>
-    <!-- CONTENT --> 
-   
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -165,9 +121,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
 
     <script src="js/script.js"></script>
-    <script src="js/print.js"></script>
-	<script src="js/qrcode.min.js"></script>
-
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
@@ -200,21 +153,5 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-<script>
-    // Tambahkan ini setelah script yang ada
-    $(document).ready(function() {
-        // Cek apakah DataTable sudah diinisialisasi
-        if (!$.fn.DataTable.isDataTable('#example')) {
-            $('#example').DataTable({
-                responsive: true
-            });
-        }
-    });
-</script>
 </body>
 </html>
-
-<?php
-// Tutup koneksi
-$pdo = null;
-?>
