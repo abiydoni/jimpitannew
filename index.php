@@ -156,7 +156,7 @@ if (!isset($_SESSION['user'])) {
       <input type="file" id="qr-input-file" accept="image/*" capture hidden>
   </div>
   <div id="qr-reader"></div>
-  <p>Apabila ada kendala bisa hubungi: Hermawan (Maman)</p>
+  <p>Apabila ada kendala, hubungi: Adi Hermawan</p>
   <p>Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
 </div>
 
