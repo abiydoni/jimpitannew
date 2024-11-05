@@ -1,9 +1,9 @@
 <?php
 function getDatabaseConnection() {
     $host = 'localhost';
-    $db = 'umt096nh_jimpitan';
-    $user = 'umt096nh_admin';
-    $pass = 'A7biy777__';
+    $db = 'appsbeem_jimpitan';
+    $user = 'appsbeem_admin';
+    $pass = 'A7by777__';
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
