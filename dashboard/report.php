@@ -123,36 +123,63 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <i class='bx bxs-file-export'></i> Unduh
                             </button>
                     </div>
-                    <div class="m-4"> <!-- Margin di sekitar tabel -->
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th style="text-align: Left;">Nama KK</th> <!-- Kolom pertama rata kiri -->
-                                <th style="text-align: center;">Code</th>
-                                <th style="text-align: center;" id="sort-date">Tanggal</th>
-                                <th style="text-align: center;">Nominal</th>
-                                <th style="text-align: center;">Input By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                if ($data) {
-                                    foreach ($data as $row): ?>
-                                        <tr class="border-b hover:bg-gray-100">
-                                            <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> <!-- Rata kiri -->
-                                            <td><?php echo htmlspecialchars($row["report_id"]); ?></td> <!-- Rata tengah -->
-                                            <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["collector"]); ?></td>
-                                        </tr>
-                                    <?php endforeach; 
-                                } else {
-                                    echo '<tr><td colspan="5" class="px-6 py-4 text-center">No data available</td></tr>';
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                    <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
+                        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th style="text-align: Left;">Nama KK</th>
+                                    <th style="text-align: center;">Code</th>
+                                    <th style="text-align: center;" id="sort-date">Tanggal</th>
+                                    <th style="text-align: center;">Nominal</th>
+                                    <th style="text-align: center;">Input By</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"> <!-- Tambahkan ID untuk tbody -->
+                                <?php
+                                    if ($data) {
+                                        foreach ($data as $row): ?>
+                                            <tr class="border-b hover:bg-gray-100">
+                                                <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["report_id"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["collector"]); ?></td>
+                                            </tr>
+                                        <?php endforeach; 
+                                    } else {
+                                        echo '<tr><td colspan="5" class="px-6 py-4 text-center">No data available</td></tr>';
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
+                    <script>
+                        // Fungsi untuk memperbarui tabel secara real-time
+                        function updateTable() {
+                            fetch('api/get_report_data.php') // Ganti dengan endpoint yang sesuai
+                                .then(response => response.json())
+                                .then(data => {
+                                    const tableBody = document.getElementById('table-body');
+                                    tableBody.innerHTML = ''; // Kosongkan tbody sebelum memperbarui
+                                    data.forEach(row => {
+                                        const tr = document.createElement('tr');
+                                        tr.className = 'border-b hover:bg-gray-100';
+                                        tr.innerHTML = `
+                                            <td>${row.kk_name}</td>
+                                            <td>${row.report_id}</td>
+                                            <td>${row.jimpitan_date}</td>
+                                            <td>${row.nominal}</td>
+                                            <td>${row.collector}</td>
+                                        `;
+                                        tableBody.appendChild(tr);
+                                    });
+                                })
+                                .catch(error => console.error('Error fetching data:', error));
+                        }
+
+                        // Panggil fungsi updateTable setiap 5 detik
+                        setInterval(updateTable, 5000);
+                    </script>                
                 </div>
             </div>
         </main>
