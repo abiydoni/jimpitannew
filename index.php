@@ -121,18 +121,31 @@ if (!isset($_SESSION['user'])) {
 <div class="container">
   <h3>Jimpitan</h3>
   <p>RT07 SALATIGA</p>
+
   <p>
-    <?php
-        // Mengatur locale ke bahasa Indonesia
-        setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
-        // setlocale(LC_TIME, 'ind'); // Untuk Windows
+    <span id="current-time">
+      <?php
+          // Mengatur locale ke bahasa Indonesia
+          setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
+          // setlocale(LC_TIME, 'ind'); // Untuk Windows
 
-        // Mengambil tanggal sekarang
-        $tanggal_sekarang = strftime("%A, %d %B %Y");
+          // Mengambil tanggal sekarang
+          $tanggal_sekarang = strftime("%A, %d %B %Y", time()); // Menambahkan parameter time()
 
-        echo "<p>Hari :  $tanggal_sekarang</p>";
-    ?>
+          echo "<p>Hari :  $tanggal_sekarang</p>";
+      ?>
+    </span>
   </p>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' };
+      document.getElementById('current-time').innerHTML = `Hari: ${now.toLocaleDateString('id-ID', options)}`;
+    }
+    setInterval(updateTime, 1000); // Memperbarui waktu setiap detik
+    updateTime(); // Memanggil fungsi untuk pertama kali
+  </script>
+
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
@@ -144,6 +157,7 @@ if (!isset($_SESSION['user'])) {
   </div>
   <div id="qr-reader"></div>
   <p>Apabila ada kendala bisa hubungi: Hermawan (Maman)</p>
+  <p>Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
 </div>
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
