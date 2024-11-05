@@ -130,9 +130,9 @@ if (!isset($_SESSION['user'])) {
           // setlocale(LC_TIME, 'ind'); // Untuk Windows
 
           // Mengambil tanggal sekarang
-          $tanggal_sekarang = strftime("%A, %d %B %Y", time()); // Menambahkan parameter time()
+          // $tanggal_sekarang = strftime("%A, %d %B %Y", time()); // Menambahkan parameter time()
 
-          echo "<p>Hari :  $tanggal_sekarang</p>";
+          // echo "<p>Hari :  $tanggal_sekarang</p>";
       ?>
     </span>
   </p>
