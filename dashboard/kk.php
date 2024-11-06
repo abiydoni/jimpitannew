@@ -137,7 +137,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
                                             <td class="flex justify-center space-x-2">
                                                 <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
-                                                <a href="api/kk_delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
+                                                <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
                                                 <a>
 
                                                 </a>
