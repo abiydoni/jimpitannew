@@ -156,7 +156,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <script>
                         // Fungsi untuk memperbarui tabel secara real-time
                         function updateTable() {
-                            fetch('api/get_report_data.php') // Ganti dengan endpoint yang sesuai
+                            fetch('api/get_report_data.php?limit=15') // Ganti dengan endpoint yang sesuai
                                 .then(response => response.json())
                                 .then(data => {
                                     const tableBody = document.getElementById('table-body');
