@@ -137,7 +137,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
                                             <td class="flex justify-center space-x-2">
                                                 <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
-                                                <a href="delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
+                                                <a href="kk_delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
                                                 <a>
 
                                                 </a>
@@ -160,7 +160,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded shadow-lg">
             <h2 class="text-lg font-bold mb-4">Tambah Data Master KK</h2>
-            <form action="create.php" method="POST" enctype="multipart/form-data">
+            <form action="kk_create.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" class="border rounded w-full p-2" required>
@@ -189,7 +189,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded shadow-lg">
             <h2 class="text-lg font-bold mb-4">Edit Data Master KK</h2>
-            <form action="update.php" method="POST" enctype="multipart/form-data">
+            <form action="kk_update.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="code_id" id="edit_code_id">
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
