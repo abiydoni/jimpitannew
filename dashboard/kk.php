@@ -105,6 +105,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">Tambah Data</button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
                                 <i class='bx bxs-printer' style="font-size:24px"></i>
                             </button>
@@ -135,8 +136,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td class="border px-4 py-2">
                                                 <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
                                                 <a href="delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
-                                            </td>
-                                            <td>
                                                 <input type="checkbox" class="print-checkbox">    
                                             </td>
                                         </tr>
