@@ -157,12 +157,19 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         // Inisialisasi DataTable setelah tabel diisi
                         $(document).ready(function() {
                             $('#example').DataTable(); // Inisialisasi DataTable
+                            console.log("DataTable initialized"); // Debugging
                         });
 
                         // Fungsi untuk memperbarui tabel secara real-time
                         function updateTable() {
+                            console.log("Updating table..."); // Debugging
                             fetch('api/get_report_data.php') // Ganti dengan endpoint yang sesuai
-                                .then(response => response.json())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
                                 .then(data => {
                                     const tableBody = document.getElementById('table-body');
                                     tableBody.innerHTML = ''; // Kosongkan tbody sebelum memperbarui
@@ -179,6 +186,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         tableBody.appendChild(tr);
                                     });
                                     $('#example').DataTable().clear().rows.add($(tableBody).find('tr')).draw(); // Update DataTable
+                                    console.log("Table updated"); // Debugging
                                 })
                                 .catch(error => console.error('Error fetching data:', error));
                         }
