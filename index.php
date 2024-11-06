@@ -136,15 +136,6 @@ if (!isset($_SESSION['user'])) {
       ?>
     </span>
   </p>
-  <script>
-    function updateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' };
-      document.getElementById('current-time').innerHTML = `Hari: ${now.toLocaleDateString('id-ID', options)}`;
-    }
-    setInterval(updateTime, 1000); // Memperbarui waktu setiap detik
-    updateTime(); // Memanggil fungsi untuk pertama kali
-  </script>
 
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
@@ -177,5 +168,16 @@ if (!isset($_SESSION['user'])) {
         });
     }
   </script>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' };
+      document.getElementById('current-time').innerHTML = `Hari: ${now.toLocaleDateString('id-ID', options)}`;
+    }
+    setInterval(updateTime, 1000); // Memperbarui waktu setiap detik
+    updateTime(); // Memanggil fungsi untuk pertama kali
+  </script>
+
 </body>
 </html>
