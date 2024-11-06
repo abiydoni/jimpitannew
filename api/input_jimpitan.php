@@ -39,7 +39,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     $result = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
     $exists = $result['count'];
-    $kk_name = $result['kk_name'] ?? 'Nama tidak ditemukan'; // Jika kk_name tidak ada, set ke null
+    $kk_name = $result['kk_name'] ?? null; // Jika kk_name tidak ada, set ke null
 
     if ($exists > 0) {
         echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ' sudah ada, mau di hapus?']);
@@ -53,8 +53,6 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     if ($stmt) {
         // Eksekusi pernyataan
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
-        // Dapatkan nama kk setelah penyisipan
-        $kk_name = $kk_name === 'Nama tidak ditemukan' ? 'Nama baru' : $kk_name; // Atur nama baru jika tidak ditemukan sebelumnya
         
         // Respons sukses
         echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
