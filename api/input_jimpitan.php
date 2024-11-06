@@ -53,6 +53,8 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     if ($stmt) {
         // Eksekusi pernyataan
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
+        // Dapatkan nama kk setelah penyisipan
+        $kk_name = $kk_name === 'Nama tidak ditemukan' ? 'Nama baru' : $kk_name; // Atur nama baru jika tidak ditemukan sebelumnya
         
         // Respons sukses
         echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
