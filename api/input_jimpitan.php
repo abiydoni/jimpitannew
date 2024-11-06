@@ -23,6 +23,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     $report_id = $data->report_id;
     $jimpitan_date = $data->jimpitan_date;
     $nominal = $data->nominal;
+    $kk_name = $data->kk_name;
 
     // Dapatkan koneksi database
     $conn = getDatabaseConnection();
@@ -39,7 +40,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     $result = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
     $exists = $result['count'];
-    $kk_name = $result['kk_name'] ?? 'gk ada'; // Jika kk_name tidak ada, set ke null
+    $kk_name = $result['kk_name'] ?? null; // Jika kk_name tidak ada, set ke null
 
     if ($exists > 0) {
         echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ' sudah ada, mau di hapus?']);
