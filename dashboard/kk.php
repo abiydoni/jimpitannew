@@ -132,6 +132,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </a>
                                             </td>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
+                                            <td class="border px-4 py-2">
+                                                <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
+                                                <a href="delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
+                                            </td>
                                             <td>
                                                 <input type="checkbox" class="print-checkbox">    
                                             </td>
@@ -148,6 +152,64 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </main>
         <!-- MAIN -->
     </section>
+    <!-- Modal Tambah Data -->
+    <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-5 rounded shadow-lg">
+            <h2 class="text-lg font-bold mb-4">Tambah Data Master KK</h2>
+            <form action="create.php" method="POST" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" name="kk_name" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">Alamat</label>
+                    <input type="text" name="kk_alamat" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">HP</label>
+                    <input type="text" name="kk_hp" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">Foto</label>
+                    <input type="file" name="kk_foto" class="border rounded w-full p-2" required>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button>
+                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Simpan">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Data -->
+    <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-5 rounded shadow-lg">
+            <h2 class="text-lg font-bold mb-4">Edit Data Master KK</h2>
+            <form action="update.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="code_id" id="edit_code_id">
+                <div class="mb-4">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">Alamat</label>
+                    <input type="text" name="kk_alamat" id="edit_kk_alamat" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">HP</label>
+                    <input type="text" name="kk_hp" id="edit_kk_hp" class="border rounded w-full p-2" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-1">Foto</label>
+                    <input type="file" name="kk_foto" class="border rounded w-full p-2">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
+                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -202,6 +264,24 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     });
 </script>
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        // Script untuk mengisi data modal edit
+        document.querySelectorAll('[data-modal-toggle="editModal"]').forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('edit_code_id').value = this.getAttribute('data-id');
+                document.getElementById('edit_kk_name').value = this.getAttribute('data-name');
+                document.getElementById('edit_kk_alamat').value = this.getAttribute('data-alamat');
+                document.getElementById('edit_kk_hp').value = this.getAttribute('data-hp');
+                toggleModal('editModal');
+            });
+        });
+    </script>
+
 
 </body>
 </html>
