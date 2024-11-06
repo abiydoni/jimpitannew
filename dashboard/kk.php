@@ -135,9 +135,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </td>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
                                             <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
-                                            <td class="border px-4 py-2">
+                                            <td class="flex justify-center space-x-2">
                                                 <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
                                                 <a href="delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
+                                                <a>
+
+                                                </a>
                                                 <input type="checkbox" class="print-checkbox">    
                                             </td>
                                         </tr>
