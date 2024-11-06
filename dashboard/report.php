@@ -172,6 +172,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td>${row.collector}</td>
                                         `;
                                         tableBody.appendChild(tr);
+                                        data.sort((a, b) => new Date(b.jimpitan_date) - new Date(a.jimpitan_date)); // Mengurutkan berdasarkan tanggal terbaru                    
                                     });
                                 })
                                 .catch(error => console.error('Error fetching data:', error));
