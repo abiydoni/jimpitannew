@@ -16,7 +16,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
 include 'api/db.php';
 
 // Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT kk_name, code_id FROM master_kk"); // Update 'your_table'
+$stmt = $pdo->prepare("SELECT * FROM master_kk");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -114,8 +114,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th style="text-align: left;">Nama KK</th>
-                                <th style="text-align: left;">Code</th>
+                                <th class="border px-4 py-2">Code ID</th>
+                                <th class="border px-4 py-2">Nama KK</th>
+                                <th class="border px-4 py-2">Alamat</th>
+                                <th class="border px-4 py-2">HP</th>
+                                <th class="border px-4 py-2">Foto</th>
                                 <th style="text-align: center;">
                                     <input type="checkbox" id="selectAllCheckbox" style="display:none">
                                     <label for="selectAllCheckbox" style="font-size:24px"><i class='bx bx-check-double'></i></label>
@@ -133,6 +136,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </a>
                                             </td>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["kk_alamat"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
+                                            <td class="border px-4 py-2"><img src="uploads/<?php echo $row['kk_foto']; ?>" width="50"></td>
                                             <td class="border px-4 py-2">
                                                 <button class="bg-yellow-500 text-white px-2 py-1 rounded" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">Edit</button>
                                                 <a href="delete.php?id=<?php echo $row['code_id']; ?>" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</a>
