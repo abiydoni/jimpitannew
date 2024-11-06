@@ -23,7 +23,6 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     $report_id = $data->report_id;
     $jimpitan_date = $data->jimpitan_date;
     $nominal = $data->nominal;
-    $kk_name = $data->kk_name;
 
     // Dapatkan koneksi database
     $conn = getDatabaseConnection();
@@ -45,8 +44,6 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     if ($exists > 0) {
         echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ' sudah ada, mau di hapus?']);
         exit; // Hentikan eksekusi jika data sudah ada
-    } else{
-        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
     }
 
     // Siapkan pernyataan SQL untuk penyisipan
@@ -58,7 +55,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
         
         // Respons sukses
-        // echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
+        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);
