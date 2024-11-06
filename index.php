@@ -123,14 +123,9 @@ if (!isset($_SESSION['user'])) {
   <p>RT07 SALATIGA</p>
   <p>
     <?php
-        // Mengatur locale ke bahasa Indonesia
-        setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
-        // setlocale(LC_TIME, 'ind'); // Untuk Windows
-
-        // Mengambil tanggal sekarang
-        $tanggal_sekarang = strftime("%A, %d %B %Y");
-
-        echo "<p>Hari :  $tanggal_sekarang</p>";
+    date_default_timezone_set('Asia/Jakarta');
+    $tanggal_sekarang=date('l, j F Y');
+    echo"Tanggal: ".$tanggal_sekarang;
     ?>
   </p>
   <div class="floating-button" style="margin-right : 70px;">
