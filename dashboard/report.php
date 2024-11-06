@@ -154,9 +154,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </table>
                     </div>
                     <script>
+                        // Inisialisasi DataTable setelah tabel diisi
+                        $(document).ready(function() {
+                            $('#example').DataTable(); // Inisialisasi DataTable
+                        });
+
                         // Fungsi untuk memperbarui tabel secara real-time
                         function updateTable() {
-                            fetch('api/get_report_data.php?limit=10') // Ganti dengan endpoint yang sesuai
+                            fetch('api/get_report_data.php') // Ganti dengan endpoint yang sesuai
                                 .then(response => response.json())
                                 .then(data => {
                                     const tableBody = document.getElementById('table-body');
@@ -172,8 +177,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td>${row.collector}</td>
                                         `;
                                         tableBody.appendChild(tr);
-                                        data.sort((a, b) => new Date(b.jimpitan_date) - new Date(a.jimpitan_date)); // Mengurutkan berdasarkan tanggal terbaru                    
                                     });
+                                    $('#example').DataTable().clear().rows.add($(tableBody).find('tr')).draw(); // Update DataTable
                                 })
                                 .catch(error => console.error('Error fetching data:', error));
                         }
