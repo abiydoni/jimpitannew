@@ -28,35 +28,6 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
-    $monthYear = $_POST['month_year'];
-    $month = date('m', strtotime($monthYear));
-    $year = date('Y', strtotime($monthYear));
-
-    // Cek apakah sudah pernah diposting
-    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM kas_umum WHERE reff = 'JPT' AND MONTH(tanggal) = ? AND YEAR(tanggal) = ?");
-    $checkStmt->execute([$month, $year]);
-    $alreadyPosted = $checkStmt->fetchColumn() > 0;
-
-    if (!$alreadyPosted) {
-        // Hitung total nominal dari tabel report
-        $totalStmt = $pdo->prepare("SELECT SUM(nominal) as total_nominal FROM report WHERE MONTH(jimpitan_date) = ? AND YEAR(jimpitan_date) = ?");
-        $totalStmt->execute([$month, $year]);
-        $total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total_nominal'];
-
-        // Posting ke tabel kas_umum
-        if ($total > 0) {
-            $insertStmt = $pdo->prepare("INSERT INTO kas_umum (reff, debit, tanggal) VALUES ('JPT', ?, NOW())");
-            $insertStmt->execute([$total]);
-            echo "<script>alert('Posting berhasil dengan total nominal: $total');</script>";
-        } else {
-            echo "<script>alert('Tidak ada nominal untuk diposting.');</script>";
-        }
-    } else {
-        echo "<script>alert('Data sudah pernah diposting untuk bulan dan tahun ini.');</script>";
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -147,10 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
                 <div class="order">
                     <div class="head">
                         <h3>Report</h3>
-                            <!-- Tombol untuk membuka modal Posting Jimpitan -->
-                            <button type="button" id="postJimpitanBtn" class="btn-download">
-                                <i class='bx bxs-file-report'></i> Posting Jimpitan
-                            </button>
                             <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
                             <button type="button" id="reportBtn" class="btn-download">
                                 <i class='bx bxs-file-export'></i> Unduh
@@ -188,16 +155,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
                     </div>
                 </div>
             </div>
-                    <!-- Modal untuk memilih bulan dan tahun -->
-                    <div id="monthYearModal" class="modal hidden">
-                        <div class="modal-content">
-                            <span class="close-button">&times;</span>
-                            <h2>Pilih Bulan dan Tahun</h2>
-                            <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun" required>
-                            <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
-                        </div>
-                    </div>
-
         </main>
 
 
@@ -261,30 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
                 searchButtonIcon.classList.replace('bx-x', 'bx-search');
                 searchForm.classList.remove('show');
             }
-        })
-
-        document.getElementById("confirmSelection").addEventListener("click", function() {
-        const selectedMonthYear = document.getElementById("monthPickerModal").value;
-        console.log("Bulan dan tahun yang dipilih:", selectedMonthYear);
-        
-        document.querySelector('.close-button').addEventListener('click', function() {
-        document.getElementById('monthYearModal').classList.add('hidden');
-        // Kirim data ke server
-        const formData = new FormData();
-        formData.append('month_year', selectedMonthYear);
-
-        fetch('report.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-            modal.classList.add("hidden"); // Menyembunyikan modal setelah konfirmasi
-            location.reload(); // Reload halaman untuk melihat perubahan
-        })
-        .catch(error => console.error('Error:', error));
-    });
+        });
     </script>
     
 <!-- <script>
