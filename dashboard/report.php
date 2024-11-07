@@ -119,7 +119,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Report</h3>
                             <!-- Tombol untuk membuka modal Posting Jimpitan -->
-                            <button type="button" id="postJimpitanBtn" class="btn-download" data-modal-toggle="monthYearModal">
+                            <button type="button" id="postJimpitanButton" class="btn-download" data-modal-toggle="monthYearModal">
                                 <i class='bx bxs-file-export'></i> Posting Jimpitan
                             </button>
                             <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
@@ -260,7 +260,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-    
+
 <script>
     // Mengelola modal
     const modal = document.getElementById("monthYearModal");
