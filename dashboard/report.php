@@ -241,7 +241,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const postJimpitanButton = document.getElementById("postJimpitanBtn");
 
         postJimpitanButton.addEventListener("click", function() {
-            modal.classList.remove("hidden");
+            modal.classList.remove("hidden"); // Pastikan modal ditampilkan
         });
 
         closeButton.addEventListener("click", function() {
