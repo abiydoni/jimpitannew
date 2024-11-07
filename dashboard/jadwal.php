@@ -383,6 +383,24 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const toggle = document.getElementById('toggleConfirmPassword');
         confirmPasswordInput.type = toggle.checked ? 'text' : 'password';
     }
+
+    const changePasswordModal = document.getElementById("changePasswordModal");
+    const openChangePasswordModal = document.getElementById("openChangePasswordModal");
+    const closeChangePasswordModal = document.getElementById("closeChangePasswordModal");
+
+    openChangePasswordModal.onclick = function() {
+        changePasswordModal.classList.remove("hidden");
+    }
+
+    closeChangePasswordModal.onclick = function() {
+        changePasswordModal.classList.add("hidden");
+    }
+
+    window.onclick = function(event) {
+        if (event.target == changePasswordModal) {
+            changePasswordModal.classList.add("hidden");
+        }
+    }
 </script>
 </body>
 </html>
