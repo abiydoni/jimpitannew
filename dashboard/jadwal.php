@@ -117,7 +117,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                        <button id="resetPasswordModal" class="mt-4 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Reset Password</button>
+                        <button id="resetPasswordModalButton" class="mt-4 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Reset Password</button>
                         <button id="openModal" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Tambah Data</button>
                             <button>
                                 <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -142,7 +142,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($user["name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["shift"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openeditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
+                                    <button onclick="openEditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
                                 </td>
                             </tr>
@@ -173,7 +173,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     $exists = $checkStmt->fetchColumn();
                 }
             ?>
-            <form action="users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
+            <form action="api/users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
                     <input type="text" name="id_code" value="<?php echo $id_code; ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                
@@ -358,6 +358,26 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const modal = document.getElementById("editUserModal");
         if (event.target == modal) {
             modal.classList.add("hidden");
+        }
+    }
+</script>
+
+<script>
+    const resetPasswordModal = document.getElementById("resetPasswordModal");
+    const resetPasswordButton = document.getElementById("resetPasswordModalButton"); // Pastikan Anda memiliki tombol ini di HTML
+    const closeResetPasswordModal = document.getElementById("closeResetPasswordModal");
+
+    resetPasswordButton.onclick = function() {
+        resetPasswordModal.classList.remove("hidden");
+    }
+
+    closeResetPasswordModal.onclick = function() {
+        resetPasswordModal.classList.add("hidden");
+    }
+
+    window.onclick = function(event) {
+        if (event.target == resetPasswordModal) {
+            resetPasswordModal.classList.add("hidden");
         }
     }
 </script>
