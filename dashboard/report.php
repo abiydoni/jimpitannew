@@ -118,13 +118,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>Report</h3>
-                            <button type="button" id="postIncomeBtn" class="btn-post">
-                                <i class='bx bxs-plus-circle'></i> Posting Pemasukan
-                            </button>
-                            <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
-                            <button type="button" id="reportBtn" class="btn-download">
-                                <i class='bx bxs-file-export'></i> Unduh
-                            </button>
+                        <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
+                        <button type="button" id="reportBtn" class="btn-download">
+                            <i class='bx bxs-file-export'></i> Unduh
+                        </button>
                     </div>
                     <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
@@ -248,47 +245,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-    <script>
-        document.getElementById('postIncomeBtn').addEventListener('click', function() {
-            const monthYear = document.getElementById('monthPicker').value;
-            const totalNominal = calculateTotalNominal(); // Fungsi untuk menghitung total nominal
 
-            if (totalNominal > 0) {
-                fetch('api/post_income.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        reff: 'JMP',
-                        debet: totalNominal,
-                        tanggal: new Date().toISOString().split('T')[0] // Tanggal hari ini
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('Sukses!', 'Pemasukan berhasil diposting.', 'success');
-                    } else {
-                        Swal.fire('Gagal!', 'Terjadi kesalahan saat memposting pemasukan.', 'error');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                Swal.fire('Peringatan!', 'Total nominal harus lebih dari 0.', 'warning');
-            }
-        });
-
-        function calculateTotalNominal() {
-            let total = 0;
-            const rows = document.querySelectorAll('#table-body tr');
-            rows.forEach(row => {
-                const nominal = parseFloat(row.cells[3].innerText);
-                total += nominal;
-            });
-            return total;
-        }
-    </script>
 <!-- <script>
     // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
     const tableBody = document.getElementById('table-body');
