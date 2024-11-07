@@ -14,7 +14,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
 }
 
 // Include the database connection
-include 'api/db.php';
+include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_code = $_POST['id_code'];
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]);
 
-    header("Location: jadwal.php"); // Redirect back to the jadwal page
+    header("Location: ../jadwal.php"); // Redirect back to the jadwal page
     exit();
 }
 ?>
