@@ -20,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_code = $_POST['id_code'];
     $user_name = $_POST['user_name'];
     $name = $_POST['name'];
+    $pass = $_POST['password'];
     $shift = $_POST['shift'];
     $role = $_POST['role'];
 
     // Update user data in the database
-    $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id = ?";
+    $sql = "UPDATE users SET user_name = ?, name = ?, password = ?, shift = ?, role = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$user_name, $name, $shift, $role, $id_code]);
+    $stmt->execute([$user_name, $name, $pass, $shift, $role, $id_code]);
 
     header("Location: ../jadwal.php"); // Redirect back to the jadwal page
     exit();
