@@ -142,7 +142,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($user["name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["shift"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="editUser('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
+                                    <button onclick="editUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
                                 </td>
                             </tr>
@@ -203,7 +203,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </form>
         </div>
     </div>
-    <div id="editUser" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div id="editUserModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
             <span id="closeEditUserModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Edit User</h3>
