@@ -161,7 +161,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form action="users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
-                    <input type="number" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <input type="number" name="id_code" value="<?php echo 'USER' . rand(10000, 99999); ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
@@ -174,11 +174,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password:</label>
                     <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <input type="checkbox" id="togglePassword" class="mt-2" onclick="togglePasswordVisibility()">
+                    <label for="togglePassword" class="text-sm">Tampilkan Password</label>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Shift:</label>
-                    <input type="text" name="shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
+                    <label class="block text-sm font-medium text-gray-700">Role:</label>
+                    <select name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <option value="admin">Admin</option>
+                        <option value="user" selected>User</option> <!-- Nilai default diatur ke 'user' -->
+                    </select>
+                </div>                
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Role:</label>
                     <input type="text" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
@@ -203,7 +208,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
 
-
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const toggle = document.getElementById('togglePassword');
+            passwordInput.type = toggle.checked ? 'text' : 'password';
+        }
+    </script>
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
         const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
