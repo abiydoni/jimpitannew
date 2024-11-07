@@ -119,6 +119,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Report</h3>
                         <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
+                        <button type="button" id="reportBtn" class="btn-download" data-modal-toggle="monthYearModal">
+                            <i class='bx bxs-file-export'></i> Posting Jimpitan
+                        </button>
                         <button type="button" id="reportBtn" class="btn-download">
                             <i class='bx bxs-file-export'></i> Unduh
                         </button>
@@ -183,6 +186,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </main>
+        <div id="monthYearModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Pilih Bulan dan Tahun</h2>
+                <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
+                <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
+            </div>
+        </div>
+
         <!-- MAIN -->
     </section>
     <!-- CONTENT --> 
@@ -245,6 +257,32 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
+<script>
+    // Mengelola modal
+    const modal = document.getElementById("monthYearModal");
+    const closeButton = document.querySelector(".close-button");
+    const reportButton = document.getElementById("reportBtn");
+
+    reportButton.addEventListener("click", function() {
+        modal.classList.remove("hidden");
+    });
+
+    closeButton.addEventListener("click", function() {
+        modal.classList.add("hidden");
+    });
+
+    window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
+
+    document.getElementById("confirmSelection").addEventListener("click", function() {
+        const selectedMonthYear = document.getElementById("monthPickerModal").value;
+        console.log("Bulan dan tahun yang dipilih:", selectedMonthYear);
+        modal.classList.add("hidden");
+    });
+</script>
 
 <!-- <script>
     // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
