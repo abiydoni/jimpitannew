@@ -161,7 +161,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form action="users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
-                    <input type="number" name="id_code" value="<?php echo 'USER' . rand(10000, 99999); ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>
+                    <input type="number" name="id_code" value="<?php echo 'USER' . rand(10000, 99999); ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
@@ -184,10 +184,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <option value="user" selected>User</option> <!-- Nilai default diatur ke 'user' -->
                     </select>
                 </div>                
-                <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Role:</label>
-                    <input type="text" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
                 <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
             </form>
         </div>
