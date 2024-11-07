@@ -207,7 +207,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
             <span id="closeEditUserModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Edit User</h3>
-            <form action="edit_user.php" method="POST" class="space-y-2">
+            <form action="api/user_edit.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="edit_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
@@ -237,7 +237,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
             <span id="closeResetPasswordModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Reset Password</h3>
-            <form action="reset_password.php" method="POST" class="space-y-2">
+            <form action="api/reset_password.php" method="POST" class="space-y-2">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
                     <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
@@ -330,6 +330,32 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.classList.add("hidden");
+        }
+    }
+</script>
+
+<script>
+    function openEditUserModal(id_code, user_name, name, shift, role) {
+        document.getElementById('edit_id_code').value = id_code;
+        document.getElementById('edit_user_name').value = user_name;
+        document.getElementById('edit_name').value = name;
+        document.getElementById('edit_shift').value = shift;
+        document.getElementById('edit_role').value = role;
+
+        const modal = document.getElementById("editUserModal");
+        modal.classList.remove("hidden");
+    }
+
+    const closeEditUserModal = document.getElementById("closeEditUserModal");
+    closeEditUserModal.onclick = function() {
+        const modal = document.getElementById("editUserModal");
+        modal.classList.add("hidden");
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("editUserModal");
         if (event.target == modal) {
             modal.classList.add("hidden");
         }

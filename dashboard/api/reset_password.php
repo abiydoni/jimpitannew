@@ -17,18 +17,19 @@ if ($_SESSION['user']['role'] !== 'admin') {
 include 'api/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_code = $_POST['id_code'];
     $user_name = $_POST['user_name'];
-    $name = $_POST['name'];
-    $shift = $_POST['shift'];
-    $role = $_POST['role'];
+    $new_password = $_POST['new_password'];
 
-    // Update user data in the database
-    $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id = ?";
+    // Hash the new password
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+    // Update the user's password in the database
+    $sql = "UPDATE users SET password = ? WHERE user_name = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$user_name, $name, $shift, $role, $id_code]);
+    $stmt->execute([$hashed_password, $user_name]);
 
-    header("Location: jadwal.php"); // Redirect back to the jadwal page
+    // Optionally, you can add a success message or redirect
+    header("Location: jadwal.php?message=Password berhasil direset"); // Redirect back to the jadwal page with a success message
     exit();
 }
 ?>
