@@ -117,7 +117,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button id="openModal" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Tambah Data</button>
+                        <button id="resetPasswordModalButton" class="mt-4 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Reset Password</button>
+                        <button id="openModal" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Tambah Data</button>
                             <button>
                                 <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     Print Report
@@ -198,6 +199,23 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </select>
                 </div>                
                 <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
+            </form>
+        </div>
+    </div>
+    <div id="resetPasswordModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
+            <span id="closeResetPasswordModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Reset Password</h3>
+            <form action="reset_password.php" method="POST" class="space-y-2">
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
+                    <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Reset Password</button>
             </form>
         </div>
     </div>
