@@ -117,7 +117,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                        <button id="resetPasswordModalButton" class="mt-4 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Reset Password</button>
+                        <button id="resetPasswordModal" class="mt-4 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Reset Password</button>
                         <button id="openModal" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">Tambah Data</button>
                             <button>
                                 <a href="api/users_print.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -176,7 +176,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form action="users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
-                    <input type="text" name="id_code" value="<?php echo $id_code; ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                </div>
+                    <input type="text" name="id_code" value="<?php echo $id_code; ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                
+                </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
                     <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
@@ -202,6 +203,36 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </form>
         </div>
     </div>
+    <div id="editUser" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
+            <span id="closeEditUserModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Edit User</h3>
+            <form action="edit_user.php" method="POST" class="space-y-2">
+                <input type="hidden" name="id_code" id="edit_id_code">
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" name="user_name" id="edit_user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Shift:</label>
+                    <input type="text" name="shift" id="edit_shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Role:</label>
+                    <select name="role" id="edit_role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+                <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
+            </form>
+        </div>
+    </div>
+
     <div id="resetPasswordModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
             <span id="closeResetPasswordModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
