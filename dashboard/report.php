@@ -157,33 +157,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tbody>
                         </table>
                     </div>
-                    <script>
-                        // Fungsi untuk memperbarui tabel secara real-time
-                        function updateTable() {
-                            fetch('api/get_report_data.php') // Ganti dengan endpoint yang sesuai
-                                .then(response => response.json())
-                                .then(data => {
-                                    const tableBody = document.getElementById('table-body');
-                                    tableBody.innerHTML = ''; // Kosongkan tbody sebelum memperbarui
-                                    data.forEach(row => {
-                                        const tr = document.createElement('tr');
-                                        tr.className = 'border-b hover:bg-gray-100';
-                                        tr.innerHTML = `
-                                            <td>${row.kk_name}</td>
-                                            <td>${row.report_id}</td>
-                                            <td>${row.jimpitan_date}</td>
-                                            <td>${row.nominal}</td>
-                                            <td>${row.collector}</td>
-                                        `;
-                                        tableBody.appendChild(tr);
-                                    });
-                                })
-                                .catch(error => console.error('Error fetching data:', error));
-                        }
-
-                        // Panggil fungsi updateTable setiap 5 detik
-                        setInterval(updateTable, 5000);
-                    </script>                
                 </div>
             </div>
         </main>
