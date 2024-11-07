@@ -128,9 +128,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </button>
                     </div>
                     <!-- Modal untuk memilih bulan dan tahun -->
-                    <div id="monthYearModal" class="modal hidden">
-                        <div class="modal-content">
-                            <span class="close-button">&times;</span>
+                    <div id="monthYearModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+                        <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
+                            <span class="close cursor-pointer text-gray-500 float-right">&times;</span>
                             <h2>Pilih Bulan dan Tahun</h2>
                             <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
                             <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
