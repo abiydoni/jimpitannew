@@ -196,7 +196,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Shift:</label>
-                    <select name="shift" id="edit_shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <select name="shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>
                         <option value="Wednesday">Wednesday</option>
@@ -240,13 +240,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Shift:</label>
                     <select name="shift" id="edit_shift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                    <option value="Monday" <?php echo ($shift == 'Monday') ? 'selected' : ''; ?>>Monday</option>
-                        <option value="Tuesday" <?php echo ($shift == 'Tuesday') ? 'selected' : ''; ?>>Tuesday</option>
-                        <option value="Wednesday" <?php echo ($shift == 'Wednesday') ? 'selected' : ''; ?>>Wednesday</option>
-                        <option value="Thursday" <?php echo ($shift == 'Thursday') ? 'selected' : ''; ?>>Thursday</option>
-                        <option value="Friday" <?php echo ($shift == 'Friday') ? 'selected' : ''; ?>>Friday</option>
-                        <option value="Saturday" <?php echo ($shift == 'Saturday') ? 'selected' : ''; ?>>Saturday</option>
-                        <option value="Sunday" <?php echo ($shift == 'Sunday') ? 'selected' : ''; ?>>Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
                     </select>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
