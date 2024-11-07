@@ -28,6 +28,35 @@ $stmt->execute();
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
+    $monthYear = $_POST['month_year'];
+    $month = date('m', strtotime($monthYear));
+    $year = date('Y', strtotime($monthYear));
+
+    // Cek apakah sudah pernah diposting
+    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM kas_umum WHERE reff = 'JPT' AND MONTH(tanggal) = ? AND YEAR(tanggal) = ?");
+    $checkStmt->execute([$month, $year]);
+    $alreadyPosted = $checkStmt->fetchColumn() > 0;
+
+    if (!$alreadyPosted) {
+        // Hitung total nominal dari tabel report
+        $totalStmt = $pdo->prepare("SELECT SUM(nominal) as total_nominal FROM report WHERE MONTH(jimpitan_date) = ? AND YEAR(jimpitan_date) = ?");
+        $totalStmt->execute([$month, $year]);
+        $total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total_nominal'];
+
+        // Posting ke tabel kas_umum
+        if ($total > 0) {
+            $insertStmt = $pdo->prepare("INSERT INTO kas_umum (reff, debit, tanggal) VALUES ('JPT', ?, NOW())");
+            $insertStmt->execute([$total]);
+            echo "<script>alert('Posting berhasil dengan total nominal: $total');</script>";
+        } else {
+            echo "<script>alert('Tidak ada nominal untuk diposting.');</script>";
+        }
+    } else {
+        echo "<script>alert('Data sudah pernah diposting untuk bulan dan tahun ini.');</script>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -127,17 +156,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <i class='bx bxs-file-export'></i> Unduh
                             </button>
                     </div>
-                    <!-- Modal untuk memilih bulan dan tahun -->
-                    <div id="monthYearModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-                        <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
-                            <span class="close cursor-pointer text-gray-500 float-right">&times;</span>
-                            <h2>Pilih Bulan dan Tahun</h2>
-                            <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
-                            <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
-                        </div>
-                    </div>
-
-
                     <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                             <thead class="bg-gray-200">
@@ -234,34 +252,29 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 searchForm.classList.remove('show');
             }
         })
-    </script>
-    
-    <script>
-        // Mengelola modal
-        const modal = document.getElementById("monthYearModal");
-        const closeButton = document.querySelector(".close-button");
-        const postJimpitanButton = document.getElementById("postJimpitanBtn");
-
-        postJimpitanButton.addEventListener("click", function() {
-            modal.classList.remove("hidden"); // Menampilkan modal
-        });
-
-        closeButton.addEventListener("click", function() {
-            modal.classList.add("hidden"); // Menyembunyikan modal
-        });
-
-        window.addEventListener("click", function(event) {
-            if (event.target === modal) {
-                modal.classList.add("hidden"); // Menyembunyikan modal jika klik di luar
-            }
-        });
 
         document.getElementById("confirmSelection").addEventListener("click", function() {
-            const selectedMonthYear = document.getElementById("monthPickerModal").value;
-            console.log("Bulan dan tahun yang dipilih:", selectedMonthYear);
+        const selectedMonthYear = document.getElementById("monthPickerModal").value;
+        console.log("Bulan dan tahun yang dipilih:", selectedMonthYear);
+        
+        // Kirim data ke server
+        const formData = new FormData();
+        formData.append('month_year', selectedMonthYear);
+
+        fetch('report.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
             modal.classList.add("hidden"); // Menyembunyikan modal setelah konfirmasi
-        });    
-        </script>
+            location.reload(); // Reload halaman untuk melihat perubahan
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    </script>
+    
 <!-- <script>
     // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
     const tableBody = document.getElementById('table-body');
