@@ -127,6 +127,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <i class='bx bxs-file-export'></i> Unduh
                             </button>
                     </div>
+                                        <!-- Modal untuk memilih bulan dan tahun -->
+                    <div id="monthYearModal" class="modal hidden">
+                        <div class="modal-content">
+                            <span class="close-button">&times;</span>
+                            <h2>Pilih Bulan dan Tahun</h2>
+                            <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
+                            <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
+                        </div>
+                    </div>
+
+
                     <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                             <thead class="bg-gray-200">
@@ -159,16 +170,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </div>
-                    <!-- Modal untuk memilih bulan dan tahun -->
-            <div id="monthYearModal" class="modal hidden">
-                <div class="modal-content">
-                    <span class="close-button">&times;</span>
-                    <h2>Pilih Bulan dan Tahun</h2>
-                    <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
-                    <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
-                </div>
-            </div>
-
         </main>
 
 
