@@ -189,14 +189,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
                 </div>
             </div>
                     <!-- Modal untuk memilih bulan dan tahun -->
-            <div id="monthYearModal" class="modal hidden">
-                <div class="modal-content">
-                    <span class="close-button">&times;</span>
-                    <h2>Pilih Bulan dan Tahun</h2>
-                    <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
-                    <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
-                </div>
-            </div>
+                    <div id="monthYearModal" class="modal hidden">
+                        <div class="modal-content">
+                            <span class="close-button">&times;</span>
+                            <h2>Pilih Bulan dan Tahun</h2>
+                            <input type="text" id="monthPickerModal" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun" required>
+                            <button type="button" id="confirmSelection" class="btn-confirm">Konfirmasi</button>
+                        </div>
+                    </div>
 
         </main>
 
@@ -267,6 +267,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['month_year'])) {
         const selectedMonthYear = document.getElementById("monthPickerModal").value;
         console.log("Bulan dan tahun yang dipilih:", selectedMonthYear);
         
+        document.querySelector('.close-button').addEventListener('click', function() {
+        document.getElementById('monthYearModal').classList.add('hidden');
         // Kirim data ke server
         const formData = new FormData();
         formData.append('month_year', selectedMonthYear);
