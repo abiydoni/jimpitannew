@@ -120,7 +120,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h3>Report</h3>
                             <!-- Tombol untuk membuka modal Posting Jimpitan -->
                             <button type="button" id="postJimpitanBtn" class="btn-download">
-                                <i class='bx bxs-file-export'></i> Posting Jimpitan
+                                <i class='bx bxs-file-report'></i> Posting Jimpitan
                             </button>
                             <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
                             <button type="button" id="reportBtn" class="btn-download">
