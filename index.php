@@ -121,22 +121,6 @@ if (!isset($_SESSION['user'])) {
 <div class="container">
   <h3>Jimpitan</h3>
   <p>RT07 SALATIGA</p>
-
-  <p>
-    <span id="current-time">
-      <?php
-          // Mengatur locale ke bahasa Indonesia
-          setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
-          // setlocale(LC_TIME, 'ind'); // Untuk Windows
-
-          // Mengambil tanggal sekarang
-          // $tanggal_sekarang = strftime("%A, %d %B %Y", time()); // Menambahkan parameter time()
-
-          // echo "<p>Hari :  $tanggal_sekarang</p>";
-      ?>
-    </span>
-  </p>
-
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
@@ -169,16 +153,6 @@ if (!isset($_SESSION['user'])) {
             });
         });
     }
-  </script>
-
-  <script>
-    function updateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' };
-      document.getElementById('current-time').innerHTML = `Hari: ${now.toLocaleDateString('id-ID', options)}`;
-    }
-    setInterval(updateTime, 1000); // Memperbarui waktu setiap detik
-    updateTime(); // Memanggil fungsi untuk pertama kali
   </script>
 
 </body>
