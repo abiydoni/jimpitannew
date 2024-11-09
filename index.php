@@ -121,9 +121,15 @@ if (!isset($_SESSION['user'])) {
 <div class="container">
   <h3>Jimpitan RT.07 Randuares</h3>
   <p>Silahkan SCAN Barcode</p>
-  <div class="floating-button" style="margin-left : 70px;">
-    <a href="dashboard/logout.php"><i class="bx bx-detail-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const tanggalHariIni = today.toLocaleDateString('id-ID', options);
+      document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
+    });
+  </script>
+  <p id="tanggalHariIni"></p>
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
