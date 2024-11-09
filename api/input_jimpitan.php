@@ -34,6 +34,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         JOIN master_kk m ON r.report_id = m.code_id 
         WHERE r.report_id = ? AND r.jimpitan_date = ?
     ";
+
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->execute([$report_id, $jimpitan_date]);
     $result = $checkStmt->fetch(PDO::FETCH_ASSOC);
@@ -54,8 +55,9 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         // Eksekusi pernyataan
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
         
-        // Respons sukses
-        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
+        // Tambahkan pemeriksaan untuk $kk_name
+        $kk_name_message = $kk_name ? $kk_name : 'Nama tidak tersedia';
+        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name_message . ', tercatat dengan nominal Rp' . $nominal]);
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);
