@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':role', $role);
 
     if ($stmt->execute()) {
-        include '../jadwal.php'
+        include '../jadwal.php';
     } else {
         echo "Gagal menyimpan data.";
     }

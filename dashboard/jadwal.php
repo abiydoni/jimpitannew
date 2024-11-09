@@ -164,7 +164,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form action="api/users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
-                    <input type="text" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                
+                    <input type="text" value="USER" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>                
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
