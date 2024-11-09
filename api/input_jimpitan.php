@@ -55,7 +55,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         // Eksekusi pernyataan
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
     
-        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
+        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . '' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);
