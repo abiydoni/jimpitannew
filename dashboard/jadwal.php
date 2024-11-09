@@ -161,24 +161,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3"> <!-- Mengatur lebar modal -->
             <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Input Data Users</h3>
-            <?php
-                $id_code = 'USER' . rand(10000, 99999);
-                $checkSql = "SELECT COUNT(*) FROM users WHERE id_code = ?";
-                $checkStmt = $pdo->prepare($checkSql);
-                $checkStmt->execute([$id_code]);
-                $exists = $checkStmt->fetchColumn();
-
-                // Jika ID Code sudah ada, buat ID Code baru
-                while ($exists > 0) {
-                    $id_code = 'USER' . rand(10000, 99999);
-                    $checkStmt->execute([$id_code]);
-                    $exists = $checkStmt->fetchColumn();
-                }
-            ?>
             <form action="api/users_save.php" method="POST" class="space-y-2"> <!-- Mengurangi jarak antar elemen -->
                 <div class="bg-white p-2 rounded-lg shadow-md"> <!-- Mengurangi padding -->
                     <label class="block text-sm font-medium text-gray-700">ID Code:</label>
-                    <input type="text" name="id_code" value="<?php echo $id_code; ?>" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                
+                    <input type="text" name="id_code" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>                
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>

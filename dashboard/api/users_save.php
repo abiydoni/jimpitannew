@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':role', $role);
 
     if ($stmt->execute()) {
-        echo "Data berhasil disimpan!";
+        include '../jadwal.php'
     } else {
         echo "Gagal menyimpan data.";
     }
