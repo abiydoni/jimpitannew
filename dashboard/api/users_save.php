@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':role', $role);
 
     if ($stmt->execute()) {
-        include '../jadwal.php';
+        header("Location: ../jadwal.php"); // Mengarahkan ke jadwal.php setelah berhasil
+        exit(); // Menghentikan eksekusi script setelah pengalihan
     } else {
         echo "Gagal menyimpan data.";
     }
