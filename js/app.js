@@ -345,27 +345,13 @@ function playAudio() {
 function onScanSuccess(decodedText) {
   console.log("Teks yang dipindai:", decodedText);
   const id = decodedText; // Ambil ID dari kode QR
-  //const nominal = 500; // Tetapkan nilai nominal
+  const nominal = 500; // Tetapkan nilai nominal
   const today = new Date();
   const jimpitanDate = today.toLocaleDateString("id-ID", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
-
-  // Menjadikan fungsi ini async
-  const nominal = await fetch('../api/get_tarif.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ kode_tarif: 'JIMPIT' }) // Mengirim kode_tarif sebagai parameter
-    })
-    .then(response => response.json())
-    .then(data => data.nominal) // Asumsikan API mengembalikan objek dengan properti 'nominal'
-    .catch(error => {
-        console.error('Error fetching nominal:', error);
-    });
 
   const [day, month, year] = jimpitanDate.split("/");
   const formattedDate = `${year}-${month}-${day}`; // Format ke YYYY-MM-DD
