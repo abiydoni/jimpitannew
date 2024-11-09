@@ -54,10 +54,8 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     if ($stmt) {
         // Eksekusi pernyataan
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
-        $exists = $result['count'];
-        $kk_name = $result['kk_name'] ?? null; // Jika kk_name tidak ada, set ke null
     
-        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
+        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);
