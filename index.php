@@ -120,7 +120,6 @@ if (!isset($_SESSION['user'])) {
 
 <div class="container">
   <h3>Jimpitan RT.07 Randuares</h3>
-  <p>Silahkan SCAN Barcode</p>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const today = new Date();
@@ -129,7 +128,9 @@ if (!isset($_SESSION['user'])) {
       document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
     });
   </script>
-  <p id="tanggalHariIni"></p>
+  <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
+  <p style="color:grey; font-size: 12px; text-align: center;">Silahkan SCAN Barcode</p>
+
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
