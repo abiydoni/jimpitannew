@@ -17,16 +17,15 @@ if ($_SESSION['user']['role'] !== 'admin') {
 include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_code = $_POST['id_code'];
     $user_name = $_POST['user_name'];
     $name = $_POST['name'];
     $shift = $_POST['shift'];
     $role = $_POST['role'];
 
     // Update user data in the database
-    $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id = ?";
+    $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id_code = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$user_name, $name, $shift, $role, $id_code]);
+    $stmt->execute([$user_name, $name, $shift, $role]);
 
     header("Location: ../jadwal.php"); // Redirect back to the jadwal page
     exit();
