@@ -204,7 +204,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
             <span id="closeEditUserModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Edit User</h3>
-            <form action="api/user_edit.php" method="POST" class="space-y-2">
+            <form action="api/users_edit.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="edit_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Username:</label>
