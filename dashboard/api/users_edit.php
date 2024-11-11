@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_code = $_POST['id_code']; // Menambahkan id_code untuk query
 
     // Validasi input
-    if (empty($user_name) || empty($name) || empty($shift) || empty($role) || empty($id_code)) {
+    if (empty($user_name) || empty($name) || empty($shift) || empty($role)) {
         // Tangani kesalahan input
         echo "<script>alert('Input tidak boleh kosong!'); window.location.href='../jadwal.php';</script>"; // Ganti dengan messagebox
         exit();
@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id_code = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
-
-    header("Location: ../jadwal.php"); // Redirect back to the jadwal page
+   
+    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
     exit();
 }
 ?>
