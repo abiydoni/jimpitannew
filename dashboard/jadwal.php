@@ -250,8 +250,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form action="api/change_password.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="change_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Nama User:</label>
-                    <input type="text" name="name" id="change_user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>
+                    <label class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
                     <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                 </div>
