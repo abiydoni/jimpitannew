@@ -147,6 +147,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
+                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">Ubah Password</button>
                                     <button onclick="alert('<?php echo htmlspecialchars($user['password']); ?>')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">Tampilkan Password</button>
                                 </td>
                             </tr>
@@ -239,6 +240,21 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </select>
                 </div>
                 <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal untuk Ubah Password -->
+    <div id="changePasswordModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
+            <span id="closeChangePasswordModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Ubah Password</h3>
+            <form action="api/change_password.php" method="POST" class="space-y-2">
+                <input type="hidden" name="id_code" id="change_id_code">
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
+                    <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Ubah Password</button>
             </form>
         </div>
     </div>
@@ -358,6 +374,29 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
 </script>
+
+<script>
+        function openChangePasswordModal(id_code) {
+            document.getElementById('change_id_code').value = id_code;
+            const modal = document.getElementById("changePasswordModal");
+            modal.classList.remove("hidden");
+        }
+
+        const closeChangePasswordModal = document.getElementById("closeChangePasswordModal");
+        closeChangePasswordModal.onclick = function() {
+            const modal = document.getElementById("changePasswordModal");
+            modal.classList.add("hidden");
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("changePasswordModal");
+            if (event.target == modal) {
+                modal.classList.add("hidden");
+            }
+        }
+    </script>
+
+
 </body>
 </html>
 
