@@ -150,9 +150,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
-                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
+                                    <a href="#" onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-key'></i> <!-- Ikon untuk ubah password -->
-                                    </button>
+                                    </a>                                
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -265,7 +265,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     </section>
-    
+
     <script>
         function openChangePasswordModal(id_code, user_name, name) {
             document.getElementById('change_id_code').value = id_code;
