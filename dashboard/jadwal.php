@@ -143,6 +143,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td class="flex justify-center space-x-2">
                                     <button onclick="openEditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Edit</button>
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Hapus</a>
+                                    <button onclick="togglePasswordVisibility('<?php echo $user['password']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Lihat Password</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
