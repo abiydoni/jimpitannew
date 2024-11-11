@@ -147,7 +147,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
-                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">Ubah Password</button>
+                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">Ubah Password</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -249,10 +249,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h3 class="text-lg font-bold text-gray-800">Ubah Password</h3>
             <form action="api/change_password.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="change_id_code">
-                <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <input type="text" name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required readonly>
-                </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
                     <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
