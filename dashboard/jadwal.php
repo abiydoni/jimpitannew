@@ -254,7 +254,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h3 class="text-lg font-bold text-gray-800">Ubah Password</h3>
             <form action="api/change_password.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="change_id_code">                
-                <label class="block text-sm font-medium text-gray-700">Nama : <span id="userNameDisplay"></span></label> <!-- Menggunakan elemen span untuk menampilkan nama pengguna -->
+                <label class="block text-sm font-medium text-gray-700">Nama : <span id="change_name"></span></label> <!-- Menggunakan elemen span untuk menampilkan nama pengguna -->
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
                     <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
@@ -382,7 +382,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
         function openChangePasswordModal(id_code) {
             document.getElementById('change_id_code').value = id_code;
-            document.getElementById('userNameDisplay').textContent = name; // Menampilkan nama pengguna di elemen span
+            document.getElementById('change_name').value = name; // Menampilkan nama pengguna di elemen span
             const modal = document.getElementById("changePasswordModal");
             modal.classList.remove("hidden");
         }
