@@ -266,14 +266,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </section>
 
-    <script>
-        function openChangePasswordModal(id_code, user_name, name) {
-            document.getElementById('change_id_code').value = id_code;
-            document.getElementById('userNameDisplay').textContent = name; // Menampilkan nama pengguna di elemen span
-            const modal = document.getElementById("changePasswordModal");
-            modal.classList.remove("hidden");
-        }
-    </script>   
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -390,6 +382,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
         function openChangePasswordModal(id_code) {
             document.getElementById('change_id_code').value = id_code;
+            document.getElementById('userNameDisplay').textContent = name; // Menampilkan nama pengguna di elemen span
             const modal = document.getElementById("changePasswordModal");
             modal.classList.remove("hidden");
         }
