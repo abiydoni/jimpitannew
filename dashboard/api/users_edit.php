@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi input
     if (empty($user_name) || empty($name) || empty($shift) || empty($role) || empty($id_code)) {
         // Tangani kesalahan input
-        header("Location: ../error.php"); // Redirect ke halaman kesalahan
+        echo "<script>alert('Input tidak boleh kosong!'); window.location.href='../jadwal.php';</script>"; // Ganti dengan messagebox
         exit();
     }
 
