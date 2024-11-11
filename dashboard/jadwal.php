@@ -253,11 +253,14 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <span id="closeChangePasswordModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Ubah Password</h3>
             <form action="api/change_password.php" method="POST" class="space-y-2">
-                <input type="hidden" name="id_code" id="change_id_code">                
-                <label class="block text-sm font-medium text-gray-700">Nama : <span id="change_name"></span></label> <!-- Menggunakan elemen span untuk menampilkan nama pengguna -->
+                <input type="hidden" name="id_code" id="change_id_code">
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Nama:</label>
+                    <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
-                    <input type="password" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <input type="text" name="new_password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                 </div>
                 <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Ubah Password</button>
             </form>
