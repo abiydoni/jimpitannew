@@ -9,8 +9,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Ambil data dari form
-$user_id = $_POST['id_code']; // ID pengguna yang ingin diubah passwordnya
-$new_password = $_POST['new_password'];
+$user_id = $_POST['id_code'] ?? null; // ID pengguna yang ingin diubah passwordnya
+$new_password = $_POST['new_password'] ?? null;
 
 // Validasi input
 if (empty($new_password)) {
@@ -24,7 +24,10 @@ $new_password_hash = password_hash($new_password, PASSWORD_DEFAULT);
 // Update password di database
 $sql = "UPDATE users SET password = ? WHERE id = ?";
 $stmt = $pdo->prepare($sql);
-$stmt->execute([$new_password_hash, $user_id]);
+if (!$stmt->execute([$new_password_hash, $user_id])) {
+    echo "Terjadi kesalahan saat mengubah password.";
+    exit;
+}
 
 // Redirect atau tampilkan pesan sukses
 header('Location: ../jadwal.php?message=Password berhasil diubah');
