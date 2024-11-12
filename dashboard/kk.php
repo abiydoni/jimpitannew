@@ -105,7 +105,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
-                        <button type="button" id="addDataBtn" class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">
+                            <button type="button" id="addDataBtn" class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">
                                 <i class='bx bxs-plus-circle' style="font-size:24px"></i> Tambah Data
                             </button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
@@ -163,6 +163,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="bg-white p-5 rounded shadow-lg">
             <h2 class="text-lg font-bold mb-4">Tambah Data Master KK</h2>
             <form action="api/kk_insert.php" method="POST" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label class="block mb-1">Code ID</label>
+                    <input type="text" name="code_id" class="border rounded w-full p-2" required>
+                </div>
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" class="border rounded w-full p-2" required>

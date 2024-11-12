@@ -20,6 +20,7 @@ include 'db.php';
 // Cek apakah form telah disubmit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
+    $kode_id = $_POST['code_id']
     $kk_name = $_POST['kk_name'];
     $kk_alamat = $_POST['kk_alamat'];
     $kk_hp = $_POST['kk_hp'];
@@ -34,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Siapkan dan eksekusi pernyataan SQL untuk menyimpan data
-    $stmt = $pdo->prepare("INSERT INTO master_kk (kk_name, kk_alamat, kk_hp, kk_foto) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$kk_name, $kk_alamat, $kk_hp, $foto_path]);
+    $stmt = $pdo->prepare("INSERT INTO master_kk (code_id, kk_name, kk_alamat, kk_hp, kk_foto) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$code_id, $kk_name, $kk_alamat, $kk_hp, $foto_path]);
 
     // Redirect setelah berhasil
     header('Location: ../kk.php?success=Data berhasil ditambahkan');
