@@ -105,8 +105,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
-                            <button type="button" id="addDataBtn" class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">
-                                <i class='bx bxs-plus-circle' style="font-size:24px"></i> Tambah Data
+                            <button type="button" id="addDataBtn" class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
+                                <i class='bx bxs-plus-circle' style="font-size:24px"></i>
                             </button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
                                 <i class='bx bxs-printer' style="font-size:24px"></i>
