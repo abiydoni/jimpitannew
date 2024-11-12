@@ -150,7 +150,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
-                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
+                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['password']; ?>')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
                                         <i class='bx bx-key'></i> <!-- Ikon untuk ubah password -->
                                     </button>                                
                                 </td>
