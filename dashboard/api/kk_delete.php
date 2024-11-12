@@ -1,9 +1,9 @@
 <?php
 include 'db.php';
 
-$id = $_GET['id'];
+$code_id = $_GET['code_id'];
 $stmt = $pdo->prepare("DELETE FROM master_kk WHERE code_id = ?");
-$stmt->execute([$id]);
+$stmt->execute([$code_id]);
 
-header("Location: ../index.php"); // Redirect setelah berhasil
+header("Location: ../kk.php"); // Redirect setelah berhasil
 ?>
