@@ -105,7 +105,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">Tambah Data</button>
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">
+                                <i class="bx bx-plus" style="font-size:24px"></i>
+                            </button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
                                 <i class='bx bxs-printer' style="font-size:24px"></i>
                             </button>
