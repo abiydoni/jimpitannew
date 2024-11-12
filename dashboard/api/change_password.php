@@ -33,6 +33,36 @@ if (!$stmt->execute([$new_password_hash, $user_id])) {
 }
 
 // Redirect atau tampilkan pesan sukses
-header('Location: ../jadwal.php?message=Password berhasil diubah');
+// echo "<script>alert('Password berhasil diubah!'); window.location.href='../jadwal.php';</script>";
+?>
+
+<div id='modal' style='display: block;'>
+    <div style='background: white; padding: 20px; border-radius: 5px;'>
+        <h2>Password berhasil diubah!</h2>
+        <button onclick='window.location.href=\"../jadwal.php\"'>OK</button>
+    </div>
+</div>
+<style>
+    #modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<script>
+        // Tambahkan script untuk menutup modal setelah 3 detik
+    setTimeout(function() {
+        document.getElementById('modal').style.display = 'none';
+    }, 3000);
+
+</script>
+
+<?php
 exit();
 ?>
