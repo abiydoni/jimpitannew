@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$code_id, $kk_name, $kk_alamat, $kk_hp, $foto_path]);
 
     // Redirect setelah berhasil
-    header('Location: ../kk.php?success=Data berhasil ditambahkan');
+    echo "<script>alert('Data berhasih ditambahkan!'); window.location.href='../kk.php';</script>";
     exit;
 }
 ?>

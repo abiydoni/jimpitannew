@@ -18,6 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute([$kk_name, $kk_alamat, $kk_hp, $id]);
     }
 
-    header("Location: ../kk.php"); // Redirect setelah berhasil
+    echo "<script>alert('Data berhasil diubah!'); window.location.href='../kk.php';</script>";
 }
 ?>
