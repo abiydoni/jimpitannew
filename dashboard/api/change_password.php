@@ -25,7 +25,7 @@ if (empty($new_password)) {
 $new_password_hash = password_hash($new_password, PASSWORD_DEFAULT);
 
 // Update password di database
-$sql = "UPDATE users SET password = ? WHERE id = ?";
+$sql = "UPDATE users SET password = ? WHERE id_code = ?";
 $stmt = $pdo->prepare($sql);
 if (!$stmt->execute([$new_password_hash, $user_id])) {
     echo "Terjadi kesalahan saat mengubah password.";
