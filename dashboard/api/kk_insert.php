@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($exists > 0) {
         // Jika code_id sudah ada, redirect dengan pesan error
+        echo "<script>alert('Code ID sudah ada');</script>";
         header('Location: ../kk.php?error=Code ID sudah ada');
         exit;
     }
