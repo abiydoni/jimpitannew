@@ -20,7 +20,7 @@ include 'db.php';
 // Cek apakah form telah disubmit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
-    $kode_id = $_POST['code_id'];
+    $code_id = $_POST['code_id'];
     $kk_name = $_POST['kk_name'];
     $kk_alamat = $_POST['kk_alamat'];
     $kk_hp = $_POST['kk_hp'];
