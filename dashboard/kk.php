@@ -164,8 +164,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
             <form action="api/kk_insert.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
-                    <label class="block mb-1">Code ID</label>
-                    <input type="text" name="code_id" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
+                    <label class="block mb-1">Code ID (Awali dengan : RT07 dan 5 angka berikutnya!)</label>
+                    <input value="RT07" type="text" name="code_id" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
                 <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Nama KK</label>
