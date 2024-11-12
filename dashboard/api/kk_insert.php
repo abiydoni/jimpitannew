@@ -24,6 +24,17 @@ include 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
     $code_id = $_POST['code_id'];
+    // Cek apakah code_id sudah ada di database
+    $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM master_kk WHERE code_id = ?");
+    $stmt_check->execute([$code_id]);
+    $exists = $stmt_check->fetchColumn();
+
+    if ($exists > 0) {
+        // Jika code_id sudah ada, redirect dengan pesan error
+        header('Location: ../kk.php?error=Code ID sudah ada');
+        exit;
+    }
+    
     $kk_name = $_POST['kk_name'];
     $kk_alamat = $_POST['kk_alamat'];
     $kk_hp = $_POST['kk_hp'];
