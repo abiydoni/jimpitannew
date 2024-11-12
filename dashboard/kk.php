@@ -160,32 +160,32 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
     <!-- Modal Tambah Data -->
     <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-5 rounded shadow-lg">
-            <h2 class="text-lg font-bold mb-4">Tambah Data Master KK</h2>
+        <div class="bg-white p-3 rounded shadow-lg"> <!-- Mengubah p-5 menjadi p-3 untuk memperkecil padding -->
+            <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
             <form action="api/kk_insert.php" method="POST" enctype="multipart/form-data">
-                <div class="mb-4">
+                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Code ID</label>
-                    <input type="text" name="code_id" class="border rounded w-full p-2" required>
+                    <input type="text" name="code_id" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
-                <div class="mb-4">
+                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" class="border rounded w-full p-2" required>
+                    <input type="text" name="kk_name" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
-                <div class="mb-4">
+                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Alamat</label>
-                    <input type="text" name="kk_alamat" class="border rounded w-full p-2" required>
+                    <input type="text" name="kk_alamat" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
-                <div class="mb-4">
+                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">HP</label>
-                    <input type="text" name="kk_hp" class="border rounded w-full p-2" required>
+                    <input type="text" name="kk_hp" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
-                <div class="mb-4">
+                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Foto</label>
-                    <input type="file" name="kk_foto" class="border rounded w-full p-2">
+                    <input type="file" name="kk_foto" class="border rounded w-full p-1"> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button>
-                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Tambah">
+                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
+                    <input type="submit" class="bg-blue-500 text-white px-3 py-1 rounded" value="Tambah"> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
                 </div>
             </form>
         </div>
