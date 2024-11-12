@@ -105,7 +105,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">Tambah Data</button>
+                        <button type="button" id="addDataBtn" class="bg-blue-500 text-white px-4 py-2 rounded" data-modal-toggle="addModal">
+                                <i class='bx bxs-plus-circle' style="font-size:24px"></i> Tambah Data
+                            </button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
                                 <i class='bx bxs-printer' style="font-size:24px"></i>
                             </button>
@@ -160,7 +162,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded shadow-lg">
             <h2 class="text-lg font-bold mb-4">Tambah Data Master KK</h2>
-            <form action="api/kk_create.php" method="POST" enctype="multipart/form-data">
+            <form action="api/kk_insert.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" class="border rounded w-full p-2" required>
@@ -175,16 +177,15 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="mb-4">
                     <label class="block mb-1">Foto</label>
-                    <input type="file" name="kk_foto" class="border rounded w-full p-2" required>
+                    <input type="file" name="kk_foto" class="border rounded w-full p-2">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button>
-                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Simpan">
+                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Tambah">
                 </div>
             </form>
         </div>
     </div>
-
     <!-- Modal Edit Data -->
     <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded shadow-lg">
@@ -257,17 +258,18 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         })
     </script>
-<script>
-    // Tambahkan ini setelah script yang ada
-    $(document).ready(function() {
-        // Cek apakah DataTable sudah diinisialisasi
-        if (!$.fn.DataTable.isDataTable('#example')) {
-            $('#example').DataTable({
-                responsive: true
-            });
-        }
-    });
-</script>
+    <script>
+        // Tambahkan ini setelah script yang ada
+        $(document).ready(function() {
+            // Cek apakah DataTable sudah diinisialisasi
+            if (!$.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable({
+                    responsive: true
+                });
+            }
+        });
+    </script>
+
     <script>
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
