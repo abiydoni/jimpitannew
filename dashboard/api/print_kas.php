@@ -12,7 +12,24 @@ if (isset($_GET['month'])) {
     // Buat tampilan untuk mencetak
     if ($data) {
         echo "<h1>Data Kas Umum untuk Bulan: $month</h1>";
-        echo "<table border='1'>
+        echo "<style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    padding: 10px;
+                    text-align: left;
+                    border: 1px solid #ddd;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                h1 {
+                    color: #333;
+                }
+              </style>";
+        echo "<table>
                 <tr>
                     <th>Kode</th>
                     <th>Tanggal</th>

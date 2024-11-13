@@ -372,13 +372,25 @@ $tanggalSekarang = date("Y-m-d");
         });
     </script>
     <script>
+        // Inisialisasi date picker untuk memilih bulan
+        flatpickr("#monthPicker", {
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, // Tampilkan bulan dalam format singkat
+                    dateFormat: "Y-m", // Format tanggal yang diinginkan
+                    altFormat: "F Y", // Format alternatif untuk tampilan
+                    theme: "light" // Tema date picker
+                })
+            ]
+        });
+
         document.getElementById('printButton').addEventListener('click', function() {
-            const selectedMonth = prompt("Masukkan bulan (format: YYYY-MM):");
+            const selectedMonth = document.getElementById('monthPicker').value; // Ambil nilai dari date picker
             if (selectedMonth) {
                 window.open(`api/print_kas.php?month=${selectedMonth}`, '_blank');
             }
         });
     </script>
-
+    <input type="text" id="monthPicker" class="custom-select" placeholder="Pilih Bulan" />
 </body>
 </html>
