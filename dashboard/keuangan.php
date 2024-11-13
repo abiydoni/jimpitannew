@@ -114,9 +114,12 @@ $tanggalSekarang = date("Y-m-d");
                             <i class='bx bxs-add-to-queue'></i> Transaksi
                         </button>
                         <input type="text" id="datePicker" class="custom-select" placeholder="Pilih Tanggal">
-                            <button type="button" id="resetFilterBtn">
+                        <button type="button" id="resetFilterBtn">
                             <i class="bx bx-x-circle" style="font-size: 24px; color: red;"></i>
-                            </button>
+                        </button>
+                        <button id="printButton" class="btn-print">
+                            <i class='bx bxs-print'></i> Cetak
+                        </button>
                     </div>
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
@@ -366,6 +369,14 @@ $tanggalSekarang = date("Y-m-d");
 
             return generatedCode; // Return the generated code
         }
+        });
+    </script>
+    <script>
+        document.getElementById('printButton').addEventListener('click', function() {
+            const selectedMonth = prompt("Masukkan bulan (format: YYYY-MM):");
+            if (selectedMonth) {
+                window.open(`api/print_kas.php?month=${selectedMonth}`, '_blank');
+            }
         });
     </script>
 
