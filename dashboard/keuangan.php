@@ -120,6 +120,8 @@ $tanggalSekarang = date("Y-m-d");
                         <button id="printButton" class="btn-print">
                             <i class='bx bxs-print'></i> Cetak
                         </button>
+                        <input type="text" id="monthPicker" class="custom-select" placeholder="Pilih Bulan" />
+
                     </div>
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
@@ -391,6 +393,5 @@ $tanggalSekarang = date("Y-m-d");
             }
         });
     </script>
-    <input type="text" id="monthPicker" class="custom-select" placeholder="Pilih Bulan" />
 </body>
 </html>
