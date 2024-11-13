@@ -116,7 +116,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h3>KK</h3>
                         <div class="mb-4 text-center">
                             <button type="button" id="addDataBtn" class="btn-download" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
-                                <i class='bx bx-plus'></i> <!-- Ikon untuk tambah data -->
+                                <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
                             <button type="button" id="printSelectedBtn" class="btn-download">
                                 <i class='bx bxs-printer' style="font-size:24px"></i>
