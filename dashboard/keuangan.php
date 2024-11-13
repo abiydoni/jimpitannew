@@ -117,7 +117,7 @@ $tanggalSekarang = date("Y-m-d");
                         <button type="button" id="resetFilterBtn">
                             <i class="bx bx-x-circle" style="font-size: 24px; color: red;"></i>
                         </button>
-                        <button id="printButton" class="btn-print">
+                        <button type="button" id="printButton" class="btn-print">
                             <i class='bx bxs-print'></i> Cetak
                         </button>
                         <input type="text" id="monthPicker" class="custom-select" placeholder="Pilih Bulan" />
@@ -390,6 +390,8 @@ $tanggalSekarang = date("Y-m-d");
             const selectedMonth = document.getElementById('monthPicker').value; // Ambil nilai dari date picker
             if (selectedMonth) {
                 window.open(`api/print_kas.php?month=${selectedMonth}`, '_blank');
+            } else {
+                Swal.fire('Peringatan', 'Silakan pilih bulan terlebih dahulu!', 'warning'); // Tambahkan pesan peringatan
             }
         });
     </script>
