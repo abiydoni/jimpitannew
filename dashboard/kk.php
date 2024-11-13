@@ -14,6 +14,16 @@ if ($_SESSION['user']['role'] !== 'admin') {
 }
 // Include the database connection
 include 'api/db.php';
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $code_id = $_GET['delete'];
+    $sql = "DELETE FROM master_kk WHERE code_id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_code]);
+
+    header("Location: kk.php");
+    exit();
+}
 
 // Prepare and execute the SQL statement
 $stmt = $pdo->prepare("SELECT * FROM master_kk");
