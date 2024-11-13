@@ -113,7 +113,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>KK</h3>
+                        <h3>DATA KEPALA KELUARGA</h3>
                         <div class="mb-4 text-center">
                             <button type="button" id="addDataBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->

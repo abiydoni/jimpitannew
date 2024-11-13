@@ -109,7 +109,7 @@ $tanggalSekarang = date("Y-m-d");
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Keuangan</h3>
+                        <h3>ARUS KAS</h3>
                         <button type="button" id="openModal" class="btn-download" data-bs-toggle="modal" data-bs-target="#inputModal">
                             <i class='bx bxs-add-to-queue'></i> Transaksi
                         </button>
