@@ -161,7 +161,7 @@ $tanggalSekarang = date("Y-m-d");
     <!-- Modal -->
     <div id="inputModal" class="fixed inset-0 flex items-center justify-center hidden"> 
         <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-container bg-white w-11/12 md:w-1/3 mx-auto shadow-lg" style="border-radius: 15px;">
+        <div class="modal-container bg-white w-11/12 md:w-1/4 mx-auto shadow-lg" style="border-radius: 15px;"> <!-- Perkecil lebar modal -->
             <div class="modal-header flex justify-between items-center p-4">
                 <h5 class="text-lg font-semibold" id="modalLabel">Tambah Data Keuangan</h5>
                 <button type="button" class="close-modal text-gray-500 hover:text-gray-800" aria-label="Close">&times;</button>
@@ -170,11 +170,11 @@ $tanggalSekarang = date("Y-m-d");
                 <form id="dataForm">
                     <div class="mb-4">
                         <label for="tanggal" class="block text-sm font-medium">Tanggal</label>
-                        <input value="<?php echo $tanggalSekarang; ?>" type="text" id="modalDatePicker" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Pilih Tanggal" name="tanggal" required>
+                        <input value="<?php echo $tanggalSekarang; ?>" type="text" id="modalDatePicker" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 40px; padding: 0 10px;" placeholder="Pilih Tanggal" name="tanggal" required> <!-- Perkecil tinggi input -->
                     </div>
                     <div class="mb-4">
                         <label for="dropdown" class="block text-sm font-medium">Reff</label>
-                        <select id="dropdown" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" required>
+                        <select id="dropdown" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 40px; padding: 0 10px;" required> <!-- Perkecil tinggi select -->
                             <option value="" disabled selected>-- Pilih Opsi --</option>
                             <option value="IN">Debet</option>
                             <option value="OUT">Kredit</option>
@@ -182,26 +182,25 @@ $tanggalSekarang = date("Y-m-d");
                     </div>
                     <div class="mb-4">
                         <label for="kode" class="block text-sm font-medium">Kode</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" id="kode" name="kode" readonly>
+                        <input type="text" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 40px; padding: 0 10px;" id="kode" name="kode" readonly> <!-- Perkecil tinggi input -->
                     </div>
                     <div class="mb-4" id="debitBox" style="display: none;">
                         <label for="debitTextbox" class="block text-sm font-medium">Debit</label>
-                        <input type="text" id="debitTextbox" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Rp.">
+                        <input type="text" id="debitTextbox" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 40px; padding: 0 10px;" placeholder="Rp."> <!-- Perkecil tinggi input -->
                     </div>
                     <div class="mb-4" id="kreditBox" style="display: none;">
                         <label for="kreditTextbox" class="block text-sm font-medium">Kredit</label>
-                        <input type="text" id="kreditTextbox" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 48px; padding: 0 12px;" placeholder="Rp.">
+                        <input type="text" id="kreditTextbox" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; height: 40px; padding: 0 10px;" placeholder="Rp."> <!-- Perkecil tinggi input -->
                     </div>
                     <div class="mb-4">
                         <label for="keterangan" class="block text-sm font-medium">Keterangan</label>
-                        <textarea id="keterangan" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; padding: 12px;" placeholder="Isi keterangan" rows="4" required></textarea>
+                        <textarea id="keterangan" class="mt-1 block w-full border border-gray-300" style="border-radius: 15px; padding: 10px;" placeholder="Isi keterangan" rows="3" required></textarea> <!-- Perkecil tinggi textarea -->
                     </div>
                     <button type="submit" class="w-full text-white py-2" style="background-color: #3c91e6; border-radius: 15px;">Simpan</button>
                 </form>
             </div>
         </div>
     </div>
-
     <!-- jQuery (Optional for extra functionality) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
