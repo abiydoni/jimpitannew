@@ -58,11 +58,16 @@ if (isset($_GET['month'])) {
         }
         echo "</table>";
         // Tambahkan total debet, kredit, dan saldo
+        // Tambahkan total debet, kredit, dan saldo ke dalam tabel
         $saldo = $total_debet - $total_kredit;
-        echo "<h3>Total Debet: Rp " . number_format($total_debet, 0, ',', '.') . "</h3>";
-        echo "<h3>Total Kredit: Rp " . number_format($total_kredit, 0, ',', '.') . "</h3>";
-        echo "<h3>Saldo: Rp " . number_format($saldo, 0, ',', '.') . "</h3>";
-
+        echo "<tr>
+                <td colspan='4'><strong>Total Debet:</strong> Rp " . number_format($total_debet, 0, ',', '.') . "</td>
+                <td colspan='2'><strong>Total Kredit:</strong> Rp " . number_format($total_kredit, 0, ',', '.') . "</td>
+              </tr>";
+        echo "<tr>
+                <td colspan='4'><strong>Saldo:</strong> Rp " . number_format($saldo, 0, ',', '.') . "</td>
+                <td colspan='2'></td>
+              </tr>";    
     } else {
         echo "<h2>Tidak ada data untuk bulan ini.</h2>";
     }
