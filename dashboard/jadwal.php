@@ -118,12 +118,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
                             <button id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <i class='bx bx-plus'></i> <!-- Ikon untuk tambah data -->
+                                <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
                             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <a href="api/users_print.php" class="flex items-center">
-                                    <i class='bx bx-printer'></i> <!-- Ikon untuk print report -->
-                                    <span class="ml-2">Print Report</span>
+                                    <i class='bx bx-printer' style="font-size:24px"></i> <!-- Ikon untuk print report -->
                                 </a>
                             </button>                        
                         </div>
