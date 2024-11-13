@@ -40,7 +40,13 @@ if (isset($_GET['month'])) {
                     <th>Debet</th>
                     <th>Kredit</th>
                 </tr>";
+                $total_debet = 0;
+                $total_kredit = 0;
+        
         foreach ($data as $row) {
+            $total_debet += htmlspecialchars($row["debet"]);
+            $total_kredit += htmlspecialchars($row["kredit"]);
+
             echo "<tr>
                     <td>" . htmlspecialchars($row["coa_code"]) . "</td>
                     <td>" . htmlspecialchars($row["date_trx"]) . "</td>
@@ -51,6 +57,12 @@ if (isset($_GET['month'])) {
                   </tr>";
         }
         echo "</table>";
+        // Tambahkan total debet, kredit, dan saldo
+        $saldo = $total_debet - $total_kredit;
+        echo "<h3>Total Debet: Rp " . number_format($total_debet, 0, ',', '.') . "</h3>";
+        echo "<h3>Total Kredit: Rp " . number_format($total_kredit, 0, ',', '.') . "</h3>";
+        echo "<h3>Saldo: Rp " . number_format($saldo, 0, ',', '.') . "</h3>";
+
     } else {
         echo "<h2>Tidak ada data untuk bulan ini.</h2>";
     }
