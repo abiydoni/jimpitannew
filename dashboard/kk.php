@@ -19,15 +19,15 @@ if (isset($_GET['delete'])) {
     $code_id = $_GET['delete'];
     $sql = "DELETE FROM master_kk WHERE code_id=?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_code]);
+    $stmt->execute([$code_id]);
 
     header("Location: kk.php");
     exit();
 }
 
 // Prepare and execute the SQL statement
-$stmt = $pdo->prepare("SELECT * FROM master_kk");
-$stmt->execute();
+$sql = "SELECT * FROM master_kk";
+$stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
