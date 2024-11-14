@@ -153,14 +153,16 @@
 
                 </div>
 
-                <!-- Card Container -->
+                <!-- Card Container 2-->
                 <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
 
                     <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
                     <hr class="my-4 border-gray-300">
 
                     <hr class="my-4 border-gray-300">
-                    <!-- Tombol Cetak -->
+                </div>
+                <!-- Card Container 3-->
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                     <button onclick="printPage()" 
                         class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full max-w-[200px]">
                         <!-- Ikon Cetak -->
