@@ -278,7 +278,7 @@
                         gap: 2rem; /* Atur jarak antar elemen */
                     }
                     .max-w-xs { /* Ubah ukuran maksimum container */
-                        max-width: 300px; /* Sesuaikan ukuran sesuai kebutuhan */
+                        max-width: 200px; /* Sesuaikan ukuran sesuai kebutuhan */
                     }
                 </style>            
             `;
