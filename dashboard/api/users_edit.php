@@ -34,8 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id_code = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
+    Swal.fire('Informasi', 'Data berhasil diperbarui!', 'warning'); // Tambahkan pesan peringatan
    
-    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
+    //echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
     exit();
 }
 ?>
