@@ -36,16 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
     // Menambahkan pengalihan setelah pesan berhasil
     echo "<script>
-        Swal.fire(
-            'Sukses!',
-            'Data berhasil diperbarui!',
-            'success'
-        ).then((result) => {
-            if (result.isConfirmed || result.isDismissed) {
-                window.location.href='../jadwal.php';
-            }
-        });
+    const toast = document.createElement('div');
+    toast.innerText = 'Data berhasil diperbarui!';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.backgroundColor = '#4CAF50';
+    toast.style.color = 'white';
+    toast.style.padding = '15px';
+    toast.style.borderRadius = '5px';
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        window.location.href = '../jadwal.php';
+    }, 2000);
     </script>";
+
     //echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
     exit();
 }
