@@ -118,7 +118,7 @@ try {
         }
     }
 
-    echo json_encode($report);
+    echo json_encode($reports);
 } catch (Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
