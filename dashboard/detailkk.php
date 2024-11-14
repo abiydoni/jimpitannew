@@ -154,7 +154,7 @@
                 </div>
 
                 <!-- Card Container -->
-                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full flex flex-col items-center space-y-2">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
 
                     <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
                     <hr class="my-4 border-gray-300">
