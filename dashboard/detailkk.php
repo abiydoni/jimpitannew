@@ -253,14 +253,38 @@ function generateQRCodes() {
 // Panggil generateQRCodes() saat halaman selesai dimuat
 window.onload = generateQRCodes;
 </script>
-        <script>
+<script>
             function printPage() {
                 const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
                 const originalContent = document.body.innerHTML; // Simpan konten asli
-                document.body.innerHTML = printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
+                
+                // Tambahkan gaya untuk tampilan cetak
+                const printStyles = `
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        .print-header h1 {
+                            font-size: 24px;
+                        }
+                        .print-content {
+                            border: 1px solid #000;
+                            padding: 10px;
+                            border-radius: 5px;
+                        }
+                    </style>
+                `;
+                
+                document.body.innerHTML = printStyles + printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
                 window.print(); // Panggil fungsi cetak
                 document.body.innerHTML = originalContent; // Kembalikan konten asli
             }
-        </script>
+        </script>    
     </body>
 </html>
