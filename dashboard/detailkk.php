@@ -226,33 +226,36 @@
             }
         })
     </script>
-<script>
-function generateQRCodes() {
-    // Ambil code_id langsung dari data PHP
-    const codeId = "<?= htmlspecialchars($data['code_id']) ?>";
-    
-    // Kosongkan konten QR code sebelumnya
-    const qrContainer = document.getElementById("qrcode-container");
-    qrContainer.innerHTML = "";
+    <script>
+    function generateQRCodes() {
+        // Ambil code_id langsung dari data PHP
+        const codeId = "<?= htmlspecialchars($data['code_id']) ?>";
+        
+        // Kosongkan konten QR code sebelumnya
+        const qrContainer = document.getElementById("qrcode-container");
+        qrContainer.innerHTML = "";
 
-    // Buat elemen div untuk QR code
-    const qrDiv = document.createElement("div");
-    qrContainer.appendChild(qrDiv);
+        // Buat elemen div untuk QR code
+        const qrDiv = document.createElement("div");
+        qrContainer.appendChild(qrDiv);
 
-    // Generate QR code
-    new QRCode(qrDiv, {
-        text: codeId,
-        width: 250,
-        height: 250,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-}
+        // Generate QR code
+        new QRCode(qrDiv, {
+            text: codeId,
+            width: 250,
+            height: 250,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
 
-// Panggil generateQRCodes() saat halaman selesai dimuat
-window.onload = generateQRCodes;
-</script>
+    // Panggil generateQRCodes() saat halaman selesai dimuat
+    window.onload = generateQRCodes;
+
+    </script>
+
+
     <script>
         function printPage() {
             const printContent = document.querySelector('.flex.flex-wrap.justify-center.gap-8.p-4'); // Ambil konten yang ingin dicetak
@@ -265,6 +268,14 @@ window.onload = generateQRCodes;
                         font-family: Arial, sans-serif;
                         margin: 0;
                         padding: 20px;
+                    }
+                    .flex {
+                        display: flex;
+                        flex-wrap: wrap; /* Pastikan konten bisa berjajar */
+                        justify-content: center; /* Pusatkan konten */
+                    }
+                    .gap-8 {
+                        gap: 2rem; /* Atur jarak antar elemen */
                     }
                 </style>
             `;
