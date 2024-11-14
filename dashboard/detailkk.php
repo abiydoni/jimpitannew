@@ -128,7 +128,7 @@
             
             <div class="flex flex-wrap justify-center gap-8 p-4">
             <!-- Card Container -->
-            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
                 <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                     <!-- Profile Image -->
                     <div class="flex items-center justify-center">
