@@ -35,21 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
     // Menambahkan pengalihan setelah pesan berhasil
-    // Mengganti alert dengan SweetAlert
-    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-    <script>
-        Swal.fire({
-            title: 'Sukses!',
-            text: 'Data berhasil diperbarui!',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '../jadwal.php';
-            }
-        });
-    </script>";
-    //echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
+    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
     exit();
 }
 ?>

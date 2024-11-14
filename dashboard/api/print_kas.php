@@ -57,7 +57,6 @@ if (isset($_GET['month'])) {
                   </tr>";
         }
         echo "</table>";
-        // Tambahkan total debet, kredit, dan saldo
         // Tambahkan total debet, kredit, dan saldo ke dalam tabel
         $saldo = $total_debet - $total_kredit;
         echo "<tr>
