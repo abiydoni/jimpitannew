@@ -131,7 +131,7 @@ if (!isset($_SESSION['user'])) {
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
   <p style="color:grey; font-size: 12px; text-align: center;">Silahkan SCAN Barcode di sini!</p>
 
-  <div class="floating-button" style="margin-right : 50px;">
+  <div class="floating-button" style="margin-right : 100px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
   <div class="floating-button" style="margin-right : 70px;">
