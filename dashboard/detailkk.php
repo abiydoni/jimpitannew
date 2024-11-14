@@ -164,7 +164,9 @@
                         </svg>
                         Cetak
                     </button>
-                    <hr class="my-4 border-gray-300">
+                </div>
+                <!-- Card Container 4-->
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
                     <a href="javascript:history.back()" 
                         class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
                         <!-- Icon Panah -->
