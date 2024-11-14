@@ -116,7 +116,7 @@
                     <h1>Jimpitan - RT07 Salatiga</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">KK</a>
+                            <a href="#">Detail</a>
                         </li>
                         <li><i class='bx bx-chevron-right' ></i></li>
                         <li>
@@ -129,56 +129,56 @@
             <div class="flex flex-wrap justify-center gap-8 p-4">
             <!-- Card Container -->
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
-                <!-- Profile Image -->
-                <div class="flex items-center justify-center">
-                    <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
+                    <!-- Profile Image -->
+                    <div class="flex items-center justify-center">
+                        <img src="<?= htmlspecialchars($data['kk_foto']) ?>" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-md">
+                    </div>
+                    
+                    <!-- Name and Position -->
+                    <div class="text-center mt-4">
+                        <h1 class="text-2xl font-bold text-gray-800"><?= htmlspecialchars($data['kk_name']) ?></h1>
+                        <p class="text-blue-500 text-sm font-medium"><?= htmlspecialchars($data['code_id']) ?></p>
+                    </div>
+                    
+                    <!-- Divider -->
+                    <hr class="my-4 border-gray-300">
+                    
+                    <!-- Contact Information -->
+                    <div class="text-center text-gray-600">
+                        <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
+                        <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
+                    </div>
+                    <hr class="my-4 border-gray-300">
+
                 </div>
-                
-                <!-- Name and Position -->
-                <div class="text-center mt-4">
-                    <h1 class="text-2xl font-bold text-gray-800"><?= htmlspecialchars($data['kk_name']) ?></h1>
-                    <p class="text-blue-500 text-sm font-medium"><?= htmlspecialchars($data['code_id']) ?></p>
+
+                <!-- Card Container -->
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full flex flex-col items-center space-y-2">
+
+                    <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
+                    <hr class="my-4 border-gray-300">
+
+                    <hr class="my-4 border-gray-300">
+                    <!-- Tombol Cetak -->
+                    <button onclick="printPage()" 
+                        class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full max-w-[200px]">
+                        <!-- Ikon Cetak -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
+                        </svg>
+                        Cetak
+                    </button>
+                    <hr class="my-4 border-gray-300">
+                    <a href="javascript:history.back()" 
+                        class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
+                        <!-- Icon Panah -->
+                        <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2 w-full max-w-[200px]">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Kembali
+                    </a>
                 </div>
-                
-                <!-- Divider -->
-                <hr class="my-4 border-gray-300">
-                
-                <!-- Contact Information -->
-                <div class="text-center text-gray-600">
-                    <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
-                    <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
-                </div>
-                <hr class="my-4 border-gray-300">
-
-            </div>
-
-            <!-- Card Container -->
-            <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full flex flex-col items-center space-y-2">
-
-                <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
-                <hr class="my-4 border-gray-300">
-
-                <hr class="my-4 border-gray-300">
-                <!-- Tombol Cetak -->
-                <button onclick="printPage()" 
-                    class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full max-w-[200px]">
-                    <!-- Ikon Cetak -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18h12v-4H6v4zM6 22h12M8 18v4m8-4v4" />
-                    </svg>
-                    Cetak
-                </button>
-                <hr class="my-4 border-gray-300">
-                <a href="javascript:history.back()" 
-                    class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-                    <!-- Icon Panah -->
-                    <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2 w-full max-w-[200px]">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Kembali
-                </a>
-            </div>
-
             </div>
         </main>
         <!-- MAIN -->
@@ -278,7 +278,7 @@
                         gap: 2rem; /* Atur jarak antar elemen */
                     }
                     .max-w-xs { /* Ubah ukuran maksimum container */
-                        max-width: 250px; /* Sesuaikan ukuran sesuai kebutuhan */
+                        max-width: 300px; /* Sesuaikan ukuran sesuai kebutuhan */
                     }
                 </style>            
             `;
