@@ -36,8 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
     // Menambahkan pengalihan setelah pesan berhasil
     echo "<script>
-        Swal.fire('Informasi', 'Data berhasil diperbarui!', 'success').then(() => {
-            window.location.href='../jadwal.php';
+        Swal.fire(
+            'Sukses!',
+            'Data berhasil diperbarui!',
+            'success'
+        ).then((result) => {
+            if (result.isConfirmed || result.isDismissed) {
+                window.location.href='../jadwal.php';
+            }
         });
     </script>";
     //echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
