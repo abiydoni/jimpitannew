@@ -148,13 +148,10 @@
                         <p><strong>Alamat : </strong><?= htmlspecialchars($data['kk_alamat']) ?></p>
                         <p><strong>No HP : </strong><?= htmlspecialchars($data['kk_hp']) ?></p>
                     </div>
-                    <hr class="my-4 border-gray-300">
-
                 </div>
 
                 <!-- Card Container 2-->
                 <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
-                    <hr class="my-6">
                     <div id="qrcode-container" class="space-y-4 flex items-center justify-center"></div>
                 </div>
                 <!-- Card Container 3-->
