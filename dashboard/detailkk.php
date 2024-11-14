@@ -284,7 +284,7 @@
             `;
             
             document.body.innerHTML = printStyles + printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
-            window.print(); // Panggil fungsi cetak
+            //window.print(); // Panggil fungsi cetak
             document.body.innerHTML = originalContent; // Kembalikan konten asli
         }
     </script>    
