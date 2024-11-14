@@ -277,7 +277,10 @@
                     .gap-8 {
                         gap: 2rem; /* Atur jarak antar elemen */
                     }
-                </style>
+                    .max-w-xs { /* Ubah ukuran maksimum container */
+                        max-width: 300px; /* Sesuaikan ukuran sesuai kebutuhan */
+                    }
+                </style>            
             `;
             
             document.body.innerHTML = printStyles + printContent.innerHTML; // Ganti konten dengan yang ingin dicetak
