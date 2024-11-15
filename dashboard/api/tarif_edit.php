@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update user data in the database
     $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ? WHERE kode_tarif = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nama_tarif, $tarif]); // Menambahkan id_code ke parameter
+    $stmt->execute([$nama_tarif, $tarif, $kode_tarif]); // Menambahkan id_code ke parameter
     // Menambahkan pengalihan setelah pesan berhasil
     echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../setting.php';</script>";
     exit();
