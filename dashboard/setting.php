@@ -120,11 +120,6 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button type="button" id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
-                            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <a href="api/users_print.php" class="flex items-center">
-                                    <i class='bx bx-printer' style="font-size:24px"></i> <!-- Ikon untuk print report -->
-                                </a>
-                            </button>                        
                         </div>
                     </div>
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
