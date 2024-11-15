@@ -186,7 +186,7 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <span id="closeeditTarifModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
             <h3 class="text-lg font-bold text-gray-800">Edit Tarif</h3>
             <form action="api/tarif_edit.php" method="POST" class="space-y-2">
-                <input type="hidden" name="id_code" id="edit_id_code">
+                <input type="hidden" name="kode_tarif" id="edit_kode_tarif">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
                     <input type="text" name="nama_tarif" id="edit_nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
