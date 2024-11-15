@@ -12,7 +12,6 @@ if (isset($_GET['month'])) {
     // Buat tampilan untuk mencetak
     if ($data) {
         echo "<h1>Data Kas Umum untuk Bulan: $month</h1>";
-        echo "<button onclick='window.print()'>Cetak</button>";
 
         echo "<style>
                 table {
