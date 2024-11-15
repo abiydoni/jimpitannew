@@ -8,20 +8,6 @@ fetch("api/get_saldo.php")
 
 function createChart(saldoData) {
   const data = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
-    ], // Mengubah nama bulan menjadi tiga huruf
     datasets: [
       {
         label: "Analisa Pemasukan dan Pengeluaran per Bulan",
