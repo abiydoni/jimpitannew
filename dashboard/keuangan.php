@@ -388,7 +388,18 @@ $tanggalSekarang = date("Y-m-d");
         document.getElementById('printButton').addEventListener('click', function() {
             const selectedMonth = document.getElementById('monthPicker').value; // Ambil nilai dari date picker
             if (selectedMonth) {
-                window.open(`api/print_kas.php?month=${selectedMonth}`, '_blank');
+                // Tampilkan form cetak tanpa membuka halaman baru
+                Swal.fire({
+                    title: 'Form Cetak',
+                    html: `<p>Bulan yang dipilih: ${selectedMonth}</p>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Cetak',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.open(`api/print_kas.php?month=${selectedMonth}`, '_blank'); // Tampilkan halaman print
+                    }
+                });
             } else {
                 Swal.fire('Peringatan', 'Silakan pilih bulan terlebih dahulu!', 'warning'); // Tambahkan pesan peringatan
             }
