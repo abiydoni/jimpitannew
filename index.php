@@ -129,7 +129,7 @@ if (!isset($_SESSION['user'])) {
     });
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <p style="color:grey; font-size: 12px; text-align: center;">Silahkan SCAN Barcode di sini!</p>
+  <p style="color:grey; font-size: 20px; text-align: center;" id="jumlahscan">Jumlah Scan: Rp. 30.000</p>
   
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
