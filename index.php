@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     header('Location: login.php'); // Redirect to login page
     exit;
 }
-include 'api/get_info.php';
+//include 'api/get_info.php';
 ?>
 
 <!DOCTYPE html>
