@@ -130,7 +130,9 @@ include 'api/get_info.php';
     });
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <h4 id="totalScan">Jumlah Scan: Rp. <?php echo $totalScan ?> dan <?php echo $totaldata ?> KK</h4>
+  <h4 id="totalScan">
+    Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totaldata; ?> KK
+  </h4>
 
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
