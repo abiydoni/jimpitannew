@@ -130,7 +130,7 @@ include 'api/get_info.php';
     });
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <p style="color:grey; font-size: 20px; text-align: center;">Jumlah Scan: Rp. <a><?php echo $totalScan ?></a></p>
+  <p style="color:grey; font-size: 20px; text-align: center;">Jumlah Scan: Rp. <a><?php echo $totalScan; ?></a></p>
   
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
