@@ -131,7 +131,7 @@ include 'api/get_info.php';
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
   <h4 id="totalScan">
-    Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totaldata; ?> KK
+    Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?>
   </h4>
 
   <div class="floating-button" style="margin-right : 70px;">
