@@ -345,25 +345,7 @@ function playAudio() {
 function onScanSuccess(decodedText) {
   console.log("Teks yang dipindai:", decodedText);
   const id = decodedText; // Ambil ID dari kode QR
-
-  // Ambil tarif dari tabel tb_tarif
-  let nominal;
-  fetch("../api/get_tarif.php?kode_tarif=JIMPIT")
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success && data.tarif) {
-        nominal = data.tarif; // Tetapkan nilai nominal dari tarif
-      } else {
-        console.error("Tarif tidak ditemukan");
-        nominal = 500; // Tetapkan nilai default jika tidak ditemukan
-      }
-    })
-    .catch((error) => {
-      console.error("Kesalahan mengambil tarif:", error);
-      nominal = 500; // Tetapkan nilai default jika terjadi kesalahan
-    });
-
-  //const nominal = 500; // Tetapkan nilai nominal
+  const nominal = 500; // Tetapkan nilai nominal
   const today = new Date();
   const jimpitanDate = today.toLocaleDateString("id-ID", {
     year: "numeric",
