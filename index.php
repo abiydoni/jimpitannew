@@ -154,7 +154,7 @@ if (!isset($_SESSION['user'])) {
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
-<script src="js/app.js"></script>
+<!-- <script src="js/app.js"></script> -->
 
 <script>
     // Fungsi untuk mengambil data secara realtime
