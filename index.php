@@ -176,8 +176,8 @@ if (!isset($_SESSION['user'])) {
             });
         }
 
-        // Update data setiap 5 detik (5000ms)
-        setInterval(updateData, 5000);
+        // Update data setiap 1 detik (1000ms)
+        setInterval(updateData, 1000);
 
         // Panggil updateData() sekali saat halaman dimuat
         $(document).ready(function() {
