@@ -44,6 +44,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
 
     if ($exists > 0) {
         echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ' sudah ada, mau di hapus?']);
+        header("Location: ../index.php");
         exit; // Hentikan eksekusi jika data sudah ada
     }
 
@@ -56,6 +57,8 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);
     
         echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . '' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
+        header("Location: ../index.php");
+
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);

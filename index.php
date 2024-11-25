@@ -129,6 +129,10 @@ include 'api/get_info.php';
       document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
     });
   </script>
+
+
+
+
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
   <h4 id="totalScan">
     Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
