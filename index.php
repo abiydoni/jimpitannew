@@ -181,7 +181,7 @@ if (!isset($_SESSION['user'])) {
     }
 
     // Update data setiap 1 detik (1000ms)
-    setInterval(updateData, 1000);
+    setInterval(updateData, 3000);
 
     // Panggil updateData() sekali saat halaman dimuat
     $(document).ready(function() {
