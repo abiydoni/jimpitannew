@@ -159,7 +159,7 @@ if (!isset($_SESSION['user'])) {
         // Fungsi untuk mengambil data secara realtime
         function updateData() {
             $.ajax({
-                url: 'api/get_info.php',  // URL script PHP yang akan diambil
+                url: './api/get_info.php',  // URL script PHP yang akan diambil
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
