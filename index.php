@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     header('Location: login.php'); // Redirect to login page
     exit;
 }
-include 'api/get_info.php';
+// include 'api/get_info.php';
 ?>
 
 <!DOCTYPE html>
@@ -130,7 +130,7 @@ include 'api/get_info.php';
     });
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <h4 id="totalScan">
+  <h4 id="totalScan" action="api/get_info.php" method="POST">
     Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
   </h4>
 
