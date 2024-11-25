@@ -130,9 +130,10 @@ if (!isset($_SESSION['user'])) {
     });
   </script>
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <h4 id="totalScan" action="api/get_info.php" method="POST">
+  <!-- <h4 id="totalScan">
     Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
-  </h4>
+  </h4> -->
+  <h4 id="totalScan">Menunggu data...</h4>
 
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
@@ -153,6 +154,37 @@ if (!isset($_SESSION['user'])) {
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
 <script src="js/app.js"></script>
+
+<script>
+        // Fungsi untuk mengambil data secara realtime
+        function updateData() {
+            $.ajax({
+                url: 'api/get_info.php',  // URL script PHP yang akan diambil
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.error) {
+                        console.log('Error: ' + data.error);
+                    } else {
+                        // Update konten dengan data baru
+                        $('#totalScan').html('Jumlah Scan: Rp. ' + data.totalScan.toLocaleString('id-ID') + ' dan ' + data.totalData + ' KK');
+                    }
+                },
+                error: function() {
+                    console.log('Gagal mengambil data');
+                }
+            });
+        }
+
+        // Update data setiap 5 detik (5000ms)
+        setInterval(updateData, 5000);
+
+        // Panggil updateData() sekali saat halaman dimuat
+        $(document).ready(function() {
+            updateData();
+        });
+    </script>
+
   <!-- <script>
     // Register the service worker
     if ('serviceWorker' in navigator) {
