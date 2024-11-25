@@ -156,34 +156,37 @@ if (!isset($_SESSION['user'])) {
 <script src="js/app.js"></script>
 
 <script>
-        // Fungsi untuk mengambil data secara realtime
-        function updateData() {
-            $.ajax({
-                url: './api/get_info.php',  // URL script PHP yang akan diambil
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    if (data.error) {
-                        console.log('Error: ' + data.error);
-                    } else {
-                        // Update konten dengan data baru
-                        $('#totalScan').html('Jumlah Scan: Rp. ' + data.totalScan.toLocaleString('id-ID') + ' dan ' + data.totalData + ' KK');
-                    }
-                },
-                error: function() {
-                    console.log('Gagal mengambil data');
+    // Fungsi untuk mengambil data secara realtime
+    function updateData() {
+        $.ajax({
+            url: 'api/get_info.php',  // URL script PHP yang akan diambil
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Debugging: Lihat data yang diterima dari server
+                console.log(data);
+
+                if (data.error) {
+                    console.log('Error: ' + data.error);
+                } else {
+                    // Update konten dengan data baru
+                    $('#totalScan').html('Jumlah Scan: Rp. ' + parseInt(data.totalScan).toLocaleString('id-ID') + ' dan ' + data.totalData + ' KK');
                 }
-            });
-        }
-
-        // Update data setiap 1 detik (1000ms)
-        setInterval(updateData, 1000);
-
-        // Panggil updateData() sekali saat halaman dimuat
-        $(document).ready(function() {
-            updateData();
+            },
+            error: function(xhr, status, error) {
+                console.log('Gagal mengambil data: ' + status + ' - ' + error);
+            }
         });
-    </script>
+    }
+
+    // Update data setiap 1 detik (1000ms)
+    setInterval(updateData, 1000);
+
+    // Panggil updateData() sekali saat halaman dimuat
+    $(document).ready(function() {
+        updateData();
+    });
+</script>
 
   <!-- <script>
     // Register the service worker
