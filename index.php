@@ -129,10 +129,6 @@ include 'api/get_info.php';
       document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
     });
   </script>
-
-
-
-
   <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
   <h4 id="totalScan">
     Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
@@ -157,7 +153,7 @@ include 'api/get_info.php';
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
 <script src="js/app.js"></script>
-  <script>
+  <!-- <script>
     // Register the service worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -170,7 +166,7 @@ include 'api/get_info.php';
             });
         });
     }
-  </script>
+  </script> -->
 
 </body>
 </html>
