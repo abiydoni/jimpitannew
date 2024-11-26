@@ -106,11 +106,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
-        <a href="index.php" 
-            class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-            Kembali
-        </a>
+    <div class="floating-button" style="margin-right : 70px;">
+        <a href="index.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
     </div>
 </div>
 </body>
