@@ -55,10 +55,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         /* Styling tabel */
         table {
-            width: 100%;
+            width: 60%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 600px; /* Lebar minimal tabel */
+            min-width: 100px; /* Lebar minimal tabel */
         }
 
         th, td {
