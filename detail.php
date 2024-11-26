@@ -109,10 +109,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-xs w-full">
         <a href="index.php" 
             class="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-            <!-- Icon Panah -->
-            <svg xmlns="kk.php" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2 w-full max-w-[200px]">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
             Kembali
         </a>
     </div>
