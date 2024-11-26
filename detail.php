@@ -39,7 +39,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <div class="screen-1">
     <H4>Data Scan Jimpitan</H4>
-    <div class="table-container" style="font-size: 10px;">
+    <div class="table-container" style="font-size: 12px;">
         <table>
             <thead>
                 <tr>
