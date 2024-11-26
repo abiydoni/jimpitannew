@@ -106,9 +106,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 
-    <div class="floating-button" style="margin-right : 70px;">
-        <a href="index.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
-    </div>
+    <!-- Tombol Bulat -->
+    <button class="round-button" onclick="window.location.href='index.php'">
+        <span>&#8592;</span> <!-- Ikon panah kiri -->
+    </button>
 </div>
 </body>
 </html>
