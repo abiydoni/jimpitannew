@@ -134,7 +134,7 @@ if (!isset($_SESSION['user'])) {
   <!-- <h4 id="totalScan">
     Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
   </h4> -->
-  <h4 id="totalScan">Menunggu data...</h4>
+  <a href="detail.php"><h4 id="totalScan">Menunggu data...</h4></a>
 
   <div class="floating-button" style="margin-right : 70px;">
     <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
