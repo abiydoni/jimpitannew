@@ -45,10 +45,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         /* Styling container tabel */
         .table-container {
-            max-width: 100%;       /* Lebar maksimal tabel */
+            max-width: 50%;       /* Lebar maksimal tabel */
             overflow-x: auto;      /* Scroll horizontal */
             overflow-y: auto;      /* Scroll vertikal */
-            max-height: 400px;     /* Maksimal tinggi tabel */
+            max-height: 100px;     /* Maksimal tinggi tabel */
             border: 1px solid #ddd; /* Bingkai tabel */
             border-radius: 5px;    /* Membulatkan bingkai */
         }
