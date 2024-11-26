@@ -43,51 +43,49 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #f4f4f9;
         }
 
-        /* Styling container tabel */
+        /* Container untuk tabel */
         .table-container {
-            max-width: 50%;       /* Lebar maksimal tabel */
-            overflow-x: auto;      /* Scroll horizontal */
-            overflow-y: auto;      /* Scroll vertikal */
-            max-height: 100px;     /* Maksimal tinggi tabel */
-            border: 1px solid #ddd; /* Bingkai tabel */
-            border-radius: 5px;    /* Membulatkan bingkai */
+            width: 100%;             /* Container mengikuti lebar halaman */
+            overflow-x: auto;        /* Scroll horizontal jika konten terlalu lebar */
+            overflow-y: auto;        /* Scroll vertikal jika konten terlalu tinggi */
+            max-height: 400px;       /* Batas tinggi maksimum untuk tabel */
+            border: 1px solid #ddd;  /* Bingkai container tabel */
+            border-radius: 5px;      /* Membulatkan sudut */
         }
 
         /* Styling tabel */
         table {
-            width: 60%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 100px; /* Lebar minimal tabel */
+            width: 100%;             /* Tabel menyesuaikan lebar container */
+            border-collapse: collapse; /* Menggabungkan border */
+            text-align: left;        /* Konten rata kiri */
         }
 
         th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd; /* Garis antar sel */
+            padding: 10px;           /* Padding untuk sel */
+            border: 1px solid #ddd;  /* Garis antar sel */
         }
 
         th {
-            background-color: #007BFF; /* Warna latar header */
-            color: white;             /* Warna teks header */
+            background-color: #007BFF; /* Warna header tabel */
+            color: white;              /* Warna teks header */
             font-weight: bold;
-            text-transform: uppercase;
+            text-transform: uppercase; /* Teks kapital */
         }
 
         td {
-            background-color: white; /* Warna latar data */
+            background-color: white;   /* Warna latar isi */
         }
 
-        /* Styling hover pada baris tabel */
+        /* Efek hover pada baris */
         tr:hover td {
             background-color: #f1f1f1; /* Warna saat baris dihover */
         }
     </style>
-
 </head>
 <body>
 <div class="screen-1">
     <H4>Data Scan Jimpitan</H4>
-    <div style="font-size: 12px;">
+    <div class="table-container" style="font-size: 12px;">
         <table>
             <thead>
                 <tr>
