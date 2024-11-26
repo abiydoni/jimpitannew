@@ -118,22 +118,25 @@ button {
 
 /* membuat tombol*/
 .round-button {
+  position: fixed; /* Posisi tetap di layar */
+  bottom: 20px; /* Jarak dari bawah */
+  right: 20px; /* Jarak dari kanan */
   width: 60px; /* Lebar tombol */
-  height: 60px; /* Tinggi tombol, sama dengan lebar */
+  height: 60px; /* Tinggi tombol */
   background-color: #007bff; /* Warna tombol */
   color: white; /* Warna teks/ikon */
   border: none; /* Menghilangkan border */
   border-radius: 50%; /* Membuat tombol bulat */
-  font-size: 24px; /* Ukuran teks/ikon */
+  font-size: 24px; /* Ukuran ikon */
   display: flex; /* Mengatur konten di tengah */
   justify-content: center; /* Pusatkan secara horizontal */
   align-items: center; /* Pusatkan secara vertikal */
   cursor: pointer; /* Pointer saat hover */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Bayangan tombol */
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Efek hover */
 }
 
-/* Hover efek */
+/* Efek hover */
 .round-button:hover {
   background-color: #0056b3; /* Warna lebih gelap saat hover */
   transform: scale(1.1); /* Membesarkan tombol sedikit */
