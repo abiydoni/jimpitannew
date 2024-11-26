@@ -147,3 +147,48 @@ button {
   outline: none; /* Menghilangkan outline bawaan */
   box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Highlight fokus */
 }
+
+/* Container untuk tabel detail*/
+.table-container {
+  max-width: 100%;
+  max-height: 300px; /* Tinggi maksimum tabel */
+  overflow: auto; /* Scroll horizontal dan vertikal */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Styling tabel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Header tetap (sticky) */
+thead th {
+  position: sticky; /* Membuat header tetap */
+  top: 0; /* Posisi tetap di atas */
+  z-index: 2; /* Memberikan prioritas atas */
+}
+
+/* Kolom pertama tetap (sticky) */
+tbody td:first-child,
+thead th:first-child {
+  position: sticky; /* Membuat kolom tetap */
+  left: 0; /* Tetap di sisi kiri */
+  background-color: #f4f4f4; /* Warna latar khusus */
+  z-index: 1; /* Memberikan prioritas */
+}
