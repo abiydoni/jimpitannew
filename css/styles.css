@@ -183,12 +183,3 @@ thead th {
   top: 0; /* Posisi tetap di atas */
   z-index: 2; /* Memberikan prioritas atas */
 }
-
-/* Kolom pertama tetap (sticky) */
-tbody td:first-child,
-thead th:first-child {
-  position: sticky; /* Membuat kolom tetap */
-  left: 0; /* Tetap di sisi kiri */
-  background-color: #f4f4f4; /* Warna latar khusus */
-  z-index: 1; /* Memberikan prioritas */
-}
