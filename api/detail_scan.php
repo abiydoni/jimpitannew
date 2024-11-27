@@ -88,6 +88,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $(document).ready(updateTable);
 </script>
     <script>
+        a {
+            margin: 0;
+            padding: 0;
+        }
+
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
