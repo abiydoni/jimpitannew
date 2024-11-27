@@ -30,6 +30,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
     <!-- <link rel="manifest" href="manifest.json"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
@@ -43,17 +44,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table>
             <thead>
                 <tr>
-                    <th style="text-align: left;">Nama KK</th>
+                    <th>Nama KK</th>
                     <th style="text-align: center;">Nominal</th>
                     <th style="text-align: center;">Jaga</th>
                 </tr>
             </thead>
-            <tbody>
-            <?php foreach($data as $tarif): ?>
+            <tbody id="data-table">
+            <?php foreach($data as $row): ?>
                 <tr class="border-b hover:bg-gray-100">
-                    <td><?php echo htmlspecialchars($tarif["kk_name"]); ?></td> 
-                    <td><?php echo htmlspecialchars($tarif["nominal"]); ?></td>
-                    <td><?php echo htmlspecialchars($tarif["collector"]); ?></td>
+                    <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
+                    <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
+                    <td><?php echo htmlspecialchars($row["collector"]); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -65,5 +66,25 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
 </div>
+
+<script>
+    // Fungsi untuk memperbarui tabel
+    function updateTable() {
+        // Tampilkan indikator loading
+        $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Loading...</td></tr>");
+        $.get("api/get_data.php", function(data) {
+            $("#data-table").html(data); // Masukkan data baru ke tabel
+        }).fail(function() {
+            $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
+        });
+    }
+
+    // Panggil updateTable setiap 5 detik
+    setInterval(updateTable, 3000);
+
+    // Muat data pertama kali saat halaman dimuat
+    $(document).ready(updateTable);
+</script>
+
 </body>
 </html>
