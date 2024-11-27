@@ -14,7 +14,7 @@ $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.nominal, report.collector 
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = '2024-11-24'
+    WHERE report.jimpitan_date = CURDATE()
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
