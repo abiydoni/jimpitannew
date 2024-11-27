@@ -40,7 +40,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <div class="screen-1">
-    <a style="font-weight: bold; font-size: 20px;">Data Scan Jimpitan</a>
+    <a style="font-weight: bold; font-size: 15px;">Data Scan Jimpitan</a>
     <a style="color: grey; font-size: 10px;">Hari Ini : <span id="tanggal"></span></a>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
         <table>
@@ -88,11 +88,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $(document).ready(updateTable);
 </script>
     <script>
-        a {
-            margin: 0;
-            padding: 0;
-        }
-
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -110,6 +105,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
     </script>
+    <style>
+        /* Mengatur margin dan padding untuk elemen <a> */
+        a {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 
 </body>
 </html>
