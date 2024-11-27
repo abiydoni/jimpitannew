@@ -148,7 +148,7 @@ if (!isset($_SESSION['user'])) {
 
   <div id="qr-reader"></div> <!-- QR camera dimulai -->
 
-  <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: Adi Hermawan</p>
+  <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: Setyo Adi Hermawan</p>
   <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
 </div>
 
