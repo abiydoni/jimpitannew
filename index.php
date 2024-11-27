@@ -117,12 +117,6 @@ if (!isset($_SESSION['user'])) {
 <body>
 
 
-
-
-
-
-
-
 <div id="landscapeBlocker">
   <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
   <p>Please rotate your device to portrait mode.</p>
