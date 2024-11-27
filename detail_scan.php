@@ -29,41 +29,40 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
-    <link rel="stylesheet" href="/css/tailwind.css">
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;800&display=swap'>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body class="bg-gray-50 text-gray-800 font-poppins">
-<div class="max-w-4xl mx-auto py-6 px-4">
-    <h4 class="text-lg font-semibold mb-4">Data Scan Jimpitan</h4>
-    <div class="overflow-x-auto">
-        <table class="min-w-full table-auto text-sm text-gray-700 bg-white border-collapse">
-            <thead class="bg-gray-200 text-gray-600 uppercase text-xs">
+<body>
+<div class="screen-1">
+    <H4>Data Scan Jimpitan</H4>
+    <div class="table-container" style="font-size: 12px;">
+        <table>
+            <thead>
                 <tr>
-                    <th class="px-4 py-2 text-left">Nama KK</th>
-                    <th class="px-4 py-2 text-center">Nominal</th>
-                    <th class="px-4 py-2 text-center">Jaga</th>
+                    <th style="text-align: left;">Nama KK</th>
+                    <th style="text-align: center;">Nominal</th>
+                    <th style="text-align: center;">Jaga</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($data)): ?>
-                    <tr>
-                        <td colspan="3" class="text-center py-4 text-gray-500">Tidak ada data jimpitan hari ini.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach($data as $tarif): ?>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="px-4 py-2"><?php echo htmlspecialchars($tarif["kk_name"]); ?></td> 
-                            <td class="px-4 py-2 text-center"><?php echo htmlspecialchars($tarif["nominal"]); ?></td>
-                            <td class="px-4 py-2 text-center"><?php echo htmlspecialchars($tarif["collector"]); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+            <?php foreach($data as $tarif): ?>
+                <tr class="border-b hover:bg-gray-100">
+                    <td><?php echo htmlspecialchars($tarif["kk_name"]); ?></td> 
+                    <td><?php echo htmlspecialchars($tarif["nominal"]); ?></td>
+                    <td><?php echo htmlspecialchars($tarif["collector"]); ?></td>
+                </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <button 
-        class="fixed bottom-4 right-4 w-12 h-12 rounded-full bg-blue-500 text-white text-xl flex items-center justify-center shadow-lg hover:bg-blue-600"
-        onclick="window.location.href='index.php'">
-        &#8592;
+
+    <!-- Tombol Bulat -->
+    <button class="round-button" onclick="window.location.href='index.php'">
+        <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
 </div>
 </body>
