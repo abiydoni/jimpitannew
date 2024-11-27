@@ -40,8 +40,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <div class="screen-1">
-    <H4 class="text-xl font-bold">Data Scan Jimpitan</H4>
-    <h5>Tanggal Hari Ini: <span id="tanggal"></span></h5>
+    <a>Data Scan Jimpitan</a>
+    <a>Hari Ini : <span id="tanggal"></span></a>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
         <table>
             <thead>
