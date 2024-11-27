@@ -1,9 +1,8 @@
-const CACHE_NAME = "jimpitan-cache-v1.4";
+const CACHE_NAME = `jimpitan-cache-${new Date().toISOString()}`; // Versi cache otomatis berdasarkan waktu
 const urlsToCache = [
   "/",
   "index.php",
   "login.php",
-  "detail.php",
   "manifest.json",
   "assets/audio/interface.wav",
   "assets/image/block.gif",
