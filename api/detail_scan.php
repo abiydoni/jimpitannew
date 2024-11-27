@@ -4,7 +4,7 @@ session_start();
 // Check if user is logged in
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
-    echo json_encode(['success' => false, 'message' => 'Silahkan login terlebih dahulu']);
+    echo json_encode(['success' => false, 'message' => 'Pengguna tidak terautentikasi']);
     exit; // Hentikan eksekusi jika pengguna tidak terautentikasi
 }
 include 'db.php';
@@ -31,10 +31,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
     <!-- <link rel="manifest" href="manifest.json"> -->
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script type="module" src="../js/ionicons.esm.js"></script>
-    <script nomodule src="../js/ionicons.js"></script>
-    <link rel="stylesheet" href="../css/normalize.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;800&display=swap'>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
