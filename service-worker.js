@@ -1,14 +1,14 @@
 const CACHE_NAME = "jimpitan-cache-v1.3";
 const urlsToCache = [
-  "/",
-  "index.php",
-  "css/styles.css",
-  "js/app.js",
-  "login.php",
-  "detail.php",
-  "manifest.json",
-  "assets/audio/interface.wav",
-  "assets/image/block.gif",
+  "/", // Halaman utama
+  "index.php", // Halaman index
+  "css/styles.css", // File CSS
+  "js/app.js", // File JavaScript
+  "login.php", // Halaman login
+  "detail.php", // Halaman detail
+  "manifest.json", // File manifest
+  "assets/audio/interface.wav", // File audio
+  "assets/image/block.gif", // Gambar
 ];
 
 // Instalasi Service Worker: Caching file yang dibutuhkan
@@ -16,7 +16,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log("Caching file...");
-      return cache.addAll(CACHE_URLS);
+      return cache.addAll(urlsToCache); // Perbaiki penggunaan urlsToCache
     })
   );
 });
