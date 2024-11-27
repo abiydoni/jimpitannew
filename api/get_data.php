@@ -9,6 +9,7 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
+try {
 // Query data
 $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.nominal, report.collector 
