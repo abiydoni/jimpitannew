@@ -44,14 +44,3 @@ if ($data) {
 } else {
     echo "<tr><td colspan='3' style='text-align: center;'>Tidak ada data jimpitan hari ini.</td></tr>";
 }
-echo "</tbody>";
-echo "</table>";
-
-// Tampilkan total nominal dan total scan di luar tabel
-echo "<div style='margin-top: 20px;'>";
-echo "<p><strong>Total Yang Disetorkan:</strong> Rp " . number_format($totalNominal, 0, ',', '.') . "</p>";
-echo "<p><strong>Total Scan:</strong> {$totalScan}</p>";
-echo "</div>";
-} catch (PDOException $e) {
-echo "Terjadi kesalahan: " . htmlspecialchars($e->getMessage());
-}
