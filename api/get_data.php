@@ -34,11 +34,11 @@ if ($data) {
     }
     // Tampilkan total nominal dan total scan di bawah tabel
     echo "<tr>
-            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Nominal:</td>
+            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Yang Disetorkan:</td>
             <td style='text-align: center; font-weight: bold;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
           </tr>";
     echo "<tr>
-            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Data:</td>
+            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Scan:</td>
             <td style='text-align: center; font-weight: bold;'>{$totalScan}</td>
           </tr>";
 } else {
