@@ -1,4 +1,4 @@
-const CACHE_NAME = "jimpitan-cache-v1.3";
+const CACHE_NAME = `jimpitan-cache-${new Date().getTime()}`; // Versi cache berdasarkan timestamp (waktu saat ini)
 const urlsToCache = [
   "/", // Halaman utama
   "index.php", // Halaman index
