@@ -82,7 +82,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Panggil updateTable setiap 5 detik
-    setInterval(updateTable, 5000);
+    setInterval(updateTable, 10000);
 
     // Muat data pertama kali saat halaman dimuat
     $(document).ready(updateTable);
