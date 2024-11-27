@@ -2,8 +2,8 @@ const CACHE_NAME = "jimpitan-cache-v1.3";
 const urlsToCache = [
   "/",
   "index.php",
+  "css/styles.css",
   "js/app.js",
-  "cs/styles.css",
   "login.php",
   "detail.php",
   "manifest.json",
