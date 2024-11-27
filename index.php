@@ -21,6 +21,8 @@ if (!isset($_SESSION['user'])) {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="css/style.css?v=<?= time(); ?>">
+
   <style>
     body, html {
         margin: 10px;
