@@ -41,6 +41,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <div class="screen-1">
     <H4 class="text-xl font-bold">Data Scan Jimpitan</H4>
+    <h5>Tanggal Hari Ini: <span id="tanggal"></span></h5>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
         <table>
             <thead>
@@ -86,6 +87,24 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // Muat data pertama kali saat halaman dimuat
     $(document).ready(updateTable);
 </script>
+    <script>
+        // Fungsi untuk menampilkan tanggal dalam format Indonesia
+        function formatTanggalIndonesia() {
+            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            
+            const tanggal = new Date();
+            const hariNama = hari[tanggal.getDay()];
+            const bulanNama = bulan[tanggal.getMonth()];
+            const tanggalTanggal = tanggal.getDate();
+            const tahun = tanggal.getFullYear();
+
+            return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
+        }
+
+        // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
+        document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+    </script>
 
 </body>
 </html>
