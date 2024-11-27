@@ -28,14 +28,14 @@ if ($data) {
         $totalNominal += $row['nominal']; // Tambahkan nominal ke total
         echo "<tr>
                 <td>{$row['kk_name']}</td>
-                <td style='text-align: center;'>{$row['nominal']}</td>
+                <td style='text-align: center;'>" . number_format($row['nominal'], 0, ',', '.') . "</td>
                 <td style='text-align: center;'>{$row['collector']}</td>
               </tr>";
     }
     // Tampilkan total nominal dan total scan di bawah tabel
     echo "<tr>
             <td colspan='2' style='text-align: right; font-weight: bold;'>Total Nominal:</td>
-            <td style='text-align: center; font-weight: bold;'>{$totalNominal}</td>
+            <td style='text-align: center; font-weight: bold;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
           </tr>";
     echo "<tr>
             <td colspan='2' style='text-align: right; font-weight: bold;'>Total Data:</td>

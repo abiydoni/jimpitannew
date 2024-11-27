@@ -53,7 +53,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach($data as $row): ?>
                 <tr class="border-b hover:bg-gray-100">
                     <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
-                    <td style="text-align: center"><?php echo htmlspecialchars($row["nominal"]); ?></td>
+                    <td style="text-align: center"><?php echo htmlspecialchars(number_format($row["nominal"], 0, ',', '.')); ?></td>
                     <td style="text-align: center"><?php echo htmlspecialchars($row["collector"]); ?></td>
                 </tr>
             <?php endforeach; ?>
