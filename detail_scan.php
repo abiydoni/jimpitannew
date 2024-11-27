@@ -45,16 +45,16 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <thead>
                 <tr>
                     <th>Nama KK</th>
-                    <th style="text-align: center;">Nominal</th>
-                    <th style="text-align: center;">Jaga</th>
+                    <th style="text-align: center">Nominal</th>
+                    <th style="text-align: center">Jaga</th>
                 </tr>
             </thead>
             <tbody id="data-table">
             <?php foreach($data as $row): ?>
                 <tr class="border-b hover:bg-gray-100">
                     <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
-                    <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
-                    <td><?php echo htmlspecialchars($row["collector"]); ?></td>
+                    <td style='text-align: center'><?php echo htmlspecialchars($row["nominal"]); ?></td>
+                    <td style='text-align: center'><?php echo htmlspecialchars($row["collector"]); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -80,7 +80,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Panggil updateTable setiap 5 detik
-    setInterval(updateTable, 3000);
+    setInterval(updateTable, 5000);
 
     // Muat data pertama kali saat halaman dimuat
     $(document).ready(updateTable);
