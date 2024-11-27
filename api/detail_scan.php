@@ -2,11 +2,12 @@
 session_start();
 
 // Check if user is logged in
+// Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php'); // Redirect to login page
-    exit;
+    echo json_encode(['success' => false, 'message' => 'Pengguna tidak terautentikasi']);
+    exit; // Hentikan eksekusi jika pengguna tidak terautentikasi
 }
-include 'api/db.php';
+include 'db.php';
 
 // Prepare the SQL statement to select only today's shift
 $stmt = $pdo->prepare("
@@ -35,7 +36,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;800&display=swap'>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
 <div class="screen-1">
@@ -62,7 +63,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Tombol Bulat -->
-    <button class="round-button" onclick="window.location.href='index.php'">
+    <button class="round-button" onclick="window.location.href='../index.php'">
         <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
 </div>
@@ -72,7 +73,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     function updateTable() {
         // Tampilkan indikator loading
         $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Loading...</td></tr>");
-        $.get("api/get_data.php", function(data) {
+        $.get("get_data.php", function(data) {
             $("#data-table").html(data); // Masukkan data baru ke tabel
         }).fail(function() {
             $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
