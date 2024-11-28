@@ -133,10 +133,12 @@ document
       const estimationColumnIndex = totalColumnIndex + 1; // Kolom 'Estimasi'
       const piutangColumnIndex = estimationColumnIndex + 1; // Kolom 'Piutang'
 
-      // Jika total == 0, maka Piutang = Estimasi
-      const piutangFormula = `IF(${getColumnLetter(totalColumnIndex)}${
+      // Jika Total kosong atau 0, Piutang = Estimasi
+      const piutangFormula = `IF(OR(${getColumnLetter(totalColumnIndex)}${
         index + 5
-      }=0, ${getColumnLetter(estimationColumnIndex)}${
+      }="", ${getColumnLetter(totalColumnIndex)}${
+        index + 5
+      }=0), ${getColumnLetter(estimationColumnIndex)}${
         index + 5
       }, ${getColumnLetter(estimationColumnIndex)}${
         index + 5
