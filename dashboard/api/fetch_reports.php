@@ -113,7 +113,7 @@ try {
     foreach ($reports as &$report) {
         foreach ($report as $key => $value) {
             if (is_numeric($value)) {
-                $report[$key] = number_format($value, 0, ',', '.'); // Format angka
+                $report[$key] = number_format($value, 0, '.', ','); // Format angka
             }
         }
     }
