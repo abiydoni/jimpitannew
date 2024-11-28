@@ -131,9 +131,16 @@ document
       // Formula untuk Piutang
       const totalColumnIndex = daysInMonth + 2; // Kolom 'Total'
       const estimationColumnIndex = totalColumnIndex + 1; // Kolom 'Estimasi'
-      const piutangFormula = `${getColumnLetter(estimationColumnIndex)}${
+      const piutangColumnIndex = estimationColumnIndex + 1; // Kolom 'Piutang'
+
+      // Jika total == 0, maka Piutang = Estimasi
+      const piutangFormula = `IF(${getColumnLetter(totalColumnIndex)}${
         index + 5
-      } - ${getColumnLetter(totalColumnIndex)}${index + 5}`;
+      }=0, ${getColumnLetter(estimationColumnIndex)}${
+        index + 5
+      }, ${getColumnLetter(estimationColumnIndex)}${
+        index + 5
+      } - ${getColumnLetter(totalColumnIndex)}${index + 5})`;
       rowData.push({ formula: piutangFormula });
 
       const newRow = worksheet.addRow(rowData);
