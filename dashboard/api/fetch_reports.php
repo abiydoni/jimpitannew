@@ -109,15 +109,6 @@ try {
     $stmt->execute();
 
     $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // Format hasil laporan dengan pemisah ribuan
-    foreach ($reports as &$report) {
-        foreach ($report as $key => $value) {
-            if (is_numeric($value)) {
-                $report[$key] = number_format($value, 0, '.', ','); // Format angka
-            }
-        }
-    }
-
     echo json_encode($reports);
 } catch (Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);

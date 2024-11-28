@@ -71,7 +71,9 @@ document
     const headerRow = worksheet.addRow([
       "",
       ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-      "",
+      "Total",
+      "Estimasi",
+      "Piutang",
     ]);
 
     // Fungsi untuk mengonversi indeks kolom menjadi huruf kolom
@@ -84,54 +86,6 @@ document
         columnIndex = Math.floor((columnIndex - temp) / 26);
       }
       return letter;
-    }
-
-    // Menghitung huruf kolom terakhir berdasarkan jumlah hari
-    const lastColumnIndex = daysInMonth + 1; // +1 untuk 'Total'
-    const lastColumnLetter = getColumnLetter(lastColumnIndex);
-
-    // Menghitung huruf kolom terakhir berdasarkan jumlah hari
-    const totalColumnIndex = daysInMonth + 2; // +1 untuk 'Total'
-    const totalColumnLetter = getColumnLetter(totalColumnIndex);
-
-    setMergedCell(worksheet, `B3:${lastColumnLetter}3`, "Tanggal");
-    setMergedCell(worksheet, "A3:A4", "Nama");
-    setMergedCell(
-      worksheet,
-      `${totalColumnLetter}3:${totalColumnLetter}4`,
-      "Total"
-    );
-    setMergedCell(
-      worksheet,
-      `${totalColumnLetter + 1}3:${totalColumnLetter + 1}4`,
-      "Estimasi"
-    );
-    setMergedCell(
-      worksheet,
-      `${totalColumnLetter + 2}3:${totalColumnLetter + 2}4`,
-      "Piutang"
-    );
-
-    function setMergedCell(worksheet, cellRange, value) {
-      worksheet.mergeCells(cellRange);
-      const cell = worksheet.getCell(cellRange.split(":")[0]);
-      cell.value = value;
-      cell.alignment = { horizontal: "center", vertical: "middle" };
-      cell.font = {
-        bold: true,
-        color: { argb: "FFFFFF" }, // Set warna font menjadi putih
-      };
-      cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "001F3F" },
-      };
-      worksheet.getCell(cellRange).border = {
-        top: { style: "thin", color: { argb: "ffffff" } },
-        left: { style: "thin", color: { argb: "ffffff" } },
-        bottom: { style: "thin", color: { argb: "ffffff" } },
-        right: { style: "thin", color: { argb: "ffffff" } },
-      };
     }
 
     headerRow.eachCell((cell) => {
@@ -148,14 +102,11 @@ document
         bottom: { style: "thin", color: { argb: "ffffff" } },
         right: { style: "thin", color: { argb: "ffffff" } },
       };
-      if (cell.value !== "") {
-        cell.numFmt = "0";
-      }
     });
 
     worksheet.getColumn(1).width = 25;
-    for (let i = 2; i <= daysInMonth + 1; i++) {
-      worksheet.getColumn(i).width = 6; // Set width for days
+    for (let i = 2; i <= daysInMonth + 3; i++) {
+      worksheet.getColumn(i).width = 6; // Set width for days + Total + Estimasi + Piutang
     }
 
     data.forEach((row, index) => {
@@ -173,11 +124,11 @@ document
       rowData.push(total > 0 ? total : "");
 
       // Hitung Estimasi
-      const nominalPerDay = 500; // Ganti nominal sesuai kebutuhan
+      const nominalPerDay = 500; // Nominal per hari
       const estimation = nominalPerDay * daysInMonth;
       rowData.push(estimation);
 
-      // Formula untuk Piutang: Estimasi - Total
+      // Formula untuk Piutang
       const totalColumnIndex = daysInMonth + 2; // Kolom 'Total'
       const estimationColumnIndex = totalColumnIndex + 1; // Kolom 'Estimasi'
       const piutangFormula = `${getColumnLetter(estimationColumnIndex)}${
@@ -217,11 +168,6 @@ document
           };
         }
       });
-    });
-
-    const lastRow = worksheet.lastRow;
-    lastRow.eachCell((cell) => {
-      cell.font = { bold: true };
     });
 
     const now = new Date();
