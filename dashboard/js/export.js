@@ -1,7 +1,7 @@
 document
   .getElementById("reportBtn")
   .addEventListener("click", async function () {
-    const monthPicker = document.getElementById("monthPicker").value;
+    const monthPicker = document.getElementById("monthPicker").value; // Format "Oct 2024"
     if (!monthPicker) {
       Swal.fire({
         icon: "warning",
@@ -62,9 +62,12 @@ document
     };
     worksheet.getCell("A2").font = { bold: true, size: 12 };
 
+    worksheet.getCell("A3").value = "";
+
+    // Menentukan jumlah hari dalam bulan yang dipilih
     const daysInMonth = new Date(year, monthNumber, 0).getDate();
 
-    // Header
+    // Membuat baris header
     const headerRow = worksheet.addRow([
       "",
       ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -72,6 +75,18 @@ document
       "Estimasi",
       "Piutang",
     ]);
+
+    // Fungsi untuk mengonversi indeks kolom menjadi huruf kolom
+    function getColumnLetter(columnIndex) {
+      let temp;
+      let letter = "";
+      while (columnIndex > 0) {
+        temp = (columnIndex - 1) % 26;
+        letter = String.fromCharCode(temp + 65) + letter;
+        columnIndex = Math.floor((columnIndex - temp) / 26);
+      }
+      return letter;
+    }
 
     headerRow.eachCell((cell) => {
       cell.fill = {
@@ -89,8 +104,10 @@ document
       };
     });
 
-    const totalRowIndex = data.length + 5; // Baris total akan berada setelah data
-    let totalEstimasi = 0;
+    worksheet.getColumn(1).width = 25;
+    for (let i = 2; i <= daysInMonth + 3; i++) {
+      worksheet.getColumn(i).width = 6; // Set width for days + Total + Estimasi + Piutang
+    }
 
     data.forEach((row, index) => {
       const rowData = [row.kk_name];
@@ -106,13 +123,17 @@ document
 
       rowData.push(total > 0 ? total : "");
 
+      // Hitung Estimasi
       const nominalPerDay = 500; // Nominal per hari
       const estimation = nominalPerDay * daysInMonth;
-      totalEstimasi += estimation; // Tambahkan estimasi ke total
       rowData.push(estimation);
 
-      const totalColumnIndex = daysInMonth + 2;
-      const estimationColumnIndex = totalColumnIndex + 1;
+      // Formula untuk Piutang
+      const totalColumnIndex = daysInMonth + 2; // Kolom 'Total'
+      const estimationColumnIndex = totalColumnIndex + 1; // Kolom 'Estimasi'
+      const piutangColumnIndex = estimationColumnIndex + 1; // Kolom 'Piutang'
+
+      // Jika Total kosong atau 0, Piutang = Estimasi
       const piutangFormula = `IF(OR(${getColumnLetter(totalColumnIndex)}${
         index + 5
       }="", ${getColumnLetter(totalColumnIndex)}${
@@ -145,49 +166,21 @@ document
           pattern: "solid",
           fgColor: { argb: fillColor },
         };
+
+        if (colNumber === rowData.length) {
+          cell.font = { bold: true };
+          cell.width = 8;
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: fillColor },
+          };
+        }
       });
     });
 
-    // Tambahkan baris total
-    const totalRow = worksheet.addRow(["Total"]);
-    for (let i = 2; i <= daysInMonth + 1; i++) {
-      const range = `${getColumnLetter(i)}5:${getColumnLetter(
-        i
-      )}${totalRowIndex}`;
-      totalRow.getCell(i).value = { formula: `SUM(${range})` };
-    }
-
-    const estimationColumnIndex = daysInMonth + 2;
-    const piutangColumnIndex = estimationColumnIndex + 2;
-
-    // Total untuk Estimasi
-    const estimationRange = `${getColumnLetter(
-      estimationColumnIndex
-    )}5:${getColumnLetter(estimationColumnIndex)}${totalRowIndex}`;
-    totalRow.getCell(estimationColumnIndex).value = {
-      formula: `SUM(${estimationRange})`,
-    };
-
-    // Total untuk Piutang
-    const piutangRange = `${getColumnLetter(
-      piutangColumnIndex
-    )}5:${getColumnLetter(piutangColumnIndex)}${totalRowIndex}`;
-    totalRow.getCell(piutangColumnIndex).value = {
-      formula: `SUM(${piutangRange})`,
-    };
-
-    totalRow.eachCell((cell) => {
-      cell.font = { bold: true };
-      cell.alignment = { horizontal: "center", vertical: "middle" };
-      cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "EAD8B1" },
-      };
-    });
-
     const now = new Date();
-    const timestamp = now.toTimeString().split(" ")[0].replace(/:/g, "");
+    const timestamp = now.toTimeString().split(" ")[0].replace(/:/g, ""); // Format HHMMSS
     const monthName = monthNames[monthNumber - 1];
     const fileName = `Report_${monthName}_${year}_${timestamp}.xlsx`;
 
@@ -203,14 +196,3 @@ document
       URL.revokeObjectURL(url);
     });
   });
-
-function getColumnLetter(columnIndex) {
-  let temp;
-  let letter = "";
-  while (columnIndex > 0) {
-    temp = (columnIndex - 1) % 26;
-    letter = String.fromCharCode(temp + 65) + letter;
-    columnIndex = Math.floor((columnIndex - temp) / 26);
-  }
-  return letter;
-}
