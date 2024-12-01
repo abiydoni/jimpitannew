@@ -53,7 +53,7 @@ include 'db.php';
             foreach ($results as $row) {
                 echo "<tr>
                         <td>{$row['collector']}</td>
-                        <td>{$row['jumlah_report']}</td>
+                        <td>{$row['jumlah_scan']}</td>
                     </tr>";
             }
             echo "</tbody>";
