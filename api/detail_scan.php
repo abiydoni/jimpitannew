@@ -62,8 +62,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
             </tbody>
         </table>
-        <h6><?php echo number_format($totalNominal, 0, ',', '.') ?></h6>
     </div>
+    <h6><?php echo number_format($totalNominal, 0, ',', '.') ?></h6>
 
     <!-- Tombol Bulat -->
     <button class="round-button" onclick="window.location.href='../index.php'">
