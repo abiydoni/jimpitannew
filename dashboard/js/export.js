@@ -25,10 +25,33 @@ document
       return;
     }
 
-    const response = await fetch(
+    // **Mengambil tarif dari API secara async**
+    let nominal = 0; // Default nominal jika API gagal memberikan data
+
+    // Fungsi untuk mendapatkan tarif dari server (menggunakan async/await)
+    async function fetchTarif() {
+      try {
+        const response = await fetch("../dashboard/api/fetch_tarif.php");
+        const data = await response.json();
+        if (data.success) {
+          nominal = data.tarif;
+          console.log("Tarif berhasil diperoleh:", nominal);
+        } else {
+          console.warn("Gagal mengambil tarif:", data.message);
+        }
+      } catch (error) {
+        console.error("Kesalahan mengambil tarif:", error);
+      }
+    }
+
+    // **Menunggu fetchTarif selesai sebelum lanjut**
+    await fetchTarif(); // Pastikan tarif diambil sebelum melanjutkan
+
+    // Mengambil laporan berdasarkan bulan dan tahun yang dipilih
+    const reportResponse = await fetch(
       `../dashboard/api/fetch_reports.php?month=${monthNumber}&year=${year}`
     );
-    const data = await response.json();
+    const dataReports = await reportResponse.json();
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Reports");
@@ -109,7 +132,9 @@ document
       worksheet.getColumn(i).width = 6; // Set width for days + Total + Estimasi + Piutang
     }
 
-    data.forEach((row, index) => {
+    let totalEstimation = 0; // Variabel untuk menghitung total estimasi
+
+    dataReports.forEach((row, index) => {
       const rowData = [row.kk_name];
       let total = 0;
 
@@ -123,10 +148,11 @@ document
 
       rowData.push(total > 0 ? total : "");
 
-      // Hitung Estimasi
-      const nominalPerDay = 500; // Nominal per hari
-      const estimation = nominalPerDay * daysInMonth;
+      // **Hitung Estimasi menggunakan nominal**
+      const estimation = nominal * daysInMonth; // **Menggunakan tarif yang diambil**
       rowData.push(estimation);
+
+      totalEstimation += estimation; // Tambahkan estimasi ke total estimasi
 
       // Formula untuk Piutang
       const totalColumnIndex = daysInMonth + 2; // Kolom 'Total'
@@ -149,7 +175,7 @@ document
 
       let fillColor = index % 2 === 0 ? "F5F5F7" : "D2E0FB";
 
-      if (index === data.length - 1) {
+      if (index === dataReports.length - 1) {
         fillColor = "EAD8B1";
       }
 
@@ -179,20 +205,38 @@ document
       });
     });
 
+    // Menambahkan baris total estimasi
+    const totalRow = worksheet.addRow([
+      "",
+      ...Array(daysInMonth).fill(""), // Kosongkan untuk kolom hari
+      "",
+      totalEstimation,
+      "",
+    ]);
+
+    totalRow.eachCell((cell, colNumber) => {
+      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.font = { bold: true };
+      if (colNumber === totalRow.cellCount - 1) {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFFF00" },
+        };
+      }
+    });
+
     const now = new Date();
     const timestamp = now.toTimeString().split(" ")[0].replace(/:/g, ""); // Format HHMMSS
     const monthName = monthNames[monthNumber - 1];
     const fileName = `Report_${monthName}_${year}_${timestamp}.xlsx`;
 
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
+    // **Mengekspor file Excel**
+    const buffer = await workbook.xlsx.writeBuffer();
+    const file = new Blob([buffer], { type: "application/octet-stream" });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(file);
+    link.download = fileName;
+    link.click();
   });
