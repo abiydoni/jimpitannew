@@ -3,7 +3,6 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user'])) {
-    echo json_encode(['success' => false, 'message' => 'Login kadaluarsa, silahkan login kembali!']);
     header('Location: login.php'); // Redirect to login page
     exit;
 }
