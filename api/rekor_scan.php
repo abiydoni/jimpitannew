@@ -68,9 +68,9 @@ include 'db.php';
             } else {
                 echo "<p>Tidak ada data untuk ditampilkan.</p>";
             }
-            echo "<div style='margin-top: 1em; font-weight: bold;'>Total Scan: $total_scans</div>";
         ?>
     </div>
+    echo "<div style='margin-top: 1em; font-weight: bold;'>Total Scan: $total_scans</div>";
 
     <!-- Tombol Bulat -->
     <button class="round-button" onclick="window.location.href='detail_scan.php'" title="Kembali ke halaman detail sebelumnya">
