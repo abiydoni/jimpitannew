@@ -55,13 +55,16 @@ include 'db.php';
             // Tampilkan hasil dalam tabel HTML
             if (count($results) > 0) {
                 echo "<table>";
-                echo "<thead><tr><th>Nama User</th><th>Jumlah Scan</th></tr></thead>";
+                echo "<thead><tr><th>No.</th><th>Nama User</th><th>Jumlah Scan</th></tr></thead>";
                 echo "<tbody>";
+                $no = 1;
                 foreach ($results as $row) {
                     echo "<tr>
+                            <td>{$no}</td> <!-- Menampilkan nomor urut -->
                             <td>{$row['collector']}</td>
                             <td style='text-align: right;'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                         </tr>";
+                        $no++; // Increment nomor urut
                 }
                 echo "</tbody>";
                 echo "</table>";
