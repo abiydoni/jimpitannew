@@ -29,17 +29,17 @@ include 'db.php';
 <body>
 <div class="screen-2">
     <a style="font-weight: bold; font-size: 15px;">Recor Scan Terbanyak</a>
-    <a style="color: grey; font-size: 10px;">Per Tanggal : <span id="tanggal"></span></a>
+    <a style="color: grey; font-size: 10px;">Per : <span id="tanggal"></span></a>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
         <?php
             // Eksekusi query
             $stmt = $pdo->prepare("
                 SELECT 
                     collector, 
-                    COUNT(*) AS jumlah_report 
+                    COUNT(*) AS jumlah_scan 
                 FROM report
                 GROUP BY collector
-                ORDER BY jumlah_report DESC
+                ORDER BY jumlah_scan DESC
             ");
             $stmt->execute();
 
@@ -48,7 +48,7 @@ include 'db.php';
 
             // Tampilkan hasil dalam tabel HTML
             echo "<table>";
-            echo "<thead><tr><th>Collector</th><th>Jumlah Report</th></tr></thead>";
+            echo "<thead><tr><th>Nama User</th><th>Jumlah Scan</th></tr></thead>";
             echo "<tbody>";
             foreach ($results as $row) {
                 echo "<tr>
