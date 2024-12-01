@@ -62,6 +62,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
             </tbody>
         </table>
+        <h6><?php echo number_format($totalNominal, 0, ',', '.') ?></h6>
     </div>
 
     <!-- Tombol Bulat -->
