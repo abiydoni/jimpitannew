@@ -68,6 +68,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button class="round-button" onclick="window.location.href='../index.php'">
         <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
+    <!-- Tombol Kedua -->
+    <button class="round-button second-button" onclick="window.location.href='../another-page.php'">
+        <span>&#128200;</span> <!-- Ikon untuk tombol kedua (misalnya ikon kalkulator) -->
+    </button>
+
 </div>
 
 <script>
