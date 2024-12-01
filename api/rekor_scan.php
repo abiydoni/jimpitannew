@@ -48,7 +48,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Tombol Bulat -->
-    <button class="round-button" onclick="window.location.href='../index.php'">
+    <button class="round-button" onclick="window.location.href='detail_scan.php'">
         <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
 </div>
