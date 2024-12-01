@@ -69,7 +69,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span>&#8592;</span> <!-- Ikon panah kiri -->
     </button>
     <!-- Tombol Kedua -->
-    <button class="second-button" onclick="window.location.href='rekor_scan.php'">Rekor Scan
+    <button class="second-button" onclick="window.location.href='rekor_scan.php'">
         <span>&#128200;</span> <!-- Ikon untuk tombol kedua (misalnya ikon kalkulator) -->
     </button>
 </div>
