@@ -31,7 +31,7 @@ document
     // Fungsi untuk mendapatkan tarif dari server (menggunakan async/await)
     async function fetchTarif() {
       try {
-        const response = await fetch("../dashboard/api/fetch_tarif.php");
+        const response = await fetch("../api/fetch_tarif.php");
         const data = await response.json();
         if (data.success) {
           nominal = data.tarif;
