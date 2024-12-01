@@ -72,11 +72,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button class="round-button" onclick="window.location.href='halaman_lain.php'">
             <span>&#8594;</span> <!-- Ikon panah kanan -->
         </button>
-
-        <!-- Tombol Baru - Contoh Tombol Tambahan -->
-        <button class="round-button" onclick="alert('Tombol Ketiga Ditekan')">
-            <span>+</span> <!-- Ikon tambah -->
-        </button>
     </div>
 </div>
 
