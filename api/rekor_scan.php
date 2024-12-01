@@ -10,19 +10,6 @@ if (!isset($_SESSION['user'])) {
 }
 include 'db.php';
 
-// Prepare the SQL statement to select only today's shift
-$stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.* 
-    FROM report 
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE()
-");
-
-// Execute the SQL statement
-$stmt->execute();
-
-// Fetch all results
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +31,34 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a style="font-weight: bold; font-size: 15px;">Recor Scan Terbanyak</a>
     <a style="color: grey; font-size: 10px;">Per Tanggal : <span id="tanggal"></span></a>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
+        <?php
+            // Eksekusi query
+            $stmt = $pdo->prepare("
+                SELECT 
+                    collector, 
+                    COUNT(*) AS jumlah_report 
+                FROM report
+                GROUP BY collector
+                ORDER BY jumlah_report DESC
+            ");
+            $stmt->execute();
 
+            // Fetch hasil
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Tampilkan hasil dalam tabel HTML
+            echo "<table>";
+            echo "<thead><tr><th>Collector</th><th>Jumlah Report</th></tr></thead>";
+            echo "<tbody>";
+            foreach ($results as $row) {
+                echo "<tr>
+                        <td>{$row['collector']}</td>
+                        <td>{$row['jumlah_report']}</td>
+                    </tr>";
+            }
+            echo "</tbody>";
+            echo "</table>";
+        ?>
     </div>
 
     <!-- Tombol Bulat -->
