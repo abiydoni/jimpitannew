@@ -29,7 +29,7 @@ include 'db.php';
 </head>
 <body>
 <div class="screen-2">
-    <a style="font-weight: bold; font-size: 15px;">Recor Scan Terbanyak</a>
+    <a style="font-weight: bold; font-size: 15px;">Rekor Scan Terbanyak</a>
     <a style="color: grey; font-size: 10px;">Per : <span id="tanggal"></span></a>
     <div class="table-container overflow-x-auto bg-white rounded-lg shadow-md" style="font-size: 12px;">
         <?php
