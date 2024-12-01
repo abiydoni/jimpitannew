@@ -60,7 +60,7 @@ include 'db.php';
                 foreach ($results as $row) {
                     echo "<tr>
                             <td>{$row['collector']}</td>
-                            <td>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
+                            <td style='text-align: right;'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                         </tr>";
                 }
                 echo "</tbody>";
