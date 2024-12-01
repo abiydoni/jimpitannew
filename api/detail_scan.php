@@ -67,12 +67,11 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button class="round-button" onclick="window.location.href='../index.php'">
             <span>&#8592;</span> <!-- Ikon panah kiri -->
         </button>
-
+    </div>
         <!-- Tombol Baru - Navigasi ke Halaman Lain -->
         <button class="round-button" onclick="window.location.href='halaman_lain.php'">
             <span>&#8594;</span> <!-- Ikon panah kanan -->
         </button>
-    </div>
 </div>
 
 <script>
