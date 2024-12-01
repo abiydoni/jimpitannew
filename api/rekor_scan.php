@@ -60,7 +60,7 @@ include 'db.php';
                 foreach ($results as $row) {
                     echo "<tr>
                             <td>{$row['collector']}</td>
-                            <td>{$row['jumlah_scan']}</td>
+                            <td>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                         </tr>";
                 }
                 echo "</tbody>";
@@ -70,7 +70,7 @@ include 'db.php';
             }
         ?>
     </div>
-    <?php echo "<div style='margin-top: 1em; font-weight: bold;'>Total Scan: $total_scans</div>"; ?>
+    <?php echo "<div style='margin-top: 1em; font-weight: bold;'>Total Scan: " . number_format($total_scans, 0, ',', '.') . "</div>"; ?>
 
     <!-- Tombol Bulat -->
     <button class="round-button" onclick="window.location.href='detail_scan.php'" title="Kembali ke halaman detail sebelumnya">
