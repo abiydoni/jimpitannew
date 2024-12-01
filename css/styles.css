@@ -189,11 +189,6 @@ button {
   transition: background-color 0.3s ease, transform 0.2s ease; /* Efek hover */
 }
 
-/* Tombol kedua */
-.second-button {
-  right: 100px; /* Posisi lebih ke kiri, 80px dari tombol pertama */
-}
-
 /* Efek hover */
 .second-button:hover {
   background-color: #0056b3; /* Warna lebih gelap saat hover */
