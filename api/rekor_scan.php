@@ -4,10 +4,11 @@ session_start();
 // Check if user is logged in
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
+    header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'Login kadaluarsa, silahkan login kembali!']);
-    header('Location: ../login.php'); // Redirect to login page
-    exit; // Hentikan eksekusi jika pengguna tidak terautentikasi
+    exit;
 }
+
 include 'db.php';
 
 ?>
@@ -45,26 +46,36 @@ include 'db.php';
 
             // Fetch hasil
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // Hitung total semua scan
+                $total_scans = 0;
+                foreach ($results as $row) {
+                    $total_scans += $row['jumlah_scan'];
+                }
 
             // Tampilkan hasil dalam tabel HTML
-            echo "<table>";
-            echo "<thead><tr><th>Nama User</th><th>Jumlah Scan</th></tr></thead>";
-            echo "<tbody>";
-            foreach ($results as $row) {
-                echo "<tr>
-                        <td>{$row['collector']}</td>
-                        <td>{$row['jumlah_scan']}</td>
-                    </tr>";
+            if (count($results) > 0) {
+                echo "<table>";
+                echo "<thead><tr><th>Nama User</th><th>Jumlah Scan</th></tr></thead>";
+                echo "<tbody>";
+                foreach ($results as $row) {
+                    echo "<tr>
+                            <td>{$row['collector']}</td>
+                            <td>{$row['jumlah_scan']}</td>
+                        </tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                echo "<p>Tidak ada data untuk ditampilkan.</p>";
             }
-            echo "</tbody>";
-            echo "</table>";
+            echo "<div style='margin-top: 1em; font-weight: bold;'>Total Scan: $total_scans</div>";
         ?>
     </div>
 
     <!-- Tombol Bulat -->
-    <button class="round-button" onclick="window.location.href='detail_scan.php'">
-        <span>&#8592;</span> <!-- Ikon panah kiri -->
-    </button>
+    <button class="round-button" onclick="window.location.href='detail_scan.php'" title="Kembali ke halaman detail sebelumnya">
+    <span>&#8592;</span> <!-- Ikon panah kiri -->
+</button>
 </div>
 
     <script>
