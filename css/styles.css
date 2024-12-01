@@ -143,8 +143,8 @@ button {
   position: fixed; /* Posisi tetap di layar */
   bottom: 20px; /* Jarak dari bawah */
   right: 20px; /* Jarak dari kanan */
-  width: 60px; /* Lebar tombol */
-  height: 60px; /* Tinggi tombol */
+  width: 30px; /* Lebar tombol */
+  height: 30px; /* Tinggi tombol */
   background-color: #007bff; /* Warna tombol */
   color: white; /* Warna teks/ikon */
   border: none; /* Menghilangkan border */
