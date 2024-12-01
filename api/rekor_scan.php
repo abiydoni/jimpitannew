@@ -77,8 +77,8 @@ include 'db.php';
 
     <!-- Tombol Bulat -->
     <button class="round-button" onclick="window.location.href='detail_scan.php'" title="Kembali ke halaman detail sebelumnya">
-    <span>&#8592;</span> <!-- Ikon panah kiri -->
-</button>
+        <span>&#8592;</span> <!-- Ikon panah kiri -->
+    </button>
 </div>
 
     <script>

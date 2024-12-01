@@ -72,7 +72,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button class="round-button second-button" onclick="window.location.href='rekor_scan.php'">
         <span>&#128200;</span> <!-- Ikon untuk tombol kedua (misalnya ikon kalkulator) -->
     </button>
-
 </div>
 
 <script>
