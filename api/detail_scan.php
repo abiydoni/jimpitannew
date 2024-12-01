@@ -129,7 +129,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .button-container {
         display: flex;
         gap: 10px; /* Memberi jarak antar tombol */
-        justify-content: center; /* Menyusun tombol di tengah */
         margin-top: 20px; /* Memberi jarak atas jika perlu */
     }
 
