@@ -2,7 +2,6 @@
 session_start();
 
 // Check if user is logged in
-// Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
     echo json_encode(['success' => false, 'message' => 'Pengguna tidak terautentikasi']);
     exit; // Hentikan eksekusi jika pengguna tidak terautentikasi
@@ -30,7 +29,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail</title>
-    <!-- <link rel="manifest" href="manifest.json"> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -63,10 +61,23 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 
-    <!-- Tombol Bulat -->
-    <button class="round-button" onclick="window.location.href='../index.php'">
-        <span>&#8592;</span> <!-- Ikon panah kiri -->
-    </button>
+    <!-- Tombol-tombol di samping satu sama lain -->
+    <div class="button-container">
+        <!-- Tombol Navigasi Kembali -->
+        <button class="round-button" onclick="window.location.href='../index.php'">
+            <span>&#8592;</span> <!-- Ikon panah kiri -->
+        </button>
+
+        <!-- Tombol Baru - Navigasi ke Halaman Lain -->
+        <button class="round-button" onclick="window.location.href='halaman_lain.php'">
+            <span>&#8594;</span> <!-- Ikon panah kanan -->
+        </button>
+
+        <!-- Tombol Baru - Contoh Tombol Tambahan -->
+        <button class="round-button" onclick="alert('Tombol Ketiga Ditekan')">
+            <span>+</span> <!-- Ikon tambah -->
+        </button>
+    </div>
 </div>
 
 <script>
@@ -87,31 +98,66 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // Muat data pertama kali saat halaman dimuat
     $(document).ready(updateTable);
 </script>
-    <script>
-        // Fungsi untuk menampilkan tanggal dalam format Indonesia
-        function formatTanggalIndonesia() {
-            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            
-            const tanggal = new Date();
-            const hariNama = hari[tanggal.getDay()];
-            const bulanNama = bulan[tanggal.getMonth()];
-            const tanggalTanggal = tanggal.getDate();
-            const tahun = tanggal.getFullYear();
 
-            return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
-        }
+<script>
+    // Fungsi untuk menampilkan tanggal dalam format Indonesia
+    function formatTanggalIndonesia() {
+        const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        
+        const tanggal = new Date();
+        const hariNama = hari[tanggal.getDay()];
+        const bulanNama = bulan[tanggal.getMonth()];
+        const tanggalTanggal = tanggal.getDate();
+        const tahun = tanggal.getFullYear();
 
-        // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
-        document.getElementById("tanggal").textContent = formatTanggalIndonesia();
-    </script>
-    <style>
-        /* Mengatur margin dan padding untuk elemen <a> */
-        a {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+        return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
+    }
+
+    // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
+    document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+</script>
+
+<style>
+    /* Mengatur margin dan padding untuk elemen <a> */
+    a {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Wadah tombol agar tombol-tombolnya disusun berdampingan */
+    .button-container {
+        display: flex;
+        gap: 10px; /* Memberi jarak antar tombol */
+        justify-content: center; /* Menyusun tombol di tengah */
+        margin-top: 20px; /* Memberi jarak atas jika perlu */
+    }
+
+    /* Mengatur gaya untuk tombol-tombol */
+    .round-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .round-button:hover {
+        background-color: #45a049;
+    }
+
+    .round-button span {
+        font-size: 20px;
+    }
+</style>
 
 </body>
 </html>
