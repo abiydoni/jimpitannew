@@ -31,7 +31,7 @@ document
     // Fungsi untuk mendapatkan tarif dari server (menggunakan async/await)
     async function fetchTarif() {
       try {
-        const response = await fetch("../api/fetch_tarif.php");
+        const response = await fetch("api/fetch_tarif.php");
         const data = await response.json();
         if (data.success) {
           nominal = data.tarif;
@@ -49,7 +49,7 @@ document
 
     // Mengambil laporan berdasarkan bulan dan tahun yang dipilih
     const reportResponse = await fetch(
-      `../api/fetch_reports.php?month=${monthNumber}&year=${year}`
+      `api/fetch_reports.php?month=${monthNumber}&year=${year}`
     );
     const dataReports = await reportResponse.json();
 
