@@ -25,7 +25,7 @@ include 'db.php';
     <style>
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
-            width: auto;
+            width: 100%;
             height: auto;
         }
 
@@ -153,7 +153,7 @@ include 'db.php';
                         labels: [row.cells[1].textContent], // Nama collector
                         datasets: [{
                             label: 'Jumlah Scan',
-                            data: [jumlahScan]*10,
+                            data: [jumlahScan],
                             backgroundColor: '#4CAF50', // Warna batang
                             barThickness: 20 // Mengatur ketebalan batang grafik
                         }]
