@@ -28,10 +28,6 @@ include 'db.php';
             width: 100%;
             height: 100%; /* Grafik akan menyesuaikan dengan tinggi baris tabel */
         }
-        .table-container {
-            max-width: 100%;
-            overflow-x: auto;
-        }
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -72,7 +68,7 @@ include 'db.php';
                                 <td class='px-2 py-1'>{$row['collector']}</td>
                                 <td class='px-2 py-1 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                                 <td class='px-2 py-1'>
-                                    <div class='chart-container'>
+                                    <div>
                                         <canvas id='chart_{$no}'></canvas>
                                     </div>
                                 </td>
