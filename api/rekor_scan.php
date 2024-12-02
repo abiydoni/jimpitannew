@@ -157,6 +157,17 @@ include 'db.php';
                             data: [jumlahScan],
                             backgroundColor: '#4CAF50', // Warna batang
                             barThickness: 20 // Mengatur ketebalan batang grafik
+                            // Menambah label data pada batang grafik
+                            datalabels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 16, // Ukuran font untuk label data
+                                    weight: 'bold'
+                                },
+                                anchor: 'end',
+                                align: 'top'
+                            }
+
                         }]
                     },
                     options: {
@@ -176,14 +187,18 @@ include 'db.php';
                             legend: {
                                 display: false // Menyembunyikan legend
                             }
+                            datalabels: {
+                                display: true, // Menampilkan label pada setiap batang
+                                color: '#ffffff',
+                                font: {
+                                    size: 16, // Ukuran font label data
+                                    weight: 'bold'
+                                }
+                            }
                         }
+
                     }
                 });
-                        // Sesuaikan lebar canvas dengan lebar kolom
-                    const columnWidth = row.cells[3].offsetWidth; // Mendapatkan lebar kolom ke-4 (kolom grafik)
-                    const canvas = chartContainer.querySelector('canvas');
-                    canvas.width = columnWidth;  // Set lebar canvas sesuai lebar kolom
-
             });
         });
     </script>
