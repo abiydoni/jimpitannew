@@ -61,12 +61,14 @@ include 'db.php';
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
+                        // Hitung persentase jumlah scan per user terhadap total scan
+                        $persentase = ($row['jumlah_scan'] / $total_scans) * 100;
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td class='px-4 py-2'>{$no}</td>
                                 <td class='px-4 py-2'>{$row['collector']}</td>
                                 <td class='px-4 py-2 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                                 <td class='px-4 py-2'>
-                                    <canvas id='chart_{$no}' class='w-32 h-16'></canvas>
+                                    <canvas id='chart_{$no}' class='w-48 h-6'></canvas>
                                 </td>
                             </tr>";
                         $no++;
@@ -110,32 +112,38 @@ include 'db.php';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Menambahkan grafik batang di setiap baris tabel
+        // Menambahkan grafik batang horizontal di setiap baris tabel dengan panjang berdasarkan persentase
         <?php $no = 1; ?>
         <?php foreach ($results as $row): ?>
             const ctx_<?= $no ?> = document.getElementById('chart_<?= $no ?>').getContext('2d');
             new Chart(ctx_<?= $no ?>, {
-                type: 'bar',
+                type: 'bar', // Grafik batang
                 data: {
                     labels: [<?= json_encode($row['collector']); ?>],
                     datasets: [{
                         label: 'Jumlah Scan',
                         data: [<?= $row['jumlah_scan']; ?>],
-                        backgroundColor: '#4CAF50',
-                        borderColor: '#388E3C',
+                        backgroundColor: '#4CAF50', // Warna batang
+                        borderColor: '#388E3C', // Warna border batang
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
+                    indexAxis: 'y', // Membuat grafik menjadi horizontal
                     scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: <?= $total_scans ?>, // Set batas maksimal berdasarkan total scan
+                            display: false // Menyembunyikan sumbu X
+                        },
                         y: {
-                            beginAtZero: true
+                            display: false // Menyembunyikan sumbu Y
                         }
                     },
                     plugins: {
                         legend: {
-                            display: false
+                            display: false // Menyembunyikan legend
                         }
                     }
                 }
