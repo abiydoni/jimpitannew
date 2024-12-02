@@ -182,7 +182,8 @@ include 'db.php';
                 });
 
                 // Sesuaikan tinggi grafik dengan tinggi baris tabel
-                chartContainer.style.height = `${row.offsetHeight}px`; // Mengatur tinggi grafik sesuai tinggi baris
+                const rowHeight = row.offsetHeight;
+                chartContainer.style.height = `${rowHeight}px`; // Mengatur tinggi grafik sesuai tinggi baris
             });
         });
     </script>
