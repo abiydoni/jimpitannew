@@ -23,23 +23,6 @@ include 'db.php';
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Mengatur layout tabel agar lebih padat */
-        table {
-            table-layout: fixed; /* Menjaga lebar kolom tetap konsisten */
-            width: 100%; /* Menjaga tabel tetap responsif */
-        }
-
-        /* Mengurangi padding di sel tabel */
-        table th, table td {
-            padding: 0.25rem;  /* Padding lebih kecil */
-        }
-
-        /* Menyesuaikan tinggi baris tabel agar lebih rapat */
-        table tr {
-            height: 28px; /* Menurunkan tinggi baris tabel */
-            line-height: 1.2; /* Mengatur line height agar teks lebih padat */
-        }
-
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
             height: 100%;
@@ -72,20 +55,20 @@ include 'db.php';
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
                     echo "<thead>
                             <tr class='bg-gray-100 border-b'>
-                                <th class='px-2 py-0 text-left'>No.</th>
-                                <th class='px-2 py-0 text-left'>Nama User</th>
-                                <th class='px-2 py-0 text-right'>Jumlah Scan</th>
-                                <th class='px-2 py-0 text-left'>Grafik</th>
+                                <th>No.</th>
+                                <th>Nama User</th>
+                                <th class='text-right'>Jumlah Scan</th>
+                                <th>Grafik</th>
                             </tr>
                           </thead>";
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
-                                <td class='px-2 py-0'>{$no}</td>
-                                <td class='px-2 py-0'>{$row['collector']}</td>
-                                <td class='px-2 py-0 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
-                                <td class='px-2 py-0'>
+                                <td>{$no}</td>
+                                <td>{$row['collector']}</td>
+                                <td class='text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
+                                <td>
                                     <div class='chart-container'>
                                         <canvas id='chart_{$no}'></canvas>
                                     </div>
