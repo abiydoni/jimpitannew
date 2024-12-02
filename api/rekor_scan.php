@@ -26,7 +26,8 @@ include 'db.php';
     <h1 class="text-xl font-bold text-gray-700 mb-2">Rekor Scan Terbanyak</h1>
     <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
-    <div class="overflow-x-auto">
+    <!-- Kontainer tabel dengan batas tinggi -->
+    <div class="overflow-y-auto max-h-60 border rounded-md">
         <?php
             // Eksekusi query
             $stmt = $pdo->prepare("
@@ -76,9 +77,8 @@ include 'db.php';
         ?>
     </div>
 
-    <?php 
-    echo "<div class='mt-4 font-bold text-gray-700'>Total Scan: " . number_format($total_scans, 0, ',', '.') . "</div>"; 
-    ?>
+    <!-- Total Scan -->
+    <div class="mt-4 font-bold text-gray-700 text-right">Total Scan: <?php echo number_format($total_scans, 0, ',', '.'); ?></div>
 
     <!-- Tombol Bulat -->
     <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
