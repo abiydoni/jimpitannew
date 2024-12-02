@@ -27,7 +27,7 @@ include 'db.php';
     <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
     <!-- Kontainer tabel dengan batas tinggi -->
-    <div class="overflow-y-auto max-h-95 border rounded-md">
+    <div class="overflow-y-auto max-h-90 border rounded-md">
         <?php
             // Eksekusi query
             $stmt = $pdo->prepare("
@@ -78,7 +78,7 @@ include 'db.php';
     </div>
 
     <!-- Total Scan -->
-    <div class="mt-4 font-bold text-gray-700 text-right">Total Scan: <?php echo number_format($total_scans, 0, ',', '.'); ?></div>
+    <div class="mt-4 font-bold text-gray-700 text-left">Total Scan: <?php echo number_format($total_scans, 0, ',', '.'); ?></div>
 
     <!-- Tombol Bulat -->
     <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
