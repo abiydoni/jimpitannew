@@ -42,7 +42,7 @@ include 'db.php';
 
         /* Menyusun grafik horizontal lebih ramping */
         canvas {
-            width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
+            width: auto !important;  /* Memastikan canvas mengikuti lebar elemen */
             height: 20px !important; /* Menyesuaikan tinggi grafik dengan baris */
         }
     </style>
