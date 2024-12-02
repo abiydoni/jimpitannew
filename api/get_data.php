@@ -3,7 +3,7 @@ session_start();
 
 // Cek login
 if (!isset($_SESSION['user'])) {
-    echo "Unauthorized";
+    header('Location: ../login.php'); // Redirect to login page
     exit;
 }
 

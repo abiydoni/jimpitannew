@@ -8,7 +8,7 @@ require '../helper/connection.php';
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
-    echo json_encode(['success' => false, 'message' => 'Pengguna tidak terautentikasi']);
+    header('Location: ../login.php'); // Redirect to login page
     exit; // Hentikan eksekusi jika pengguna tidak terautentikasi
 }
 
