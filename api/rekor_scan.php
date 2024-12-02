@@ -25,7 +25,7 @@ include 'db.php';
     <style>
         /* CSS untuk menyesuaikan tinggi grafik dengan tinggi baris tabel */
         .chart-container {
-            width: 300%;
+            width: 100%;
             height: 100%; /* Grafik akan menyesuaikan dengan tinggi baris tabel */
         }
     </style>
