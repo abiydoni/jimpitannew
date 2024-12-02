@@ -26,7 +26,7 @@ include 'db.php';
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
             width: 100%;
-            height: 50px;
+            height: auto;
         }
 
         /* Mengurangi padding di sel tabel */
