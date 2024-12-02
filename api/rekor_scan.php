@@ -28,17 +28,19 @@ include 'db.php';
             width: 100%;
             height: 100%; /* Grafik akan menyesuaikan dengan tinggi baris tabel */
         }
-        /* Mengatur padding baris tabel */
+        /* Mengurangi padding di sel dan baris tabel */
         table th, table td {
-            padding-top: 0.25rem;  /* Sesuaikan padding atas */
-            padding-bottom: 0.25rem;  /* Sesuaikan padding bawah */
+            padding-top: 0.15rem; /* Padding atas */
+            padding-bottom: 0.15rem; /* Padding bawah */
+            padding-left: 0.25rem; /* Padding kiri */
+            padding-right: 0.25rem; /* Padding kanan */
         }
 
-        table td {
-            padding-left: 0.5rem; /* Sesuaikan padding kiri */
-            padding-right: 0.5rem; /* Sesuaikan padding kanan */
+        /* Mengatur tinggi baris tabel */
+        table tr {
+            height: 24px; /* Sesuaikan tinggi baris tabel */
+            line-height: 24px; /* Sesuaikan tinggi garis */
         }
-
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
