@@ -25,7 +25,7 @@ include 'db.php';
     <style>
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
-            width: 100%;
+            width: auto;
             height: auto;
         }
 
@@ -42,7 +42,7 @@ include 'db.php';
 
         /* Menyusun grafik horizontal lebih ramping */
         canvas {
-            width: auto !important;  /* Memastikan canvas mengikuti lebar elemen */
+            width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
             height: 20px !important; /* Menyesuaikan tinggi grafik dengan baris */
         }
     </style>
