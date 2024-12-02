@@ -13,7 +13,6 @@ body {
   background: #dde5f4;
   height: 100vh;
   overflow: auto; /* Pastikan tidak ada elemen yang menghalangi tombol */
-
 }
 
 .screen-1 {
@@ -202,11 +201,6 @@ button {
   box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Highlight fokus */
 }
 
-
-
-
-
-
 /* Container untuk tabel detail*/
 .table-container {
   max-width: 150%;
@@ -241,4 +235,10 @@ thead th {
   position: sticky; /* Membuat header tetap */
   top: 0; /* Posisi tetap di atas */
   z-index: 2; /* Memberikan prioritas atas */
+}
+
+.chart-container {
+  max-width: 200px; /* Sesuaikan dengan ukuran yang Anda inginkan */
+  width: 100%;
+  height: 30px; /* Tinggi grafik */
 }
