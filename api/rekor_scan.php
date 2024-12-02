@@ -25,9 +25,27 @@ include 'db.php';
     <style>
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
-            height: 150%;
-            max-height: 24px; /* Membatasi tinggi grafik sesuai baris tabel */
             width: 100%;
+            max-height: 24px; /* Membatasi tinggi grafik sesuai baris tabel */
+            height: 100%;
+        }
+
+        /* Mengurangi padding di sel tabel */
+        table th, table td {
+            padding: 0.25rem; /* Padding lebih kecil */
+            text-align: left;
+        }
+
+        /* Menyesuaikan tinggi baris tabel agar lebih rapat */
+        table tr {
+            height: 28px; /* Menurunkan tinggi baris tabel */
+            line-height: 1.2; /* Mengatur line height agar teks lebih padat */
+        }
+
+        /* Menyusun grafik horizontal lebih ramping */
+        canvas {
+            width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
+            height: 24px !important; /* Menyesuaikan tinggi grafik dengan baris */
         }
     </style>
 </head>
