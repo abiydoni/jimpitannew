@@ -240,5 +240,5 @@ thead th {
 .chart-container {
   max-width: 200px; /* Sesuaikan dengan ukuran yang Anda inginkan */
   width: 100%;
-  height: 30px; /* Tinggi grafik */
+  height: 1px; /* Tinggi grafik */
 }
