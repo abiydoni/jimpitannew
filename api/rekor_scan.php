@@ -27,7 +27,7 @@ include 'db.php';
     <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
     <!-- Kontainer tabel dengan batas tinggi -->
-    <div class="overflow-y-auto max-h-80 border rounded-md">
+    <div class="overflow-y-auto max-h-110 border rounded-md">
         <?php
             // Eksekusi query
             $stmt = $pdo->prepare("
