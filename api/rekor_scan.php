@@ -26,7 +26,7 @@ include 'db.php';
         /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
         .chart-container {
             width: 100%;
-            max-height: 24px; /* Membatasi tinggi grafik sesuai baris tabel */
+            max-height: 20px; /* Membatasi tinggi grafik sesuai baris tabel */
             height: 100%;
         }
 
@@ -44,7 +44,7 @@ include 'db.php';
         /* Menyusun grafik horizontal lebih ramping */
         canvas {
             width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
-            height: 24px !important; /* Menyesuaikan tinggi grafik dengan baris */
+            height: 20px !important; /* Menyesuaikan tinggi grafik dengan baris */
         }
     </style>
 </head>
@@ -156,8 +156,7 @@ include 'db.php';
                             label: 'Jumlah Scan',
                             data: [jumlahScan],
                             backgroundColor: '#4CAF50', // Warna batang
-                            borderColor: '#388E3C', // Warna border batang
-                            barThickness: 24 // Mengatur ketebalan batang grafik
+                            barThickness: 20 // Mengatur ketebalan batang grafik
                         }]
                     },
                     options: {
