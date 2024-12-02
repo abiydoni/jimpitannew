@@ -32,6 +32,9 @@ include 'db.php';
             max-width: 100%;
             overflow-x: auto;
         }
+        td {
+            vertical-align: middle; /* Agar grafik rata tengah di dalam tabel */
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -67,7 +70,7 @@ include 'db.php';
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
-                        echo "<tr class='border-b hover:bg-gray-50'>
+                        echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td class='px-4 py-2'>{$no}</td>
                                 <td class='px-4 py-2'>{$row['collector']}</td>
                                 <td class='px-4 py-2 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
@@ -118,59 +121,59 @@ include 'db.php';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Menyesuaikan tinggi grafik berdasarkan tinggi baris tabel
-        window.addEventListener('load', () => {
-            const rows = document.querySelectorAll('tr'); // Menargetkan semua baris dalam tabel
+        // Membuat grafik untuk setiap pengguna
+        window.addEventListener('load', function () {
+            const rows = document.querySelectorAll('tr[data-no]'); // Menargetkan semua baris dalam tabel
 
             rows.forEach(row => {
-                // Mendapatkan tinggi baris
-                const rowHeight = row.offsetHeight;
-
-                // Menyesuaikan tinggi grafik sesuai dengan tinggi baris
+                const no = row.getAttribute('data-no');
                 const chartContainer = row.querySelector('.chart-container');
-                if (chartContainer) {
-                    chartContainer.style.height = `${rowHeight}px`; // Mengatur tinggi grafik
-                }
-            });
-        });
 
-        // Membuat grafik untuk setiap pengguna
-        <?php $no = 1; ?>
-        <?php foreach ($results as $row): ?>
-            const ctx_<?= $no ?> = document.getElementById('chart_<?= $no ?>').getContext('2d');
-            new Chart(ctx_<?= $no ?>, {
-                type: 'bar', // Grafik batang
-                data: {
-                    labels: [<?= json_encode($row['collector']); ?>],
-                    datasets: [{
-                        label: 'Jumlah Scan',
-                        data: [<?= $row['jumlah_scan']; ?>],
-                        backgroundColor: '#4CAF50', // Warna batang
-                        borderColor: '#388E3C', // Warna border batang
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y', // Membuat grafik menjadi horizontal
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: <?= $total_scans ?>, // Set batas maksimal berdasarkan total scan
-                            display: false // Menyembunyikan sumbu X
-                        },
-                        y: {
-                            display: false // Menyembunyikan sumbu Y
-                        }
+                // Mendapatkan elemen canvas untuk grafik
+                const ctx = document.getElementById('chart_' + no).getContext('2d');
+
+                // Data untuk grafik
+                const jumlahScan = parseInt(row.cells[2].textContent.replace(/[^\d]/g, '')); // Mengambil jumlah scan dari tabel
+                const totalScans = <?php echo $total_scans; ?>;
+
+                // Membuat grafik batang horizontal
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [row.cells[1].textContent], // Nama collector
+                        datasets: [{
+                            label: 'Jumlah Scan',
+                            data: [jumlahScan],
+                            backgroundColor: '#4CAF50', // Warna batang
+                            borderColor: '#388E3C', // Warna border batang
+                            borderWidth: 1
+                        }]
                     },
-                    plugins: {
-                        legend: {
-                            display: false // Menyembunyikan legend
+                    options: {
+                        responsive: true,
+                        indexAxis: 'y', // Grafik horizontal
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: totalScans, // Set batas maksimal berdasarkan total scan
+                                display: false // Menyembunyikan sumbu X
+                            },
+                            y: {
+                                display: false // Menyembunyikan sumbu Y
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Menyembunyikan legend
+                            }
                         }
                     }
-                }
+                });
+
+                // Sesuaikan tinggi grafik dengan tinggi baris tabel
+                chartContainer.style.height = `${row.offsetHeight}px`; // Mengatur tinggi grafik sesuai tinggi baris
             });
-        <?php $no++; endforeach; ?>
+        });
     </script>
 </body>
 </html>
