@@ -32,7 +32,6 @@ include 'db.php';
 
         /* Mengurangi padding di sel tabel */
         table th, table td {
-            padding: 0.25rem; /* Padding lebih kecil */
             text-align: left;
         }
 
