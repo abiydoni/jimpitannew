@@ -158,7 +158,7 @@ include 'db.php';
                             data: [jumlahScan],
                             backgroundColor: '#4CAF50', // Warna batang
                             borderColor: '#388E3C', // Warna border batang
-                            barThickness: 20 // Mengatur ketebalan batang grafik
+                            barThickness: 15 // Mengatur ketebalan batang grafik
                         }]
                     },
                     options: {
