@@ -32,9 +32,6 @@ include 'db.php';
             max-width: 100%;
             overflow-x: auto;
         }
-        td {
-            vertical-align: middle; /* Agar grafik rata tengah di dalam tabel */
-        }
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -61,20 +58,20 @@ include 'db.php';
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
                     echo "<thead>
                             <tr class='bg-gray-100 border-b'>
-                                <th class='px-4 py-2 text-left'>No.</th>
-                                <th class='px-4 py-2 text-left'>Nama User</th>
-                                <th class='px-4 py-2 text-right'>Jumlah Scan</th>
-                                <th class='px-4 py-2 text-left'>Grafik</th>
+                                <th class='px-2 py-1 text-left'>No.</th>
+                                <th class='px-2 py-1 text-left'>Nama User</th>
+                                <th class='px-2 py-1 text-right'>Jumlah Scan</th>
+                                <th class='px-2 py-1 text-left'>Grafik</th>
                             </tr>
                           </thead>";
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
-                                <td class='px-4 py-2'>{$no}</td>
-                                <td class='px-4 py-2'>{$row['collector']}</td>
-                                <td class='px-4 py-2 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
-                                <td class='px-4 py-2'>
+                                <td class='px-2 py-1'>{$no}</td>
+                                <td class='px-2 py-1'>{$row['collector']}</td>
+                                <td class='px-2 py-1 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
+                                <td class='px-2 py-1'>
                                     <div class='chart-container'>
                                         <canvas id='chart_{$no}'></canvas>
                                     </div>
