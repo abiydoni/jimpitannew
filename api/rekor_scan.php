@@ -21,6 +21,18 @@ include 'db.php';
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* CSS untuk menyesuaikan tinggi grafik dengan tinggi baris tabel */
+        .chart-container {
+            width: 100%;
+            height: 100%; /* Grafik akan menyesuaikan dengan tinggi baris tabel */
+        }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col min-h-screen max-w-4xl mx-auto mt-8 p-4 bg-white shadow-lg rounded-lg">
@@ -28,17 +40,10 @@ include 'db.php';
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="flex-1 overflow-y-auto border rounded-md mb-4">
+        <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("
-                    SELECT 
-                        collector, 
-                        COUNT(*) AS jumlah_scan 
-                    FROM report
-                    GROUP BY collector
-                    ORDER BY jumlah_scan DESC
-                ");
+                $stmt = $pdo->prepare("SELECT collector, COUNT(*) AS jumlah_scan FROM report GROUP BY collector ORDER BY jumlah_scan DESC");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -48,6 +53,7 @@ include 'db.php';
                     $total_scans += $row['jumlah_scan'];
                 }
 
+                // Tampilkan data dalam tabel
                 if (count($results) > 0) {
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
                     echo "<thead>
@@ -55,20 +61,20 @@ include 'db.php';
                                 <th class='px-4 py-2 text-left'>No.</th>
                                 <th class='px-4 py-2 text-left'>Nama User</th>
                                 <th class='px-4 py-2 text-right'>Jumlah Scan</th>
-                                <th class='px-4 py-2 text-center'>Grafik</th>
+                                <th class='px-4 py-2 text-left'>Grafik</th>
                             </tr>
                           </thead>";
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
-                        // Hitung persentase jumlah scan per user terhadap total scan
-                        $persentase = ($row['jumlah_scan'] / $total_scans) * 100;
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td class='px-4 py-2'>{$no}</td>
                                 <td class='px-4 py-2'>{$row['collector']}</td>
                                 <td class='px-4 py-2 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                                 <td class='px-4 py-2'>
-                                    <div class='chart-container'><canvas id='chart_{$no}'></canvas></div>
+                                    <div class='chart-container'>
+                                        <canvas id='chart_{$no}'></canvas>
+                                    </div>
                                 </td>
                             </tr>";
                         $no++;
@@ -76,10 +82,10 @@ include 'db.php';
                     echo "</tbody>";
                     echo "</table>";
                 } else {
-                    echo "<div class='text-center py-4 text-gray-500'>"
-                       . "<ion-icon name='folder-open-outline' size='large'></ion-icon>"
-                       . "<p>Data tidak tersedia</p>"
-                       . "</div>";
+                    echo "<div class='text-center py-4 text-gray-500'>
+                           <ion-icon name='folder-open-outline' size='large'></ion-icon>
+                           <p>Data tidak tersedia</p>
+                          </div>";
                 }
             ?>
         </div>
@@ -112,7 +118,23 @@ include 'db.php';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Menambahkan grafik batang horizontal di setiap baris tabel dengan panjang berdasarkan persentase
+        // Menyesuaikan tinggi grafik berdasarkan tinggi baris tabel
+        window.addEventListener('load', () => {
+            const rows = document.querySelectorAll('tr'); // Menargetkan semua baris dalam tabel
+
+            rows.forEach(row => {
+                // Mendapatkan tinggi baris
+                const rowHeight = row.offsetHeight;
+
+                // Menyesuaikan tinggi grafik sesuai dengan tinggi baris
+                const chartContainer = row.querySelector('.chart-container');
+                if (chartContainer) {
+                    chartContainer.style.height = `${rowHeight}px`; // Mengatur tinggi grafik
+                }
+            });
+        });
+
+        // Membuat grafik untuk setiap pengguna
         <?php $no = 1; ?>
         <?php foreach ($results as $row): ?>
             const ctx_<?= $no ?> = document.getElementById('chart_<?= $no ?>').getContext('2d');
@@ -148,8 +170,7 @@ include 'db.php';
                     }
                 }
             });
-            <?php $no++; ?>
-        <?php endforeach; ?>
+        <?php $no++; endforeach; ?>
     </script>
 </body>
 </html>
