@@ -153,7 +153,7 @@ include 'db.php';
                         labels: [row.cells[1].textContent], // Nama collector
                         datasets: [{
                             label: 'Jumlah Scan',
-                            data: [jumlahScan],
+                            data: [jumlahScan]*10,
                             backgroundColor: '#4CAF50', // Warna batang
                             barThickness: 20 // Mengatur ketebalan batang grafik
                         }]
