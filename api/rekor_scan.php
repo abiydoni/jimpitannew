@@ -22,12 +22,12 @@ include 'db.php';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-<div class="max-w-4xl mx-auto mt-8 p-4 bg-white shadow-lg rounded-lg">
+<div class="flex flex-col min-h-screen max-w-4xl mx-auto mt-8 p-4 bg-white shadow-lg rounded-lg">
     <h1 class="text-xl font-bold text-gray-700 mb-2">Rekor Scan Terbanyak</h1>
     <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
-    <!-- Kontainer tabel dengan batas tinggi -->
-    <div class="overflow-y-auto max-h-90 border rounded-md">
+    <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
+    <div class="flex-1 overflow-y-auto border rounded-md mb-4">
         <?php
             // Eksekusi query
             $stmt = $pdo->prepare("
