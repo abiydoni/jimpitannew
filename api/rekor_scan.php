@@ -68,7 +68,7 @@ include 'db.php';
                                 <td class='px-2 py-1'>{$row['collector']}</td>
                                 <td class='px-2 py-1 text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                                 <td class='px-2 py-1'>
-                                    <div>
+                                    <div class='chart-container'>
                                         <canvas id='chart_{$no}'></canvas>
                                     </div>
                                 </td>
