@@ -27,7 +27,7 @@ include 'db.php';
         .chart-container {
             width: 100%;
             max-height: 20px; /* Membatasi tinggi grafik sesuai baris tabel */
-            height: 100%;
+            height: auto;
         }
 
         /* Mengurangi padding di sel tabel */
@@ -179,6 +179,11 @@ include 'db.php';
                         }
                     }
                 });
+                        // Sesuaikan lebar canvas dengan lebar kolom
+                    const columnWidth = row.cells[3].offsetWidth; // Mendapatkan lebar kolom ke-4 (kolom grafik)
+                    const canvas = chartContainer.querySelector('canvas');
+                    canvas.width = columnWidth;  // Set lebar canvas sesuai lebar kolom
+
             });
         });
     </script>
