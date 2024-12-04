@@ -117,18 +117,60 @@ $totalScan = count($data);
         </table>
     </div>
 
-    <button onclick="window.location.href='../index.php'">&#8592; Kembali</button>
-    <button onclick="window.location.href='rekor_scan.php'">&#128200; Rekor Scan</button>
+
+    <!-- Tombol Bulat -->
+    <button class="round-button" onclick="window.location.href='../index.php'">
+        <span>&#8592;</span> <!-- Ikon panah kiri -->
+    </button>
+    <!-- Tombol Kedua -->
+    <button class="second-button" onclick="window.location.href='rekor_scan.php'">
+        <span>&#128200;</span> <!-- Ikon untuk tombol kedua (misalnya ikon kalkulator) -->
+    </button>
 </div>
 
 <script>
-    function formatTanggalIndonesia() {
-        const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const tanggal = new Date();
-        return `${hari[tanggal.getDay()]}, ${tanggal.getDate()} ${bulan[tanggal.getMonth()]} ${tanggal.getFullYear()}`;
+    // Fungsi untuk memperbarui tabel
+    function updateTable() {
+        // Tampilkan indikator loading
+        $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Loading...</td></tr>");
+        $.get("get_data.php", function(data) {
+            $("#data-table").html(data); // Masukkan data baru ke tabel
+        }).fail(function() {
+            $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
+        });
     }
-    document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+
+    // Panggil updateTable setiap 5 detik
+    setInterval(updateTable, 100000);
+
+    // Muat data pertama kali saat halaman dimuat
+    $(document).ready(updateTable);
 </script>
+    <script>
+        // Fungsi untuk menampilkan tanggal dalam format Indonesia
+        function formatTanggalIndonesia() {
+            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            
+            const tanggal = new Date();
+            const hariNama = hari[tanggal.getDay()];
+            const bulanNama = bulan[tanggal.getMonth()];
+            const tanggalTanggal = tanggal.getDate();
+            const tahun = tanggal.getFullYear();
+
+            return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
+        }
+
+        // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
+        document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+    </script>
+    <style>
+        /* Mengatur margin dan padding untuk elemen <a> */
+        a {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
 </body>
 </html>
