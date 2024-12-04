@@ -53,7 +53,7 @@ include 'db.php';
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4">
+        <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="max-height: 500px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT collector, COUNT(*) AS jumlah_scan FROM report GROUP BY collector ORDER BY jumlah_scan DESC");
