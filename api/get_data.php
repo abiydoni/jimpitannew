@@ -36,18 +36,27 @@ if ($data) {
               </tr>";
     }
     // Tampilkan total nominal dan total scan di bawah tabel
-    echo "<tr style='font-weight: bold;'>
-            <td colspan='2' style='text-align: right;'>Total Yang Disetorkan:</td>
-            <td style='text-align: center;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
-            <td></td>
-          </tr>";
-    echo "<tr style='font-weight: bold;'>
-            <td colspan='2' style='text-align: right;'>Total Scan:</td>
-            <td style='text-align: center;'>{$totalScan}</td>
-            <td></td>
-          </tr>";
+    // echo "<tr style='font-weight: bold;'>
+    //         <td colspan='2' style='text-align: right;'>Total Yang Disetorkan:</td>
+    //         <td style='text-align: center;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
+    //         <td></td>
+    //       </tr>";
+    // echo "<tr style='font-weight: bold;'>
+    //         <td colspan='2' style='text-align: right;'>Total Scan:</td>
+    //         <td style='text-align: center;'>{$totalScan}</td>
+    //         <td></td>
+    //       </tr>";
 } else {
     // Jika tidak ada data
     echo "<tr><td colspan='4' style='text-align: center;'>Tidak ada data jimpitan hari ini.</td></tr>";
 }
+
+echo "<?php if ($data): ?>
+    <div class="totals">
+        <p><strong>Total Yang Disetorkan:</strong> <?php echo number_format($totalNominal, 0, ',', '.'); ?></p>
+        <p><strong>Total Scan:</strong> <?php echo $totalScan; ?></p>
+    </div>
+<?php endif; ?>
+</div>";
+
 ?>
