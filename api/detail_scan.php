@@ -54,8 +54,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody id="data-table">
-            <?php foreach($data as $row): ?>
-                <?php $no = 1; foreach ($data as $row): ?>
+            <?php no = 1; foreach($data as $row): ?>
                 <tr class="border-b hover:bg-gray-100">
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
