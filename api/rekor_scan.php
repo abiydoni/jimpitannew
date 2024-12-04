@@ -48,7 +48,7 @@ include 'db.php';
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <div class="flex flex-col min-h-screen max-w-4xl mx-auto mt-8 p-4 bg-white shadow-lg rounded-lg">
+    <div class="flex flex-col min-h-screen max-w-4xl mx-auto mt-8 bg-white shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Rekor Scan Terbanyak</h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
 
