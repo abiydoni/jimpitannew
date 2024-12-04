@@ -42,7 +42,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
     <a style="font-weight: bold; font-size: 15px;">Data Scan Jimpitan</a>
-    <a style="color: grey; font-size: 10px;">Hari Ini : <span id="tanggal"></span></a>
+    <a style="color: grey; font-size: 10px;">Hari <span id="tanggal"></span></a>
     <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;">
         <table>
             <thead>
