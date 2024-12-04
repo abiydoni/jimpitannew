@@ -112,7 +112,6 @@ include 'db.php';
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
-</div>
 
     <script>
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
