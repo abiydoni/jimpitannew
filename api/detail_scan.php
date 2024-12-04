@@ -47,6 +47,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table>
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>Nama KK</th>
                     <th style="text-align: center">Nominal</th>
                     <th style="text-align: center">Jaga</th>
@@ -54,7 +55,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </thead>
             <tbody id="data-table">
             <?php foreach($data as $row): ?>
+                <?php $no = 1; foreach ($data as $row): ?>
                 <tr class="border-b hover:bg-gray-100">
+                    <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
                     <td style="text-align: center"><?php echo htmlspecialchars(number_format($row["nominal"], 0, ',', '.')); ?></td>
                     <td style="text-align: center"><?php echo htmlspecialchars($row["collector"]); ?></td>
