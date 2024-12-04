@@ -18,29 +18,36 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Variabel untuk menyimpan total nominal dan total scan
 $totalNominal = 0;
 $totalScan = count($data);
 
 // Tampilkan data sebagai HTML
 if ($data) {
+    $no = 1; // Inisialisasi nomor urut
     foreach ($data as $row) {
         $totalNominal += $row['nominal']; // Tambahkan nominal ke total
         echo "<tr>
-                <td>{$row['kk_name']}</td>
+                <td>" . $no++ . "</td> <!-- Nomor Urut -->
+                <td>" . htmlspecialchars($row['kk_name']) . "</td>
                 <td style='text-align: center;'>" . number_format($row['nominal'], 0, ',', '.') . "</td>
-                <td style='text-align: center;'>{$row['collector']}</td>
+                <td style='text-align: center;'>" . htmlspecialchars($row['collector']) . "</td>
               </tr>";
     }
     // Tampilkan total nominal dan total scan di bawah tabel
-    echo "<tr>
-            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Yang Disetorkan:</td>
-            <td style='text-align: center; font-weight: bold;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
+    echo "<tr style='font-weight: bold;'>
+            <td colspan='2' style='text-align: right;'>Total Yang Disetorkan:</td>
+            <td style='text-align: center;'>" . number_format($totalNominal, 0, ',', '.') . "</td>
+            <td></td>
           </tr>";
-    echo "<tr>
-            <td colspan='2' style='text-align: right; font-weight: bold;'>Total Scan:</td>
-            <td style='text-align: center; font-weight: bold;'>{$totalScan}</td>
+    echo "<tr style='font-weight: bold;'>
+            <td colspan='2' style='text-align: right;'>Total Scan:</td>
+            <td style='text-align: center;'>{$totalScan}</td>
+            <td></td>
           </tr>";
 } else {
-    echo "<tr><td colspan='3' style='text-align: center;'>Tidak ada data jimpitan hari ini.</td></tr>";
+    // Jika tidak ada data
+    echo "<tr><td colspan='4' style='text-align: center;'>Tidak ada data jimpitan hari ini.</td></tr>";
 }
+?>
