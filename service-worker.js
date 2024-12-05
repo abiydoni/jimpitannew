@@ -1,4 +1,4 @@
-const CACHE_NAME = `jimpitan-cache-${new Date().toISOString()}`; // Versi cache otomatis berdasarkan waktu
+const CACHE_NAME = "jimpitan-cache-v5"; // Nama cache dengan versi tetap
 const urlsToCache = [
   "/",
   "index.php",
@@ -8,60 +8,68 @@ const urlsToCache = [
   "assets/image/block.gif",
 ];
 
-// Install event untuk menyimpan file ke cache
+// Install event: Simpan file ke cache
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Opened cache and adding files to cache");
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
+  console.log("Service Worker: Installed and files cached.");
 });
 
-// Activate event untuk menghapus cache lama dan memastikan hanya versi terbaru yang digunakan
+// Activate event: Hapus cache lama
 self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [CACHE_NAME]; // Menyimpan cache terbaru yang akan digunakan
   event.waitUntil(
     caches
       .keys()
-      .then((cacheNames) => {
-        return Promise.all(
+      .then((cacheNames) =>
+        Promise.all(
           cacheNames.map((cacheName) => {
-            if (!cacheWhitelist.includes(cacheName)) {
-              console.log(`Deleting outdated cache: ${cacheName}`);
-              return caches.delete(cacheName); // Menghapus cache lama
+            if (cacheName !== CACHE_NAME) {
+              console.log(`Service Worker: Deleting old cache: ${cacheName}`);
+              return caches.delete(cacheName); // Hapus cache lama
             }
           })
-        );
-      })
+        )
+      )
       .then(() => {
-        console.log("Cache has been updated and old caches removed.");
-        self.clients.claim(); // Mengambil kontrol langsung atas halaman yang sedang berjalan
-
-        // Mengirim pesan ke halaman (client) yang sedang berjalan
-        self.clients.matchAll().then((clients) => {
-          clients.forEach((client) => {
-            client.postMessage("Cache has been updated!");
-          });
-        });
+        console.log("Service Worker: Cache updated.");
+        return self.clients.claim(); // Ambil kendali halaman
       })
   );
 });
 
-// Fetch event untuk menggunakan cache atau melakukan fetch dari jaringan
+// Fetch event: Gunakan cache atau fetch dari jaringan
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       return (
         response ||
-        fetch(event.request).then((networkResponse) => {
-          // Jika fetch berhasil, simpan ke cache untuk penggunaan berikutnya
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
-          });
-          return networkResponse;
+        fetch(event.request).catch(() => {
+          // Fallback jika fetch gagal
+          if (event.request.mode === "navigate") {
+            return caches.match("/"); // Redirect ke halaman utama jika offline
+          }
         })
       );
     })
   );
+});
+
+// Kirim notifikasi ke pengguna ketika cache diperbarui
+self.addEventListener("message", (event) => {
+  if (event.data === "CHECK_UPDATE") {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        if (!cacheNames.includes(CACHE_NAME)) {
+          self.clients.matchAll().then((clients) => {
+            clients.forEach((client) => {
+              client.postMessage(
+                "Cache updated. Please reload to get the latest version."
+              );
+            });
+          });
+        }
+      })
+    );
+  }
 });
