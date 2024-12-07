@@ -204,7 +204,7 @@ button {
 /* Container untuk tabel detail*/
 .table-container {
   max-width: 150%;
-  max-height: 500px; /* Tinggi maksimum tabel */
+  max-height: 450px; /* Tinggi maksimum tabel */
   overflow-y: auto; /* Aktifkan scroll vertikal jika konten melebihi batas */
   border: 1px solid #ddd;
   border-radius: 5px;
