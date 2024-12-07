@@ -52,7 +52,7 @@ include 'db.php';
         <h1 class="text-xl font-bold text-gray-700 mb-2">Rekor Scan Terbanyak</h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;">
+        <div class="table-container flex-1 border rounded-md mb-4" style="font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT collector, COUNT(*) AS jumlah_scan FROM report GROUP BY collector ORDER BY jumlah_scan DESC");
