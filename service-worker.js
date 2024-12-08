@@ -1,11 +1,10 @@
-let CACHE_NAME = "jimpitan-cache-v1.5"; // Nama cache default jika gagal mengambil dari server
+let CACHE_NAME = "jimpitan-cache-v1.5"; // Nama cache default
 
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Install Event");
 
-  // Ambil nama cache dari endpoint
   event.waitUntil(
-    fetch("/get_cache_version.php") // Endpoint untuk mendapatkan nama cache
+    fetch("/get_cache_version.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch cache name");
@@ -13,14 +12,13 @@ self.addEventListener("install", (event) => {
         return response.json();
       })
       .then((data) => {
-        CACHE_NAME = data.cache_name || CACHE_NAME; // Gunakan nama dari server, fallback ke default
+        CACHE_NAME = data.cache_name || CACHE_NAME;
         console.log("[Service Worker] Cache Name Set:", CACHE_NAME);
 
-        // Buka cache dan tambahkan file yang akan dicache
         return caches.open(CACHE_NAME).then((cache) => {
           console.log("[Service Worker] Caching Files");
           return cache.addAll([
-            "/", // Tambahkan file yang perlu dicache
+            "/",
             "index.php",
             "login.php",
             "manifest.json",
@@ -36,7 +34,6 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  // Respon dari cache jika ada, jika tidak ambil dari jaringan
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
@@ -47,7 +44,6 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("activate", (event) => {
   console.log("[Service Worker] Activate Event");
 
-  // Hapus cache lama jika ada versi baru
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
