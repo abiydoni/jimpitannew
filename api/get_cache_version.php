@@ -1,6 +1,6 @@
 <?php
 // Sertakan file db.php untuk menggunakan koneksi
-require_once 'db.php';
+require 'db.php';
 
 try {
     // Query untuk mendapatkan `versi_p` berdasarkan `kode_p`
