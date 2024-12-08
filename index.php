@@ -7,6 +7,27 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 // include 'api/get_info.php';
+include 'db.php'
+// Inisialisasi nilai default untuk versi_p
+$versi_p = "Tidak tersedia";
+
+try {
+    // Query untuk mengambil versi_p dari tabel tb_profile
+    $kode_p = 'APP001';
+    $stmt = $pdo->prepare("SELECT versi_p FROM tb_profile WHERE kode_p = :kode_p");
+    $stmt->bindParam(':kode_p', $kode_p, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        $versi_p = $result['versi_p'];
+    }
+} catch (PDOException $e) {
+    // Jika ada error, tampilkan pesan (hanya untuk debugging)
+    $versi_p = "Error: " . $e->getMessage();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -152,7 +173,8 @@ if (!isset($_SESSION['user'])) {
 
   <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: Setyo Adi Hermawan</p>
   <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
-</div>
+  <p style="color:grey; font-size: 10px; text-align: center;">Versi Aplikasi: <strong><?php echo htmlspecialchars($versi_p, ENT_QUOTES, 'UTF-8'); ?></strong></p>
+  </div>
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
