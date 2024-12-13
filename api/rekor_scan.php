@@ -128,7 +128,7 @@ include 'db.php';
                         $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
                     } elseif ($no >= 8 && $no <= 10) {
                         // Peringkat 7 ke atas: ikon jempol perunggu
-                        $bintang = '<ion-icon name="ellipse" class="text-blue-500 star-animate"></ion-icon>';
+                        $bintang = '<ion-icon name="happy" class="text-blue-500 star-animate"></ion-icon>';
                     } else {
                         // Peringkat di luar 1-10: ikon default (tidak diberi hiasan)
                         $bintang = '';
