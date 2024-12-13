@@ -119,7 +119,7 @@ include 'db.php';
                         $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
                     } else ($no >= 8 && $no <= 10) {
                         // Peringkat 7 ke atas: ikon jempol perunggu
-                        $bintang = '<ion-icon name="muscle-outline" class="text-orange-500 lengan-tangan-spin"></ion-icon>';
+                        $bintang = '<ion-icon name="muscle-outline" class="text-orange-500 star-animate"></ion-icon>';
                     }
                     echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
