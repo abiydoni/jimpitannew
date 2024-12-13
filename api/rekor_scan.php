@@ -91,7 +91,8 @@ include 'db.php';
                         } elseif ($no == 2) {
                             $medali = '<ion-icon name="medal-outline" class="text-gray-400"></ion-icon>'; // Medali perak
                         } elseif ($no == 3) {
-                            $medali = '<ion-icon name="medal-outline" class="text-orange-500"></ion-icon>'; // Medali perunggu                                            }
+                            $medali = '<ion-icon name="medal-outline" class="text-orange-500"></ion-icon>'; // Medali perunggu                                            
+                        }
 
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
