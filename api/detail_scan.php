@@ -22,6 +22,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Hitung total scan
 $total_scans = count($data);
 $total_nominal = array_sum(array_column($data, 'nominal'));
+
+    // Format data untuk respons
+    $response = [
+        'data' => $data,
+        'total_nominal' => $total_nominal
+    ];
+
+    // Set header untuk JSON dan keluarkan respons
+    header('Content-Type: application/json');
+    echo json_encode($response);
+
 ?>
 
 <!DOCTYPE html>
