@@ -135,6 +135,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <th style="text-align: center;" id="sort-date">Tanggal</th>
                                     <th style="text-align: center;">Nominal</th>
                                     <th style="text-align: center;">Input By</th>
+                                    <th style="text-align: center;">Kode User</th>
                                 </tr>
                             </thead>
                             <tbody id="table-body"> <!-- Tambahkan ID untuk tbody -->
@@ -147,6 +148,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["collector"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["kode_u"]); ?></td>
                                             </tr>
                                         <?php endforeach; 
                                     } else {
