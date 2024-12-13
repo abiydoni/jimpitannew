@@ -36,7 +36,21 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;800&display=swap'>
-    <link rel="stylesheet" href="../css/styles.css">
+    <!-- <link rel="stylesheet" href="../css/styles.css"> -->
+
+    <style>
+        /* Mengurangi padding di sel tabel */
+        table th, table td {
+            text-align: left;
+        }
+
+        /* Menyesuaikan tinggi baris tabel agar lebih rapat */
+        table tr {
+            height: 28px; /* Menurunkan tinggi baris tabel */
+            line-height: 1.2; /* Mengatur line height agar teks lebih padat */
+        }
+    </style>
+
 </head>
 <body>
 
