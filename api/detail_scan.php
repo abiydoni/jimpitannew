@@ -50,8 +50,8 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
-        <div class="table-container flex-1 border rounded-md mb-4" style="font-size: 12px;">
-            <?php if (count($data) > 0): ?>
+    <div class="table-container flex-1 border rounded-md mb-4 max-h-[200px] overflow-y-auto" style="font-size: 12px;">
+        <?php if (count($data) > 0): ?>
                 <table class='min-w-full border-collapse text-sm text-gray-700'>
                     <thead>
                         <tr class='bg-gray-100 border-b'>
