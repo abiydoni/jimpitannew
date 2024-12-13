@@ -57,7 +57,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                         <tr class='bg-gray-100 border-b'>
                             <th>No.</th>
                             <th>Nama KK</th>
-                            <th class='text-right'>Nominal</th>
+                            <th class='text-center'>Nominal</th>
                             <th>Jaga</th>
                         </tr>
                     </thead>
@@ -67,8 +67,8 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                             <tr class='border-b hover:bg-gray-50'>
                                 <td><?= $no++ ?></td>
                                 <td><?= htmlspecialchars($row["kk_name"]) ?></td>
-                                <td class="text-right"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                                <td class="text-center"><?= htmlspecialchars($row["collector"]) ?></td>
+                                <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
+                                <td><?= htmlspecialchars($row["collector"]) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
