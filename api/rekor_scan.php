@@ -96,7 +96,6 @@ include 'db.php';
                         } elseif ($no == 3) {
                             $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>';
                         }
-
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
                                 <td>{$row['nama_u']} $bintang</td>
