@@ -45,6 +45,21 @@ include 'db.php';
             width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
             height: 20px !important; /* Menyesuaikan tinggi grafik dengan baris */
         }
+        /* Animasi berkedip */
+        @keyframes blink {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Terapkan animasi ke ikon bintang */
+        .star-animate {
+            animation: blink 1.5s infinite;
+        }
+
+        /* Berikan sedikit jeda untuk efek bintang bertahap */
+        .star-delay-1 { animation-delay: 0.3s; }
+        .star-delay-2 { animation-delay: 0.6s; }
+
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -87,14 +102,14 @@ include 'db.php';
                         // Menentukan jumlah bintang berdasarkan peringkat
                         $bintang = '';
                         if ($no == 1) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
                         } elseif ($no == 2) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
                         } elseif ($no == 3) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
                         }
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
