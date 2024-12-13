@@ -114,12 +114,12 @@ include 'db.php';
                     if ($no <= 3) {
                         // Peringkat 1 hingga 3: ikon bintang
                         $bintang = str_repeat('<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>', $no);
-                    } elseif ($no >= 4 && $no <= 6) {
+                    } elseif ($no >= 4 && $no <= 7) {
                         // Peringkat 4 hingga 6: ikon jempol perunggu
                         $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
-                    } else {
+                    } else ($no >= 8 && $no <= 10) {
                         // Peringkat 7 ke atas: ikon jempol perunggu
-                        $bintang = str_repeat('<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>', 3);
+                        $bintang = '<ion-icon name="muscle-outline" class="text-orange-500 lengan-tangan-spin"></ion-icon>';
                     }
                     echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
