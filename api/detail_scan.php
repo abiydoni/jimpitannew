@@ -36,12 +36,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 
     <style>
-        /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
-        .chart-container {
-            width: 100%;
-            height: auto;
-        }
-
         /* Mengurangi padding di sel tabel */
         table th, table td {
             text-align: left;
@@ -52,38 +46,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             height: 28px; /* Menurunkan tinggi baris tabel */
             line-height: 1.2; /* Mengatur line height agar teks lebih padat */
         }
-
-        /* Menyusun grafik horizontal lebih ramping */
-        canvas {
-            width: 100% !important;  /* Memastikan canvas mengikuti lebar elemen */
-            height: 20px !important; /* Menyesuaikan tinggi grafik dengan baris */
-        }
-        /* Animasi berkedip */
-        @keyframes blink {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        /* Terapkan animasi ke ikon bintang */
-        .star-animate {
-            animation: blink 1.5s infinite;
-        }
-
-        /* Berikan sedikit jeda untuk efek bintang bertahap */
-        .star-delay-1 { animation-delay: 0.3s; }
-        .star-delay-2 { animation-delay: 0.6s; }
-        /* Animasi berputar */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Terapkan animasi berputar ke ikon bintang */
-        .star-spin {
-        animation: spin 2s linear infinite;
-}
-
-
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -104,7 +66,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Jaga</th>
                             </tr>
                           </thead>";
-                    echo "<tbody>";
+                    echo "<tbody id='data-table,>";
                     $no = 1;
                     foreach ($data as $row) {
                     echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
