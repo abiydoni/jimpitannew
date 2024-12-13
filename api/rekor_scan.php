@@ -84,9 +84,22 @@ include 'db.php';
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
+                        // Menentukan jumlah bintang berdasarkan peringkat
+                        $bintang = '';
+                        if ($no == 1) {
+                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                        } elseif ($no == 2) {
+                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
+                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                        } elseif ($no == 3) {
+                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                        }
+
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
-                                <td>{$row['nama_u']}</td>
+                                <td>{$row['nama_u']} $bintang</td>
                                 <td class='text-right'>" . number_format($row['jumlah_scan'], 0, ',', '.') . "</td>
                                 <td>
                                     <div class='chart-container'>
