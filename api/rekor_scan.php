@@ -83,7 +83,7 @@ include 'db.php';
         </h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 50vh; max-height: 75vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 50vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT nama_u, COUNT(*) AS jumlah_scan FROM report GROUP BY kode_u ORDER BY jumlah_scan DESC");
@@ -99,7 +99,7 @@ include 'db.php';
                 // Tampilkan data dalam tabel
                 if (count($results) > 0) {
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
-                    echo "<thead>
+                    echo "<thead class='sticky top-0'>
                             <tr class='bg-gray-100 border-b'>
                                 <th>No.</th>
                                 <th>Nama User</th>
