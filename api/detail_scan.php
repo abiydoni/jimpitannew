@@ -8,20 +8,20 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'db.php';
+try {
+    // SQL statement untuk mengambil data hari ini
+    $stmt = $pdo->prepare("
+        SELECT master_kk.kk_name, report.* 
+        FROM report 
+        JOIN master_kk ON report.report_id = master_kk.code_id
+        WHERE report.jimpitan_date = CURDATE()
+    ");
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// SQL statement untuk mengambil data hari ini
-$stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.* 
-    FROM report 
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE()
-");
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Hitung total scan
-$total_scans = count($data);
-$total_nominal = array_sum(array_column($data, 'nominal'));
+    // Hitung total scan
+    $total_scans = count($data);
+    $total_nominal = array_sum(array_column($data, 'nominal'));
 
     // Format data untuk respons
     $response = [
@@ -32,7 +32,11 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
     // Set header untuk JSON dan keluarkan respons
     header('Content-Type: application/json');
     echo json_encode($response);
-
+} catch (Exception $e) {
+    // Tangani error
+    header('HTTP/1.1 500 Internal Server Error');
+    echo json_encode(['error' => $e->getMessage()]);
+}    
 ?>
 
 <!DOCTYPE html>
