@@ -110,30 +110,17 @@ include 'db.php';
                     echo "<tbody>";
                     $no = 1;
                     foreach ($results as $row) {
-                        // Menentukan jumlah bintang berdasarkan peringkat
-                        $bintang = '';
-                        if ($no == 1) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
-                        } elseif ($no == 2) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
-                        } elseif ($no == 3) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
-                        }
-                        } elseif ($no == 4) {
-                            $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
-                        }
-                        } elseif ($no == 5) {
-                            $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
-                        }
-                        } elseif ($no == 6) {
-                            $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
-                        }
-                        } elseif ($no == 7) {
-                            $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
-                        }
+                    // Menentukan ikon bintang atau jempol berdasarkan peringkat
+                    if ($no <= 3) {
+                        // Peringkat 1 hingga 3: ikon bintang
+                        $bintang = str_repeat('<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>', $no);
+                    } elseif ($no >= 4 && $no <= 6) {
+                        // Peringkat 4 hingga 6: ikon jempol perunggu
+                        $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
+                    } else {
+                        // Peringkat 7 ke atas: ikon jempol perunggu
+                        $bintang = str_repeat('<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>', 3);
+                    }
                     echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
                                 <td>{$row['nama_u']} $bintang</td>
