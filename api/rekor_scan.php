@@ -59,6 +59,17 @@ include 'db.php';
         /* Berikan sedikit jeda untuk efek bintang bertahap */
         .star-delay-1 { animation-delay: 0.3s; }
         .star-delay-2 { animation-delay: 0.6s; }
+        /* Animasi berputar */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Terapkan animasi berputar ke ikon bintang */
+        .star-spin {
+        animation: spin 2s linear infinite;
+}
+
 
     </style>
 </head>
@@ -66,9 +77,9 @@ include 'db.php';
     <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             Rekor Scan Terbanyak 
-            <ion-icon name="star" class="text-yellow-500 ml-2"></ion-icon>
-            <ion-icon name="star" class="text-yellow-500 ml-1"></ion-icon>
-            <ion-icon name="star" class="text-yellow-500 ml-1"></ion-icon>
+            <ion-icon name="star" class="text-yellow-500 ml-2 star-spin"></ion-icon>
+            <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
+            <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
         </h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
