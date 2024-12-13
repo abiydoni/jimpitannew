@@ -111,6 +111,40 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         }
 
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+
+        // Fungsi untuk memperbarui tabel setiap 60 detik
+        function updateTable() {
+            $.ajax({
+                url: 'get_data.php',
+                method: 'GET',
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    $('#data-table').empty();
+                    data.data.forEach((row, index) => {
+                        $('#data-table').append(`
+                            <tr class='border-b hover:bg-gray-50'>
+                                <td>${index + 1}</td>
+                                <td>${row.kk_name}</td>
+                                <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
+                                <td>${row.collector}</td>
+                            </tr>
+                        `);
+                    });
+                    $('#total-scans').text(data.data.length);
+                    $('#total-nominal').text(parseInt(data.total_nominal).toLocaleString());
+                },
+                error: function() {
+                    $('#data-table').html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
+                }
+            });
+        }
+
+        // Panggil updateTable setiap 60 detik
+        setInterval(updateTable, 60000);
+
+        // Muat data pertama kali saat halaman dimuat
+        $(document).ready(updateTable);
+
     </script>
 </body>
 </html>
