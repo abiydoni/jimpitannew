@@ -49,7 +49,12 @@ include 'db.php';
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-        <h1 class="text-xl font-bold text-gray-700 mb-2">Rekor Scan Terbanyak</h1>
+        <h1 class="text-xl font-bold text-gray-700 mb-2">
+            Rekor Scan Terbanyak 
+            <ion-icon name="star" class="text-yellow-500 ml-2"></ion-icon>
+            <ion-icon name="star" class="text-yellow-500 ml-1"></ion-icon>
+            <ion-icon name="star" class="text-yellow-500 ml-1"></ion-icon>
+        </h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
         <div class="table-container flex-1 border rounded-md mb-4" style="font-size: 12px;">
