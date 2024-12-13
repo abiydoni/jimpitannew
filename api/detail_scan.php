@@ -78,14 +78,13 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     <ion-icon name='folder-open-outline' size='large'></ion-icon>
                     <p>Data tidak tersedia</p>
                 </div>
+                <div class="mt-4 font-bold text-gray-700 text-left">
+                    Total Scan: <?= number_format($total_scans, 0, ',', '.') ?>
+                </div>
+                <div class="mt-1 font-bold text-gray-700 text-left">
+                    Total Nominal Setor: Rp <?= number_format($total_nominal, 0, ',', '.') ?>
+                </div>
             <?php endif; ?>
-        </div>
-
-        <div class="mt-4 font-bold text-gray-700 text-left">
-            Total Scan: <?= number_format($total_scans, 0, ',', '.') ?>
-        </div>
-        <div class="mt-1 font-bold text-gray-700 text-left">
-            Total Nominal Setor: Rp <?= number_format($total_nominal, 0, ',', '.') ?>
         </div>
 
         <!-- Tombol Bulat Kembali -->
