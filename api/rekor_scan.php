@@ -74,7 +74,7 @@ include 'db.php';
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 50vh;">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             Rekor Scan Terbanyak 
             <ion-icon name="star" class="text-yellow-500 ml-2 star-spin"></ion-icon>
@@ -83,7 +83,7 @@ include 'db.php';
         </h1>
         <p class="text-sm text-gray-500 mb-4">Per : <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="table-container flex-1 border rounded-md mb-4" style="font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 50vh; max-height: 75vh; font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT nama_u, COUNT(*) AS jumlah_scan FROM report GROUP BY kode_u ORDER BY jumlah_scan DESC");
