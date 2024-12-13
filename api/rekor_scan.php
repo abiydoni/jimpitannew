@@ -87,15 +87,11 @@ include 'db.php';
                         // Menentukan jumlah bintang berdasarkan peringkat
                         $bintang = '';
                         if ($no == 1) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $medali = '<ion-icon name="medal-outline" class="text-yellow-500"></ion-icon>'; // Medali emas
                         } elseif ($no == 2) {
-                            $bintang = '<ion-icon name="star" class="text-gray-400"></ion-icon>
-                            <ion-icon name="star" class="text-gray-400"></ion-icon>'; // Perak
+                            $medali = '<ion-icon name="medal-outline" class="text-gray-400"></ion-icon>'; // Medali perak
                         } elseif ($no == 3) {
-                            $bintang = '<ion-icon name="star" class="text-orange-500"></ion-icon>'; // Perunggu
-                        }
+                            $medali = '<ion-icon name="medal-outline" class="text-orange-500"></ion-icon>'; // Medali perunggu                                            }
 
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
                                 <td>{$no}</td>
