@@ -91,10 +91,10 @@ include 'db.php';
                                         <ion-icon name="star" class="text-yellow-500"></ion-icon>
                                         <ion-icon name="star" class="text-yellow-500"></ion-icon>';
                         } elseif ($no == 2) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>
-                                        <ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $bintang = '<ion-icon name="star" class="text-gray-400"></ion-icon>
+                            <ion-icon name="star" class="text-gray-400"></ion-icon>'; // Perak
                         } elseif ($no == 3) {
-                            $bintang = '<ion-icon name="star" class="text-yellow-500"></ion-icon>';
+                            $bintang = '<ion-icon name="star" class="text-orange-500"></ion-icon>'; // Perunggu
                         }
 
                         echo "<tr class='border-b hover:bg-gray-50' data-no='{$no}'>
