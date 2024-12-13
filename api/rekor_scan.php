@@ -111,9 +111,18 @@ include 'db.php';
                     $no = 1;
                     foreach ($results as $row) {
                     // Menentukan ikon bintang atau jempol berdasarkan peringkat
-                    if ($no <= 3) {
-                        // Peringkat 1 hingga 3: ikon bintang
-                        $bintang = str_repeat('<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>', $no);
+                    if ($no == 1) {
+                        // Peringkat 1: 3 bintang
+                        $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                    <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                    <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
+                    } elseif ($no == 2) {
+                        // Peringkat 2: 2 bintang
+                        $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>
+                                    <ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
+                    } elseif ($no == 3) {
+                        // Peringkat 3: 1 bintang
+                        $bintang = '<ion-icon name="star" class="text-yellow-500 star-animate"></ion-icon>';
                     } elseif ($no >= 4 && $no <= 7) {
                         // Peringkat 4 hingga 6: ikon jempol perunggu
                         $bintang = '<ion-icon name="thumbs-up" class="text-orange-500 star-animate"></ion-icon>';
