@@ -426,10 +426,10 @@ body {
 
 #content main .table-data .order {
   flex-grow: 1;
-  flex-basis: 200px;
+  flex-basis: 500px;
 }
 #content main .table-data .order table {
-  width: 100%;
+  width: 50%;
   border-collapse: collapse;
 }
 #content main .table-data .order table th {
