@@ -140,7 +140,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         }
 
         // Panggil updateTable setiap 60 detik
-        setInterval(updateTable, 60000);
+        setInterval(updateTable, 10000);
 
         // Muat data pertama kali saat halaman dimuat
         $(document).ready(updateTable);
