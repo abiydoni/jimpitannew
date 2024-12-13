@@ -78,7 +78,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     <ion-icon name='folder-open-outline' size='large'></ion-icon>
                     <p>Data tidak tersedia</p>
                 </div>
-            <?php endif; ?>
+            <!-- <?php endif; ?> -->
         </div>
 
         <div class="mt-4 font-bold text-gray-700 text-left">
@@ -87,6 +87,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         <div class="mt-1 font-bold text-gray-700 text-left">
             Total Nominal Setor: Rp <?= number_format($total_nominal, 0, ',', '.') ?>
         </div>
+        <?php endif; ?>
 
         <!-- Tombol Bulat Kembali -->
         <button class="fixed bottom-4 right-20 w-12 h-12 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
