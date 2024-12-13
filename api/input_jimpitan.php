@@ -14,6 +14,8 @@ if (!isset($_SESSION['user'])) {
 
 // Dapatkan informasi pengguna dari sesi
 $collector = $_SESSION['user']['user_name'];
+$kode_u = $_SESSION['user']['id_code'];
+$nama_u = $_SESSION['user']['name'];
 
 // Dapatkan input data
 $data = json_decode(file_get_contents("php://input"));
@@ -49,12 +51,12 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     }
 
     // Siapkan pernyataan SQL untuk penyisipan
-    $sql = "INSERT INTO report (report_id, jimpitan_date, nominal, collector) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         // Eksekusi pernyataan
-        $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector]);    
+        $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u]);    
         echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . '' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
 
     } else {
