@@ -99,6 +99,11 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <div class='text-center py-4 text-gray-500'>
+                    <ion-icon name='folder-open-outline' size='large'></ion-icon>
+                    <p>Data tidak tersedia</p>
+                </div>
+
             <?php endif; ?>
         </div>
 
