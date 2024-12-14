@@ -82,10 +82,10 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         </div>
 
         <div class="mt-4 font-bold text-gray-700 text-left">
-            Total Scan: <?= number_format($total_scans, 0, ',', '.') ?>
+            Total Scan: <span id="total-scans"><?= number_format($total_scans, 0, ',', '.') ?></span>
         </div>
         <div class="mt-1 font-bold text-gray-700 text-left">
-            Total Nominal Setor: Rp <?= number_format($total_nominal, 0, ',', '.') ?>
+            Total Nominal Setor: Rp <span id="total-nominal"><?= number_format($total_nominal, 0, ',', '.') ?></span>
         </div>
 
         <!-- Tombol Bulat Kembali -->
