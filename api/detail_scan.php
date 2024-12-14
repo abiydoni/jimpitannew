@@ -118,6 +118,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                 url: 'get_data.php',
                 method: 'GET',
                 success: function(response) {
+                    console.log(response); // Periksa output ini di konsol browser
                     const data = JSON.parse(response);
                     $('#data-table').empty();
                     data.data.forEach((row, index) => {
