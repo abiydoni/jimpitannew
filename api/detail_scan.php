@@ -51,7 +51,6 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
-        <?php if (count($data) > 0): ?>
                 <table class='min-w-full border-collapse text-sm text-gray-700'>
                     <thead class="sticky top-0">
                         <tr class='bg-gray-100 border-b'>
@@ -73,37 +72,11 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
-                <!-- <div class='text-center py-4 text-gray-500'>
-                    <ion-icon name='folder-open-outline' size='large'></ion-icon>
-                    <p>Data tidak tersedia</p>
-                </div> -->
-                <table class='min-w-full border-collapse text-sm text-gray-700'>
-                    <thead class="sticky top-0">
-                        <tr class='bg-gray-100 border-b'>
-                            <th>No.</th>
-                            <th>Nama KK</th>
-                            <th class='text-center'>Nominal</th>
-                            <th>Jaga</th>
-                        </tr>
-                    </thead>
-                    <tbody id='data-table'>
-                        <?php $no = 1; ?>
-                        <?php foreach ($data as $row): ?>
-                            <tr class='border-b hover:bg-gray-50'>
-                                <td><?= $no++ ?></td>
-                                <td><?= htmlspecialchars($row["kk_name"]) ?></td>
-                                <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                                <td><?= htmlspecialchars($row["collector"]) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <?php if (count($data) < 1): ?>
                 <div class='text-center py-4 text-gray-500'>
                     <ion-icon name='folder-open-outline' size='large'></ion-icon>
                     <p>Data tidak tersedia</p>
                 </div>
-
             <?php endif; ?>
         </div>
 
