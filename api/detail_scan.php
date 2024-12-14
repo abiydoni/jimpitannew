@@ -74,18 +74,10 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     </tbody>
                 </table>
             <?php else: ?>
-                <!-- <div class='text-center py-4 text-gray-500'>
+                <div class='text-center py-4 text-gray-500'>
                     <ion-icon name='folder-open-outline' size='large'></ion-icon>
                     <p>Data tidak tersedia</p>
-                </div> -->
-                    <thead class="sticky top-0">
-                        <tr class='bg-gray-100 border-b'>
-                            <th>No.</th>
-                            <th>Nama KK</th>
-                            <th class='text-center'>Nominal</th>
-                            <th>Jaga</th>
-                        </tr>
-                    </thead>
+                </div>
             <?php endif; ?>
         </div>
 
