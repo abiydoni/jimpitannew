@@ -74,10 +74,21 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     </tbody>
                 </table>
             <?php else: ?>
-                <div class='text-center py-4 text-gray-500'>
+                <!-- <div class='text-center py-4 text-gray-500'>
                     <ion-icon name='folder-open-outline' size='large'></ion-icon>
                     <p>Data tidak tersedia</p>
-                </div>
+                </div> -->
+                <tbody id='data-table'>
+                    <?php $no = 1; ?>
+                    <?php foreach ($data as $row): ?>
+                        <tr class='border-b hover:bg-gray-50'>
+                            <td><?= $no++ ?></td>
+                            <td><?= htmlspecialchars($row["kk_name"]) ?></td>
+                            <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
+                            <td><?= htmlspecialchars($row["collector"]) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
             <?php endif; ?>
         </div>
 
