@@ -40,25 +40,23 @@ try {
     <div class="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
         <h1 class="text-2xl font-bold text-gray-700 mb-4">Informasi</h1>
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <h2 class="text-lg text-gray-600">Halaman ini masih dalam pengembangan...</h2>
+            <!-- Grid Menu -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <?php foreach ($menus as $menu) : ?>
+                    <a href="<?= htmlspecialchars($menu['alamat_url']) ?>" 
+                        class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
+                        title="<?= htmlspecialchars($menu['nama']) ?>">
+                        
+                        <!-- Ikon Default -->
+                        <ion-icon name="grid-outline" class="text-3xl mb-2"></ion-icon>
+                        
+                        <!-- Nama Menu -->
+                        <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
-    <!-- Grid Menu -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <?php foreach ($menus as $menu) : ?>
-            <a href="<?= htmlspecialchars($menu['alamat_url']) ?>" 
-                class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
-                title="<?= htmlspecialchars($menu['nama']) ?>">
-                
-                <!-- Ikon Default -->
-                <ion-icon name="grid-outline" class="text-3xl mb-2"></ion-icon>
-                
-                <!-- Nama Menu -->
-                <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
-            </a>
-        <?php endforeach; ?>
-    </div>
-
     <!-- Tombol Kembali -->
     <a href="detail_scan.php" 
        class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
