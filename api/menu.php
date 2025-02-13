@@ -8,6 +8,14 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'db.php';
+try {
+    // Ambil data menu dari database menggunakan PDO
+    $stmt = $pdo->prepare("SELECT nama, alamat_url FROM tb_menu");
+    $stmt->execute();
+    $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +42,21 @@ include 'db.php';
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <h2 class="text-lg text-gray-600">Halaman ini masih dalam pengembangan...</h2>
         </div>
+    </div>
+    <!-- Grid Menu -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <?php foreach ($menus as $menu) : ?>
+            <a href="<?= htmlspecialchars($menu['alamat_url']) ?>" 
+                class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
+                title="<?= htmlspecialchars($menu['nama']) ?>">
+                
+                <!-- Ikon Default -->
+                <ion-icon name="grid-outline" class="text-3xl mb-2"></ion-icon>
+                
+                <!-- Nama Menu -->
+                <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
+            </a>
+        <?php endforeach; ?>
     </div>
 
     <!-- Tombol Kembali -->
