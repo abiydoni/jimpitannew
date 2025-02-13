@@ -39,7 +39,8 @@ try {
     <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
         <a style="font-weight: bold; font-size: 15px;">Data Scan Jimpitan</a>
         <a style="color: grey; font-size: 10px;">Hari <span id="tanggal"></span></a>
-        <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;">
+        <!-- <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;"> -->
+        <div class="table-container bg-gray-50 p-4 rounded-lg border border-gray-200">
             <table>
                 <thead>
                     <tr>
@@ -48,7 +49,7 @@ try {
                         <th>Nama KK</th>
                     </tr>
                 </thead>
-                <tbody id="data-table">
+                <tbody>
                 <?php $no = 1; foreach($kk as $row): ?>
                     <tr class="border-b hover:bg-gray-100">
                         <td><?php echo $no++; ?></td>
@@ -68,24 +69,6 @@ try {
     </div>
 </div>
 
-<script>
-    // Fungsi untuk memperbarui tabel
-    function updateTable() {
-        // Tampilkan indikator loading
-        $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Loading...</td></tr>");
-        $.get("get_data.php", function(data) {
-            $("#data-table").html(data); // Masukkan data baru ke tabel
-        }).fail(function() {
-            $("#data-table").html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
-        });
-    }
-
-    // Panggil updateTable setiap 5 detik
-    setInterval(updateTable, 60000);
-
-    // Muat data pertama kali saat halaman dimuat
-    $(document).ready(updateTable);
-</script>
     <script>
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
