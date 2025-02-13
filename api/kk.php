@@ -9,19 +9,14 @@ if (!isset($_SESSION['user'])) {
 }
 include 'db.php';
 
-// Prepare the SQL statement to select only today's shift
-$stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.* 
-    FROM report 
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE()
-");
-
-// Execute the SQL statement
-$stmt->execute();
-
-// Fetch all results
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    // Ambil data menu dari database menggunakan PDO
+    $stmt = $pdo->prepare("SELECT * FROM master_kk");
+    $stmt->execute();
+    $kk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -49,31 +44,26 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>Kode</th>
                         <th>Nama KK</th>
-                        <th style="text-align: center">Nominal</th>
-                        <th style="text-align: center">Jaga</th>
                     </tr>
                 </thead>
                 <tbody id="data-table">
-                <?php $no = 1; foreach($data as $row): ?>
+                <?php $no = 1; foreach($kk as $row): ?>
                     <tr class="border-b hover:bg-gray-100">
                         <td><?php echo $no++; ?></td>
+                        <td><?php echo htmlspecialchars($row["code_id"]); ?></td> 
                         <td><?php echo htmlspecialchars($row["kk_name"]); ?></td> 
-                        <td style="text-align: center"><?php echo htmlspecialchars(number_format($row["nominal"], 0, ',', '.')); ?></td>
-                        <td style="text-align: center"><?php echo htmlspecialchars($row["collector"]); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
 
-        <!-- Tombol Bulat -->
-        <button class="round-button" onclick="window.location.href='../index.php'">
-            <span>&#8592;</span> <!-- Ikon panah kiri -->
-        </button>
-        <!-- Tombol Kedua -->
-        <button class="second-button" onclick="window.location.href='rekor_scan.php'">
-            <span>&#128200;</span> <!-- Ikon untuk tombol kedua (misalnya ikon kalkulator) -->
+        <!-- Tombol Kembali -->
+        <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+            onclick="window.location.href='menu.php'" title="Pergi ke menu">
+            <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
 </div>

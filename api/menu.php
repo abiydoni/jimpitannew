@@ -38,12 +38,12 @@ try {
 
 <body class="bg-gray-100 font-poppins text-gray-800 flex justify-center items-center min-h-screen">
     <div class="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Informasi</h1>
+        <h1 class="text-2xl font-bold text-gray-700 mb-4">Menu Informasi</h1>
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <!-- Grid Menu -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <?php foreach ($menus as $menu) : ?>
-                    <a href="<?= htmlspecialchars($menu['alamat_url']) ?>" 
+                    <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         
