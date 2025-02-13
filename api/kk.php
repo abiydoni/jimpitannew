@@ -37,13 +37,13 @@ try {
 
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col min-h-screen max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-        <a style="font-weight: bold; font-size: 15px;">Data Scan Jimpitan</a>
+        <a style="font-weight: bold; font-size: 15px;">Data KK</a>
         <a style="color: grey; font-size: 10px;">Hari <span id="tanggal"></span></a>
         <!-- <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;"> -->
-        <div class="table-container bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
             <table class='min-w-full border-collapse text-sm text-gray-700'>
-                <thead>
-                    <tr>
+                <thead class="sticky top-0">
+                    <tr class='bg-gray-100 border-b'>
                         <th>No.</th>
                         <th>Kode</th>
                         <th>Nama KK</th>
