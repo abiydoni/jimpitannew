@@ -83,7 +83,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
 
         <!-- Tombol Menu -->
         <button class="fixed bottom-4 right-36 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-            onclick="window.location.href='#'" title="Pergi ke menu">
+            onclick="window.location.href='menu.php'" title="Pergi ke menu">
             <ion-icon name="menu-outline"></ion-icon>
         </button>
 
