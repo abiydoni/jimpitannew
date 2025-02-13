@@ -82,6 +82,11 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         </div>
 
         <!-- Tombol Bulat Kembali -->
+        <button class="fixed bottom-4 right-40 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+            onclick="window.location.href='#'" title="Kembali ke halaman detail sebelumnya">
+            <ion-icon name="book-outline"></ion-icon>
+        </button>
+        <!-- Tombol Bulat Kembali -->
         <button class="fixed bottom-4 right-20 w-12 h-12 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
             onclick="window.location.href='rekor_scan.php'" title="Kembali ke halaman detail sebelumnya">
             <ion-icon name="book-outline"></ion-icon>
