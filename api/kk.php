@@ -41,7 +41,7 @@ try {
         <a style="color: grey; font-size: 10px;">Hari <span id="tanggal"></span></a>
         <!-- <div class="table-container flex-1 overflow-y-auto border rounded-md mb-4" style="font-size: 12px;"> -->
         <div class="table-container bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <table>
+            <table class='min-w-full border-collapse text-sm text-gray-700'>
                 <thead>
                     <tr>
                         <th>No.</th>
