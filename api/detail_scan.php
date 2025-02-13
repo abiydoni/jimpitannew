@@ -81,18 +81,19 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
             Total Nominal Setor: Rp <span id="total-nominal"><?= number_format($total_nominal, 0, ',', '.') ?></span>
         </div>
 
-        <!-- Tombol Bulat Kembali -->
-        <button class="fixed bottom-4 right-40 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-            onclick="window.location.href='#'" title="Kembali ke halaman detail sebelumnya">
-            <ion-icon name="book-outline"></ion-icon>
+        <!-- Tombol Menu -->
+        <button class="fixed bottom-4 right-36 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+            onclick="window.location.href='#'" title="Pergi ke menu">
+            <ion-icon name="menu-outline"></ion-icon>
         </button>
-        <!-- Tombol Bulat Kembali -->
+
+        <!-- Tombol Rekor -->
         <button class="fixed bottom-4 right-20 w-12 h-12 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
             onclick="window.location.href='rekor_scan.php'" title="Kembali ke halaman detail sebelumnya">
             <ion-icon name="book-outline"></ion-icon>
         </button>
 
-        <!-- Tombol Bulat -->
+        <!-- Tombol Kembali -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
             onclick="window.location.href='../index.php'" title="Pergi ke halaman baru">
             <ion-icon name="arrow-back-outline"></ion-icon>
