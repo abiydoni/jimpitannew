@@ -74,7 +74,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
             </table>
         </div>
 
-        <div class="mt-1 font-bold text-gray-700 text-left">
+        <div class="mt-1 font-bold text-gray-700 text-left text-xl">
             Total Nominal Setor: Rp <span id="total-nominal"><?= number_format($total_nominal, 0, ',', '.') ?></span>
         </div>
         <div class="mt-4 font-bold text-gray-700 text-left">
