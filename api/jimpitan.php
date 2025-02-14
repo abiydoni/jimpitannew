@@ -79,7 +79,7 @@ foreach ($results as $row) {
                     <option value="<?= $i ?>" <?= $i == $tahun ? 'selected' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Filter</button>
+            <button type="submit" class="bg-blue-500 text-white p-1 px-3 text-sm rounded">Filter</button>
         </form>
 
         <!-- Tabel Data -->
@@ -89,10 +89,9 @@ foreach ($results as $row) {
                     <thead class="sticky top-0">
                         <tr class="bg-gray-100 border-b">
                             <th>No.</th>
-                            <th>Kode</th>
                             <th>Nama Kepala Keluarga</th>
-                            <th>Jumlah Nominal</th>
                             <th>Target</th>
+                            <th>Diambil</th>
                             <th>Hutang</th>
                         </tr>
                     </thead>
@@ -106,10 +105,9 @@ foreach ($results as $row) {
                         ?>
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
-                                <td><?= $row['code_id'] ?></td>
                                 <td><?= $row['kk_name'] ?></td>
-                                <td><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
                                 <td><?= number_format($target, 0, ',', '.') ?></td>
+                                <td><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
                                 <td><?= number_format($hutang, 0, ',', '.') ?></td>
                             </tr>
                         <?php
