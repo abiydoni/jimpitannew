@@ -83,7 +83,7 @@ foreach ($results as $row) {
         </form>
 
         <!-- Tabel Data -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 80vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 70vh;">
             <?php if (count($results) > 0): ?>
                 <table class="min-w-full border-collapse text-sm text-gray-700">
                     <thead class="sticky top-0">
