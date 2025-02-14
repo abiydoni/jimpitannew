@@ -45,7 +45,7 @@ try {
         </h1>
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <!-- Grid Menu -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
                 <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
@@ -63,7 +63,7 @@ try {
     <!-- Tombol Scan Barcode -->
     <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
         <a href="../index.php" 
-        class="w-16 h-16 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
+        class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
             <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
         </a>
     </div>
