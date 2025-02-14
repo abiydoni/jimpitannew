@@ -15,7 +15,7 @@ include 'db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail</title>
+    <title>Inventory Barang</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -43,17 +43,15 @@ include 'db.php';
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
-            Rekor Scan Terbanyak 
-            <ion-icon name="star" class="text-yellow-500 ml-2 star-spin"></ion-icon>
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
-            <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
+            Data Barang
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("SELECT nama_u, COUNT(*) AS jumlah_barang FROM tb_barang GROUP BY nama ORDER BY jumlah_barang DESC");
+                $stmt = $pdo->prepare("SELECT nama, jumlah, COUNT(*) AS jumlah_barang FROM tb_barang GROUP BY nama ORDER BY jumlah_barang DESC");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -78,8 +76,8 @@ include 'db.php';
                     foreach ($results as $row) {
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td>{$no}</td>
-                                <td>{$row['nama_u']}</td>
-                                <td class='text-right'>" . number_format($row['jumlah_barang'], 0, ',', '.') . "</td>
+                                <td>{$row['nama']}</td>
+                                <td class='text-right'>" . number_format($row['jumlah'], 0, ',', '.') . "</td>
                             </tr>";
                         $no++;
                     }
