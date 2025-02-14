@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="manifest" href="manifest.json">
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
@@ -92,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p style="color:grey; font-size: 8px; text-align: center;">@2024 copyright | by doniabiy</p>
 </div>
 </form>
-<script>
+<!-- <script>
     // Register the service worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -105,6 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     }
-</script>
+</script> -->
 </body>
 </html>
