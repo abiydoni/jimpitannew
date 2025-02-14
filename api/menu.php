@@ -43,7 +43,7 @@ try {
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
              Menu Informasi
         </h1>
-        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 " style="max-height: 70vh;">
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
             <!-- Grid Menu -->
             <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
                 <?php foreach ($menus as $menu) : ?>
@@ -54,20 +54,19 @@ try {
                         <!-- Ikon dari Database -->
                         <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-3xl mb-2"></ion-icon>
                         
-                        <!-- Nama Menu -->
-                        <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
+                        <!-- Nama Menu (Ditambahkan text-center) -->
+                        <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>
         </div>
-    <!-- Tombol Scan Barcode -->
-    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-        <a href="../index.php" 
-        class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
-            <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
-        </a>
-    </div>
-
+        <!-- Tombol Scan Barcode -->
+        <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
+            <a href="../index.php" 
+            class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
+                <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
+            </a>
+        </div>
     </div>
     <!-- Tombol Kembali -->
     <a href="detail_scan.php" 
