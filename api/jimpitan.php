@@ -54,13 +54,13 @@ include 'db.php';
                 // Eksekusi query dengan JOIN untuk mengambil kk_name dari tabel master_kk
                 $stmt = $pdo->prepare("
                     SELECT 
-                        r.report_id, 
+                        m.code_id, 
                         m.kk_name, 
-                        SUM(r.nominal) AS jumlah_nominal
-                    FROM report r
-                    LEFT JOIN master_kk m ON r.report_id = m.code_id
-                    GROUP BY r.report_id, m.kk_name
-                    ORDER BY r.report_id ASC;
+                        COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
+                    FROM master_kk m
+                    LEFT JOIN report r ON m.code_id = r.report_id
+                    GROUP BY m.code_id, m.kk_name
+                    ORDER BY m.code_id ASC;
                 ");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -87,7 +87,7 @@ include 'db.php';
                     foreach ($results as $row) {
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td>{$no}</td>
-                                <td>{$row['report_id']}</td>
+                                <td>{$row['code_id']}</td>
                                 <td>{$row['kk_name']}</td>
                                 <td>" . number_format($row['jumlah_nominal'], 0, ',', '.') . "</td>
                             </tr>";
