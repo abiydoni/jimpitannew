@@ -42,7 +42,9 @@ try {
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <!-- Grid Menu -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <?php foreach ($menus as $menu) : ?>
+                <?php foreach ($menus as $menu) : 
+                var_dump($menus);
+                    ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
