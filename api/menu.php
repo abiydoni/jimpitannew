@@ -43,7 +43,7 @@ try {
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
              Menu Informasi
         </h1>
-        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 " style="max-height: 50vh;">
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 " style="max-height: 70vh;">
             <!-- Grid Menu -->
             <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
                 <?php foreach ($menus as $menu) : ?>
