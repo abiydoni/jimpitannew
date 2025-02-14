@@ -53,6 +53,7 @@ try {
         }
 
         .floating-button a {
+            right: 4px; /* Jarak dari kanan */
             color: white; /* Warna teks */
             font-size: 24px; /* Ukuran teks */
             text-decoration: none; /* Menghilangkan garis bawah */
