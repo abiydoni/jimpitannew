@@ -138,10 +138,15 @@ if (!isset($_SESSION['user'])) {
   </h4> -->
   <a href="api/detail_scan.php"><h4 id="totalScan">Menunggu data...</h4></a>
 
-  <div class="floating-button" style="margin-right : 70px;">
+  <!-- <div class="floating-button" style="margin-right : 70px;">
     <a href="api/menu.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
-  </div>
-  <div class="floating-button">
+  </div> -->
+    <a href="api/menu.php" 
+       class="fixed bottom-4 right-10 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+       title="Kembali ke halaman detail sebelumnya">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+    </a>
+    <div class="floating-button">
       <label for="qr-input-file" id="fileInputLabel" style="color: white;">
         <i class="bx bxs-camera" style="font-size:24px; color: white;"></i>
       </label>
