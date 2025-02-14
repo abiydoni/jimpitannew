@@ -60,11 +60,13 @@ try {
                 <?php endforeach; ?>
             </div>
         </div>
+    <!-- Tombol Scan Barcode -->
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
         <a href="../index.php" 
-        class="fixed bottom-4 right-50 w-20 h-20 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-        title="Kembali ke halaman Scan">
-            <ion-icon name="arrow-back-outline"></ion-icon>
+        class="w-16 h-16 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
+            <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
         </a>
+    </div>
 
     </div>
     <!-- Tombol Kembali -->
