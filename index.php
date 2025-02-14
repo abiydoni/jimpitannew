@@ -142,8 +142,8 @@ if (!isset($_SESSION['user'])) {
     <a href="api/menu.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div> -->
     <a href="api/menu.php" 
-       class="fixed bottom-4 right-10 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-       title="Kembali ke halaman detail sebelumnya">
+       class="fixed bottom-4 right-20 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+       title="Kembali ke Menu">
         <ion-icon name="arrow-back-outline"></ion-icon>
     </a>
     <div class="floating-button">

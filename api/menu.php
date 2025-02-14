@@ -40,7 +40,7 @@ try {
             .floating-button {
             position: fixed;
             bottom: 20px; /* Jarak dari bawah */
-            right: 4px; /* Jarak dari kanan */
+            right: 0px; /* Jarak dari kanan */
             background-color: #14505c; /* Warna latar belakang dengan transparansi */
             border-radius: 50%; /* Membuat tombol bulat */
             width: 60px; /* Lebar tombol */
