@@ -52,21 +52,24 @@ include 'db.php';
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("SELECT report_id, nominal, sum(nominal) AS jumlah_nominal FROM report GROUP BY report_id ORDER BY kk_name ASC");
+                $stmt = $pdo->prepare("SELECT report_id, sum(nominal) AS jumlah_nominal FROM report GROUP BY report_id ORDER BY report_id ASC");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Hitung total kepala keluarga
-                $total_data = count($results);
+                // Hitung total nominal
+                $total_nominal = 0;
+                foreach ($results as $row) {
+                    $total_nominal += $row['jumlah_nominal'];
+                }
 
                 // Tampilkan data dalam tabel
-                if ($total_data > 0) {
+                if (count($results) > 0) {
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
                     echo "<thead class='sticky top-0'>
                             <tr class='bg-gray-100 border-b'>
                                 <th>No.</th>
                                 <th>Kode</th>
-                                <th>Jumlah</th>
+                                <th>Jumlah Nominal</th>
                             </tr>
                           </thead>";
                     echo "<tbody>";
@@ -75,7 +78,7 @@ include 'db.php';
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td>{$no}</td>
                                 <td>{$row['report_id']}</td>
-                                <td>{$row['nominal']}</td>
+                                <td>" . number_format($row['jumlah_nominal'], 0, ',', '.') . "</td>
                             </tr>";
                         $no++;
                     }
@@ -90,8 +93,8 @@ include 'db.php';
             ?>
         </div>
 
-        <!-- Total Kepala Keluarga -->
-        <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?php echo number_format($total_data, 0, ',', '.'); ?></div>
+        <!-- Total Nominal -->
+        <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?php echo number_format($total_nominal, 0, ',', '.'); ?></div>
 
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
