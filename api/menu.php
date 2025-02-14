@@ -38,7 +38,11 @@ try {
 
 <body class="bg-gray-100 font-poppins text-gray-800 flex justify-center items-center min-h-screen">
     <div class="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Menu Informasi</h1>
+        <h1 class="text-2xl font-bold text-gray-700 mb-4 flex items-center">
+            <!-- Ikon Ionicons -->
+            <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
+             Menu Informasi
+        </h1>
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <!-- Grid Menu -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
