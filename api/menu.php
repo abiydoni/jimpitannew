@@ -37,13 +37,13 @@ try {
 </head>
 
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 70vh;">
+    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h1 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
             <!-- Ikon Ionicons -->
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
              Menu Informasi
         </h1>
-        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 " style="max-height: 50vh;">
             <!-- Grid Menu -->
             <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
                 <?php foreach ($menus as $menu) : ?>
