@@ -60,6 +60,12 @@ try {
                 <?php endforeach; ?>
             </div>
         </div>
+        <a href="../index.php" 
+        class="fixed bottom-4 right-50 w-20 h-20 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+        title="Kembali ke halaman Scan">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+        </a>
+
     </div>
     <!-- Tombol Kembali -->
     <a href="detail_scan.php" 
