@@ -139,7 +139,7 @@ if (!isset($_SESSION['user'])) {
   <a href="api/detail_scan.php"><h4 id="totalScan">Menunggu data...</h4></a>
 
   <div class="floating-button" style="margin-right : 70px;">
-    <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
+    <a href="api/menu.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
   </div>
   <div class="floating-button">
       <label for="qr-input-file" id="fileInputLabel" style="color: white;">

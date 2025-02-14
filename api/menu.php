@@ -34,6 +34,45 @@ try {
     
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
+      <style>
+            .floating-button {
+            position: fixed;
+            bottom: 20px; /* Jarak dari bawah */
+            right: 20px; /* Jarak dari kanan */
+            background-color: #14505c; /* Warna latar belakang dengan transparansi */
+            border-radius: 50%; /* Membuat tombol bulat */
+            width: 60px; /* Lebar tombol */
+            height: 60px; /* Tinggi tombol */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Bayangan */
+            z-index: 1000; /* Pastikan di atas elemen lain */
+        }
+
+        .floating-button a {
+            color: white; /* Warna teks */
+            font-size: 24px; /* Ukuran teks */
+            text-decoration: none; /* Menghilangkan garis bawah */
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: #14505c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+    </style>
+
 </head>
 
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -68,12 +107,15 @@ try {
                 <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
             </a>
         </div>
+        <div class="floating-button" style="margin-right : 70px;">
+            <a href="dashboard/logout.php"><i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
+        </div>
     <!-- Tombol Kembali -->
-    <a href="detail_scan.php" 
+    <!-- <a href="detail_scan.php" 
        class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
        title="Kembali ke halaman detail sebelumnya">
         <ion-icon name="arrow-back-outline"></ion-icon>
-    </a>
+    </a> -->
 
     <style>
         @keyframes wiggle {
