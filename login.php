@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p style="color:grey; font-size: 8px; text-align: center;">@2024 copyright | by doniabiy</p>
 </div>
 </form>
-    <!-- <script>
-        // Register the service worker
+<script>
+    // Register the service worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
@@ -105,6 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     }
-  </script> -->
+</script>
 </body>
 </html>
