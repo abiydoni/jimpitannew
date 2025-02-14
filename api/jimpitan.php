@@ -90,9 +90,9 @@ foreach ($results as $row) {
                         <tr class="bg-gray-100 border-b">
                             <th>No.</th>
                             <th>Nama Kepala Keluarga</th>
-                            <th class="text-left">Target</th>
-                            <th class="text-left">Diambil</th>
-                            <th class="text-left">Hutang</th>
+                            <th class="text-right">Target</th>
+                            <th class="text-right">Diambil</th>
+                            <th class="text-right">Hutang</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,9 +106,9 @@ foreach ($results as $row) {
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
                                 <td><?= $row['kk_name'] ?></td>
-                                <td class="text-left"><?= number_format($target, 0, ',', '.') ?></td>
-                                <td class="text-left"><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
-                                <td class="text-left"><?= number_format($hutang, 0, ',', '.') ?></td>
+                                <td class="text-right"><?= number_format($target, 0, ',', '.') ?></td>
+                                <td class="text-right"><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
+                                <td class="text-right"><?= number_format($hutang, 0, ',', '.') ?></td>
                             </tr>
                         <?php
                         $no++;
