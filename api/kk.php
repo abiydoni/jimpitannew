@@ -47,22 +47,20 @@ include 'db.php';
             Data Kepala Keluarga
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
+        
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("SELECT code_id, kk_name, COUNT(*) AS jumlah_data FROM master_kk ORDER BY kk_name ASC");
+                $stmt = $pdo->prepare("SELECT code_id, kk_name FROM master_kk ORDER BY kk_name ASC");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Hitung total scan
-                $total_data = 0;
-                foreach ($results as $row) {
-                    $total_data += $row['jumlah_data'];
-                }
+                // Hitung total kepala keluarga
+                $total_data = count($results);
 
                 // Tampilkan data dalam tabel
-                if (count($results) > 0) {
+                if ($total_data > 0) {
                     echo "<table class='min-w-full border-collapse text-sm text-gray-700'>";
                     echo "<thead class='sticky top-0'>
                             <tr class='bg-gray-100 border-b'>
@@ -92,7 +90,7 @@ include 'db.php';
             ?>
         </div>
 
-        <!-- Total Scan -->
+        <!-- Total Kepala Keluarga -->
         <div class="mt-4 font-bold text-gray-700 text-left">Total Kepala Keluarga: <?php echo number_format($total_data, 0, ',', '.'); ?></div>
 
         <!-- Tombol Bulat -->
