@@ -30,7 +30,7 @@ $stmt = $pdo->prepare("
     FROM master_kk m
     LEFT JOIN report r ON m.code_id = r.report_id AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
     GROUP BY m.code_id, m.kk_name
-    ORDER BY m.code_id ASC;
+    ORDER BY m.kk_name ASC;
 ");
 $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
 $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
@@ -83,7 +83,7 @@ foreach ($results as $row) {
         </form>
 
         <!-- Tabel Data -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 70vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
             <?php if (count($results) > 0): ?>
                 <table class="min-w-full border-collapse text-sm text-gray-700">
                     <thead class="sticky top-0">
