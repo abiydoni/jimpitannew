@@ -47,9 +47,9 @@ try {
                         class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         
-                        <!-- Ikon Default -->
-                        <ion-icon name="grid-outline" class="text-3xl mb-2"></ion-icon>
-                        
+                        <!-- Ikon dari Database -->
+                        <ion-icon name="<?= htmlspecialchars($menu['ikon'] ?: 'grid-outline') ?>" class="text-3xl mb-2"></ion-icon>
+                                                
                         <!-- Nama Menu -->
                         <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
                     </a>
