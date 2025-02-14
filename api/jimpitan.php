@@ -31,6 +31,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Hitung total nominal
 $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 ?>
 
 <!DOCTYPE html>
