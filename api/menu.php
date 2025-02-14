@@ -61,19 +61,25 @@ try {
             </div>
         </div>
         <!-- Tombol Scan Barcode -->
-        <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-            <h1 class="text-center">Scan Disini!</h1>
+        <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+            <h1 class="text-center font-bold mb-2 text-gray-700">Scan Disini..!</h1>
             <a href="../index.php" 
-            class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
-                <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
+            class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 motion-safe:animate-[wiggle_2s_infinite]">
+                <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
             </a>
         </div>
-    </div>
     <!-- Tombol Kembali -->
     <a href="detail_scan.php" 
        class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
        title="Kembali ke halaman detail sebelumnya">
         <ion-icon name="arrow-back-outline"></ion-icon>
     </a>
+
+    <style>
+        @keyframes wiggle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
 </body>
 </html>
