@@ -62,6 +62,7 @@ try {
         </div>
         <!-- Tombol Scan Barcode -->
         <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
+            <h1 class="text-center">Scan Disini!</h1>
             <a href="../index.php" 
             class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
                 <ion-icon name="barcode-outline" class="text-3xl"></ion-icon>
