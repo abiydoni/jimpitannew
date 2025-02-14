@@ -48,8 +48,8 @@ try {
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         
                         <!-- Ikon dari Database -->
-                        <ion-icon name="<?= htmlspecialchars($menu['ikon'] ?: 'grid-outline') ?>" class="text-3xl mb-2"></ion-icon>
-                                                
+                        <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-3xl mb-2"></ion-icon>
+                        
                         <!-- Nama Menu -->
                         <span class="text-sm"><?= htmlspecialchars($menu['nama']) ?></span>
                     </a>
