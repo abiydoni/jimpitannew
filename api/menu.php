@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 include 'db.php';
 try {
     // Ambil data menu dari database menggunakan PDO
-    $stmt = $pdo->prepare("SELECT nama, alamat_url FROM tb_menu ORDER BY nama ASC");
+    $stmt = $pdo->prepare("SELECT nama, alamat_url, ikon FROM tb_menu ORDER BY nama ASC");
     $stmt->execute();
     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -42,9 +42,7 @@ try {
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <!-- Grid Menu -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <?php foreach ($menus as $menu) : 
-                var_dump($menus);
-                    ?>
+                <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md flex flex-col items-center justify-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
