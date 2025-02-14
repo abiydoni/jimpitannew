@@ -51,7 +51,7 @@ include 'db.php';
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("SELECT code_id, kk_name, COUNT(*) AS jumlah_data FROM maseter_kk GROUP BY kk_name ORDER BY jumlah_data ASC");
+                $stmt = $pdo->prepare("SELECT code_id, kk_name, COUNT(*) AS jumlah_data FROM master_kk GROUP BY kk_name ORDER BY jumlah_data ASC");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
