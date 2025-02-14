@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 include 'db.php';
 try {
     // Ambil data menu dari database menggunakan PDO
-    $stmt = $pdo->prepare("SELECT nama, alamat_url FROM tb_menu");
+    $stmt = $pdo->prepare("SELECT nama, alamat_url FROM tb_menu ORDER BY nama ASC");
     $stmt->execute();
     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
