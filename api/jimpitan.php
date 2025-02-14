@@ -51,8 +51,14 @@ include 'db.php';
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
-                // Eksekusi query
-                $stmt = $pdo->prepare("SELECT report_id, sum(nominal) AS jumlah_nominal FROM report GROUP BY report_id ORDER BY report_id ASC");
+                // Eksekusi query dengan JOIN untuk mengambil kk_name dari tabel master_kk
+                $stmt = $pdo->prepare("
+                    SELECT r.report_id, m.kk_name, SUM(r.nominal) AS jumlah_nominal
+                    FROM report r
+                    LEFT JOIN master_kk m ON r.report_id = m.code_id
+                    GROUP BY r.report_id, m.kk_name
+                    ORDER BY r.report_id ASC
+                ");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -69,6 +75,7 @@ include 'db.php';
                             <tr class='bg-gray-100 border-b'>
                                 <th>No.</th>
                                 <th>Kode</th>
+                                <th>Nama Kepala Keluarga</th>
                                 <th>Jumlah Nominal</th>
                             </tr>
                           </thead>";
@@ -78,6 +85,7 @@ include 'db.php';
                         echo "<tr class='border-b hover:bg-gray-50'>
                                 <td>{$no}</td>
                                 <td>{$row['report_id']}</td>
+                                <td>{$row['kk_name']}</td>
                                 <td>" . number_format($row['jumlah_nominal'], 0, ',', '.') . "</td>
                             </tr>";
                         $no++;
