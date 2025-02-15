@@ -9,9 +9,20 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
-// Ambil bulan dan tahun yang dipilih
-$bulan = isset($_POST['bulan']) ? $_POST['bulan'] : date('m');
-$tahun = isset($_POST['tahun']) ? $_POST['tahun'] : date('Y');
+// Ambil bulan dan tahun dari POST dengan validasi
+$bulan = (!empty($_POST['bulan'])) ? intval($_POST['bulan']) : date('m');
+$tahun = (!empty($_POST['tahun'])) ? intval($_POST['tahun']) : date('Y');
+
+// Pastikan bulan dalam rentang 1-12
+if ($bulan < 1 || $bulan > 12) {
+    $bulan = date('m');
+}
+
+// Pastikan tahun dalam batas wajar (5 tahun ke belakang dari tahun saat ini)
+$tahun_sekarang = date('Y');
+if ($tahun < ($tahun_sekarang - 5) || $tahun > $tahun_sekarang) {
+    $tahun = $tahun_sekarang;
+}
 
 // Ambil tarif dari tb_tarif
 $stmt_tarif = $pdo->prepare("SELECT tarif FROM tb_tarif WHERE kode_tarif = 'TR001'");
