@@ -21,33 +21,51 @@ $tarif = $stmt_tarif->fetchColumn();
 // Hitung jumlah hari di bulan yang dipilih
 $jumlah_hari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
 
-// Eksekusi query untuk mengambil data dari master_kk dan report
-$stmt = $pdo->prepare("
-    SELECT 
-        m.code_id, 
-        m.kk_name, 
-        COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
-    FROM master_kk m
-    LEFT JOIN report r ON m.code_id = r.report_id AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
-    GROUP BY m.code_id, m.kk_name
-    ORDER BY m.kk_name ASC;
-");
-$stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
-$stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Cek apakah ada pencarian berdasarkan kode
+$kode_dicari = isset($_GET['kode']) ? $_GET['kode'] : '';
 
-// Hitung total nominal
-$total_nominal = 0;
-foreach ($results as $row) {
-    $total_nominal += $row['jumlah_nominal'];
+if ($kode_dicari) {
+    // Query untuk mencari data berdasarkan kode
+    $stmt = $pdo->prepare("
+        SELECT m.code_id, m.kk_name, COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
+        FROM master_kk m
+        LEFT JOIN report r ON m.code_id = r.report_id 
+        WHERE m.code_id = :kode AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
+        GROUP BY m.code_id, m.kk_name
+        ORDER BY m.kk_name ASC
+    ");
+    $stmt->bindParam(':kode', $kode_dicari, PDO::PARAM_STR);
+    $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
+    $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$data) {
+        echo "Data tidak ditemukan.";
+        exit;
+    }
+} else {
+    // Query untuk mengambil semua data
+    $stmt = $pdo->prepare("
+        SELECT m.code_id, m.kk_name, COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
+        FROM master_kk m
+        LEFT JOIN report r ON m.code_id = r.report_id AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
+        GROUP BY m.code_id, m.kk_name
+        ORDER BY m.kk_name ASC;
+    ");
+    $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
+    $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Tampilkan data dalam tabel
+// Hitung total nominal
+$total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,7 +83,6 @@ foreach ($results as $row) {
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
 
-        <!-- Dropdown untuk memilih bulan dan tahun -->
         <form method="post" class="mb-4">
             <label for="bulan" class="mr-2">Bulan:</label>
             <select name="bulan" id="bulan" class="bg-gray-100 p-2 rounded">
@@ -82,9 +99,8 @@ foreach ($results as $row) {
             <button type="submit" class="bg-blue-500 text-white p-1 px-3 text-sm rounded">Filter</button>
         </form>
 
-        <!-- Tabel Data -->
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
-            <?php if (count($results) > 0): ?>
+            <?php if (!empty($results)): ?>
                 <table class="min-w-full border-collapse text-sm text-gray-700">
                     <thead class="sticky top-0">
                         <tr class="bg-gray-100 border-b">
@@ -96,65 +112,29 @@ foreach ($results as $row) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($results as $row):
-                            // Menghitung target dan hutang
-                            $target = $jumlah_hari * $tarif;
-                            $hutang = $target - $row['jumlah_nominal'];
-                        ?>
+                        <?php $no = 1; foreach ($results as $row): ?>
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
                                 <td>
                                     <a href="detail_kk.php?nama=<?= urlencode($row['code_id']) ?>" class="text-blue-500 hover:underline">
-                                        <?php echo htmlspecialchars($row["kk_name"]); ?>
+                                        <?= htmlspecialchars($row["kk_name"]) ?>
                                     </a>
                                 </td>
-                                <td class="text-right"><?= number_format($target, 0, ',', '.') ?></td>
+                                <td class="text-right"><?= number_format($jumlah_hari * $tarif, 0, ',', '.') ?></td>
                                 <td class="text-right"><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
-                                <td class="text-right"><?= number_format($hutang, 0, ',', '.') ?></td>
+                                <td class="text-right"><?= number_format(($jumlah_hari * $tarif) - $row['jumlah_nominal'], 0, ',', '.') ?></td>
                             </tr>
-                        <?php
-                        $no++;
-                        endforeach;
-                        ?>
+                        <?php $no++; endforeach; ?>
                     </tbody>
                 </table>
             <?php else: ?>
-                <div class="text-center py-4 text-gray-500">
-                    <ion-icon name="folder-open-outline" size="large"></ion-icon>
-                    <p>Data tidak tersedia</p>
-                </div>
+                <p class="text-center py-4 text-gray-500">Data tidak tersedia</p>
             <?php endif; ?>
         </div>
-
-        <!-- Total Nominal -->
         <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?= number_format($total_nominal, 0, ',', '.') ?></div>
-
-        <!-- Tombol Bulat -->
-        <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-                onclick="window.location.href='menu.php'" title="Kembali ke halaman menu">
-            <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
     </div>
-
     <script>
-        // Fungsi untuk menampilkan tanggal dalam format Indonesia
-        function formatTanggalIndonesia() {
-            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            
-            const tanggal = new Date();
-            const hariNama = hari[tanggal.getDay()];
-            const bulanNama = bulan[tanggal.getMonth()];
-            const tanggalTanggal = tanggal.getDate();
-            const tahun = tanggal.getFullYear();
-
-            return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
-        }
-
-        // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
-        document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+        document.getElementById("tanggal").textContent = new Date().toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     </script>
 </body>
 </html>
