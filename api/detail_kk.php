@@ -110,10 +110,10 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
                     </tr>
                 </tbody>
             </table>
-
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
+            <br>
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 67vh;">
             <!-- Tabel Detail Per Tanggal -->
-            <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail Per Tanggal</h2>
+            <h2 class="sticky text-lg font-semibold mt-4 text-gray-700">Detail Per Tanggal</h2>
             <table class="min-w-full border-collapse text-sm text-gray-700 mt-2">
                 <thead class="sticky top-0">
                     <tr class="bg-gray-100 border-b">
@@ -125,8 +125,8 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
                 <tbody>
                     <?php $no = 1; foreach ($detail_transaksi as $tgl => $nominal): ?>
                         <tr class="border-b hover:bg-gray-50">
-                            <td><?= $no++ ?></td>
-                            <td><?= date('d-m-Y', strtotime($tgl)) ?></td>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
