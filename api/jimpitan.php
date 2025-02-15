@@ -133,10 +133,10 @@ foreach ($results as $row) {
         <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?= number_format($total_nominal, 0, ',', '.') ?></div>
 
         <!-- Tombol Bulat -->
-        <a href="jimpitan.php" 
-            class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
-            <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
-        </a>
+        <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+                onclick="window.location.href='menu.php'" title="Kembali ke halaman menu">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
     </div>
 
     <script>
