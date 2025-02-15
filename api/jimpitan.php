@@ -74,21 +74,25 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
 
-        <!-- Dropdown untuk memilih bulan dan tahun -->
-        <form method="post" class="mb-4">
-            <label for="bulan" class="mr-2">Bulan:</label>
-            <select name="bulan" id="bulan" class="bg-gray-100 p-2 rounded">
+        <form method="GET" id="filterForm" class="mb-4">
+            <!-- Dropdown Bulan -->
+            <label for="bulan">Bulan:</label>
+            <select name="bulan" id="bulan" class="bg-gray-100 p-2 rounded" onchange="document.getElementById('filterForm').submit()">
                 <?php for ($i = 1; $i <= 12; $i++): ?>
-                    <option value="<?= $i ?>" <?= ($i == $bulan) ? 'selected' : '' ?>><?= $i ?></option>
+                    <option value="<?= $i ?>" <?= ($i == $bulan) ? 'selected' : '' ?>><?= date('F', mktime(0, 0, 0, $i, 1)) ?></option>
                 <?php endfor; ?>
             </select>
-            <label for="tahun" class="ml-2 mr-2">Tahun:</label>
-            <select name="tahun" id="tahun" class="bg-gray-100 p-2 rounded">
+
+            <!-- Dropdown Tahun -->
+            <label for="tahun">Tahun:</label>
+            <select name="tahun" id="tahun" class="bg-gray-100 p-2 rounded" onchange="document.getElementById('filterForm').submit()">
                 <?php for ($i = date('Y') - 5; $i <= date('Y'); $i++): ?>
                     <option value="<?= $i ?>" <?= ($i == $tahun) ? 'selected' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
-            <button type="submit" class="bg-blue-500 text-white p-1 px-3 text-sm rounded">Filter</button>
+
+            <!-- Tombol Filter (Opsional jika ingin pakai manual) -->
+            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filter</button>
         </form>
 
         <!-- Tabel Data -->
