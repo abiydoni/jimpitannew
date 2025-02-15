@@ -139,7 +139,7 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
 
         <!-- Tombol Kembali -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-                onclick="window.history.back()" title="Kembali">
+            href="menu.php" title="Kembali">
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
