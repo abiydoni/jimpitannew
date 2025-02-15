@@ -106,7 +106,7 @@ foreach ($results as $row) {
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
                                 <td>
-                                    <a href="detail_kk.php?nama=<?= urlencode($row['code_id']) ?>" class="text-blue-500 hover:underline">
+                                    <a href="detail_kk.php?kode=<?= urlencode($row['code_id']) ?>" class="text-blue-500 hover:underline">
                                         <?php echo htmlspecialchars($row["kk_name"]); ?>
                                     </a>
                                 </td>
