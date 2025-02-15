@@ -23,6 +23,7 @@ $jumlah_hari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
 
 // Cek apakah ada pencarian berdasarkan kode
 $kode_dicari = isset($_GET['kode']) ? $_GET['kode'] : '';
+$data = null;
 
 if ($kode_dicari) {
     // Query untuk mencari data berdasarkan kode
@@ -38,18 +39,9 @@ if ($kode_dicari) {
     $stmt->execute();
     
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$data) {
-        echo "Data tidak ditemukan.";
-        exit;
-    }
-} else {
-    echo "Kode tidak valid.";
-    exit;
 }
 
-// Hitung total nominal
-$total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
+$total_nominal = $data ? $data['jumlah_nominal'] : 0;
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +63,11 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
 
+        <form method="get" class="mb-4">
+            <input type="text" name="kode" placeholder="Masukkan kode" class="border p-2 rounded" value="<?= htmlspecialchars($kode_dicari) ?>">
+            <button type="submit" class="bg-green-500 text-white p-1 px-3 text-sm rounded">Cari</button>
+        </form>
+
         <form method="post" class="mb-4">
             <label for="bulan" class="mr-2">Bulan:</label>
             <select name="bulan" id="bulan" class="bg-gray-100 p-2 rounded">
@@ -88,7 +85,7 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
         </form>
 
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
-            <?php if (!empty($results)): ?>
+            <?php if ($data): ?>
                 <table class="min-w-full border-collapse text-sm text-gray-700">
                     <thead class="sticky top-0">
                         <tr class="bg-gray-100 border-b">
@@ -100,19 +97,13 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $no = 1; foreach ($results as $row): ?>
-                            <tr class="border-b hover:bg-gray-50">
-                                <td><?= $no ?></td>
-                                <td>
-                                    <a href="detail_kk.php?nama=<?= urlencode($row['code_id']) ?>" class="text-blue-500 hover:underline">
-                                        <?= htmlspecialchars($row["kk_name"]) ?>
-                                    </a>
-                                </td>
-                                <td class="text-right"><?= number_format($jumlah_hari * $tarif, 0, ',', '.') ?></td>
-                                <td class="text-right"><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
-                                <td class="text-right"><?= number_format(($jumlah_hari * $tarif) - $row['jumlah_nominal'], 0, ',', '.') ?></td>
-                            </tr>
-                        <?php $no++; endforeach; ?>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td>1</td>
+                            <td><?= htmlspecialchars($data["kk_name"]) ?></td>
+                            <td class="text-right"><?= number_format($jumlah_hari * $tarif, 0, ',', '.') ?></td>
+                            <td class="text-right"><?= number_format($data['jumlah_nominal'], 0, ',', '.') ?></td>
+                            <td class="text-right"><?= number_format(($jumlah_hari * $tarif) - $data['jumlah_nominal'], 0, ',', '.') ?></td>
+                        </tr>
                     </tbody>
                 </table>
             <?php else: ?>
