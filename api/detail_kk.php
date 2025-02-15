@@ -31,8 +31,6 @@ if ($kode_dicari) {
         FROM master_kk m
         LEFT JOIN report r ON m.code_id = r.report_id 
         WHERE m.code_id = :kode AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
-        GROUP BY m.code_id, m.kk_name
-        ORDER BY m.kk_name ASC
     ");
     $stmt->bindParam(':kode', $kode_dicari, PDO::PARAM_STR);
     $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
@@ -46,18 +44,8 @@ if ($kode_dicari) {
         exit;
     }
 } else {
-    // Query untuk mengambil semua data
-    $stmt = $pdo->prepare("
-        SELECT m.code_id, m.kk_name, COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
-        FROM master_kk m
-        LEFT JOIN report r ON m.code_id = r.report_id AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun
-        GROUP BY m.code_id, m.kk_name
-        ORDER BY m.kk_name ASC;
-    ");
-    $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
-    $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo "Kode tidak valid.";
+    exit;
 }
 
 // Hitung total nominal
