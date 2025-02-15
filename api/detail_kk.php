@@ -79,63 +79,60 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
+        <?php if ($data): ?>
+            <table class="min-w-full border-collapse text-sm text-gray-700">
+                <thead class="sticky top-0">
+                    <tr class="bg-gray-100 border-b">
+                        <th>Nama Kepala Keluarga</th>
+                        <th class="text-right">Target</th>
+                        <th class="text-right">Diambil</th>
+                        <th class="text-right">Hutang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td><?= htmlspecialchars($data["kk_name"]) ?></td>
+                        <td class="text-right"><?= number_format($jumlah_hari * $tarif, 0, ',', '.') ?></td>
+                        <td class="text-right"><?= number_format($data['jumlah_nominal'], 0, ',', '.') ?></td>
+                        <td class="text-right"><?= number_format(($jumlah_hari * $tarif) - $data['jumlah_nominal'], 0, ',', '.') ?></td>
+                    </tr>
+                </tbody>
+            </table>
 
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
-            <?php if ($data): ?>
-                <table class="min-w-full border-collapse text-sm text-gray-700">
-                    <thead class="sticky top-0">
-                        <tr class="bg-gray-100 border-b">
-                            <th>No.</th>
-                            <th>Nama Kepala Keluarga</th>
-                            <th class="text-right">Target</th>
-                            <th class="text-right">Diambil</th>
-                            <th class="text-right">Hutang</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td>1</td>
-                            <td><?= htmlspecialchars($data["kk_name"]) ?></td>
-                            <td class="text-right"><?= number_format($jumlah_hari * $tarif, 0, ',', '.') ?></td>
-                            <td class="text-right"><?= number_format($data['jumlah_nominal'], 0, ',', '.') ?></td>
-                            <td class="text-right"><?= number_format(($jumlah_hari * $tarif) - $data['jumlah_nominal'], 0, ',', '.') ?></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Tabel Detail Per Tanggal -->
-                <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail Per Tanggal</h2>
-                <table class="min-w-full border-collapse text-sm text-gray-700 mt-2">
-                    <thead class="sticky top-0">
-                        <tr class="bg-gray-100 border-b">
-                            <th>No.</th>
-                            <th>Tanggal</th>
-                            <th class="text-right">Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($detail_transaksi)): ?>
-                            <?php $no = 1; foreach ($detail_transaksi as $row): ?>
-                                <tr class="border-b hover:bg-gray-50">
-                                    <td><?= $no++ ?></td>
-                                    <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
-                                    <td class="text-right"><?= number_format($row['nominal'], 0, ',', '.') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="3" class="text-center text-gray-500 py-4">Tidak ada data jimpitan</td>
+            <!-- Tabel Detail Per Tanggal -->
+            <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail Per Tanggal</h2>
+            <table class="min-w-full border-collapse text-sm text-gray-700 mt-2">
+                <thead class="sticky top-0">
+                    <tr class="bg-gray-100 border-b">
+                        <th>No.</th>
+                        <th>Tanggal</th>
+                        <th class="text-right">Nominal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($detail_transaksi)): ?>
+                        <?php $no = 1; foreach ($detail_transaksi as $row): ?>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td><?= $no++ ?></td>
+                                <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
+                                <td class="text-right"><?= number_format($row['nominal'], 0, ',', '.') ?></td>
                             </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="3" class="text-center text-gray-500 py-4">Tidak ada data jimpitan</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
 
-            <?php else: ?>
-                <p class="text-center py-4 text-gray-500">Data tidak tersedia</p>
-            <?php endif; ?>
-        </div>
+        <?php else: ?>
+            <p class="text-center py-4 text-gray-500">Data tidak tersedia</p>
+        <?php endif; ?>
+    </div>
 
-        <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?= number_format($total_nominal, 0, ',', '.') ?></div>
+    <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?= number_format($total_nominal, 0, ',', '.') ?></div>
 
     <!-- Tombol Kembali -->
     <a href="jimpitan.php?bulan=<?= htmlspecialchars($bulan) ?>&tahun=<?= htmlspecialchars($tahun) ?>"
