@@ -110,7 +110,6 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
                     </tr>
                 </tbody>
             </table>
-            <br>
             <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail</h2>
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 65vh;">
             <!-- Tabel Detail Per Tanggal -->
