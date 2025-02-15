@@ -125,7 +125,10 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
                     <?php $no = 1; foreach ($detail_transaksi as $tgl => $nominal): ?>
                         <tr class="border-b hover:bg-gray-50">
                             <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
+                            <?= setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');?>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>">
+                                <?= strftime('%A, %d %B %Y', strtotime($tgl)) ?>
+                            </td>
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
