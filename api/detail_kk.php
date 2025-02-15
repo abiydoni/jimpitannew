@@ -70,7 +70,6 @@ if ($kode_dicari) {
 }
 
 $total_nominal = $data ? $data['jumlah_nominal'] : 0;
-setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
 ?>
 
 <!DOCTYPE html>
@@ -118,17 +117,18 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class="bg-gray-100 border-b">
                         <th>No.</th>
-                        <th class="text-left">Tanggal</th>
+                        <th>Hari</th>
+                        <th>Tanggal</th>
                         <th class="text-right">Nominal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $no = 1; foreach ($detail_transaksi as $tgl => $nominal): ?>
+                    <?php $hari = strftime('%A', strtotime($tgl)); ?>
                         <tr class="border-b hover:bg-gray-50">
                             <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>">
-                                <?= strftime('%A, %d %B %Y', strtotime($tgl)) ?>
-                            </td>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= ucfirst($hari) ?></td>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
