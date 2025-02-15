@@ -90,9 +90,6 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
                     <option value="<?= $i ?>" <?= ($i == $tahun) ? 'selected' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
-
-            <!-- Tombol Filter (Opsional jika ingin pakai manual) -->
-            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filter</button>
         </form>
 
         <!-- Tabel Data -->
