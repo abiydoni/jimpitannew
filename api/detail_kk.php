@@ -9,9 +9,9 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
-// Ambil bulan dan tahun yang dipilih
-$bulan = isset($_POST['bulan']) ? $_POST['bulan'] : date('m');
-$tahun = isset($_POST['tahun']) ? $_POST['tahun'] : date('Y');
+// Ambil bulan dan tahun dari halaman sebelumnya
+$bulan = $_SESSION['bulan'] ?? date('m');
+$tahun = $_SESSION['tahun'] ?? date('Y');
 
 // Ambil tarif dari tb_tarif
 $stmt_tarif = $pdo->prepare("SELECT tarif FROM tb_tarif WHERE kode_tarif = 'TR001'");
@@ -26,7 +26,6 @@ $kode_dicari = isset($_GET['kode']) ? $_GET['kode'] : '';
 $data = null;
 
 if ($kode_dicari) {
-    // Query untuk mencari data berdasarkan kode
     $stmt = $pdo->prepare("
         SELECT m.code_id, m.kk_name, COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
         FROM master_kk m
@@ -62,27 +61,6 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
             Data Jimpitan
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
-
-        <form method="get" class="mb-4">
-            <input type="text" name="kode" placeholder="Masukkan kode" class="border p-2 rounded" value="<?= htmlspecialchars($kode_dicari) ?>">
-            <button type="submit" class="bg-green-500 text-white p-1 px-3 text-sm rounded">Cari</button>
-        </form>
-
-        <form method="post" class="mb-4">
-            <label for="bulan" class="mr-2">Bulan:</label>
-            <select name="bulan" id="bulan" class="bg-gray-100 p-2 rounded">
-                <?php for ($i = 1; $i <= 12; $i++): ?>
-                    <option value="<?= $i ?>" <?= $i == $bulan ? 'selected' : '' ?>><?= $i ?></option>
-                <?php endfor; ?>
-            </select>
-            <label for="tahun" class="ml-2 mr-2">Tahun:</label>
-            <select name="tahun" id="tahun" class="bg-gray-100 p-2 rounded">
-                <?php for ($i = date('Y') - 5; $i <= date('Y'); $i++): ?>
-                    <option value="<?= $i ?>" <?= $i == $tahun ? 'selected' : '' ?>><?= $i ?></option>
-                <?php endfor; ?>
-            </select>
-            <button type="submit" class="bg-blue-500 text-white p-1 px-3 text-sm rounded">Filter</button>
-        </form>
 
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
             <?php if ($data): ?>
