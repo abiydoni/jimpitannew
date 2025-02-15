@@ -70,6 +70,7 @@ if ($kode_dicari) {
 }
 
 $total_nominal = $data ? $data['jumlah_nominal'] : 0;
+setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
 ?>
 
 <!DOCTYPE html>
@@ -117,11 +118,10 @@ $total_nominal = $data ? $data['jumlah_nominal'] : 0;
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class="bg-gray-100 border-b">
                         <th>No.</th>
-                        <th>Tanggal</th>
+                        <th class="text-left">Tanggal</th>
                         <th class="text-right">Nominal</th>
                     </tr>
                 </thead>
-                <?= setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');?>
                 <tbody>
                     <?php $no = 1; foreach ($detail_transaksi as $tgl => $nominal): ?>
                         <tr class="border-b hover:bg-gray-50">
