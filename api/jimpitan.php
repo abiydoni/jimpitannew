@@ -105,7 +105,7 @@ foreach ($results as $row) {
                         ?>
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
-                                <td><?= $row['kk_name'] ?></td>
+                                <td><a href="#"><?= $row['kk_name'] ?></a></td>
                                 <td class="text-right"><?= number_format($target, 0, ',', '.') ?></td>
                                 <td class="text-right"><?= number_format($row['jumlah_nominal'], 0, ',', '.') ?></td>
                                 <td class="text-right"><?= number_format($hutang, 0, ',', '.') ?></td>
