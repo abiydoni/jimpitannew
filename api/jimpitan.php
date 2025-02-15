@@ -106,8 +106,9 @@ foreach ($results as $row) {
                             <tr class="border-b hover:bg-gray-50">
                                 <td><?= $no ?></td>
                                 <td>
-                                    <a href="detail_kk.php?kode=<?= urlencode($row['code_id']) ?>" class="text-blue-500 hover:underline">
-                                        <?php echo htmlspecialchars($row["kk_name"]); ?>
+                                    <a href="detail_kk.php?kode=<?= htmlspecialchars(urlencode($row['code_id'])) ?>&bulan=<?= htmlspecialchars(urlencode($bulan)) ?>&tahun=<?= htmlspecialchars(urlencode($tahun)) ?>" 
+                                    class="text-blue-500 hover:underline">
+                                        <?= htmlspecialchars($row['kk_name']) ?>
                                     </a>
                                 </td>
                                 <td class="text-right"><?= number_format($target, 0, ',', '.') ?></td>
