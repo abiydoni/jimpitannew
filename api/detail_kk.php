@@ -134,7 +134,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $stmt_detail('collector') ?></td>
+                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $row('collector') ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
