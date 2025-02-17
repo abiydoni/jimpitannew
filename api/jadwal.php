@@ -14,14 +14,25 @@ $stmt = $pdo->prepare("SELECT name, shift FROM users ORDER BY shift, name");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Mapping shift dari Inggris ke Indonesia
+$shift_mapping = [
+    "Monday"    => "Senin",
+    "Tuesday"   => "Selasa",
+    "Wednesday" => "Rabu",
+    "Thursday"  => "Kamis",
+    "Friday"    => "Jumat",
+    "Saturday"  => "Sabtu",
+    "Sunday"    => "Minggu"
+];
+
 // Grupkan data berdasarkan shift
 $jadwal = [];
 foreach ($data as $row) {
     $jadwal[$row['shift']][] = $row['name'];
 }
 
-// Daftar hari kerja
-$hari_list = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+// Urutan hari dalam bahasa Inggris
+$hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +56,9 @@ $hari_list = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <?php foreach ($hari_list as $hari): ?>
                 <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2"><?= $hari ?></h2>
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
+                        <?= $shift_mapping[$hari] ?>
+                    </h2>
                     <table class="w-full text-sm text-gray-700 border-collapse">
                         <thead>
                             <tr class="bg-gray-100 border-b">
