@@ -44,26 +44,28 @@ if ($kode_dicari) {
 
     // Ambil detail transaksi per tanggal
     $stmt_detail = $pdo->prepare("
-    SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal, r.collector 
-    FROM report r 
-    WHERE r.report_id = :kode 
-    AND MONTH(r.jimpitan_date) = :bulan 
-    AND YEAR(r.jimpitan_date) = :tahun 
-    ORDER BY r.jimpitan_date ASC");
-
+        SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal
+        FROM report r
+        WHERE r.report_id = :kode
+        AND MONTH(r.jimpitan_date) = :bulan
+        AND YEAR(r.jimpitan_date) = :tahun
+        ORDER BY r.jimpitan_date ASC
+    ");
     $stmt_detail->bindParam(':kode', $kode_dicari, PDO::PARAM_STR);
     $stmt_detail->bindParam(':bulan', $bulan, PDO::PARAM_INT);
     $stmt_detail->bindParam(':tahun', $tahun, PDO::PARAM_INT);
     $stmt_detail->execute();
+    // $detail_transaksi = $stmt_detail->fetchAll(PDO::FETCH_ASSOC);
     $transaksi = $stmt_detail->fetchAll(PDO::FETCH_ASSOC);
-    
+    // Buat daftar tanggal lengkap dalam bulan tersebut
     for ($i = 1; $i <= $jumlah_hari; $i++) {
         $tanggal = sprintf("%04d-%02d-%02d", $tahun, $bulan, $i);
-        $detail_transaksi[$tanggal] = ['nominal' => 0, 'collector' => '-'];
+        $detail_transaksi[$tanggal] = 0; // Default nominal 0
     }
-    
+
+    // Masukkan data dari database ke dalam array
     foreach ($transaksi as $row) {
-        $detail_transaksi[$row['tanggal']] = ['nominal' => $row['nominal'], 'collector' => $row['collector']];
+        $detail_transaksi[$row['tanggal']] = $row['nominal'];
     }
 }
 
@@ -119,7 +121,6 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         <th class="text-left">Hari</th>
                         <th class="text-left">Tanggal</th>
                         <th class="text-right">Nominal</th>
-                        <th class="text-left">Collector</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,7 +133,6 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
-                            <td><?= htmlspecialchars($data['collector']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
