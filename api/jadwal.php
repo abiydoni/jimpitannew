@@ -11,11 +11,12 @@ include 'db.php';
 
 // Ambil data jadwal dengan jumlah scan
 $query = "
-    SELECT u.shift, r.nama_u, u.id_code, COUNT(r.kode_u) AS total_scan 
+    SELECT u.shift, u.name, u.id_code, 
+           COALESCE(COUNT(r.kode_u), 0) AS total_scan 
     FROM users u
     LEFT JOIN report r ON u.id_code = r.kode_u
-    GROUP BY u.shift, r.nama_u, u.id_code
-    ORDER BY u.shift, r.nama_u
+    GROUP BY u.shift, u.name, u.id_code
+    ORDER BY u.shift, u.name
 ";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
@@ -82,7 +83,7 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
                                 foreach ($jadwal[$hari] as $row): ?>
                                     <tr class="border-b hover:bg-gray-50">
                                         <td class="p-2 border text-center"><?= $no ?></td>
-                                        <td class="p-2 border"><?= htmlspecialchars($row['nama_u']) ?></td>
+                                        <td class="p-2 border"><?= htmlspecialchars($row['name']) ?></td>
                                         <td class="p-2 border text-center"><?= number_format($row['total_scan'], 0, ',', '.') ?></td>
                                     </tr>
                                 <?php 
