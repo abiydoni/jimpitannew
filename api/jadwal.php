@@ -62,7 +62,7 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
         </h1>
 
         <!-- Grid untuk menampilkan tabel -->
-        <div class="border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <?php foreach ($hari_list as $hari): ?>
                 <div class="bg-white shadow-md rounded-lg p-4 w-full">
                     <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
@@ -71,27 +71,27 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
                     <table class="w-full text-sm text-gray-700 border-collapse">
                         <thead>
                             <tr class="bg-gray-100 border-b">
-                                <th class="p-2 border">No.</th>
-                                <th class="p-2 border">Nama</th>
-                                <th class="p-2 border">Scan</th>
+                                <th class="border">No.</th>
+                                <th class="border">Nama</th>
+                                <th class="border">Scan</th>
                             </tr>
                         </thead>
-                        <tbody class="">
+                        <tbody>
                             <?php
                             if (!empty($jadwal[$hari])):
                                 $no = 1;
                                 foreach ($jadwal[$hari] as $row): ?>
                                     <tr class="border-b hover:bg-gray-50">
-                                        <td class="p-2 border text-center"><?= $no ?></td>
-                                        <td class="p-2 border"><?= htmlspecialchars($row['name']) ?></td>
-                                        <td class="p-2 border text-center"><?= number_format($row['total_scan'], 0, ',', '.') ?></td>
+                                        <td class="border text-center"><?= $no ?></td>
+                                        <td class="border"><?= htmlspecialchars($row['name']) ?></td>
+                                        <td class="border text-center"><?= number_format($row['total_scan'], 0, ',', '.') ?></td>
                                     </tr>
                                 <?php 
                                 $no++;
                                 endforeach;
                             else: ?>
                                 <tr>
-                                    <td colspan="3" class="p-2 border text-center text-gray-500">Tidak ada jadwal</td>
+                                    <td colspan="3" class="border text-center text-gray-500">Tidak ada jadwal</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
