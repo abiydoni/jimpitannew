@@ -85,8 +85,8 @@ try {
 
         <!-- Tanggal dan Waktu -->
         <div class="flex flex-col items-center bg-gray-200 p-4 rounded-lg mb-4">
-            <div class="text-2xl font-bold text-gray-700" id="date"></div> <!-- Tanggal Lebih Besar -->
             <div class="text-3xl font-semibold text-gray-600" id="time"></div> <!-- Waktu Lebih Kecil -->
+            <div class="text-gray-700" id="date"></div> <!-- Tanggal Lebih Besar -->
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
