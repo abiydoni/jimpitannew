@@ -9,8 +9,15 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
-// Ambil jadwal dari database
-$stmt = $pdo->prepare("SELECT name, shift FROM users ORDER BY shift, name");
+// Ambil data jadwal dengan jumlah scan
+$query = "
+    SELECT u.shift, r.nama_u, u.id_code, COUNT(r.kode_u) AS total_scan 
+    FROM users u
+    LEFT JOIN report r ON u.id_code = r.kode_u
+    GROUP BY u.shift, r.nama_u, u.id_code
+    ORDER BY u.shift, r.nama_u
+";
+$stmt = $pdo->prepare($query);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -28,7 +35,7 @@ $shift_mapping = [
 // Grupkan data berdasarkan shift
 $jadwal = [];
 foreach ($data as $row) {
-    $jadwal[$row['shift']][] = $row['name'];
+    $jadwal[$row['shift']][] = $row;
 }
 
 // Urutan hari dalam bahasa Inggris
@@ -65,23 +72,25 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
                             <tr class="bg-gray-100 border-b">
                                 <th class="p-2 border">No.</th>
                                 <th class="p-2 border">Nama</th>
+                                <th class="p-2 border">Scan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             if (!empty($jadwal[$hari])):
                                 $no = 1;
-                                foreach ($jadwal[$hari] as $nama): ?>
+                                foreach ($jadwal[$hari] as $row): ?>
                                     <tr class="border-b hover:bg-gray-50">
                                         <td class="p-2 border text-center"><?= $no ?></td>
-                                        <td class="p-2 border"><?= htmlspecialchars($nama) ?></td>
+                                        <td class="p-2 border"><?= htmlspecialchars($row['nama_u']) ?></td>
+                                        <td class="p-2 border text-center"><?= number_format($row['total_scan'], 0, ',', '.') ?></td>
                                     </tr>
                                 <?php 
                                 $no++;
                                 endforeach;
                             else: ?>
                                 <tr>
-                                    <td colspan="2" class="p-2 border text-center text-gray-500">Tidak ada jadwal</td>
+                                    <td colspan="3" class="p-2 border text-center text-gray-500">Tidak ada jadwal</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
