@@ -44,7 +44,7 @@ if ($kode_dicari) {
 
     // Ambil detail transaksi per tanggal
     $stmt_detail = $pdo->prepare("
-        SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal
+        SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal, r.collector
         FROM report r
         WHERE r.report_id = :kode
         AND MONTH(r.jimpitan_date) = :bulan
@@ -65,7 +65,7 @@ if ($kode_dicari) {
 
     // Masukkan data dari database ke dalam array
     foreach ($transaksi as $row) {
-        $detail_transaksi[$row['tanggal']] = $row['nominal'];
+        $detail_transaksi[$row['tanggal']] = ['nominal' => $row['nominal'], 'collector' => $row['collector']];
     }
 }
 
@@ -121,6 +121,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         <th class="text-left">Hari</th>
                         <th class="text-left">Tanggal</th>
                         <th class="text-right">Nominal</th>
+                        <th class="text-left">Collector</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -133,6 +134,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                             <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
                                 <?= number_format($nominal, 0, ',', '.') ?>
                             </td>
+                            <td><?= htmlspecialchars($data['collector']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
