@@ -62,7 +62,7 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
         </h1>
 
         <!-- Grid untuk menampilkan tabel -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
             <?php foreach ($hari_list as $hari): ?>
                 <div class="bg-white shadow-md rounded-lg p-4 w-full">
                     <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
@@ -76,7 +76,7 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
                                 <th class="p-2 border">Scan</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="">
                             <?php
                             if (!empty($jadwal[$hari])):
                                 $no = 1;
