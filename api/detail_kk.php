@@ -123,7 +123,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         <th class="text-left">No.</th>
                         <th class="text-left">Hari</th>
                         <th class="text-left">Tanggal</th>
-                        <th class="text-right">Nominal</th>
+                        <th class="text-center">Nominal</th>
                         <th class="text-left">Collector</th>                    
                     </tr>
                 </thead>
@@ -134,7 +134,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= ucfirst($hari) ?></td>
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
-                        <td class="text-right <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>">
+                        <td class="text-center <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>">
                             <?= number_format($detail['nominal'], 0, ',', '.') ?>
                         </td>
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= htmlspecialchars($detail['collector']) ?></td>
