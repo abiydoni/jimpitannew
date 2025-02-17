@@ -43,7 +43,14 @@ if ($kode_dicari) {
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Ambil detail transaksi per tanggal
-    $stmt_detail = $pdo->prepare("SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal, r.collector FROM report r WHERE r.report_id = :kode AND MONTH(r.jimpitan_date) = :bulan AND YEAR(r.jimpitan_date) = :tahun ORDER BY r.jimpitan_date ASC");
+    $stmt_detail = $pdo->prepare("
+    SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal, r.collector 
+    FROM report r 
+    WHERE r.report_id = :kode 
+    AND MONTH(r.jimpitan_date) = :bulan 
+    AND YEAR(r.jimpitan_date) = :tahun 
+    ORDER BY r.jimpitan_date ASC");
+
     $stmt_detail->bindParam(':kode', $kode_dicari, PDO::PARAM_STR);
     $stmt_detail->bindParam(':bulan', $bulan, PDO::PARAM_INT);
     $stmt_detail->bindParam(':tahun', $tahun, PDO::PARAM_INT);
