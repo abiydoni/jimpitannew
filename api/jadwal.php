@@ -53,38 +53,41 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
             Jadwal Jaga Mingguan
         </h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Grid untuk menampilkan tabel (dibagi menjadi 2 kolom di semua layar) -->
+        <div class="flex flex-wrap">
             <?php foreach ($hari_list as $hari): ?>
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
-                        <?= $shift_mapping[$hari] ?>
-                    </h2>
-                    <table class="w-full text-sm text-gray-700 border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 border-b">
-                                <th class="p-2 border">No.</th>
-                                <th class="p-2 border">Nama</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if (!empty($jadwal[$hari])):
-                                $no = 1;
-                                foreach ($jadwal[$hari] as $nama): ?>
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="p-2 border text-center"><?= $no ?></td>
-                                        <td class="p-2 border"><?= htmlspecialchars($nama) ?></td>
-                                    </tr>
-                                <?php 
-                                $no++;
-                                endforeach;
-                            else: ?>
-                                <tr>
-                                    <td colspan="2" class="p-2 border text-center text-gray-500">Tidak ada jadwal</td>
+                <div class="w-1/2 p-2"> <!-- Membagi layar jadi 2 kolom (50% width) -->
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
+                            <?= $shift_mapping[$hari] ?>
+                        </h2>
+                        <table class="w-full text-sm text-gray-700 border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="p-2 border">No.</th>
+                                    <th class="p-2 border">Nama</th>
                                 </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if (!empty($jadwal[$hari])):
+                                    $no = 1;
+                                    foreach ($jadwal[$hari] as $nama): ?>
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="p-2 border text-center"><?= $no ?></td>
+                                            <td class="p-2 border"><?= htmlspecialchars($nama) ?></td>
+                                        </tr>
+                                    <?php 
+                                    $no++;
+                                    endforeach;
+                                else: ?>
+                                    <tr>
+                                        <td colspan="2" class="p-2 border text-center text-gray-500">Tidak ada jadwal</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
