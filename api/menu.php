@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php'); // Redirect ke halaman login
+    exit;
+}
+
+include 'db.php';
+try {
+    // Ambil data menu dari database menggunakan PDO
+    $stmt = $pdo->prepare("SELECT nama, alamat_url, ikon FROM tb_menu WHERE status=1 ORDER BY nama ASC");
+    $stmt->execute();
+    $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -64,8 +84,9 @@
         </h1>
 
         <!-- Tanggal dan Waktu -->
-        <div class="flex justify-center items-center bg-gray-200 p-4 rounded-lg mb-4">
-            <div class="text-lg font-semibold text-gray-700" id="datetime"></div>
+        <div class="flex flex-col items-center bg-gray-200 p-4 rounded-lg mb-4">
+            <div class="text-4xl font-bold text-gray-700" id="date"></div> <!-- Tanggal Lebih Besar -->
+            <div class="text-2xl font-semibold text-gray-600" id="time"></div> <!-- Waktu Lebih Kecil -->
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
@@ -104,22 +125,35 @@
     </style>
 
     <script>
-        // Fungsi untuk mendapatkan tanggal dan waktu saat ini
+        // Fungsi untuk mendapatkan tanggal dan waktu saat ini dalam format Indonesia
         function updateTime() {
             const now = new Date();
-            const day = now.getDate().toString().padStart(2, '0');
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const year = now.getFullYear();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
 
-            const datetime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-            document.getElementById('datetime').textContent = datetime;
+            // Format Tanggal Lengkap dalam Bahasa Indonesia
+            const tanggalFormatter = new Intl.DateTimeFormat('id-ID', {
+                weekday: 'long', // Hari (misal: Senin)
+                year: 'numeric',
+                month: 'long', // Bulan (misal: Januari)
+                day: 'numeric'
+            });
+            const tanggal = tanggalFormatter.format(now);
+
+            // Format Waktu (HH:MM:SS)
+            const jam = now.getHours().toString().padStart(2, '0');
+            const menit = now.getMinutes().toString().padStart(2, '0');
+            const detik = now.getSeconds().toString().padStart(2, '0');
+            const waktu = `${jam}:${menit}:${detik}`;
+
+            // Menampilkan Tanggal dan Waktu
+            document.getElementById('date').textContent = tanggal;
+            document.getElementById('time').textContent = waktu;
         }
 
         // Update waktu setiap detik
         setInterval(updateTime, 1000);
+
+        // Inisialisasi pertama kali saat halaman dimuat
+        updateTime();
     </script>
 
 </body>
