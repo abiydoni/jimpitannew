@@ -90,7 +90,7 @@ try {
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
-            <div class="grid grid-cols-3 md:grid-cols-3 gap-2">
+            <div class="grid grid-cols-4 md:grid-cols-4 gap-1">
                 <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="py-3 px-4 rounded-lg flex flex-col items-center justify-center transition-transform transform hover:scale-105"
