@@ -93,7 +93,7 @@ try {
             <div class="grid grid-cols-4 md:grid-cols-4 gap-4">
                 <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
-                        class="group bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center transition-transform transform hover:scale-105"
+                        class="py-3 px-4 rounded-lg flex flex-col items-center justify-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-3xl mb-2"></ion-icon>
                         <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
