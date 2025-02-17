@@ -90,10 +90,10 @@ try {
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
-            <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-sm">
+            <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
                 <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
-                        class="py-3 px-4 rounded-lg flex flex-col items-center justify-center transition-transform transform hover:scale-105"
+                        class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-105"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
                         <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
