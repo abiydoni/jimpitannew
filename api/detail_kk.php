@@ -44,7 +44,7 @@ if ($kode_dicari) {
 
     // Ambil detail transaksi per tanggal
     $stmt_detail = $pdo->prepare("
-        SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal
+        SELECT DATE(r.jimpitan_date) AS tanggal, r.nominal, r.collector
         FROM report r
         WHERE r.report_id = :kode
         AND MONTH(r.jimpitan_date) = :bulan
@@ -60,14 +60,17 @@ if ($kode_dicari) {
     // Buat daftar tanggal lengkap dalam bulan tersebut
     for ($i = 1; $i <= $jumlah_hari; $i++) {
         $tanggal = sprintf("%04d-%02d-%02d", $tahun, $bulan, $i);
-        $detail_transaksi[$tanggal] = 0; // Default nominal 0
+        $detail_transaksi[$tanggal] = ['nominal' => 0, 'collector' => '-'];
     }
 
     // Masukkan data dari database ke dalam array
     foreach ($transaksi as $row) {
-        $detail_transaksi[$row['tanggal']] = $row['nominal'];
+        $detail_transaksi[$row['tanggal']] = [
+            'nominal' => $row['nominal'],
+            'collector' => $row['collector']
+        ];
     }
-}
+    }
 
 $total_nominal = $data ? $data['jumlah_nominal'] : 0;
 setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
@@ -121,19 +124,21 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         <th class="text-left">Hari</th>
                         <th class="text-left">Tanggal</th>
                         <th class="text-right">Nominal</th>
+                        <th class="text-left">Collector</th>                    
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $no = 1; foreach ($detail_transaksi as $tgl => $nominal): ?>
+                    <?php $no = 1; foreach ($detail_transaksi as $tgl => $detail): ?>
                     <?php $hari = strftime('%A', strtotime($tgl)); ?>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= ucfirst($hari) ?></td>
-                            <td class="<?= $nominal == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
-                            <td class="text-right <?= $nominal == 0 ? 'text-red-500' : '' ?>">
-                                <?= number_format($nominal, 0, ',', '.') ?>
-                            </td>
-                        </tr>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
+                        <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= ucfirst($hari) ?></td>
+                        <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
+                        <td class="text-right <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>">
+                            <?= number_format($detail['nominal'], 0, ',', '.') ?>
+                        </td>
+                        <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= htmlspecialchars($detail['collector']) ?></td>
+                    </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
