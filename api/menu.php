@@ -90,7 +90,7 @@ try {
 
     @keyframes marquee {
         0% {
-            transform: translateX(200%); /* Mulai dari luar layar kanan */
+            transform: translateX(100%); /* Mulai dari luar layar kanan */
         }
         100% {
             transform: translateX(-100%); /* Berakhir di luar layar kiri */
