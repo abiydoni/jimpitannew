@@ -81,10 +81,10 @@ try {
             cursor: not-allowed;
         }
 
-        .animate-marquee {
+    .animate-marquee {
         display: inline-block;
         white-space: nowrap;
-        animation: marquee 20s linear infinite;
+        animation: marquee 15s linear infinite;
     }
 
     @keyframes marquee {
@@ -96,10 +96,10 @@ try {
         }
     }
 
-    /* Responsif */
+    /* Responsif: Percepat animasi di layar kecil */
     @media (max-width: 768px) {
         .animate-marquee {
-            animation-duration: 15s; /* Lebih cepat di layar kecil */
+            animation-duration: 10s; /* Animasi lebih cepat di perangkat kecil */
         }
     }
 
@@ -117,8 +117,8 @@ try {
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
                 Menu Jimpitan
             </h2>
-            <div class="flex flex-col items-center p-2 rounded-lg mb-2">
-                <div class="text-white overflow-hidden w-full">
+            <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800">
+                <div class="text-xl font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
                 </div>
             </div>
