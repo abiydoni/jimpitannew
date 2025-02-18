@@ -81,18 +81,19 @@ try {
             cursor: not-allowed;
         }
 
-    .animate-marquee {
+        .animate-marquee {
         display: inline-block;
         white-space: nowrap;
         animation: marquee 15s linear infinite;
+        transform: translateX(100%); /* Mulai dari luar layar kanan */
     }
 
     @keyframes marquee {
         0% {
-            transform: translateX(100%);
+            transform: translateX(100%); /* Mulai dari kanan layar */
         }
         100% {
-            transform: translateX(-100%);
+            transform: translateX(-100%); /* Berakhir di luar layar kiri */
         }
     }
 
@@ -102,8 +103,7 @@ try {
             animation-duration: 10s; /* Animasi lebih cepat di perangkat kecil */
         }
     }
-
-    </style>
+</style>
 
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800"
@@ -118,7 +118,7 @@ try {
                 Menu Jimpitan
             </h2>
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800">
-                <div class="text-xl font-semibold text-white overflow-hidden w-full">
+                <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
                 </div>
             </div>
