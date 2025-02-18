@@ -97,12 +97,11 @@ try {
         }
     }
 
-    /* Responsif: Percepat animasi di layar kecil */
-    @media (max-width: 768px) {
+        /* Sesuaikan durasi animasi berdasarkan panjang teks */
         .animate-marquee {
-            animation-duration: 10s; /* Animasi lebih cepat di perangkat kecil */
-        }
+        animation-duration: calc(15s + (var(--text-length) / 10));
     }
+
 </style>
 
 </head>
