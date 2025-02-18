@@ -85,45 +85,50 @@ try {
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800"
     style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
-    <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
-        <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
-            <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
-            Menu Jimpitan, Randuares RT.07
-        </h2>
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    
+    <div class="relative z-10"> 
 
-        <!-- Tanggal dan Waktu -->
-        <div class="flex flex-col items-center p-4 rounded-lg mb-4">
-            <div class="text-3xl font-semibold text-white" id="time"></div> <!-- Waktu Lebih Kecil -->
-            <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
-        </div>
+        <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
+                <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
+                Menu Jimpitan
+            </h2>
 
-        <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
-            <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
-                <?php foreach ($menus as $menu) : ?>
-                    <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
-                        class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
-                        title="<?= htmlspecialchars($menu['nama']) ?>">
-                        <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center">
-                            <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
-                        </div>
-                        <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
-                    </a>
-                <?php endforeach; ?>
+            <!-- Tanggal dan Waktu -->
+            <div class="flex flex-col items-center p-4 rounded-lg mb-4">
+                <div class="text-3xl font-semibold text-white" id="time"></div> <!-- Waktu Lebih Kecil -->
+                <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
             </div>
-        </div>
 
-        <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-            <h1 class="text-center font-bold mb-2 text-gray-700">Scan Disini..!</h1>
-            <a href="../index.php" 
-               class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 motion-safe:animate-[wiggle_2s_infinite]">
-                <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
-            </a>
-        </div>
+            <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
+                <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
+                    <?php foreach ($menus as $menu) : ?>
+                        <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
+                            class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
+                            title="<?= htmlspecialchars($menu['nama']) ?>">
+                            <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center">
+                                <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
+                            </div>
+                            <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
 
-        <div class="floating-button" style="margin-right : 70px;">
-            <a href="dashboard/logout.php">
-                <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
-            </a>
+            <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                <h1 class="text-center font-bold mb-2 text-gray-700">Scan Disini..!</h1>
+                <a href="../index.php" 
+                class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 motion-safe:animate-[wiggle_2s_infinite]">
+                    <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
+                </a>
+            </div>
+
+            <div class="floating-button" style="margin-right : 70px;">
+                <a href="dashboard/logout.php">
+                    <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
+                </a>
+            </div>
         </div>
     </div>
 
