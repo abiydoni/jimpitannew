@@ -93,8 +93,8 @@ try {
 
         <!-- Tanggal dan Waktu -->
         <div class="flex flex-col items-center p-4 rounded-lg mb-4">
-            <div class="text-3xl font-semibold text-gray-600" id="time"></div> <!-- Waktu Lebih Kecil -->
-            <div class="text-gray-500" id="date"></div> <!-- Tanggal Lebih Besar -->
+            <div class="text-3xl font-semibold text-white" id="time"></div> <!-- Waktu Lebih Kecil -->
+            <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
         </div>
 
         <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
@@ -103,7 +103,9 @@ try {
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
-                        <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
+                        <div class="bg-white shadow-md rounded-lg p-4 w-full">
+                            <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
+                        </div>
                         <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
                     </a>
                 <?php endforeach; ?>
