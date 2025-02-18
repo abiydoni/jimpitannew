@@ -42,6 +42,7 @@ try {
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="manifest" href="../manifest.json">
 
     <style>
         .floating-button {
@@ -198,6 +199,20 @@ try {
         // Inisialisasi pertama kali saat halaman dimuat
         updateTime();
     </script>
+  <script>
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+            });
+        });
+    }
+  </script>
 
 </body>
 </html>
