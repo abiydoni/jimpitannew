@@ -117,7 +117,7 @@ try {
             </div>
 
             <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-                <h1 class="text-center font-bold mb-2 text-gray-700">Scan Disini..!</h1>
+                <h1 class="text-center font-bold mb-2 text-white">Scan Disini..!</h1>
                 <a href="../index.php" 
                 class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 motion-safe:animate-[wiggle_2s_infinite]">
                     <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
