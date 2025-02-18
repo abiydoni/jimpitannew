@@ -88,20 +88,20 @@ try {
     <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
         <h1 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
-            Menu Informasi
+            Menu Jimpitan, Randuares RT.07
         </h1>
 
         <!-- Tanggal dan Waktu -->
         <div class="flex flex-col items-center p-4 rounded-lg mb-4">
             <div class="text-3xl font-semibold text-gray-600" id="time"></div> <!-- Waktu Lebih Kecil -->
-            <div class="text-gray-700" id="date"></div> <!-- Tanggal Lebih Besar -->
+            <div class="text-gray-500" id="date"></div> <!-- Tanggal Lebih Besar -->
         </div>
 
-        <div class="p-4 rounded-lg border border-gray-200 max-h-[70vh] overflow-y-auto">
+        <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
             <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
                 <?php foreach ($menus as $menu) : ?>
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
-                        class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-105"
+                        class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
                         <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
                         <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
