@@ -90,18 +90,19 @@ try {
 
     @keyframes marquee {
         0% {
-            transform: translateX(100%); /* Mulai dari luar layar kanan */
+            transform: translateX(180%); /* Mulai dari luar layar kanan */
         }
         100% {
             transform: translateX(-100%); /* Berakhir di luar layar kiri */
         }
     }
 
-        /* Sesuaikan durasi animasi berdasarkan panjang teks */
+    /* Responsif: Percepat animasi di layar kecil */
+    @media (max-width: 768px) {
         .animate-marquee {
-        animation-duration: calc(15s + (var(--text-length) / 10));
+            animation-duration: 10s; /* Animasi lebih cepat di perangkat kecil */
+        }
     }
-
 </style>
 
 </head>
