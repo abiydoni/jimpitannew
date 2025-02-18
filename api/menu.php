@@ -103,10 +103,10 @@ try {
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
-                        <div class="bg-white shadow-md rounded-lg p-4 w-full">
+                        <div class="bg-white shadow-md rounded-lg p-4 w-full items-center justify-center">
                             <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
                         </div>
-                        <span class="text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
+                        <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>
