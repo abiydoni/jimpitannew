@@ -13,6 +13,13 @@ try {
     $stmt = $pdo->prepare("SELECT nama, alamat_url, ikon FROM tb_menu WHERE status=1 ORDER BY nama ASC");
     $stmt->execute();
     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil gambar background dari tabel tb_profil
+    $stmt_bg = $pdo->prepare("SELECT gambar FROM tb_profil WHERE id = 1 LIMIT 1");
+    $stmt_bg->execute();
+    $profil = $stmt_bg->fetch(PDO::FETCH_ASSOC);
+    $background = $profil ? "../assets/image/" . htmlspecialchars($profil['gambar']) : '';
+    
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -76,7 +83,7 @@ try {
     </style>
 
 </head>
-<body class="bg-gray-100 font-poppins text-gray-800">
+<body class="bg-gray-100 font-poppins text-gray-800" style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">>
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h1 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
