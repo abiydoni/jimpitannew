@@ -86,10 +86,10 @@ try {
 <body class="bg-gray-100 font-poppins text-gray-800"
     style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
     <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
-        <h1 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
+        <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
             <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
             Menu Jimpitan, Randuares RT.07
-        </h1>
+        </h2>
 
         <!-- Tanggal dan Waktu -->
         <div class="flex flex-col items-center p-4 rounded-lg mb-4">
@@ -103,7 +103,7 @@ try {
                     <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                         class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                         title="<?= htmlspecialchars($menu['nama']) ?>">
-                        <div class="bg-white shadow-md rounded-lg p-4 w-full items-center justify-center">
+                        <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center">
                             <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
                         </div>
                         <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
