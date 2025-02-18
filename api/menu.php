@@ -15,7 +15,7 @@ try {
     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Ambil gambar background dari tabel tb_profil
-    $stmt_bg = $pdo->prepare("SELECT gambar FROM tb_profil WHERE kode = 1 LIMIT 1");
+    $stmt_bg = $pdo->prepare("SELECT * FROM tb_profil WHERE kode = 1 LIMIT 1");
     $stmt_bg->execute();
     $profil = $stmt_bg->fetch(PDO::FETCH_ASSOC);
     $background = $profil ? "../assets/image/" . htmlspecialchars($profil['gambar']) : '';
@@ -80,6 +80,29 @@ try {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        .animate-marquee {
+        display: inline-block;
+        white-space: nowrap;
+        animation: marquee 20s linear infinite;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+        .animate-marquee {
+            animation-duration: 15s; /* Lebih cepat di layar kecil */
+        }
+    }
+
     </style>
 
 </head>
@@ -94,6 +117,11 @@ try {
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
                 Menu Jimpitan
             </h2>
+            <div class="flex flex-col items-center p-4 rounded-lg mb-4 bg-gray-800">
+                <div class="text-3xl font-semibold text-white overflow-hidden w-full">
+                    <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
+                </div>
+            </div>
 
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
