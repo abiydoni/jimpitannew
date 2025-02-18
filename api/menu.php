@@ -15,7 +15,7 @@ try {
     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Ambil gambar background dari tabel tb_profil
-    $stmt_bg = $pdo->prepare("SELECT gambar FROM tb_profil WHERE id = 1 LIMIT 1");
+    $stmt_bg = $pdo->prepare("SELECT gambar FROM tb_profil WHERE kode = 1 LIMIT 1");
     $stmt_bg->execute();
     $profil = $stmt_bg->fetch(PDO::FETCH_ASSOC);
     $background = $profil ? "../assets/image/" . htmlspecialchars($profil['gambar']) : '';
