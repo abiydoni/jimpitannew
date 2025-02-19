@@ -118,7 +118,7 @@ try {
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
                 Menu Jimpitan
             </h2>
-            <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800">
+            <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
                 </div>
