@@ -136,7 +136,7 @@ try {
                         <a href="<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
                             class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                             title="<?= htmlspecialchars($menu['nama']) ?>">
-                            <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center">
+                            <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center opacity-50">
                                 <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
                             </div>
                             <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
