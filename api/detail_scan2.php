@@ -15,6 +15,7 @@ $stmt = $pdo->prepare("
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
     WHERE report.jimpitan_date = CURDATE()
+    ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
