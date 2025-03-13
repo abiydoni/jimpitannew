@@ -67,7 +67,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
 
         echo json_encode([
             'success' => true,
-            'message' => 'Jimpitan tanggal: ' . $jimpitan_date . ', Dengan Nama: ' . $kk_name . ', tercatat dengan nominal: Rp' . number_format($nominal, 0, ',', '.')
+            'message' => 'Jimpitan tanggal: ' . $jimpitan_date . ', Dengan Nama: ' . $kk_name . ', tercatat dengan nominal: Rp ' . number_format($nominal, 0, ',', '.')
         ]);
         
     } else {
