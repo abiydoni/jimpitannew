@@ -65,8 +65,11 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
         $kkResult = $kkStmt->fetch(PDO::FETCH_ASSOC);
         $kk_name = $kkResult['kk_name'] ?? 'Tidak Diketahui'; // Default jika NULL
 
-        echo json_encode(['success' => true, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ', tercatat dengan nominal Rp' . $nominal]);
-
+        echo json_encode([
+            'success' => true,
+            'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama <strong><span style="color:blue;">' . $kk_name . '</span></strong>, tercatat dengan nominal Rp' . number_format($nominal, 0, ',', '.')
+        ]);
+        
     } else {
         // Respons gagal untuk persiapan pernyataan
         echo json_encode(['success' => false, 'message' => 'Gagal menyiapkan pernyataan']);
