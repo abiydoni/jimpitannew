@@ -45,7 +45,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     $kk_name = $result['kk_name'] ?? null; // Jika kk_name tidak ada, set ke null
 
     if ($exists > 0) {
-        echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama ' . $kk_name . ' sudah ada, mau di hapus?']);
+        echo json_encode(['success' => false, 'message' => 'Jimpitan tanggal: ' . $jimpitan_date . ', Dengan Nama: ' . $kk_name . ' sudah ada, mau di hapus?']);
 
         exit; // Hentikan eksekusi jika data sudah ada
     }
@@ -67,7 +67,7 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
 
         echo json_encode([
             'success' => true,
-            'message' => 'Jimpitan tanggal ' . $jimpitan_date . ', Nama <strong><span style="color:blue;">' . $kk_name . '</span></strong>, tercatat dengan nominal Rp' . number_format($nominal, 0, ',', '.')
+            'message' => 'Jimpitan tanggal: ' . $jimpitan_date . ', Dengan Nama: ' . $kk_name . ', tercatat dengan nominal: Rp' . number_format($nominal, 0, ',', '.')
         ]);
         
     } else {
