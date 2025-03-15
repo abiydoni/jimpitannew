@@ -154,7 +154,7 @@ try {
             </div>
 
             <div class="floating-button" style="margin-right : 70px;">
-                <a href="../dashboard/logout.php">
+                <a href="logout.php">
                     <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
                 </a>
             </div>
