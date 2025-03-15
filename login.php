@@ -1,5 +1,5 @@
 <?php
-include "api/cek_login.php"
+include "cek_login.php"
 ?>
 
 <!DOCTYPE html>
