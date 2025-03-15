@@ -1,13 +1,13 @@
 <?php
-session_start(); // Memulai sesi
+session_start(); // Mulai sesi
 
 // Hapus semua variabel sesi
-$_SESSION = [];
+session_unset();
 
 // Hancurkan sesi
 session_destroy();
 
-// Redirect ke halaman login atau homepage
-header("Location: ../login.php");
+// Redirect ke halaman login atau halaman utama
+header("Location: login.php");
 exit();
 ?>
