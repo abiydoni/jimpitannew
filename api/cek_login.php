@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); 
 require 'helper/connection.php'; // Assuming this includes the getDatabaseConnection function
 
 $error = ''; // Initialize the error variable

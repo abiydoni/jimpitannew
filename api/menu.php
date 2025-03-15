@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); 
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
