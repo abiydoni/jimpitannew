@@ -19,7 +19,7 @@ if (!isset($_SESSION['user'])) {
   <script src="js/html5-qrcode.min/js" type="text/javascript"></script>
   <link rel="stylesheet" href="css/sweetalert2.min.css">
   <script src="js/sweetalert2.all.min.js"></script>
-  <script src="js/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 
   <style>
