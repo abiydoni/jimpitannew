@@ -26,7 +26,7 @@ ORDER BY
     month ASC;
 ");
 // Menyiapkan dan mengeksekusi query
-$stmt = $conn->prepare($sql);
+$stmt = $konek->prepare($sql);
 $stmt->bindParam(':year', $selected_year, PDO::PARAM_INT);
 $stmt->execute();
 
