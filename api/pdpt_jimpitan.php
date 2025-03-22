@@ -11,6 +11,11 @@ include 'db.php'; // Pastikan db.php sudah terhubung ke database dengan benar
 
 // Jika tahun dipilih
 $selected_year = isset($_POST['year']) ? $_POST['year'] : date('Y');
+// Ambil daftar tahun dari tabel report
+$query = "SELECT DISTINCT YEAR(jimpitan_date) AS year FROM report ORDER BY year DESC";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$years = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Eksekusi query
 $sql = "SELECT 
