@@ -58,6 +58,24 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        /* Membatasi tinggi grafik agar sesuai dengan tinggi baris tabel */
+        .chart-container {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Mengurangi padding di sel tabel */
+        table th, table td {
+            text-align: left;
+        }
+
+        /* Menyesuaikan tinggi baris tabel agar lebih rapat */
+        table tr {
+            height: 28px; /* Menurunkan tinggi baris tabel */
+            line-height: 1.2; /* Mengatur line height agar teks lebih padat */
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
@@ -74,7 +92,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
                         <th class="text-left">No.</th>
                         <th class="text-left">Hari</th>
                         <th class="text-left">Tanggal</th>
-                        <th class="text-center">Nominal</th>
+                        <th class="text-right">Nominal</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,7 +102,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= $no++ ?></td>
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= ucfirst($hari) ?></td>
                         <td class="text-left <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>"><?= date('d-m-Y', strtotime($tgl)) ?></td>
-                        <td class="text-center <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>">
+                        <td class="text-right <?= $detail['nominal'] == 0 ? 'text-red-500' : '' ?>">
                             <?= number_format($detail['nominal'], 0, ',', '.') ?>
                         </td>
                     </tr>
