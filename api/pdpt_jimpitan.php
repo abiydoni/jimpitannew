@@ -8,6 +8,9 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'db.php'; // Pastikan db.php sudah terhubung ke database dengan benar
+// Cek apakah bulan dan tahun dikirim melalui GET, jika kosong gunakan bulan & tahun sekarang
+$bulan = (!empty($_GET['bulan']) && is_numeric($_GET['bulan'])) ? (int)$_GET['bulan'] : date('m');
+$tahun = (!empty($_GET['tahun']) && is_numeric($_GET['tahun'])) ? (int)$_GET['tahun'] : date('Y');
 
 // Jika tahun dipilih
 $selected_year = isset($_POST['year']) ? $_POST['year'] : date('Y');
@@ -34,7 +37,6 @@ $sql = "SELECT
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':year', $selected_year, PDO::PARAM_INT);
 $stmt->execute();
-
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +72,7 @@ $stmt->execute();
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h2 class="text-2xl font-semibold mb-4">Laporan Jimpitan Tahun <?php echo $selected_year; ?></h2>
+        
         <!-- Form untuk memilih tahun -->
         <form method="POST" class="mb-6">
             <label for="year" class="text-xl font-semibold mr-4">Pilih Tahun:</label>
@@ -84,6 +87,7 @@ $stmt->execute();
             </select>
             <button type="submit" class="ml-4 p-2 bg-blue-500 text-white rounded">Tampilkan</button>
         </form>
+        
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <!-- Tabel Laporan Jimpitan -->
@@ -106,6 +110,7 @@ $stmt->execute();
                     // Menampilkan data bulan dan total nominal
                     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     $data = [];
+                    $total_jimpitan = 0; // Variabel untuk total jimpitan tahunan
                     foreach ($result as $row) {
                         $data[$row['month']] = $row['total_nominal'];
                         $total_jimpitan += $row['total_nominal']; // Menambahkan nominal untuk total tahunan
@@ -115,7 +120,7 @@ $stmt->execute();
                     for ($i = 1; $i <= 12; $i++) {
                         $total_nominal = isset($data[$i]) ? $data[$i] : 0;
                         echo "<tr class='border-b hover:bg-gray-50'>";
-                        echo "<td class='py-2 px-4 border-b'>" . $months[$i] . "</td>";
+                        echo "<td class='py-2 px-4 border-b'><a href='detail_pdpt_jimpitan.php?bulan=$i&tahun=$selected_year' class='text-blue-500 hover:underline'>" . $months[$i] . "</a></td>";
                         echo "<td class='py-2 px-4 border-b text-right'>" . number_format($total_nominal) . "</td>";
                         echo "</tr>";
                     }
@@ -123,6 +128,7 @@ $stmt->execute();
                 </tbody>
             </table>
         </div>
+        
         <!-- Total Jimpitan Tahun -->
         <div class="mt-4">
             <p class="font-bold text-lg">Total Jimpitan Tahun <?php echo $selected_year; ?>: Rp. <?php echo number_format($total_jimpitan); ?></p>
