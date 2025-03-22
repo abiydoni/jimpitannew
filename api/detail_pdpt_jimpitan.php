@@ -60,14 +60,14 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             Detail Jimpitan
         </h1>
         <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
         
         <?php if (!empty($detail_transaksi)): ?>
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 65vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 60vh;">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class="bg-gray-100 border-b">
