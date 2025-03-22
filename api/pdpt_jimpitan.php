@@ -7,26 +7,26 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-include 'db.php';
+include 'db.php'; // Pastikan db.php sudah terhubung ke database dengan benar
 
 // Jika tahun dipilih
 $selected_year = isset($_POST['year']) ? $_POST['year'] : date('Y');
 
 // Eksekusi query
-$stmt = $pdo->prepare("SELECT 
-    MONTH(jimpitan_date) AS month, 
-    SUM(nominal) AS total_nominal
-FROM 
-    report
-WHERE 
-    YEAR(jimpitan_date) = :year
-GROUP BY 
-    MONTH(jimpitan_date)
-ORDER BY 
-    month ASC;
-");
+$sql = "SELECT 
+            MONTH(jimpitan_date) AS month, 
+            SUM(nominal) AS total_nominal
+        FROM 
+            report
+        WHERE 
+            YEAR(jimpitan_date) = :year
+        GROUP BY 
+            MONTH(jimpitan_date)
+        ORDER BY 
+            month ASC";
+
 // Menyiapkan dan mengeksekusi query
-$stmt = $konek->prepare($sql);
+$stmt = $pdo->prepare($sql);
 $stmt->bindParam(':year', $selected_year, PDO::PARAM_INT);
 $stmt->execute();
 
@@ -37,7 +37,7 @@ $stmt->execute();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Barang</title>
+    <title>Laporan Jimpitan - Tahun <?php echo $selected_year; ?></title>
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js"></script>
