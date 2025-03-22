@@ -70,11 +70,10 @@ $stmt->execute();
             <label for="year" class="text-xl font-semibold mr-4">Pilih Tahun:</label>
             <select name="year" id="year" class="p-2 border rounded">
                 <?php
-                // Menampilkan dropdown untuk memilih tahun
-                $current_year = date('Y');
-                for ($i = $current_year; $i >= 2000; $i--) {
-                    $selected = ($i == $selected_year) ? 'selected' : '';
-                    echo "<option value='$i' $selected>$i</option>";
+                // Menampilkan tahun yang tersedia dari database
+                foreach ($years as $year) {
+                    $selected = ($year['year'] == $selected_year) ? 'selected' : '';
+                    echo "<option value='" . $year['year'] . "' $selected>" . $year['year'] . "</option>";
                 }
                 ?>
             </select>
