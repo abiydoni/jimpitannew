@@ -118,6 +118,11 @@ $stmt->execute();
                     ?>
                 </tbody>
             </table>
+            <!-- Total Jimpitan Tahun -->
+            <div class="mt-4">
+                <p class="font-bold text-lg">Total Jimpitan Tahun <?php echo $selected_year; ?>: <?php echo number_format($total_jimpitan); ?></p>
+            </div>
+
         </div>
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
