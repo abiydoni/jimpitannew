@@ -75,7 +75,7 @@ $stmt->execute();
         <!-- Form untuk memilih tahun -->
         <form method="GET" action="" class="mb-6">
             <label for="tahun" class="text-xl font-semibold mr-4">Pilih Tahun:</label>
-            <select name="tahun" id="tahun" class="p-2 border rounded">
+            <select name="tahun" id="tahun" class="p-2 border rounded" onchange="updateYear()">
                 <?php
                 // Menampilkan tahun yang tersedia dari database
                 foreach ($years as $year) {
@@ -84,7 +84,6 @@ $stmt->execute();
                 }
                 ?>
             </select>
-            <button type="submit" class="ml-4 p-2 bg-blue-500 text-white rounded">Tampilkan</button>
         </form>
         
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
@@ -140,4 +139,13 @@ $stmt->execute();
         </button>
     </div>
 </body>
+<script>
+    // Menangani pengubahan tahun secara otomatis
+    function updateYear() {
+        // Ambil tahun yang dipilih
+        var tahun = document.getElementById("tahun").value;
+        // Update URL dengan parameter tahun
+        window.location.href = "?tahun=" + tahun;
+    }
+</script>
 </html>
