@@ -85,7 +85,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
         <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
         
         <?php if (!empty($detail_transaksi)): ?>
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class="bg-gray-100 border-b">
