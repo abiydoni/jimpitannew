@@ -20,7 +20,7 @@ if (!isset($_SESSION['user'])) {
   <link rel="stylesheet" href="css/sweetalert2.min.css">
   <script src="js/sweetalert2.all.min.js"></script>
   <script src="js/jquery-3.6.0.min.js"></script>
-  <link href='css/boxicons.min.css' rel='stylesheet'>
+  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 
   <style>
     body, html {
