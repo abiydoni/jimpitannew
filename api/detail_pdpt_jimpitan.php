@@ -9,10 +9,9 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
-// Validasi dan ambil bulan, tahun, dan kode_id dari URL
+// Ambil bulan, tahun, dan kode_id dari URL
 $bulan = isset($_GET['bulan']) ? intval($_GET['bulan']) : date('m');
 $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : date('Y');
-$kode_dicari = isset($_GET['kode']) ? $_GET['kode'] : '';
 
 // Validasi bulan dan tahun
 if ($bulan < 1 || $bulan > 12) {
@@ -44,7 +43,8 @@ if ($kode_dicari) {
     // Buat daftar tanggal lengkap dalam bulan tersebut
     for ($i = 1; $i <= $jumlah_hari; $i++) {
         $tanggal = sprintf("%04d-%02d-%02d", $tahun, $bulan, $i);
-        $detail_transaksi[$tanggal] = ['nominal' => 0];  // Default nominal 0 jika tidak ada transaksi
+        // Default nominal 0 jika tidak ada transaksi untuk tanggal ini
+        $detail_transaksi[$tanggal] = ['nominal' => 0];  
     }
 
     // Masukkan data dari database ke dalam array
