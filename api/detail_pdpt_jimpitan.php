@@ -22,7 +22,11 @@ $data = null;
 $detail_transaksi = [];
 if ($kode_dicari) {
     // Ambil data utama
-    $stmt = $pdo->prepare("SELECT jimpitan_date, sum(nominal) as total_nominal FROM report WHERE MONTH(jimpitan_date) = :bulan AND YEAR(jimpitan_date) = :tahun");
+    $stmt = $pdo->prepare("SELECT jimpitan_date, SUM(nominal) as total_jimpitan 
+                           FROM report 
+                           WHERE MONTH(jimpitan_date) = :bulan 
+                           AND YEAR(jimpitan_date) = :tahun 
+                           GROUP BY jimpitan_date");
     $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
     $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
     $stmt->execute();
@@ -31,18 +35,18 @@ if ($kode_dicari) {
     // Buat daftar tanggal lengkap dalam bulan tersebut
     for ($i = 1; $i <= $jumlah_hari; $i++) {
         $tanggal = sprintf("%04d-%02d-%02d", $tahun, $bulan, $i);
-        $detail_transaksi[$tanggal] = ['nominal' => 0];
+        $detail_transaksi[$tanggal] = ['nominal' => 0];  // Default nominal 0 jika tidak ada transaksi
     }
 
     // Masukkan data dari database ke dalam array
     foreach ($transaksi as $row) {
         $detail_transaksi[$row['jimpitan_date']] = [
-            'nominal' => $row['nominal'],
+            'nominal' => $row['total_jimpitan'], // Menggunakan total_jimpitan
         ];
     }
 }
 
-$total_nominal = array_sum(array_column($detail_transaksi, 'nominal'));
+$total_nominal = array_sum(array_column($detail_transaksi, 'nominal')); // Menghitung total nominal
 setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
 ?>
 
