@@ -55,6 +55,8 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Jimpitan</title>
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
@@ -97,7 +99,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
         <div class="mt-4 font-bold text-gray-700 text-left">Total Jimpitan: <?= number_format($total_nominal, 0, ',', '.') ?></div>
     </div>
     <!-- Tombol Kembali -->
-    <a href="pdpt_jimpitan.php?bulan=<?= htmlspecialchars($bulan) ?>&tahun=<?= htmlspecialchars($tahun) ?>"
+    <a href="pdpt_jimpitan.php?tahun=<?= htmlspecialchars($tahun) ?>"
         class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
         <ion-icon name="arrow-back-outline"></ion-icon>
     </a>

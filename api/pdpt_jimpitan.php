@@ -9,11 +9,10 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php'; // Pastikan db.php sudah terhubung ke database dengan benar
 // Cek apakah bulan dan tahun dikirim melalui GET, jika kosong gunakan bulan & tahun sekarang
-$bulan = (!empty($_GET['bulan']) && is_numeric($_GET['bulan'])) ? (int)$_GET['bulan'] : date('m');
 $tahun = (!empty($_GET['tahun']) && is_numeric($_GET['tahun'])) ? (int)$_GET['tahun'] : date('Y');
 
 // Jika tahun dipilih
-$selected_year = isset($_POST['year']) ? $_POST['year'] : date('Y');
+$selected_year = $tahun;
 // Ambil daftar tahun dari tabel report
 $query = "SELECT DISTINCT YEAR(jimpitan_date) AS year FROM report ORDER BY year DESC";
 $stmt = $pdo->prepare($query);
