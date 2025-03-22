@@ -9,10 +9,19 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 
-// Ambil bulan, tahun, dan kode_id dari URL
+// Validasi dan ambil bulan, tahun, dan kode_id dari URL
 $bulan = isset($_GET['bulan']) ? intval($_GET['bulan']) : date('m');
 $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : date('Y');
 $kode_dicari = isset($_GET['kode']) ? $_GET['kode'] : '';
+
+// Validasi bulan dan tahun
+if ($bulan < 1 || $bulan > 12) {
+    $bulan = date('m');
+}
+
+if ($tahun < 2000 || $tahun > date('Y')) {
+    $tahun = date('Y');
+}
 
 // Hitung jumlah hari di bulan yang dipilih
 $jumlah_hari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
@@ -47,7 +56,7 @@ if ($kode_dicari) {
 }
 
 $total_nominal = array_sum(array_column($detail_transaksi, 'nominal')); // Menghitung total nominal
-setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
+setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
 ?>
 
 <!DOCTYPE html>
