@@ -73,7 +73,7 @@ $stmt->execute();
         <h2 class="text-2xl font-semibold mb-4">Laporan Jimpitan Tahun <?php echo $selected_year; ?></h2>
         
         <!-- Form untuk memilih tahun -->
-        <form method="POST" class="mb-6">
+        <form method="GET" class="mb-6">
             <label for="year" class="text-xl font-semibold mr-4">Pilih Tahun:</label>
             <select name="year" id="year" class="p-2 border rounded">
                 <?php
