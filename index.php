@@ -123,7 +123,7 @@ try {
                 <span>Menu Jimpitan</span>
                 
                 <!-- Kotak dengan teks "Pilih Warna" -->
-                <div class="ml-4 flex items-center px-2 py-2 rounded bg-gray-500 text-white">
+                <div class="ml-4 flex items-center px-2 py-2 text-gray-500">
                     <span class="mr-1 text-xs">Pilih Warna</span>
                     <input type="color" id="overlayColor"
                         class="w-8 h-8 border-none p-0 cursor-pointer rounded-full"
