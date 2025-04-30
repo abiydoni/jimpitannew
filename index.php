@@ -113,7 +113,7 @@ try {
 
     <!-- Loader GIF -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-    <img src="assets/image/loading.gif" alt="Loading..." class="w-16 h-16">
+    <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
     <div class="relative z-10"> 
