@@ -115,11 +115,6 @@ if (!isset($_SESSION['user'])) {
   </style>
 </head>
 <body>
-    <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
-
 <div id="landscapeBlocker">
   <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
   <p>Please rotate your device to portrait mode.</p>
@@ -158,21 +153,6 @@ if (!isset($_SESSION['user'])) {
 </div>
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
-
-    <script>
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function (e) {
-        if (
-            this.target !== '_blank' &&
-            this.href &&
-            !this.href.startsWith('javascript') &&
-            !this.href.startsWith('#')
-        ) {
-            document.getElementById('loader').classList.remove('hidden');
-        }
-        });
-    });
-    </script>
 
 <script src="js/app.js"></script>
 

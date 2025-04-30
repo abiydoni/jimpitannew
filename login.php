@@ -15,11 +15,6 @@ include "cek_login.php"
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-        <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
-
 <form action="login.php" method="POST">
 <div class="screen-1">
     <div class="email">
@@ -51,34 +46,5 @@ include "cek_login.php"
     <p style="color:grey; font-size: 8px; text-align: center;">@2024 copyright | by doniabiy</p>
 </div>
 </form>
-    <script>
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function (e) {
-        if (
-            this.target !== '_blank' &&
-            this.href &&
-            !this.href.startsWith('javascript') &&
-            !this.href.startsWith('#')
-        ) {
-            document.getElementById('loader').classList.remove('hidden');
-        }
-        });
-    });
-    </script>
-
-<!-- <script>
-    // Register the service worker
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then((registration) => {
-            console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch((error) => {
-            console.error('Service Worker registration failed:', error);
-            });
-        });
-    }
-</script> -->
 </body>
 </html>
