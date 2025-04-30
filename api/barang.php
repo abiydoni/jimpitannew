@@ -106,20 +106,30 @@ include 'db.php';
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
-    <script>
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function (e) {
-        if (
-            this.target !== '_blank' &&
-            this.href &&
-            !this.href.startsWith('javascript') &&
-            !this.href.startsWith('#')
-        ) {
-            document.getElementById('loader').classList.remove('hidden');
-        }
-        });
+<script>
+  // Menambahkan event listener untuk semua elemen tombol/link
+  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+    element.addEventListener('click', function (e) {
+      // Mencegah form disubmit langsung atau link berpindah halaman
+      e.preventDefault();
+
+      // Tampilkan loader
+      document.getElementById('loader').classList.remove('hidden');
+      
+      // Jika itu adalah form submit, submit form setelah beberapa detik
+      if (this.type === 'submit') {
+        setTimeout(function() {
+          this.closest('form').submit();
+        }.bind(this), 500); // Tunggu 500ms sebelum submit form
+      } else {
+        // Jika itu link, pindahkan halaman setelah beberapa detik
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 500); // Tunggu 500ms sebelum pindah halaman
+      }
     });
-    </script>
+  });
+</script>
 
     <script>
     document.querySelectorAll('a').forEach(link => {
