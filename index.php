@@ -111,9 +111,9 @@ try {
     style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
 
-    <!-- Loader GIF -->
+    <!-- Loader GIF loading -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-    <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
+        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
     <div class="relative z-10"> 

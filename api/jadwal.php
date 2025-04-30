@@ -55,6 +55,12 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
+
+            <!-- Loader GIF loading -->
+    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
+    </div>
+
     <div class="max-w-6xl mx-auto p-4">
         <h1 class="text-2xl font-bold text-gray-700 mb-4 text-center">
             <ion-icon name="calendar-outline" class="text-blue-500"></ion-icon>
@@ -106,5 +112,21 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
+    <script>
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function (e) {
+        if (
+            this.target !== '_blank' &&
+            this.href &&
+            !this.href.startsWith('javascript') &&
+            !this.href.startsWith('#')
+        ) {
+            document.getElementById('loader').classList.remove('hidden');
+        }
+        });
+    });
+    </script>
+
+
 </body>
 </html>
