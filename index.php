@@ -108,7 +108,7 @@ try {
 
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800"
-    <!-- style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;"> -->
+    style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     
     <div class="relative z-10"> 
