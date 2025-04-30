@@ -1,194 +1,218 @@
 <?php
-session_start();
+session_start(); 
 
-// Check if user is logged in
+// Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php'); // Redirect to login page
+    header('Location:login.php'); // Redirect ke halaman login
     exit;
 }
-// include 'api/get_info.php';
+
+include 'api/db.php';
+try {
+    // Ambil data menu dari database menggunakan PDO
+    $stmt = $pdo->prepare("SELECT nama, alamat_url, ikon FROM tb_menu WHERE status=1 ORDER BY nama ASC");
+    $stmt->execute();
+    $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil gambar background dari tabel tb_profil
+    $stmt_bg = $pdo->prepare("SELECT * FROM tb_profil WHERE kode = 1 LIMIT 1");
+    $stmt_bg->execute();
+    $profil = $stmt_bg->fetch(PDO::FETCH_ASSOC);
+    $background = $profil ? "../assets/image/" . htmlspecialchars($profil['gambar']) : '';
+    
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jimpitan</title>
-  
-  <script src="js/html5-qrcode.min.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="css/sweetalert2.min.css">
-  <script src="js/sweetalert2.all.min.js"></script>
-  <script src="js/jquery-3.6.0.min.js"></script>
-  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail</title>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="manifest" href="manifest.json">
 
-  <style>
-    body, html {
-        margin: 10px;
-        padding: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-    }
-    #landscapeBlocker {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.8);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-    #landscapeBlocker img {
-        max-width: 30%;
-        max-height: 30%;
-    }
-    .container {
-        text-align: center;
-        margin-top: 50px;
-    }
-    .rounded {
-        border-radius: 25px;
-    }
-    .roundedBtn {
-        border-radius: 25px;
-        background-color: #14505c;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .stopBtn {
-        border-radius: 25px;
-        background-color: #F95454;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .custom-timer-progress-bar {
-        height: 4px; /* Height of the progress bar */
-        background-color: #FF8A8A; /* Color of the progress bar */
-        width: 80%; /* Adjust width as needed */
-        margin: 0 auto; /* Center the progress bar horizontally */
+    <style>
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 0px;
+            background-color: #14505c;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .floating-button a {
+            right: 4px;
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: #14505c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .animate-marquee {
+        display: inline-block;
+        white-space: nowrap;
+        animation: marquee 15s linear infinite;
+        transform: translateX(100%); /* Mulai dari luar layar kanan */
     }
 
-    .floating-button {
-      position: fixed;
-      bottom: 20px; /* Jarak dari bawah */
-      right: 20px; /* Jarak dari kanan */
-      background-color: #14505c; /* Warna latar belakang dengan transparansi */
-      border-radius: 50%; /* Membuat tombol bulat */
-      width: 60px; /* Lebar tombol */
-      height: 60px; /* Tinggi tombol */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Bayangan */
-      z-index: 1000; /* Pastikan di atas elemen lain */
-  }
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%); /* Mulai dari luar layar kanan */
+        }
+        100% {
+            transform: translateX(-100%); /* Berakhir di luar layar kiri */
+        }
+    }
 
-  .floating-button a {
-      color: white; /* Warna teks */
-      font-size: 24px; /* Ukuran teks */
-      text-decoration: none; /* Menghilangkan garis bawah */
-  }
-  button {
-    margin: 10px;
-    padding: 10px 20px;
-    border-radius: 25px;
-    background-color: #14505c;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-  }
+    /* Responsif: Percepat animasi di layar kecil */
+    @media (max-width: 768px) {
+        .animate-marquee {
+            animation-duration: 10s; /* Animasi lebih cepat di perangkat kecil */
+        }
+    }
+</style>
 
-  </style>
 </head>
-<body>
+<body class="bg-gray-100 font-poppins text-gray-800"
+    style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    
+    <div class="relative z-10"> 
 
+        <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
+                <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
+                Menu Jimpitan
+            </h2>
+            <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50">
+                <div class="text-sm font-semibold text-white overflow-hidden w-full">
+                    <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
+                </div>
+            </div>
 
-<div id="landscapeBlocker">
-  <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
-  <p>Please rotate your device to portrait mode.</p>
-</div>
+            <!-- Tanggal dan Waktu -->
+            <div class="flex flex-col items-center p-4 rounded-lg mb-4">
+                <div class="text-3xl font-semibold text-white" id="time"></div> <!-- Waktu Lebih Kecil -->
+                <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
+            </div>
 
-<div class="container">
-  <h3>Jimpitan RT.07 Randuares</h3>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const today = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const tanggalHariIni = today.toLocaleDateString('id-ID', options);
-      document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
-    });
-  </script>
-  <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <!-- <h4 id="totalScan">
-    Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
-  </h4> -->
-  <a href="api/detail_scan.php"><h4 id="totalScan">Menunggu data...</h4></a>
+            <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
+                <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
+                    <?php foreach ($menus as $menu) : ?>
+                        <a href="api/<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
+                            class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
+                            title="<?= htmlspecialchars($menu['nama']) ?>">
+                            <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center opacity-75">
+                                <ion-icon name="<?= $menu['ikon'] ?: 'grid-outline' ?>" class="text-4xl"></ion-icon>
+                            </div>
+                            <span class="text-white text-sm text-center"><?= htmlspecialchars($menu['nama']) ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
 
-    <div class="floating-button" style="margin-right : 70px;">
-      <a href="api/menu.php"><i class="bx bx-arrow-back bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
+            <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                <h1 class="text-center font-bold mb-2 text-white">Scan Disini..!</h1>
+                <a href="scan.php" 
+                class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
+                    <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
+                </a>
+            </div>
+
+            <div class="floating-button" style="margin-right : 70px;">
+                <a href="dashboard/logout.php">
+                    <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="floating-button">
-      <label for="qr-input-file" id="fileInputLabel" style="color: white;">
-        <i class="bx bxs-camera" style="font-size:24px; color: white;"></i>
-      </label>
-      <input type="file" id="qr-input-file" accept="image/*" capture hidden>
-  </div>
 
-  <div id="qr-reader"></div> <!-- QR camera dimulai -->
+    <style>
+        @keyframes wiggle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
 
-  <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: Setyo Adi Hermawan</p>
-  <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
-</div>
+    <script>
+        // Fungsi untuk mendapatkan tanggal dan waktu saat ini dalam format Indonesia
+        function updateTime() {
+            const now = new Date();
 
-<audio id="audio" src="assets/audio/interface.wav"></audio>
+            // Format Tanggal Lengkap dalam Bahasa Indonesia
+            const tanggalFormatter = new Intl.DateTimeFormat('id-ID', {
+                weekday: 'long', // Hari (misal: Senin)
+                year: 'numeric',
+                month: 'long', // Bulan (misal: Januari)
+                day: 'numeric'
+            });
+            const tanggal = tanggalFormatter.format(now);
 
-<script src="js/app.js"></script>
+            // Format Waktu (HH:MM:SS)
+            const jam = now.getHours().toString().padStart(2, '0');
+            const menit = now.getMinutes().toString().padStart(2, '0');
+            const detik = now.getSeconds().toString().padStart(2, '0');
+            const waktu = `${jam}:${menit}:${detik}`;
 
-<script>
-    // Fungsi untuk mengambil data secara realtime
-    function updateData() {
-        $.ajax({
-            url: 'api/get_info.php',  // URL script PHP yang akan diambil
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                // Debugging: Lihat data yang diterima dari server
-                console.log(data);
+            // Menampilkan Tanggal dan Waktu
+            document.getElementById('date').textContent = tanggal;
+            document.getElementById('time').textContent = waktu;
+        }
 
-                if (data.error) {
-                    console.log('Error: ' + data.error);
-                } else {
-                    // Update konten dengan data baru
-                    $('#totalScan').html('Jumlah Scan: Rp. ' + parseInt(data.totalScan).toLocaleString('id-ID') + ' dan ' + data.totalData + ' KK');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log('Gagal mengambil data: ' + status + ' - ' + error);
-            }
+        // Update waktu setiap detik
+        setInterval(updateTime, 1000);
+
+        // Inisialisasi pertama kali saat halaman dimuat
+        updateTime();
+    </script>
+  <script>
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../service-worker.js')
+            .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+            });
         });
     }
+  </script>
 
-    // Update data setiap 1 detik (1000ms)
-    setInterval(updateData, 3000);
-
-    // Panggil updateData() sekali saat halaman dimuat
-    $(document).ready(function() {
-        updateData();
-    });
-</script>
 </body>
 </html>
