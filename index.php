@@ -125,7 +125,7 @@ try {
                 </div>
                 <input type="color" id="overlayColor" 
                     style="z-index:9999;" 
-                    class="w-8 h-8 rounded-full border-none p-0 cursor-pointer" 
+                    class="w-8 h-8 border-none p-0 cursor-pointer" 
                     title="Pilih warna latar belakang">
             </h2>
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50">
