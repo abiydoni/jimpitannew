@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($redirect_option === 'dashboard') {
                         header('Location: /dashboard'); // Redirect to Dashboard
                     } else {
-                        header('Location: api/menu.php'); // Redirect to Scan App
+                        header('Location: index.php'); // Redirect to Scan App
                     }
                     exit;
                 }
