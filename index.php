@@ -113,7 +113,7 @@ try {
 
     <!-- Loader GIF -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-    <img src="assets/loading.gif" alt="Loading..." class="w-16 h-16">
+    <img src="assets/image/loading.gif" alt="Loading..." class="w-16 h-16">
     </div>
 
     <div class="relative z-10"> 
@@ -176,14 +176,12 @@ try {
     <script>
     document.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function (e) {
-        // Hindari link dengan target _blank atau link anchor
         if (
             this.target !== '_blank' &&
             this.href &&
             !this.href.startsWith('javascript') &&
             !this.href.startsWith('#')
         ) {
-            // Tampilkan loader
             document.getElementById('loader').classList.remove('hidden');
         }
         });
