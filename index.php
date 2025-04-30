@@ -123,8 +123,8 @@ try {
                 <span>Menu Jimpitan</span>
                 
                 <!-- Kotak dengan teks "Pilih Warna" -->
-                <div class="ml-4 flex items-center px-2 py-2 text-gray-500">
-                    <span class="mr-1 text-xs">Pilih Warna</span>
+                <div class="absolute top-4 right-4 flex items-center px-2 py-2 text-gray-500">
+                    <span class="mr-2 text-xs">Pilih Warna</span> <!-- Menambahkan margin kanan agar ada jarak lebih -->
                     <input type="color" id="overlayColor"
                         class="w-8 h-8 border-none p-0 cursor-pointer rounded-full"
                         title="Pilih warna latar belakang"
