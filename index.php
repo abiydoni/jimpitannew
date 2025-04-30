@@ -132,7 +132,7 @@ try {
                 <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
             </div>
 
-            <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto">
+            <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto shadow-md">
                 <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
                     <?php foreach ($menus as $menu) : ?>
                         <a href="api/<?= htmlspecialchars($menu['alamat_url']) ?>.php" 
