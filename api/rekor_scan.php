@@ -166,7 +166,7 @@ include 'db.php';
 
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-                onclick="window.location.href='menu.php'" title="Kembali ke halaman detail sebelumnya">
+                onclick="window.location.href='../index.php'" title="Kembali ke halaman detail sebelumnya">
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
