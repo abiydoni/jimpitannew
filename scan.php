@@ -115,11 +115,6 @@ if (!isset($_SESSION['user'])) {
   </style>
 </head>
 <body>
-    <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
-
 <div id="landscapeBlocker">
   <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
   <p>Please rotate your device to portrait mode.</p>
@@ -160,31 +155,6 @@ if (!isset($_SESSION['user'])) {
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
 <script src="js/app.js"></script>
-
-<script>
-  // Menambahkan event listener untuk semua elemen tombol/link
-  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-    element.addEventListener('click', function (e) {
-      // Mencegah form disubmit langsung atau link berpindah halaman
-      e.preventDefault();
-
-      // Tampilkan loader
-      document.getElementById('loader').classList.remove('hidden');
-      
-      // Jika itu adalah form submit, submit form setelah beberapa detik
-      if (this.type === 'submit') {
-        setTimeout(function() {
-          this.closest('form').submit();
-        }.bind(this), 500); // Tunggu 500ms sebelum submit form
-      } else {
-        // Jika itu link, pindahkan halaman setelah beberapa detik
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 500); // Tunggu 500ms sebelum pindah halaman
-      }
-    });
-  });
-</script>
 
 <script>
     // Fungsi untuk mengambil data secara realtime

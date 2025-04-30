@@ -15,11 +15,6 @@ include "cek_login.php"
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-        <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
-
 <form action="login.php" method="POST">
 <div class="screen-1">
     <div class="email">
@@ -51,30 +46,5 @@ include "cek_login.php"
     <p style="color:grey; font-size: 8px; text-align: center;">@2024 copyright | by doniabiy</p>
 </div>
 </form>
-<script>
-  // Menambahkan event listener untuk semua elemen tombol/link
-  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-    element.addEventListener('click', function (e) {
-      // Mencegah form disubmit langsung atau link berpindah halaman
-      e.preventDefault();
-
-      // Tampilkan loader
-      document.getElementById('loader').classList.remove('hidden');
-      
-      // Jika itu adalah form submit, submit form setelah beberapa detik
-      if (this.type === 'submit') {
-        setTimeout(function() {
-          this.closest('form').submit();
-        }.bind(this), 500); // Tunggu 500ms sebelum submit form
-      } else {
-        // Jika itu link, pindahkan halaman setelah beberapa detik
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 500); // Tunggu 500ms sebelum pindah halaman
-      }
-    });
-  });
-</script>
-
 </body>
 </html>
