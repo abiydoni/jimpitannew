@@ -113,7 +113,7 @@ try {
         <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
     <label for="overlayColor" class="text-white">Pilih Warna Latar:</label>
-    <input type="color" id="overlayColor" name="overlayColor" value="#000000" class="w-10 h-10 rounded-full border-none p-0">
+    <input type="color" id="overlayColor" style="z-index:9999; position:relative;" ...>
 
     <!-- <div id="overlayDiv" class="absolute inset-0 shadow bg-black bg-opacity-90"></div> -->
     <div id="overlayDiv" class="absolute inset-0"></div>
@@ -244,24 +244,27 @@ try {
         });
     }
   </script>
-<script>
-const colorPicker = document.getElementById('overlayColor');
-const overlay = document.getElementById('overlayDiv');
 
-// Cek jika warna sudah tersimpan sebelumnya
-const savedColor = localStorage.getItem('overlayColor');
-if (savedColor) {
+    <script>
+    const colorPicker = document.getElementById('overlayColor');
+    const overlay = document.getElementById('overlayDiv');
+
+    // Ambil dari localStorage jika ada, jika tidak gunakan hitam transparan default
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+
+    // Set warna latar ke elemen overlay
     overlay.style.backgroundColor = savedColor;
-    colorPicker.value = savedColor.slice(0, 7); // ambil #rrggbb saja
-}
 
-// Saat user pilih warna baru
-colorPicker.addEventListener('input', function () {
-    const colorWithOpacity = this.value + 'E6'; // 90% opacity
-    overlay.style.backgroundColor = colorWithOpacity;
-    localStorage.setItem('overlayColor', colorWithOpacity);
-});
-</script>
+    // Set nilai color picker tanpa transparansi
+    colorPicker.value = savedColor.substring(0, 7);
+
+    // Saat warna diubah oleh pengguna
+    colorPicker.addEventListener('input', function () {
+        const chosenColor = this.value + 'E6'; // Tambah transparansi (E6 = ~90%)
+        overlay.style.backgroundColor = chosenColor;
+        localStorage.setItem('overlayColor', chosenColor); // Simpan ke browser
+    });
+    </script>
 
 </body>
 </html>
