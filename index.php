@@ -112,9 +112,6 @@ try {
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
         <img src="assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
-    <label for="overlayColor" class="text-white">Pilih Warna Latar:</label>
-    <input type="color" id="overlayColor" style="z-index:9999; position:relative;" ...>
-
     <!-- <div id="overlayDiv" class="absolute inset-0 shadow bg-black bg-opacity-90"></div> -->
     <div id="overlayDiv" class="absolute inset-0"></div>
 
@@ -125,6 +122,7 @@ try {
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>           
                 Menu Jimpitan
             </h2>
+            <input type="color" id="overlayColor" style="z-index:9999; position:relative;" ...>
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan']) ?></span>
@@ -133,8 +131,8 @@ try {
 
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
-                <div class="text-3xl font-semibold text-white" id="time"></div> <!-- Waktu Lebih Kecil -->
-                <div class="text-white" id="date"></div> <!-- Tanggal Lebih Besar -->
+                <div class="text-3xl font-semibold text-gray-500" id="time"></div> <!-- Waktu Lebih Kecil -->
+                <div class="text-gray-500" id="date"></div> <!-- Tanggal Lebih Besar -->
             </div>
 
             <div class="p-4 rounded-lg max-h-[70vh] overflow-y-auto bg-black bg-opacity-50 shadow-md">
