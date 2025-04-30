@@ -110,9 +110,10 @@ try {
 <body class="bg-gray-100 font-poppins text-gray-800"
     style="background: url('<?= $background ?>') no-repeat center center fixed; background-size: cover;">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <!-- Loader fullscreen -->
+
+    <!-- Loader GIF -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid border-4 border-opacity-50"></div>
+    <img src="assets/loading.gif" alt="Loading..." class="w-16 h-16">
     </div>
 
     <div class="relative z-10"> 
