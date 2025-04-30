@@ -118,15 +118,18 @@ try {
     <div class="relative z-10"> 
 
         <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
-            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center justify-between">
-                <div class="flex items-center">
-                    <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
-                    Menu Jimpitan
+            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center">
+                <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
+                <span>Menu Jimpitan</span>
+                
+                <!-- Kotak dengan teks "Pilih Warna" -->
+                <div class="ml-4 flex items-center border px-3 py-2 rounded-lg bg-gray-800 text-white">
+                    <span class="mr-2">Pilih Warna</span>
+                    <input type="color" id="overlayColor"
+                        class="w-8 h-8 border-none p-0 cursor-pointer rounded-full"
+                        title="Pilih warna latar belakang"
+                        style="z-index:9999;">
                 </div>
-                <input type="color" id="overlayColor" 
-                    style="z-index:9999;" 
-                    class="w-8 h-8 border-none p-0 cursor-pointer" 
-                    title="Pilih warna latar belakang">
             </h2>
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
