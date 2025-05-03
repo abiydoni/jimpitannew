@@ -43,7 +43,7 @@ include 'db.php';
             </div>
             <div>
                 <label for="message" class="block text-sm font-medium">Pesan</label>
-                <textarea id="message" name="message" required aria-valuetext="Test Pesan  Otomatis"
+                <textarea id="message" name="message" required
                         class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="3" placeholder="Tulis pesan Anda di sini..."></textarea>
             </div>
