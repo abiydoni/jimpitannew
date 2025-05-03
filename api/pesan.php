@@ -104,8 +104,8 @@ include 'db.php';
     </script>
 
     <script>
-        async function send MessageWhatsApp(event) {
-        event.preventDefault(); // Mencegah reload halaman
+        async function sendMessageWhatsApp(event) {
+        event.preventDefault();
 
         const phone = document.getElementById("phone").value.trim();
         const message = document.getElementById("message").value.trim();
@@ -115,14 +115,13 @@ include 'db.php';
             return;
         }
 
-        const url = "https://wa.appsbee.my.id/send-message";
         const payload = {
             phoneNumber: phone,
             message: message,
         };
 
         try {
-            const response = await fetch(url, {
+            const response = await fetch("send-wa.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -131,11 +130,9 @@ include 'db.php';
             });
 
             const result = await response.json();
-            console.log(result);
-            alert("Pesan berhasil dikirim: " + JSON.stringify(result));
+            alert("Respon: " + JSON.stringify(result));
         } catch (error) {
-            console.error("Gagal mengirim pesan:", error);
-            alert("Terjadi kesalahan saat mengirim pesan.");
+            alert("Gagal kirim pesan: " + error);
         }
         }
     </script>
