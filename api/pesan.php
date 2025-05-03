@@ -38,7 +38,7 @@ include 'db.php';
         <form onsubmit="sendMessageWhatsApp(event)" class="space-y-4">
             <div>
                 <label for="phone" class="block text-sm font-medium">Nomor WhatsApp</label>
-                <input type="text" id="phone" name="phone" required value="6289510101008"
+                <input type="text" id="phone" name="phone" required
                     class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="628xxx">
             </div>
             <div>
