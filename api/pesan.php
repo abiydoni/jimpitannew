@@ -34,9 +34,24 @@ include 'db.php';
             Kirim Pesan
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
-        <button onclick="sendMessageWhatsApp()">Kirim Pesan</button>
-
-
+        <!-- Tambahkan ini di dalam <div class="flex flex-col ...">, sebelum tombol Kirim -->
+        <form onsubmit="sendMessageWhatsApp(event)" class="space-y-4">
+            <div>
+                <label for="phone" class="block text-sm font-medium">Nomor WhatsApp</label>
+                <input type="text" id="phone" name="phone" required
+                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="628xxx">
+            </div>
+            <div>
+                <label for="message" class="block text-sm font-medium">Pesan</label>
+                <textarea id="message" name="message" required
+                        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="3" placeholder="Tulis pesan Anda di sini..."></textarea>
+            </div>
+            <button type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Kirim Pesan
+            </button>
+        </form>
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
                 onclick="window.location.href='../index.php'" title="Kembali ke halaman menu">
@@ -88,32 +103,42 @@ include 'db.php';
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
     </script>
 
-<script>
-    async function sendMessageWhatsApp() {
-      const url = "https://wa.appsbee.my.id/send-message";
-      const payload = {
-        phoneNumber: "6289510101008",
-        message: "Halo, ini pesan dari WhatsApp Gateway!",
-      };
+    <script>
+        async function send MessageWhatsApp(event) {
+        event.preventDefault(); // Mencegah reload halaman
 
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
+        const phone = document.getElementById("phone").value.trim();
+        const message = document.getElementById("message").value.trim();
 
-        const result = await response.json();
-        console.log(result);
-        alert("Pesan berhasil dikirim: " + JSON.stringify(result));
-      } catch (error) {
-        console.error("Gagal mengirim pesan:", error);
-        alert("Terjadi kesalahan saat mengirim pesan.");
-      }
-    }
-  </script>
+        if (!phone || !message) {
+            alert("Nomor dan pesan wajib diisi!");
+            return;
+        }
+
+        const url = "https://wa.appsbee.my.id/send-message";
+        const payload = {
+            phoneNumber: phone,
+            message: message,
+        };
+
+        try {
+            const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            console.log(result);
+            alert("Pesan berhasil dikirim: " + JSON.stringify(result));
+        } catch (error) {
+            console.error("Gagal mengirim pesan:", error);
+            alert("Terjadi kesalahan saat mengirim pesan.");
+        }
+        }
+    </script>
 
 </body>
 </html>
