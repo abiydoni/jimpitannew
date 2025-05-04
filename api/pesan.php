@@ -48,14 +48,19 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             </div>
         <?php endif; ?>
 
-        <form action="send-wa.php" method="post">
-            <label>Nomor WhatsApp:</label><br>
-            <input type="tel" name="phoneNumber" pattern="^\d{10,15}$" required placeholder="Contoh: 6281234567890"><br>
+        <form action="send-wa.php" method="post" id="waForm">
+            <div id="nomor-container" class="mb-4">
+                <label>Nomor WhatsApp:</label>
+                <div class="flex mb-2">
+                    <input type="tel" name="phoneNumbers[]" pattern="^\d{10,15}$" required class="border p-2 w-full" placeholder="Contoh: 6281234567890">
+                    <button type="button" onclick="addNomor()" class="ml-2 bg-blue-500 text-white px-3 rounded">+</button>
+                </div>
+            </div>
 
             <label>Pesan:</label><br>
-            <textarea name="message" required placeholder="Isi pesan WhatsApp..."></textarea><br>
+            <textarea name="message" required placeholder="Isi pesan WhatsApp..." class="w-full border p-2 mb-3"></textarea><br>
 
-            <button type="submit">Kirim Pesan</button>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Kirim Pesan</button>
         </form>
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
@@ -107,5 +112,33 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
     </script>
+
+<script>
+function addNomor() {
+    const container = document.getElementById('nomor-container');
+
+    const div = document.createElement('div');
+    div.classList.add('flex', 'mb-2');
+
+    const input = document.createElement('input');
+    input.type = 'tel';
+    input.name = 'phoneNumbers[]';
+    input.required = true;
+    input.pattern = '^\\d{10,15}$';
+    input.placeholder = 'Contoh: 6289876543210';
+    input.className = 'border p-2 w-full';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = '-';
+    btn.className = 'ml-2 bg-red-500 text-white px-3 rounded';
+    btn.onclick = () => div.remove();
+
+    div.appendChild(input);
+    div.appendChild(btn);
+    container.appendChild(div);
+}
+</script>
+
 </body>
 </html>
