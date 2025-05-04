@@ -35,22 +35,14 @@ include 'db.php';
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         <!-- Tambahkan ini di dalam <div class="flex flex-col ...">, sebelum tombol Kirim -->
-        <form onsubmit="sendMessageWhatsApp(event)" class="space-y-4">
-            <div>
-                <label for="phone" class="block text-sm font-medium">Nomor WhatsApp</label>
-                <input type="text" id="phone" name="phone" required
-                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="628xxx">
-            </div>
-            <div>
-                <label for="message" class="block text-sm font-medium">Pesan</label>
-                <textarea id="message" name="message" required
-                        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        rows="3" placeholder="Tulis pesan Anda di sini..."></textarea>
-            </div>
-            <button type="submit"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                Kirim Pesan
-            </button>
+        <form action="send-wa.php" method="post">
+            <label>Nomor WhatsApp:</label><br>
+            <input type="tel" name="phoneNumber" pattern="^\d{10,15}$" required placeholder="Contoh: 6281234567890"><br>
+
+            <label>Pesan:</label><br>
+            <textarea name="message" required placeholder="Isi pesan WhatsApp..."></textarea><br>
+
+            <button type="submit">Kirim Pesan</button>
         </form>
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
