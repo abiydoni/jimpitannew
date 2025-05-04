@@ -139,9 +139,11 @@ function addNomor() {
     container.appendChild(div);
 }
 
-document.getElementById('tambah-nomor').addEventListener('click', function(e) {
-    e.preventDefault();
-    addNomor();
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('tambah-nomor').addEventListener('click', function(e) {
+        e.preventDefault(); // Cegah submit
+        addNomor();
+    });
 });
 </script>
 
