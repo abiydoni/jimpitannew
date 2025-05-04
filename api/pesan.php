@@ -8,6 +8,9 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'db.php';
+// Cek jika ada parameter status di URL
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +37,17 @@ include 'db.php';
             Kirim Pesan
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
-        <!-- Tambahkan ini di dalam <div class="flex flex-col ...">, sebelum tombol Kirim -->
+        <!-- Notifikasi Sukses -->
+        <?php if ($status === 'success') : ?>
+            <div class="bg-green-500 text-white p-4 rounded mb-4">
+                Pesan berhasil dikirim!
+            </div>
+        <?php elseif ($status === 'error') : ?>
+            <div class="bg-red-500 text-white p-4 rounded mb-4">
+                Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.
+            </div>
+        <?php endif; ?>
+
         <form action="send-wa.php" method="post">
             <label>Nomor WhatsApp:</label><br>
             <input type="tel" name="phoneNumber" pattern="^\d{10,15}$" required placeholder="Contoh: 6281234567890"><br>
@@ -94,40 +107,5 @@ include 'db.php';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
     </script>
-
-    <script>
-        async function sendMessageWhatsApp(event) {
-        event.preventDefault();
-
-        const phone = document.getElementById("phone").value.trim();
-        const message = document.getElementById("message").value.trim();
-
-        if (!phone || !message) {
-            alert("Nomor dan pesan wajib diisi!");
-            return;
-        }
-
-        const payload = {
-            phoneNumber: phone,
-            message: message,
-        };
-
-        try {
-            const response = await fetch("send-wa.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-            alert("Respon: " + JSON.stringify(result));
-        } catch (error) {
-            alert("Gagal kirim pesan: " + error);
-        }
-        }
-    </script>
-
 </body>
 </html>

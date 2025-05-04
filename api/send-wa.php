@@ -39,6 +39,11 @@ curl_close($ch);
 $log = "[" . date("Y-m-d H:i:s") . "] Nomor: $nomor | Pesan: $pesan | Status: $httpCode\n";
 file_put_contents("log-kirim-wa.txt", $log, FILE_APPEND);
 
-// Tampilkan hasil ke user
-echo "<h3>Respon dari server:</h3>";
-echo "<pre>" . htmlspecialchars($response) . "</pre>";
+// Redirect dengan status sukses atau error
+if ($httpCode == 200) {
+    header('Location: pesan.php?status=success'); // Jika berhasil, arahkan ke halaman sukses
+} else {
+    header('Location: kpesan.php?status=error'); // Jika gagal, arahkan ke halaman error
+}
+exit;
+?>
