@@ -53,7 +53,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 <label>Nomor WhatsApp:</label>
                 <div class="flex mb-2">
                     <input type="tel" name="phoneNumbers[]" pattern="^\d{10,15}$" required class="border p-2 w-full" placeholder="Contoh: 6281234567890">
-                    <button type="button" onclick="addNomor()" class="ml-2 bg-blue-500 text-white px-3 rounded">+</button>
+                    <button type="button" onclick="addNomor()" id="tambah-nomor" class="ml-2 bg-blue-500 text-white px-3 rounded">+</button>
                 </div>
             </div>
 
@@ -138,6 +138,11 @@ function addNomor() {
     div.appendChild(btn);
     container.appendChild(div);
 }
+
+document.getElementById('tambah-nomor').addEventListener('click', function(e) {
+    e.preventDefault();
+    addNomor();
+});
 </script>
 
 </body>
