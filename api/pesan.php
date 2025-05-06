@@ -61,7 +61,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             <label>Nomor WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="nomorwa[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
+                    <input type="text" name="phoneNumber[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
                     <button type="button" onclick="tambahNomor()" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
@@ -69,7 +69,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             <!-- Input Pesan (tetap satu) -->
             <div class="input-group mt-4">
                 <label>Pesan:</label><br>
-                <textarea name="pesan" rows="4" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-1 border rounded"></textarea>
+                <textarea name="message" rows="4" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-1 border rounded"></textarea>
             </div>
 
             <br>
@@ -137,7 +137,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.name = 'nomorwa[]';
+        input.name = 'phoneNumber[]';
         input.placeholder = 'Contoh: 6281234567890';
         input.className = 'flex-1 px-2 py-1 border rounded';
 
