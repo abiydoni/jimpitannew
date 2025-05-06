@@ -47,7 +47,7 @@ $pesan .= "Pesan Otomatis System";
 
 // --- Kirim pesan ke grup WA ---
 $groupId = "120363398680818900@g.us"; // ganti sesuai grup WA kamu
-$response = file_get_contents("http://localhost/send-wa-group.php?groupId=$groupId&message=" . urlencode($pesan));
+$response = file_get_contents("https://rt07.appsbee.my.id/api/send-wa-group.php?groupId=$groupId&message=" . urlencode($pesan));
 
 // --- Simpan log pengiriman ---
 file_put_contents("log-pengiriman.txt", "[".date('Y-m-d H:i:s')."] Pesan terkirim otomatis\n", FILE_APPEND);
