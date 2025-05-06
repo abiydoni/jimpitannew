@@ -63,11 +63,11 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                     <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
-
+            <?php include 'ambil_data_jaga.php'; ?>
             <!-- Input Pesan (tetap satu) -->
             <div class="input-group mt-4">
                 <label>Pesan:</label><br>
-                <textarea name="message" rows="4" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-1 border rounded"></textarea>
+                <textarea name="message" rows="4" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-1 border rounded"><?php echo htmlspecialchars($pesan); ?></textarea>
             </div>
 
             <br>
