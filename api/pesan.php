@@ -57,23 +57,23 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         <?php endif; ?>
 
         <form method="post" action="send-wa.php">
-            <!-- Input Pesan (tetap satu) -->
-            <div class="input-group">
-                <label>Pesan:</label><br>
-                <textarea name="pesan" rows="4" cols="50" placeholder="Tulis pesan..."></textarea>
-            </div>
-
             <!-- Input Nomor WA (bisa ditambah/hapus) -->
             <label>Nomor WA:</label>
             <div id="nomor-container">
-                <div class="input-group">
-                    <input type="text" name="nomorwa[]" placeholder="Contoh: 6281234567890">
-                    <button type="button" onclick="tambahNomor()">+</button>
+                <div class="input-group flex items-center">
+                    <input type="text" name="nomorwa[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
+                    <button type="button" onclick="tambahNomor()" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
 
+            <!-- Input Pesan (tetap satu) -->
+            <div class="input-group mt-4">
+                <label>Pesan:</label><br>
+                <textarea name="pesan" rows="4" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-1 border rounded"></textarea>
+            </div>
+
             <br>
-            <button type="submit">Kirim</button>
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Kirim</button>
         </form>
 
         <!-- Tombol Bulat -->
@@ -133,16 +133,18 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         const container = document.getElementById('nomor-container');
 
         const div = document.createElement('div');
-        div.className = 'input-group';
+        div.className = 'input-group flex items-center';
 
         const input = document.createElement('input');
         input.type = 'text';
         input.name = 'nomorwa[]';
         input.placeholder = 'Contoh: 6281234567890';
+        input.className = 'flex-1 px-2 py-1 border rounded';
 
         const hapusBtn = document.createElement('button');
         hapusBtn.type = 'button';
         hapusBtn.textContent = '–';
+        hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
         hapusBtn.onclick = function () {
             container.removeChild(div);
         };
