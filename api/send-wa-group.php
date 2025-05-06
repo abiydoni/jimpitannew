@@ -29,10 +29,9 @@ $successCount = 0;
 $errorCount = 0;
 
 foreach ($groupList as $group) {
-    $group = filter_var($group, FILTER_SANITIZE_NUMBER_INT);
-
-    if (!$group) continue;
-
+    $group = trim($group);
+    if (empty($group) || !str_ends_with($group, '@g.us')) continue;
+    
     $data = [
         'groupId' => $group,
         'message' => $pesangroup
