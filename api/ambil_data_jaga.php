@@ -1,7 +1,7 @@
 <?php
-require 'db.php'; // memanggil koneksi PDO
+require 'db.php'; // koneksi PDO
 
-// Hari dalam bahasa Indonesia
+// Terjemahan hari & bulan
 $hariIndo = [
     'Sunday' => 'Minggu',
     'Monday' => 'Senin',
@@ -12,7 +12,6 @@ $hariIndo = [
     'Saturday' => 'Sabtu',
 ];
 
-// Bulan dalam bahasa Indonesia
 $bulanIndo = [
     'January' => 'Januari',
     'February' => 'Februari',
@@ -28,18 +27,20 @@ $bulanIndo = [
     'December' => 'Desember',
 ];
 
-$hariEng = date('l');
-$hariIni = $hariIndo[$hariEng];
+// Ambil hari ini dalam bahasa Inggris (untuk query) dan Indonesia (untuk tampilan)
+$hariEng = date('l'); // contoh: Monday
+$hariInd = $hariIndo[$hariEng]; // Senin
 $tanggal = date('j');
-$bulan = $bulanIndo[date('F')];
+$bulanEng = date('F');
+$bulanInd = $bulanIndo[$bulanEng];
 $tahun = date('Y');
 
-// Query dengan PDO
+// Query berdasarkan shift = hari ini dalam bhs Inggris
 $stmt = $pdo->prepare("SELECT name FROM users WHERE shift = :shift");
-$stmt->execute(['shift' => $hariIni]);
+$stmt->execute(['shift' => $hariEng]);
 $users = $stmt->fetchAll();
 
-$pesan = "Jadwal Jaga Hari ini, $hariIni, $tanggal $bulan $tahun\n\n";
+$pesan = "Jadwal Jaga Hari ini, $hariInd, $tanggal $bulanInd $tahun\n\n";
 
 if ($users) {
     $no = 1;
