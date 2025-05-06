@@ -56,7 +56,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         <?php endif; ?>
         <form method="post" action="send-wa-group.php">
             <!-- Input Nomor WA (bisa ditambah/hapus) -->
-            <label>Nomor WA:</label>
+            <label>ID Group WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
                     <input type="text" name="groupId" value="120363326273379143@g.us" class="flex-1 px-2 py-1 border rounded" readonly>
