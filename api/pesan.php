@@ -61,7 +61,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             <label>Nomor WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="phoneNumber[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
+                    <input type="text" name="phoneNumbers[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
                     <button type="button" onclick="tambahNomor()" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
@@ -137,7 +137,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.name = 'phoneNumber[]';
+        input.name = 'phoneNumbers[]';
         input.placeholder = 'Contoh: 6281234567890';
         input.className = 'flex-1 px-2 py-1 border rounded';
 
