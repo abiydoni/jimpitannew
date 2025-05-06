@@ -10,7 +10,6 @@ if (!isset($_SESSION['user'])) {
 include 'db.php';
 // Cek jika ada parameter status di URL
 $status = isset($_GET['status']) ? $_GET['status'] : '';
-
 ?>
 
 <!DOCTYPE html>
@@ -82,33 +81,33 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
-<script>
-  // Menambahkan event listener untuk semua elemen tombol/link
-  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-    element.addEventListener('click', function (e) {
-      // Mencegah form disubmit langsung atau link berpindah halaman
-      e.preventDefault();
-
-      // Tampilkan loader
-      document.getElementById('loader').classList.remove('hidden');
-      
-      // Jika itu adalah form submit, submit form setelah beberapa detik
-      if (this.type === 'submit') {
-        setTimeout(function() {
-          this.closest('form').submit();
-        }.bind(this), 500); // Tunggu 500ms sebelum submit form
-      } else {
-        // Jika itu link, pindahkan halaman setelah beberapa detik
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 500); // Tunggu 500ms sebelum pindah halaman
-      }
-    });
-  });
-</script>
-
 
     <script>
+        // Menambahkan event listener untuk semua elemen tombol/link
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+                element.addEventListener('click', function (e) {
+                    // Mencegah form disubmit langsung atau link berpindah halaman
+                    e.preventDefault();
+
+                    // Tampilkan loader
+                    document.getElementById('loader').classList.remove('hidden');
+                    
+                    // Jika itu adalah form submit, submit form setelah beberapa detik
+                    if (this.type === 'submit') {
+                        setTimeout(function() {
+                            this.closest('form').submit();
+                        }.bind(this), 500); // Tunggu 500ms sebelum submit form
+                    } else {
+                        // Jika itu link, pindahkan halaman setelah beberapa detik
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 500); // Tunggu 500ms sebelum pindah halaman
+                    }
+                });
+            });
+        });
+
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -125,35 +124,33 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+
+        // Fungsi untuk menambah input nomor WA
+        function tambahNomor() {
+            const container = document.getElementById('nomor-container');
+
+            const div = document.createElement('div');
+            div.className = 'input-group flex items-center';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'phoneNumbers[]';
+            input.placeholder = 'Contoh: 6281234567890';
+            input.className = 'flex-1 px-2 py-1 border rounded';
+
+            const hapusBtn = document.createElement('button');
+            hapusBtn.type = 'button';
+            hapusBtn.textContent = '–';
+            hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
+            hapusBtn.onclick = function () {
+                container.removeChild(div);
+            };
+
+            div.appendChild(input);
+            div.appendChild(hapusBtn);
+            container.appendChild(div);
+        }
     </script>
-
-<script>
-<script>
-    function tambahNomor() {
-        const container = document.getElementById('nomor-container');
-
-        const div = document.createElement('div');
-        div.className = 'input-group flex items-center';
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'phoneNumbers[]';
-        input.placeholder = 'Contoh: 6281234567890';
-        input.className = 'flex-1 px-2 py-1 border rounded';
-
-        const hapusBtn = document.createElement('button');
-        hapusBtn.type = 'button';
-        hapusBtn.textContent = '–';
-        hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
-        hapusBtn.onclick = function () {
-            container.removeChild(div);
-        };
-
-        div.appendChild(input);
-        div.appendChild(hapusBtn);
-        container.appendChild(div);
-    }
-</script>
 
 </body>
 </html>
