@@ -23,7 +23,15 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-
+    <style>
+        .input-group {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <!-- Loader GIF loading -->
@@ -48,20 +56,15 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             </div>
         <?php endif; ?>
 
-        <form action="send-wa.php" method="post" class="space-y-4">
-            <label>Nomor WhatsApp:</label>
-            <div id="nomor-container">
-                <div class="flex mb-2">
-                    <input type="tel" name="phoneNumbers[]" required pattern="^\d{10,15}$" placeholder="Contoh: 6281234567890" class="border p-2 w-full">
-                    <button type="button" class="ml-2 bg-red-500 text-white px-3 rounded" onclick="this.parentElement.remove()">-</button>
+        <form method="post" action="send-wa.php">
+            <div id="input-container">
+                <div class="input-group">
+                    <input type="text" name="pesan[]" placeholder="Tulis pesan...">
+                    <button type="button" onclick="tambahInput()">+</button>
                 </div>
             </div>
-            <button id="tambah-nomor" type="button" class="bg-green-500 text-white px-3 py-1 rounded">+</button>
-
-            <label>Pesan:</label>
-            <textarea name="message" required placeholder="Isi pesan WhatsApp..." class="w-full border p-2"></textarea>
-
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Kirim Pesan</button>
+            <br>
+            <button type="submit">Kirim</button>
         </form>
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
@@ -115,32 +118,29 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     </script>
 
 <script>
-function addNomor() {
-    const container = document.getElementById('nomor-container');
+<script>
+    function tambahInput() {
+        const container = document.getElementById('input-container');
 
-    const div = document.createElement('div');
-    div.className = 'flex mb-2';
+        const div = document.createElement('div');
+        div.className = 'input-group';
 
-    const input = document.createElement('input');
-    input.type = 'tel';
-    input.name = 'phoneNumbers[]';
-    input.required = true;
-    input.pattern = '^\\d{10,15}$';
-    input.placeholder = 'Contoh: 6289876543210';
-    input.className = 'border p-2 w-full';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'pesan[]';
+        input.placeholder = 'Tulis pesan...';
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = '-';
-    btn.className = 'ml-2 bg-red-500 text-white px-3 rounded';
-    btn.onclick = () => div.remove();
+        const hapusBtn = document.createElement('button');
+        hapusBtn.type = 'button';
+        hapusBtn.textContent = '–';
+        hapusBtn.onclick = function () {
+            container.removeChild(div);
+        };
 
-    div.appendChild(input);
-    div.appendChild(btn);
-    container.appendChild(div);
-}
-
-document.getElementById('tambah-nomor').addEventListener('click', addNomor);
+        div.appendChild(input);
+        div.appendChild(hapusBtn);
+        container.appendChild(div);
+    }
 </script>
 
 </body>
