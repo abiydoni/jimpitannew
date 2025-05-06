@@ -71,11 +71,11 @@ file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
 
 // Redirect dengan status
 if ($successCount > 0 && $errorCount == 0) {
-    header('Location: pesan.php?status=success&jumlah=' . $successCount);
+    header('Location: pesan-group.php?status=success&jumlah=' . $successCount);
 } elseif ($successCount > 0) {
-    header('Location: pesan.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
+    header('Location: pesan-group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
 } else {
-    header('Location: kpesan.php?status=error');
+    header('Location: pesan-group.php?status=error');
 }
 exit;
 ?>

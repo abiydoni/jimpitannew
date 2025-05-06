@@ -132,7 +132,7 @@ if ($successCount > 0 && $errorCount == 0) {
 } elseif ($successCount > 0) {
     header('Location: pesan.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
 } else {
-    header('Location: kpesan.php?status=error');
+    header('Location: pesan.php?status=error');
 }
 exit;
 ?>
