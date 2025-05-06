@@ -1,7 +1,7 @@
 <?php
-require 'db.php'; // koneksi PDO
+require 'db.php';
 
-// Terjemahan hari & bulan
+// Terjemahan hari dan bulan ke Bahasa Indonesia
 $hariIndo = [
     'Sunday' => 'Minggu',
     'Monday' => 'Senin',
@@ -27,15 +27,15 @@ $bulanIndo = [
     'December' => 'Desember',
 ];
 
-// Ambil hari ini dalam bahasa Inggris (untuk query) dan Indonesia (untuk tampilan)
-$hariEng = date('l'); // contoh: Monday
+// Ambil hari dan tanggal hari ini
+$hariEng = date('l'); // Monday
 $hariInd = $hariIndo[$hariEng]; // Senin
 $tanggal = date('j');
 $bulanEng = date('F');
 $bulanInd = $bulanIndo[$bulanEng];
 $tahun = date('Y');
 
-// Query berdasarkan shift = hari ini dalam bhs Inggris
+// Ambil data dari tabel users
 $stmt = $pdo->prepare("SELECT name FROM users WHERE shift = :shift");
 $stmt->execute(['shift' => $hariEng]);
 $users = $stmt->fetchAll();
@@ -50,4 +50,9 @@ if ($users) {
 } else {
     $pesan .= "Tidak ada petugas jaga hari ini.";
 }
+
+// Tambahkan penutup
+$pesan .= "\n\n🌟 Selamat melaksanakan tugas RT.07\n";
+$pesan .= "Pesan Otomatis System";
+
 ?>
