@@ -54,14 +54,13 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.
             </div>
         <?php endif; ?>
-
         <form method="post" action="send-wa.php">
             <!-- Input Nomor WA (bisa ditambah/hapus) -->
             <label>Nomor WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
                     <input type="text" name="phoneNumbers[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
-                    <button type="button" onclick="tambahNomor()" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
+                    <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
 
@@ -126,7 +125,9 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
         // Fungsi untuk menambah input nomor WA
-        function tambahNomor() {
+        function tambahNomor(event) {
+            event.preventDefault(); // Mencegah tindakan default (seperti pengalihan atau submit form)
+
             const container = document.getElementById('nomor-container');
 
             const div = document.createElement('div');
@@ -139,7 +140,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             input.className = 'flex-1 px-2 py-1 border rounded';
 
             const hapusBtn = document.createElement('button');
-            hapusBtn.type = 'button';
+            hapusBtn.type = 'button'; // Pastikan ini adalah tombol biasa, bukan submit
             hapusBtn.textContent = '–';
             hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
             hapusBtn.onclick = function () {
@@ -150,7 +151,8 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             div.appendChild(hapusBtn);
             container.appendChild(div);
         }
-    </script>
+
+</script>
 
 </body>
 </html>
