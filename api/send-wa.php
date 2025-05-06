@@ -17,7 +17,8 @@ if (empty($nomorList) || !$pesan) {
 }
 
 // URL Web App Google Script
-$url = "https://script.google.com/macros/s/AKfycbxN6_dhycBtaEp2w6M1Je0Uet14KM5C3fadCpeF3-lSbqcUe-lLi534-hdaHNcExl1D/exec";
+// $url = "https://script.google.com/macros/s/AKfycbxN6_dhycBtaEp2w6M1Je0Uet14KM5C3fadCpeF3-lSbqcUe-lLi534-hdaHNcExl1D/exec";
+$url = "https://wa.appsbee.my.id/send-message";
 
 $logAll = "";
 $successCount = 0;
@@ -37,7 +38,15 @@ foreach ($nomorList as $nomor) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+
+    //Iki header sing bener pak
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    // ================================
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
