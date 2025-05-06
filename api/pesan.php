@@ -57,15 +57,25 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         <?php endif; ?>
 
         <form method="post" action="send-wa.php">
-            <div id="input-container">
+            <!-- Input Pesan (tetap satu) -->
+            <div class="input-group">
+                <label>Pesan:</label><br>
+                <textarea name="pesan" rows="4" cols="50" placeholder="Tulis pesan..."></textarea>
+            </div>
+
+            <!-- Input Nomor WA (bisa ditambah/hapus) -->
+            <label>Nomor WA:</label>
+            <div id="nomor-container">
                 <div class="input-group">
-                    <input type="text" name="pesan[]" placeholder="Tulis pesan...">
-                    <button type="button" onclick="tambahInput()">+</button>
+                    <input type="text" name="nomorwa[]" placeholder="Contoh: 6281234567890">
+                    <button type="button" onclick="tambahNomor()">+</button>
                 </div>
             </div>
+
             <br>
             <button type="submit">Kirim</button>
         </form>
+
         <!-- Tombol Bulat -->
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
                 onclick="window.location.href='../index.php'" title="Kembali ke halaman menu">
@@ -119,16 +129,16 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 
 <script>
 <script>
-    function tambahInput() {
-        const container = document.getElementById('input-container');
+    function tambahNomor() {
+        const container = document.getElementById('nomor-container');
 
         const div = document.createElement('div');
         div.className = 'input-group';
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.name = 'pesan[]';
-        input.placeholder = 'Tulis pesan...';
+        input.name = 'nomorwa[]';
+        input.placeholder = 'Contoh: 6281234567890';
 
         const hapusBtn = document.createElement('button');
         hapusBtn.type = 'button';
