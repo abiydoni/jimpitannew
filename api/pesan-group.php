@@ -59,7 +59,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             <label>ID Group WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="groupId" value="120363326273379143@g.us" class="flex-1 px-2 py-1 border rounded" readonly>
+                    <input type="text" name="groupId[]" value="120363326273379143@g.us" class="flex-1 px-2 py-1 border rounded" readonly>
                     <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
@@ -128,7 +128,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 
             const input = document.createElement('input');
             input.type = 'text';
-            input.name = 'groupId';
+            input.name = 'groupId[]';
             input.placeholder = '120363326273379143@g.us';
             input.className = 'flex-1 px-2 py-1 border rounded';
 
