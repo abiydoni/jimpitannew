@@ -47,15 +47,32 @@ $pesan .= "Pesan Otomatis System";
 
 // --- Kirim pesan ke grup WA ---
 $groupId = "120363398680818900@g.us"; // ganti sesuai grup WA kamu
-$response = file_get_contents("https://rt07.appsbee.my.id/api/send-wa-group.php?groupId=$groupId&message=" . urlencode($pesan));
+$url = "https://rt07.appsbee.my.id/api/send-wa-group.php"; // URL API
 
-// --- Simpan log pengiriman ---
-if ($response === false) {
-    $error = error_get_last();
-    file_put_contents("log-pengiriman.txt", "[".date('Y-m-d H:i:s')."] ERROR: " . $error['message'] . "\n", FILE_APPEND);
+// Data yang dikirim ke API
+$data = [
+    'groupId' => [$groupId], // Membungkus groupId dengan array
+    'message' => $pesan
+];
+
+// Inisialisasi cURL
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); // Mengirim data sebagai JSON
+
+// Eksekusi cURL
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+// Cek responsenya
+if ($httpCode == 200) {
+    file_put_contents("log-pengiriman.txt", "[".date('Y-m-d H:i:s')."] Pesan berhasil dikirim.\n", FILE_APPEND);
 } else {
-    file_put_contents("log-pengiriman.txt", "[".date('Y-m-d H:i:s')."] Response: $response\n", FILE_APPEND);
+    file_put_contents("log-pengiriman.txt", "[".date('Y-m-d H:i:s')."] ERROR: " . curl_error($ch) . "\n", FILE_APPEND);
 }
 
-echo "Pesan berhasil dikirim.";
+curl_close($ch);
 ?>
