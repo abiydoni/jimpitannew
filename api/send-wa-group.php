@@ -26,7 +26,9 @@ $successCount = 0;
 $errorCount = 0;
 
 foreach ($groupList as $group) {
-    $group = filter_var($group, FILTER_SANITIZE_NUMBER_INT);
+    $group = trim($group); // cukup pastikan tidak ada spasi
+
+    // $group = filter_var($group, FILTER_SANITIZE_NUMBER_INT);
 
     if (!$group) continue;
 
