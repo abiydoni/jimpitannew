@@ -1,5 +1,8 @@
 <?php 
-if (php_sapi_name() !== 'cli' {
+// if (php_sapi_name() !== 'cli' {
+
+    session_start();
+
 
     include 'db.php';
     include 'ambil_data_jaga.php';
@@ -31,5 +34,5 @@ if (php_sapi_name() !== 'cli' {
     } else {
         echo "Gagal mengirim pesan. Respon: $response";
     }
-}
+// }
 ?>
