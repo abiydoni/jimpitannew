@@ -55,7 +55,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             </div>
         <?php endif; ?>
         <form method="post" action="send-wa-group.php">
-            <!-- Input Nomor WA (bisa ditambah/hapus) -->
             <label>ID Group WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
@@ -64,7 +63,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 </div>
             </div>
             <?php include 'ambil_data_jaga.php'; ?>
-            <!-- Input Pesan (tetap satu) -->
             <div class="input-group mt-4">
                 <label>Pesan:</label><br>
                 <textarea name="message" rows="5" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-2 border rounded"><?php echo htmlspecialchars($pesan); ?></textarea>
