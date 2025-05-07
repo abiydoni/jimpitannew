@@ -1,7 +1,7 @@
 <?php 
-// if (php_sapi_name() !== 'cli' {
+if (php_sapi_name() !== 'cli' {
 
-    session_start();
+    // session_start();
 
 
     include 'db.php';
@@ -34,5 +34,5 @@
     } else {
         echo "Gagal mengirim pesan. Respon: $response";
     }
-// }
+}
 ?>
