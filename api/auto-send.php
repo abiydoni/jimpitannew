@@ -1,7 +1,7 @@
 <?php 
 if (php_sapi_name() !== 'cli') {
 
-    // session_start(); // Tidak dibutuhkan untuk cron
+    // session_start(); 
 
     include 'db.php';
     include 'ambil_data_jaga.php';
@@ -9,9 +9,8 @@ if (php_sapi_name() !== 'cli') {
     $groupId = "120363398680818900@g.us";
     $message = $pesan;
 
-    // Siapkan data POST dengan format x-www-form-urlencoded
     $data = http_build_query([
-        'groupId[]' => $groupId, // gunakan array agar sesuai dengan PHP $_POST['groupId']
+        'groupId[]' => $groupId,
         'message' => $message
     ]);
 
@@ -28,13 +27,12 @@ if (php_sapi_name() !== 'cli') {
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode == 200) {
-        echo "Pesan berhasil dikirim.";
-    } else {
-        echo "Gagal mengirim pesan. Respon: $response";
-    }
+    // if ($httpCode == 200) {
+    //     echo "Pesan berhasil dikirim.";
+    // } else {
+    //     echo "Gagal mengirim pesan. Respon: $response";
+    // }
 
-    // Log untuk memastikan cron berjalan
     file_put_contents(__DIR__ . '/../log-cron-test.txt', "[" . date("Y-m-d H:i:s") . "] Cron jalan\n", FILE_APPEND);
 }
 ?>
