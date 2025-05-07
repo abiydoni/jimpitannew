@@ -1,8 +1,7 @@
 <?php 
-if (php_sapi_name() !== 'cli' {
+if (php_sapi_name() !== 'cli') {
 
-    // session_start();
-
+    // session_start(); // Tidak dibutuhkan untuk cron
 
     include 'db.php';
     include 'ambil_data_jaga.php';
@@ -19,7 +18,7 @@ if (php_sapi_name() !== 'cli' {
     $ch = curl_init("https://rt07.appsbee.my.id/api/send-wa-group.php");
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // <-- Tambahkan
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/x-www-form-urlencoded'
     ]);
@@ -34,5 +33,8 @@ if (php_sapi_name() !== 'cli' {
     } else {
         echo "Gagal mengirim pesan. Respon: $response";
     }
+
+    // Log untuk memastikan cron berjalan
+    file_put_contents(__DIR__ . '/../log-cron-test.txt', "[" . date("Y-m-d H:i:s") . "] Cron jalan\n", FILE_APPEND);
 }
 ?>
