@@ -2,7 +2,7 @@
 include 'db.php';
 include 'ambil_data_jaga.php';
 
-$groupId = "120363398680818900@g.us";
+$groupId = "6285729705810-1505093181@g.us";
 $message = $pesan;
 
 $data = http_build_query([
