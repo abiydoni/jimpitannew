@@ -16,6 +16,7 @@ $data = http_build_query([
 $ch = curl_init("https://rt07.appsbee.my.id/api/send-wa-group.php");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // <-- Tambahkan
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/x-www-form-urlencoded'
 ]);
