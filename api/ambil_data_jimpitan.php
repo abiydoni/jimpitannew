@@ -55,15 +55,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total_nominal = array_sum(array_column($data, 'jumlah_nominal'));
 
-// // Hitung total nominal tetap dari data report kemarin
-// $stmtTotal = $pdo->prepare("
-//     SELECT SUM(nominal) as total_nominal 
-//     FROM report 
-//     WHERE jimpitan_date = CURDATE() - INTERVAL 1 DAY
-// ");
-// $stmtTotal->execute();
-// $total_nominal = $stmtTotal->fetchColumn();
-
 // Bangun pesan WhatsApp / Telegram
 $pesan = "⏰ *Report Jimpitan Hari :* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
 $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
@@ -73,10 +64,16 @@ $pesan .= "==========================\n";
 if ($data) {
     $no = 1;
     foreach ($data as $user) {
-        $pesan .= $no++ . ". " . $user['kk_name'] . "\n";
+        if ((int)$user['jumlah_nominal'] === 0) {
+            $pesan .= $no++ . ". " . $user['kk_name'] . "\n";
+        }
+    }
+
+    if ($no === 1) {
+        $pesan .= "✅ Semua KK menyetor jimpitan.\n";
     }
 } else {
-    $pesan .= "✅ Semua KK menyetor jimpitan.\n";
+    $pesan .= "❌ Tidak ada data tersedia.\n";
 }
 
 // Tambahkan penutup
