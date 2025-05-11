@@ -54,8 +54,9 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
 
 // Bangun pesan WhatsApp / Telegram
 $pesan = "⏰ *Report Jimpitan Hari :* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
-$pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n";
-$pesan .= "📋 Jimpitan yang kosong:\n";
+$pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
+$pesan .= "📋 *Jimpitan yang kosong :*\n";
+$pesan .= "==========================\n";
 
 if ($data) {
     $no = 1;
