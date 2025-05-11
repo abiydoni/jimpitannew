@@ -1,6 +1,5 @@
 <?php
 require 'db.php';
-header('Content-Type: application/json');
 
 // Terjemahan hari dan bulan ke Bahasa Indonesia
 $hariIndo = [
@@ -77,11 +76,4 @@ if ($data) {
 // Tambahkan penutup
 $pesan .= "\n🌟 Diharapkan kedepannya bisa diperhatikan\n";
 $pesan .= "_- Pesan Otomatis dari System -_";
-
-// Kembalikan juga sebagai JSON untuk debugging (opsional)
-echo json_encode([
-    'data' => $data,
-    'total_nominal' => $total_nominal,
-    'pesan' => $pesan
-]);
 ?>
