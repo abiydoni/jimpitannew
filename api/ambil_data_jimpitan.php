@@ -61,7 +61,8 @@ if ($data) {
     $no = 1;
     foreach ($data as $row) {
         if ($row['nominal'] == 0) {
-            $pesan .= $no++ . $row['kk_name'] . "\n";
+            $pesan .= $no . "️⃣ " . $row['kk_name'] . "\n";
+            $no++;
         }
     }
     if ($no === 1) {
