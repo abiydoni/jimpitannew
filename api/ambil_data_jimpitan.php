@@ -47,7 +47,7 @@ $stmt = $pdo->prepare("
     ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
-$data = $stmt->fetchAll();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Hitung total nominal
 $total_nominal = array_sum(array_column($data, 'nominal'));
