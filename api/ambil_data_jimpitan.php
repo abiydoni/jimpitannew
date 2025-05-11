@@ -53,7 +53,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $total_nominal = array_sum(array_column($data, 'jumlah_nominal'));
 
 // Bangun pesan WhatsApp / Telegram
-$pesan = "⏰ *Report Jimpitan Hari :* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
+$pesan = "⏰ *Report Jimpitan Hari* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
 $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
 $pesan .= "📋 *Jimpitan yang kosong :*\n";
 $pesan .= "==========================\n";
@@ -62,7 +62,7 @@ if ($data) {
     $no = 1;
     foreach ($data as $user) {
         if ((int)$user['jumlah_nominal'] === 0) {
-            $pesan .= $no++ . ". " . $user['kk_name'] . "\n";
+            $pesan .= $no++ . ". " . $user['code_id'] . "\n";
         }
     }
 
@@ -74,6 +74,6 @@ if ($data) {
 }
 
 // Tambahkan penutup
-$pesan .= "\n🌟 Diharapkan kedepannya bisa diperhatikan\n";
+$pesan .= "\n🌟 Terimakasih atas perhatiannya\n";
 $pesan .= "_- Pesan Otomatis dari System -_";
 ?>
