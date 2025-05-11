@@ -46,7 +46,7 @@ m.kk_name,
 COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
 FROM master_kk m
 LEFT JOIN report r ON m.code_id = r.report_id 
-AND r.jimpitan_date = CURDATE() - INTERVAL 1 DAY 
+AND r.jimpitan_date = CURDATE() - INTERVAL 2 DAY 
 GROUP BY m.code_id, m.kk_name
 ORDER BY m.kk_name ASC;
 ");
