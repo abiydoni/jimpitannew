@@ -45,7 +45,7 @@ FROM master_kk m
 LEFT JOIN report r ON m.code_id = r.report_id 
 AND r.jimpitan_date = CURDATE() - INTERVAL 1 DAY 
 GROUP BY m.code_id, m.kk_name
-ORDER BY m.kk_name ASC;
+ORDER BY m.code_id ASC;
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
