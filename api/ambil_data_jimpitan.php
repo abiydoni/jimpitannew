@@ -60,7 +60,7 @@ $pesan .= "📋 Jimpitan yang kosong:\n";
 if ($data) {
     $no = 1;
     foreach ($data as $user) {
-        $pesan .= $no++ . "️⃣ " . $user['kk_name'] . "\n";
+        $pesan .= $no++ . "️. " . $user['kk_name'] . "\n";
     }
 } else {
     $pesan .= "❌ Semua sudah memberikan jimpitan";
