@@ -53,6 +53,6 @@ if ($users) {
 
 // Tambahkan penutup
 $pesan .= "\n🌟 Selamat melaksanakan tugas 🏡RT.07\n";
-$pesan .= "🕸️ *Link scan* : https://rt07.appsbee.my.id\n";
+$pesan .= "🕸️ *Link scan* : https://rt07.appsbee.my.id\n\n";
 $pesan .= "_- Pesan Otomatis dari System -_";
 ?>
