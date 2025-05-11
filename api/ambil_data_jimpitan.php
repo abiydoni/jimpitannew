@@ -59,17 +59,11 @@ $pesan .= "📋 Jimpitan yang kosong:\n";
 
 if ($data) {
     $no = 1;
-    foreach ($data as $row) {
-        if ($row['nominal'] == 0) {
-            $pesan .= $no . "️⃣ " . $row['kk_name'] . "\n";
-            $no++;
-        }
-    }
-    if ($no === 1) {
-        $pesan .= "✅ Semua KK menyetor jimpitan.\n";
+    foreach ($data as $user) {
+        $pesan .= $no++ . "️⃣ " . $user['kk_name'] . "\n";
     }
 } else {
-    $pesan .= "❌ Tidak ada data jimpitan semalam.\n";
+    $pesan .= "❌ Semua sudah memberikan jimpitan";
 }
 
 // Tambahkan penutup
