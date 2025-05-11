@@ -1,8 +1,5 @@
 <?php
-include 'db.php';
-
-// Set header JSON
-header('Content-Type: application/json');
+require 'db.php';
 
 // Terjemahan hari dan bulan ke Bahasa Indonesia
 $hariIndo = [
