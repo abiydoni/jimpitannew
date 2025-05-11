@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+header('Content-Type: application/json');
 
 // Terjemahan hari dan bulan ke Bahasa Indonesia
 $hariIndo = [
