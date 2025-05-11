@@ -38,19 +38,25 @@ $bulanEng = date('F');
 $bulanInd = $bulanIndo[$bulanEng];
 $tahun = date('Y');
 
-// Ambil data laporan untuk HARI KEMARIN
+// Ambil data KK yang nominal-nya 0 pada hari kemarin
 $stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.*
-    FROM report
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE() - INTERVAL 2 DAY
-    ORDER BY report.scan_time DESC
+    SELECT master_kk.kk_name, report.nominal
+    FROM master_kk
+    LEFT JOIN report ON report.report_id = master_kk.code_id 
+        AND report.jimpitan_date = CURDATE() - INTERVAL 1 DAY
+    WHERE report.nominal = 0
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Hitung total nominal
-$total_nominal = array_sum(array_column($data, 'nominal'));
+// Hitung total nominal tetap dari data report kemarin
+$stmtTotal = $pdo->prepare("
+    SELECT SUM(nominal) as total_nominal 
+    FROM report 
+    WHERE jimpitan_date = CURDATE() - INTERVAL 1 DAY
+");
+$stmtTotal->execute();
+$total_nominal = $stmtTotal->fetchColumn();
 
 // Bangun pesan WhatsApp / Telegram
 $pesan = "⏰ *Report Jimpitan Hari :* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
@@ -58,15 +64,12 @@ $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n
 $pesan .= "📋 *Jimpitan yang kosong :*\n";
 $pesan .= "==========================\n";
 
-$no = 1;
-$adaKosong = false;
-foreach ($data as $user) {
-    if ($user['nominal'] == 0) {
+if ($data) {
+    $no = 1;
+    foreach ($data as $user) {
         $pesan .= $no++ . ". " . $user['kk_name'] . "\n";
-        $adaKosong = true;
     }
-}
-if (!$adaKosong) {
+} else {
     $pesan .= "✅ Semua KK menyetor jimpitan.\n";
 }
 
