@@ -53,7 +53,7 @@ ORDER BY m.kk_name ASC;
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
+$total_nominal = array_sum(array_column($data, 'jumlah_nominal'));
 
 // // Hitung total nominal tetap dari data report kemarin
 // $stmtTotal = $pdo->prepare("
