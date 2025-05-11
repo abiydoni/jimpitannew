@@ -40,23 +40,29 @@ $tahun = date('Y');
 
 // Ambil data KK yang nominal-nya 0 pada hari kemarin
 $stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.nominal
-    FROM master_kk
-    LEFT JOIN report ON report.report_id = master_kk.code_id 
-        AND report.jimpitan_date = CURDATE() - INTERVAL 1 DAY
-    WHERE report.nominal = 0
+SELECT 
+m.code_id, 
+m.kk_name, 
+COALESCE(SUM(r.nominal), 0) AS jumlah_nominal
+FROM master_kk m
+LEFT JOIN report r ON m.code_id = r.report_id 
+AND r.jimpitan_date = CURDATE() - INTERVAL 1 DAY 
+GROUP BY m.code_id, m.kk_name
+ORDER BY m.kk_name ASC;
 ");
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Hitung total nominal tetap dari data report kemarin
-$stmtTotal = $pdo->prepare("
-    SELECT SUM(nominal) as total_nominal 
-    FROM report 
-    WHERE jimpitan_date = CURDATE() - INTERVAL 1 DAY
-");
-$stmtTotal->execute();
-$total_nominal = $stmtTotal->fetchColumn();
+$total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
+
+// // Hitung total nominal tetap dari data report kemarin
+// $stmtTotal = $pdo->prepare("
+//     SELECT SUM(nominal) as total_nominal 
+//     FROM report 
+//     WHERE jimpitan_date = CURDATE() - INTERVAL 1 DAY
+// ");
+// $stmtTotal->execute();
+// $total_nominal = $stmtTotal->fetchColumn();
 
 // Bangun pesan WhatsApp / Telegram
 $pesan = "⏰ *Report Jimpitan Hari :* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
