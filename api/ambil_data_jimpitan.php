@@ -43,7 +43,7 @@ $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.*
     FROM report
     JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE() - INTERVAL 1 DAY
+    WHERE report.jimpitan_date = CURDATE() - INTERVAL 2 DAY
     ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
@@ -58,13 +58,16 @@ $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n
 $pesan .= "📋 *Jimpitan yang kosong :*\n";
 $pesan .= "==========================\n";
 
-if ($data) {
-    $no = 1;
-    foreach ($data as $user) {
-        $pesan .= $no++ . "️. " . $user['kk_name'] . "\n";
+$no = 1;
+$adaKosong = false;
+foreach ($data as $user) {
+    if ($user['nominal'] == 0) {
+        $pesan .= $no++ . ". " . $user['kk_name'] . "\n";
+        $adaKosong = true;
     }
-} else {
-    $pesan .= "❌ Semua sudah memberikan jimpitan";
+}
+if (!$adaKosong) {
+    $pesan .= "✅ Semua KK menyetor jimpitan.\n";
 }
 
 // Tambahkan penutup
