@@ -62,11 +62,11 @@ if ($data) {
     $no = 1;
     foreach ($data as $user) {
         if ((int)$user['jumlah_nominal'] === 0) {
-            $pesan .= $no++ . ". " . $user['code_id'] . "\n";
+            // $pesan .= $no++ . ". " . $user['code_id'] . "\n";
 
-            // $kk_name = $user['kk_name'];
-            // $kk_anonim = strtoupper(substr($kk_name, 0, 1)) . '*****' . strtolower(substr($kk_name, -1));
-            // $pesan .= $no++ . ". " . $user['code_id'] . " - " . $kk_anonim . "\n";
+            $kk_name = $user['kk_name'];
+            $kk_anonim = strtoupper(substr($kk_name, 0, 1)) . '*****' . strtolower(substr($kk_name, -1));
+            $pesan .= $no++ . ". " . $user['code_id'] . " - " . $kk_anonim . "\n";
 
         }
     }
