@@ -28,12 +28,21 @@ $bulanIndo = [
 ];
 
 // Ambil hari dan tanggal HARI INI
-$hariEng = date('l');
+// $hariEng = date('l');
+// $hariInd = $hariIndo[$hariEng];
+// $tanggal = date('j');
+// $bulanEng = date('F');
+// $bulanInd = $bulanIndo[$bulanEng];
+// $tahun = date('Y');
+
+$kemarin = date_create('yesterday');
+$hariEng = $kemarin->format('l');
 $hariInd = $hariIndo[$hariEng];
-$tanggal = date('j');
-$bulanEng = date('F');
+$tanggal = $kemarin->format('j');
+$bulanEng = $kemarin->format('F');
 $bulanInd = $bulanIndo[$bulanEng];
-$tahun = date('Y');
+$tahun = $kemarin->format('Y');
+
 
 // Ambil data KK yang nominal-nya 0 pada hari kemarin
 $stmt = $pdo->prepare("
