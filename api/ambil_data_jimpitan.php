@@ -35,15 +35,6 @@ $bulanIndo = [
 // $bulanInd = $bulanIndo[$bulanEng];
 // $tahun = date('Y');
 
-$kemarin = date_create('yesterday');
-$hariEng = $kemarin->format('l');
-$hariInd = $hariIndo[$hariEng];
-$tanggal = $kemarin->format('j');
-$bulanEng = $kemarin->format('F');
-$bulanInd = $bulanIndo[$bulanEng];
-$tahun = $kemarin->format('Y');
-
-
 // Ambil data KK yang nominal-nya 0 pada hari kemarin
 $stmt = $pdo->prepare("
 SELECT 
@@ -61,8 +52,19 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total_nominal = array_sum(array_column($data, 'jumlah_nominal'));
 
+$kemarin = new DateTime('yesterday');
+$tanggal = $kemarin->format('Y-m-d');
+$hariEng = $kemarin->format('l');
+$hariInd = $hariIndo[$hariEng];
+$tgl = $kemarin->format('j');
+$bulanEng = $kemarin->format('F');
+$bulanInd = $bulanIndo[$bulanEng];
+$tahun = $kemarin->format('Y');
+
+$tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
+
 // Bangun pesan WhatsApp / Telegram
-$pesan = "⏰ *Report Jimpitan Hari* $hariInd, $tanggal $bulanInd $tahun _(Semalam)_\n\n";
+$pesan = "⏰ *Report Jimpitan Hari* $tanggalLengkap _(Semalam)_\n\n";
 $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
 $pesan .= "📋 *Jimpitan yang kosong (kode KK) :*\n";
 $pesan .= "==========================\n";
