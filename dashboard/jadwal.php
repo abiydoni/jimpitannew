@@ -33,7 +33,7 @@ $stmt = $pdo->query($sql);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil data kk_name dari tabel mater_kk
-$sql_kk = "SELECT kk_name FROM mater_kk";
+$sql_kk = "SELECT kk_name FROM master_kk";
 $stmt_kk = $pdo->query($sql_kk);
 $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 ?>
