@@ -231,7 +231,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <select name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                         <option value="" disabled selected>Pilih Nama KK</option>
                         <?php foreach ($kk_names as $kk): ?>
                             <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
@@ -270,7 +270,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="id_code" id="change_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Nama:</label>
-                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <select name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                         <option value="" disabled selected>Pilih Nama KK</option>
                         <?php foreach ($kk_names as $kk): ?>
                             <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
