@@ -136,6 +136,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
                         <thead class="bg-gray-200">
                             <tr>
                                 <th style="text-align: left;">Kode ID</th>
+                                <th style="text-align: center;">Username</th>
                                 <th style="text-align: center;">Nama</th>
                                 <th style="text-align: center;">Shift</th>
                                 <th style="text-align: center;">Aksi</th>
@@ -145,6 +146,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
                         <?php foreach($users as $user): ?>
                             <tr class="border-b hover:bg-gray-100">
                                 <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                                <td><?php echo htmlspecialchars($user["user_name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["name"]); ?></td>
                                 <td><?php echo htmlspecialchars($user["shift"]); ?></td>
                                 <td class="flex justify-center space-x-2">
@@ -269,7 +271,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
             <form action="api/change_password.php" method="POST" class="space-y-2">
                 <input type="hidden" name="id_code" id="change_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">User Name:</label>
+                    <label class="block text-sm font-medium text-gray-700">Username:</label>
                     <input type="text" name="user_name" id="change_user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required disabled>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
@@ -401,7 +403,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
         function openChangePasswordModal(id_code, user_name, password) {
             document.getElementById('change_id_code').value = id_code;
             document.getElementById('change_user_name').value = user_name;
-            document.getElementById('change_password').value = password; // Menampilkan nama pengguna di elemen span
+            document.getElementById('change_password').value = password;
             const modal = document.getElementById("changePasswordModal");
             modal.classList.remove("hidden");
         }
