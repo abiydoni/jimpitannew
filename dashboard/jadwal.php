@@ -31,6 +31,11 @@ if (isset($_GET['delete'])) {
 $sql = "SELECT * FROM users";
 $stmt = $pdo->query($sql);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil data kk_name dari tabel mater_kk
+$sql_kk = "SELECT kk_name FROM mater_kk";
+$stmt_kk = $pdo->query($sql_kk);
+$kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -178,7 +183,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="bg-white p-1 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <option value="" disabled selected>Pilih Nama KK</option>
+                        <?php foreach ($kk_names as $kk): ?>
+                            <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="bg-white p-1 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password:</label>
@@ -221,7 +231,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <input type="text" name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <option value="" disabled selected>Pilih Nama KK</option>
+                        <?php foreach ($kk_names as $kk): ?>
+                            <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Shift:</label>
@@ -255,7 +270,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="id_code" id="change_id_code">
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Nama:</label>
-                    <input type="text" id="change_name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required disabled>
+                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <option value="" disabled selected>Pilih Nama KK</option>
+                        <?php foreach ($kk_names as $kk): ?>
+                            <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password Baru:</label>
