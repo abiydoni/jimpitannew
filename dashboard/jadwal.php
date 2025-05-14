@@ -405,11 +405,10 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 </script>
 
 <script>
-        function openChangePasswordModal(id_code, name, user_name, password) {
+        function openChangePasswordModal(id_code, name, user_name) {
             document.getElementById('change_id_code').value = id_code;
             document.getElementById('change_name').value = name;
             document.getElementById('change_user_name').value = user_name;
-            document.getElementById('change_password').value = password;
             const modal = document.getElementById("changePasswordModal");
             modal.classList.remove("hidden");
         }
