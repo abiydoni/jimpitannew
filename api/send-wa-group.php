@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 //======== Send Group
 // groupId = '6285729705810-1505093181@g.us' // == "Warga rt 07/01 randsa"
 // gorupId = '120363398680818900@g.us' // 'Group WA Q'
+
 // Ambil dan sanitasi input
 $groupList = $_POST['groupId'] ?? [];
 $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
