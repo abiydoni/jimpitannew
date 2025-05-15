@@ -57,7 +57,7 @@ $tahun = $kemarin->format('Y');
 $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
 
 // Bangun pesan WhatsApp / Telegram
-$pesan = "⏰ *Report Jimpitan Hari*" . $tanggalLengkap . "_(Semalam)_\n\n";
+$pesan = "⏰ *Report Jimpitan Hari* $tanggalLengkap _(Semalam)_\n\n";
 $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
 $pesan .= "📋 *Jimpitan yang kosong (kode KK) :*\n";
 $pesan .= "==========================\n";
