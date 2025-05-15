@@ -28,14 +28,6 @@ $bulanIndo = [
     'December' => 'Desember',
 ];
 
-// Ambil hari dan tanggal HARI INI
-// $hariEng = date('l');
-// $hariInd = $hariIndo[$hariEng];
-// $tanggal = date('j');
-// $bulanEng = date('F');
-// $bulanInd = $bulanIndo[$bulanEng];
-// $tahun = date('Y');
-
 // Ambil data KK yang nominal-nya 0 pada hari kemarin
 $stmt = $pdo->prepare("
 SELECT 
@@ -65,7 +57,7 @@ $tahun = $kemarin->format('Y');
 $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
 
 // Bangun pesan WhatsApp / Telegram
-$pesan = "⏰ *Report Jimpitan Hari* $tanggalLengkap _(Semalam)_\n\n";
+$pesan = "⏰ *Report Jimpitan Hari*" . $tanggalLengkap . "_(Semalam)_\n\n";
 $pesan .= "💰 Sebesar Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
 $pesan .= "📋 *Jimpitan yang kosong (kode KK) :*\n";
 $pesan .= "==========================\n";
@@ -74,7 +66,6 @@ if ($data) {
     $no = 1;
     foreach ($data as $user) {
         if ((int)$user['jumlah_nominal'] === 0) {
-            // $pesan .= $no++ . ". " . $user['code_id'] . "\n";
 
             // $kk_name = $user['kk_name'];
             // $kk_anonim = strtoupper(substr($kk_name, 0, 1)) . '•••••' . strtolower(substr($kk_name, -1));
