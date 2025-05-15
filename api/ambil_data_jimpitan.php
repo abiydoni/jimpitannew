@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+date_default_timezone_set('Asia/Jakarta');
 
 // Terjemahan hari dan bulan ke Bahasa Indonesia
 $hariIndo = [
