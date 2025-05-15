@@ -22,8 +22,4 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
-
-// Logging lebih detail
-$logMessage = "[" . date("Y-m-d H:i:s") . "] HTTP Code: $httpCode, Response: " . json_encode($response) . "\n";
-file_put_contents(_DIR_ . '/../log-cron-test.txt', $logMessage, FILE_APPEND);
 ?>
