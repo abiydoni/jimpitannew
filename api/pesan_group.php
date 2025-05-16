@@ -58,7 +58,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 </div>
             </div>
             <?php 
-            // include 'ambil_data_jimpitan.php'; 
             ?>
             <?php include 'ambil_data_jaga.php'; ?>
             <div class="input-group mt-4">
