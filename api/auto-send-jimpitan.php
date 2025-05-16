@@ -1,8 +1,8 @@
 <?php
 include 'db.php';
 include 'ambil_data_jimpitan.php';
-// $gorupId = '120363398680818900@g.us'; // 'Group WA Q'
-$groupId = "6285729705810-1505093181@g.us"; //warga RT.07
+$gorupId = '120363398680818900@g.us'; // 'Group WA Q'
+// $groupId = "6285729705810-1505093181@g.us"; //warga RT.07
 $message = $pesan;
 
 $data = http_build_query([
