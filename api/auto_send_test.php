@@ -26,7 +26,7 @@ curl_close($ch);
 $now = date('Y-m-d H:i:s');
 
 // Path log file (pastikan folder `log_wa` punya permission write)
-$logFile = __DIR__ . '/log_wa/log_send_wa.txt';
+$logFile = __DIR__ . '../log_wa/log_send_wa.txt';
 
 // Buat isi log
 if ($curlError) {
