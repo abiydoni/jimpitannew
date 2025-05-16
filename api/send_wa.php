@@ -17,7 +17,7 @@ if (empty($nomorList) || !$pesan) {
 }
 
 // $url = "https://wa.appsbee.my.id/send-message";
-$url = "http://wapi.appsbee.my.id/send-message";
+$url = "https://wapi.appsbee.my.id/send-message";
 
 $logAll = "";
 $successCount = 0;
