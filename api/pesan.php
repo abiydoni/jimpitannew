@@ -33,11 +33,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <!-- Loader GIF loading
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div> -->
-
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
@@ -54,7 +49,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.
             </div>
         <?php endif; ?>
-        <form method="post" action="send-wa.php">
+        <form method="post" action="send_wa.php">
             <!-- Input Nomor WA (bisa ditambah/hapus) -->
             <label>Nomor WA:</label>
             <div id="nomor-container">
@@ -82,24 +77,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     </div>
 
     <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-        //         element.addEventListener('click', function (e) {
-        //             e.preventDefault();
-        //             document.getElementById('loader').classList.remove('hidden');
-        //             if (this.type === 'submit') {
-        //                 setTimeout(function() {
-        //                     this.closest('form').submit();
-        //                 }.bind(this), 500); 
-        //             } else {
-        //                 setTimeout(() => {
-        //                     window.location.href = this.href;
-        //                 }, 500); 
-        //             }
-        //         });
-        //     });
-        // });
-
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];

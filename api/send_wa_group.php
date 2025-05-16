@@ -29,8 +29,6 @@ $errorCount = 0;
 foreach ($groupList as $group) {
     $group = trim($group); // cukup pastikan tidak ada spasi
 
-    // $group = filter_var($group, FILTER_SANITIZE_NUMBER_INT);
-
     if (!$group) continue;
 
     $data = [
@@ -42,8 +40,6 @@ foreach ($groupList as $group) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-    // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -75,11 +71,11 @@ file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
 
 // Redirect dengan status
 if ($successCount > 0 && $errorCount == 0) {
-    header('Location: pesan-group.php?status=success&jumlah=' . $successCount);
+    header('Location: pesan_group.php?status=success&jumlah=' . $successCount);
 } elseif ($successCount > 0) {
-    header('Location: pesan-group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
+    header('Location: pesan_group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
 } else {
-    header('Location: pesan-group.php?status=error');
+    header('Location: pesan_group.php?status=error');
 }
 exit;
 ?>

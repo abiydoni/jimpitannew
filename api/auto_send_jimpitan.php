@@ -1,8 +1,8 @@
 <?php
 include 'db.php';
 include 'ambil_data_jimpitan.php';
-$gorupId = '120363398680818900@g.us'; // 'Group WA Q'
-// $groupId = "6285729705810-1505093181@g.us"; //warga RT.07
+// $gorupId = '120363398680818900@g.us'; // 'Group WA Q'
+$groupId = "6285729705810-1505093181@g.us"; //warga RT.07
 $message = $pesan;
 
 $data = http_build_query([
@@ -22,8 +22,4 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
-
-// // Logging lebih detail
-// $logMessage = "[" . date("Y-m-d H:i:s") . "] HTTP Code: $httpCode, Response: " . json_encode($response) . "\n";
-// file_put_contents(_DIR_ . '/../log-cron-test.txt', $logMessage, FILE_APPEND);
 ?>

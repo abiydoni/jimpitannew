@@ -16,8 +16,6 @@ if (empty($nomorList) || !$pesan) {
     exit;
 }
 
-// URL Web App Google Script
-// $url = "https://script.google.com/macros/s/AKfycbxN6_dhycBtaEp2w6M1Je0Uet14KM5C3fadCpeF3-lSbqcUe-lLi534-hdaHNcExl1D/exec";
 $url = "https://wa.appsbee.my.id/send-message";
 
 $logAll = "";
@@ -38,8 +36,6 @@ foreach ($nomorList as $nomor) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-    // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -62,66 +58,6 @@ foreach ($nomorList as $nomor) {
 
     $logAll .= "[" . date("Y-m-d H:i:s") . "] Nomor: $nomor | Pesan: $pesan | Status: $status ($httpCode)\n";
 }
-
-//======== Send Group
-
-// // Ambil dan sanitasi input
-// $groupList = $_POST['groupId'] ?? [];
-// $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
-
-// // Validasi
-// if (empty($groupList) || !$pesangroup) {
-//     echo json_encode(['error' => 'Group dan pesan wajib diisi']);
-//     exit;
-// }
-
-// $url = "https://wa.appsbee.my.id/send-message-group";
-
-// $logAll = "";
-// $successCount = 0;
-// $errorCount = 0;
-
-// foreach ($groupList as $group) {
-//     $group = filter_var($group, FILTER_SANITIZE_NUMBER_INT);
-
-//     if (!$group) continue;
-
-//     $data = [
-//         'groupId' => $group,
-//         'message' => $pesangroup
-//     ];
-
-//     $ch = curl_init($url);
-//     curl_setopt($ch, CURLOPT_POST, true);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-//     // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-
-//     //Iki header sing bener pak
-//     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-//         'Content-Type: application/json'
-//     ]);
-//     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-//     // ========================
-
-//     $response = curl_exec($ch);
-//     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-//     curl_close($ch);
-
-//     // Logging
-//     $status = ($httpCode == 200) ? "SUKSES" : "GAGAL";
-//     if ($status === "SUKSES") {
-//         $successCount++;
-//     } else {
-//         $errorCount++;
-//     }
-
-//     $logAll .= "[" . date("Y-m-d H:i:s") . "] Group: $group | Pesan: $pesangroup | Status: $status ($httpCode)\n";
-// }
-
-// ==========
-
 
 // Simpan log semua
 file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
