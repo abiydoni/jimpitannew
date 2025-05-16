@@ -21,22 +21,4 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
-
-// Tanggal dan waktu sekarang
-$now = date('Y-m-d H:i:s');
-
-// Path log file (pastikan folder `log_wa` punya permission write)
-$logFile = __DIR__ . '../log_wa/log_send_wa.txt';
-
-// Buat isi log
-if ($curlError) {
-    $logStatus = "[$now] FAILED | CURL Error: $curlError\n";
-} else {
-    $statusText = ($httpCode === 200) ? 'SUCCESS' : 'FAILED';
-    $logStatus = "[$now] $statusText | HTTP $httpCode | Response: $response\n";
-}
-
-// Simpan ke log file
-file_put_contents($logFile, $logStatus, FILE_APPEND);
-
 ?>
