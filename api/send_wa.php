@@ -16,8 +16,8 @@ if (empty($nomorList) || !$pesan) {
     exit;
 }
 
-// $url = "https://wa.appsbee.my.id/send-message";
-$url = "https://wapi.appsbee.my.id/send-message";
+$url = "https://wa.appsbee.my.id/send-message";
+// $url = "https://wapi.appsbee.my.id/send-message";
 
 $logAll = "";
 $successCount = 0;
@@ -40,8 +40,10 @@ foreach ($nomorList as $nomor) {
 
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'x-session-id: f81c3d61b82f3d11a2161236d41e4904'
+        'Content-Type: application/json'
+
+        // 'Content-Type: application/json',
+        // 'x-session-id: f81c3d61b82f3d11a2161236d41e4904'
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     // ========================
