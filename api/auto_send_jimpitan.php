@@ -9,7 +9,7 @@ $data = http_build_query([
     'message' => $message
 ]);
 
-$ch = curl_init("https://rt07.appsbee.my.id/api/send-wa-group.php");
+$ch = curl_init("https://rt07.appsbee.my.id/api/send_wa_group.php");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
