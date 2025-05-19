@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // gorupId = '120363398680818900@g.us' // 'Group WA Q'
 
 // Ambil dan sanitasi input
-$groupList = $_POST['groupId[]'] ?? [];
+$groupList = $_POST['groupId'] ?? [];
 $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 
 // Validasi
@@ -41,7 +41,7 @@ foreach ($groupList as $group) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    
+
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         // 'Content-Type: application/json'
