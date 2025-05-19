@@ -28,8 +28,7 @@ $successCount = 0;
 $errorCount = 0;
 
 foreach ($groupList as $group) {
-    // $group = trim($group); // cukup pastikan tidak ada spasi
-    $group = "120363398680818900@g.us";
+    $group = trim($group); // cukup pastikan tidak ada spasi
 
     if (!$group) continue;
 
