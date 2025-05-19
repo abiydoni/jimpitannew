@@ -16,8 +16,8 @@ if (empty($groupList) || !$pesangroup) {
     exit;
 }
 
-// $url = "https://wa.appsbee.my.id/send-message-group";
-$url = "https://wapi.appsbee.my.id/send-group-message";
+$url = "https://wa.appsbee.my.id/send-message-group";
+// $url = "https://wapi.appsbee.my.id/send-group-message";
 
 $logAll = "";
 $successCount = 0;
