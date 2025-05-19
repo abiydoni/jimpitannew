@@ -75,6 +75,16 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     </div>
 
 <script>
+    // Menangani submit form dan menampilkan log sebelum dikirim
+    document.querySelector("form").addEventListener("submit", function(event) {
+        const groupIds = Array.from(document.querySelectorAll('input[name="groupId[]"]')).map(input => input.value);
+        const message = document.querySelector('textarea[name="message"]').value;
+
+        console.log("=== Kirim Pesan Group WA ===");
+        console.log("Group ID(s):", groupIds);
+        console.log("Pesan:", message);
+    });
+
     // Fungsi untuk menampilkan tanggal dalam format Indonesia
     function formatTanggalIndonesia() {
         const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
