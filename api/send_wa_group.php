@@ -41,7 +41,8 @@ foreach ($groupList as $group) {
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
+        'x-session-id: 2edc7db57af95c1360833b2d545e6b1f'
+        // 'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     // ========================
