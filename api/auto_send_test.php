@@ -14,8 +14,11 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    // 'Content-Type: application/x-www-form-urlencoded'
+
+    // 'Content-Type: application/json',
     'Content-Type: application/x-www-form-urlencoded',
-    'x-session-id: 2edc7db57af95c1360833b2d545e6b1f'
+    'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
