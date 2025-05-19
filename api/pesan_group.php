@@ -57,9 +57,6 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                     <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
-            <?php 
-            // include 'ambil_data_jimpitan.php'; 
-            ?>
             <?php include 'ambil_data_jimpitan.php'; ?>
             <div class="input-group mt-4">
                 <label>Pesan:</label><br>
