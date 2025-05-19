@@ -6,10 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-//======== Send Group
-// groupId = '6285729705810-1505093181@g.us' // == "Warga rt 07/01 randsa"
-// gorupId = '120363398680818900@g.us' // 'Group WA Q'
-
 // Ambil dan sanitasi input
 $groupList = $_POST['groupId'] ?? [];
 $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
@@ -28,7 +24,7 @@ $successCount = 0;
 $errorCount = 0;
 
 foreach ($groupList as $group) {
-    $group = trim($group); // cukup pastikan tidak ada spasi
+    $group = trim($group);
 
     if (!$group) continue;
 
