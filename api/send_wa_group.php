@@ -64,16 +64,16 @@ foreach ($groupList as $group) {
 // ==========
 
 
-// Simpan log semua
-file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
+// // Simpan log semua
+// file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
 
-// Redirect dengan status
-if ($successCount > 0 && $errorCount == 0) {
-    header('Location: pesan_group.php?status=success&jumlah=' . $successCount);
-} elseif ($successCount > 0) {
-    header('Location: pesan_group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
-} else {
-    header('Location: pesan_group.php?status=error');
-}
+// // Redirect dengan status
+// if ($successCount > 0 && $errorCount == 0) {
+//     header('Location: pesan_group.php?status=success&jumlah=' . $successCount);
+// } elseif ($successCount > 0) {
+//     header('Location: pesan_group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
+// } else {
+//     header('Location: pesan_group.php?status=error');
+// }
 exit;
 ?>
