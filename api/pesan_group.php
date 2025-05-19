@@ -107,7 +107,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'groupId[]';
-            input.placeholder = '120363326273379143@g.us';
+            input.placeholder = '120363398680818900@g.us';
             input.className = 'flex-1 px-2 py-1 border rounded';
 
             const hapusBtn = document.createElement('button');
