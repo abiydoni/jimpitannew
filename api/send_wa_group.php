@@ -1,19 +1,24 @@
 <?php
+// Cek metode POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Gunakan metode POST']);
     exit;
 }
 
-$groupList = $_POST['groupId'] ?? []; // ← ini diperbaiki
+// Ambil dan sanitasi input
+$groupList = $_POST['groupId'] ?? []; // ✅ TANPA "[]"
 $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 
+// Validasi
 if (empty($groupList) || !$pesangroup) {
     echo json_encode(['error' => 'Group dan pesan wajib diisi']);
     exit;
 }
 
 $url = "https://wapi.appsbee.my.id/send-group-message";
+$sessionId = '91e37fbd895dedf2587d3f506ce1718e';
+
 $logAll = "";
 $successCount = 0;
 $errorCount = 0;
@@ -33,33 +38,35 @@ foreach ($groupList as $group) {
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
+        "x-session-id: $sessionId"
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    // Logging tambahan untuk debug
-    if (curl_errno($ch)) {
-        $logAll .= "[" . date("Y-m-d H:i:s") . "] CURL Error: " . curl_error($ch) . "\n";
-    } else {
-        $logAll .= "[" . date("Y-m-d H:i:s") . "] Group: $group | Status: " . ($httpCode == 200 ? "SUKSES" : "GAGAL") . " ($httpCode)\n";
-        $logAll .= "[DATA] " . json_encode($data) . "\n";
-        $logAll .= "[RESPONSE] " . $response . "\n";
-    }
-
+    $curlError = curl_error($ch);
     curl_close($ch);
 
-    if ($httpCode == 200) {
+    $status = ($httpCode == 200) ? "SUKSES" : "GAGAL";
+    if ($status === "SUKSES") {
         $successCount++;
     } else {
         $errorCount++;
     }
+
+    $logAll .= "[" . date("Y-m-d H:i:s") . "] Group: $group | Status: $status ($httpCode)\n";
+    $logAll .= "[DATA] " . json_encode($data) . "\n";
+    $logAll .= "[RESPONSE] " . $response . "\n";
+    if ($curlError) {
+        $logAll .= "[CURL ERROR] $curlError\n";
+    }
+    $logAll .= str_repeat("-", 60) . "\n";
 }
 
+// Simpan log
 file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
 
+// Redirect berdasarkan status
 if ($successCount > 0 && $errorCount == 0) {
     header('Location: pesan_group.php?status=success&jumlah=' . $successCount);
 } elseif ($successCount > 0) {
