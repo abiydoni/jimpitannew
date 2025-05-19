@@ -20,7 +20,8 @@ if (empty($groupList) || !$pesangroup) {
     exit;
 }
 
-$url = "https://wa.appsbee.my.id/send-message-group";
+// $url = "https://wa.appsbee.my.id/send-message-group";
+$url = "https://wapi.appsbee.my.id/send-group-message";
 
 $logAll = "";
 $successCount = 0;
@@ -43,7 +44,10 @@ foreach ($groupList as $group) {
 
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
+        // 'Content-Type: application/json'
+
+        'Content-Type: application/json',
+        'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     // ========================
