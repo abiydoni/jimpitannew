@@ -1,16 +1,22 @@
 <?php
-// Cek metode POST
+// Debug mode: tampilkan error langsung
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Gunakan metode POST']);
     exit;
 }
 
-// Ambil dan sanitasi input
-$groupList = $_POST['groupId'] ?? []; // ✅ TANPA "[]"
-$pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
+$groupList = $_POST['groupId'] ?? [];
+if (!is_array($groupList)) {
+    $groupList = [$groupList];
+}
 
-// Validasi
+$pesangroup = $_POST['message'] ?? '';
+$pesangroup = trim($pesangroup);
+
 if (empty($groupList) || !$pesangroup) {
     echo json_encode(['error' => 'Group dan pesan wajib diisi']);
     exit;
@@ -22,6 +28,8 @@ $sessionId = '91e37fbd895dedf2587d3f506ce1718e';
 $logAll = "";
 $successCount = 0;
 $errorCount = 0;
+
+$results = []; // Menampung hasil tiap request
 
 foreach ($groupList as $group) {
     $group = trim($group);
@@ -54,25 +62,32 @@ foreach ($groupList as $group) {
         $errorCount++;
     }
 
-    $logAll .= "[" . date("Y-m-d H:i:s") . "] Group: $group | Status: $status ($httpCode)\n";
-    $logAll .= "[DATA] " . json_encode($data) . "\n";
-    $logAll .= "[RESPONSE] " . $response . "\n";
+    $logEntry = "[" . date("Y-m-d H:i:s") . "] Group: $group | Status: $status ($httpCode)\n";
+    $logEntry .= "[DATA] " . json_encode($data) . "\n";
+    $logEntry .= "[RESPONSE] " . $response . "\n";
     if ($curlError) {
-        $logAll .= "[CURL ERROR] $curlError\n";
+        $logEntry .= "[CURL ERROR] $curlError\n";
     }
-    $logAll .= str_repeat("-", 60) . "\n";
+    $logEntry .= str_repeat("-", 60) . "\n";
+
+    $logAll .= $logEntry;
+
+    $results[] = [
+        'group' => $group,
+        'status' => $status,
+        'http_code' => $httpCode,
+        'curl_error' => $curlError,
+        'response' => $response,
+    ];
 }
 
-// Simpan log
 file_put_contents("log-kirim-wa.txt", $logAll, FILE_APPEND);
 
-// Redirect berdasarkan status
-if ($successCount > 0 && $errorCount == 0) {
-    header('Location: pesan_group.php?status=success&jumlah=' . $successCount);
-} elseif ($successCount > 0) {
-    header('Location: pesan_group.php?status=partial&berhasil=' . $successCount . '&gagal=' . $errorCount);
-} else {
-    header('Location: pesan_group.php?status=error');
-}
+// Tampilkan hasil debug di browser
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode([
+    'successCount' => $successCount,
+    'errorCount' => $errorCount,
+    'results' => $results,
+]);
 exit;
-?>
