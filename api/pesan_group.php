@@ -49,7 +49,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                 Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.
             </div>
         <?php endif; ?>
-        <form method="post" action="send_wa_group_test.php">
+        <form method="post" action="send_wa_group.php">
             <label>ID Group WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
