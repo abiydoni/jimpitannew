@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // gorupId = '120363398680818900@g.us' // 'Group WA Q'
 
 // Ambil dan sanitasi input
-$groupList = $_POST['groupId'] ?? [];
+$groupList = $_POST['groupId[]'] ?? [];
 $pesangroup = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 
 // Validasi
