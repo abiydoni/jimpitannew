@@ -41,9 +41,11 @@ foreach ($groupList as $group) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
+    
     //Iki header sing bener pak
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        // 'Content-Type: application/json'
+
         'Content-Type: application/json',
         'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
     ]);
