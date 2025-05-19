@@ -74,52 +74,51 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         </button>
     </div>
 
-    <script>
-        // Fungsi untuk menampilkan tanggal dalam format Indonesia
-        function formatTanggalIndonesia() {
-            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            
-            const tanggal = new Date();
-            const hariNama = hari[tanggal.getDay()];
-            const bulanNama = bulan[tanggal.getMonth()];
-            const tanggalTanggal = tanggal.getDate();
-            const tahun = tanggal.getFullYear();
+<script>
+    // Fungsi untuk menampilkan tanggal dalam format Indonesia
+    function formatTanggalIndonesia() {
+        const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        
+        const tanggal = new Date();
+        const hariNama = hari[tanggal.getDay()];
+        const bulanNama = bulan[tanggal.getMonth()];
+        const tanggalTanggal = tanggal.getDate();
+        const tahun = tanggal.getFullYear();
 
-            return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
-        }
+        return `${hariNama}, ${tanggalTanggal} ${bulanNama} ${tahun}`;
+    }
 
-        // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
-        document.getElementById("tanggal").textContent = formatTanggalIndonesia();
+    // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
+    document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Fungsi untuk menambah input nomor WA
-        function tambahNomor(event) {
-            event.preventDefault(); // Mencegah tindakan default (seperti pengalihan atau submit form)
+    // Fungsi untuk menambah input nomor WA
+    function tambahNomor(event) {
+        event.preventDefault(); // Mencegah tindakan default (seperti pengalihan atau submit form)
 
-            const container = document.getElementById('nomor-container');
+        const container = document.getElementById('nomor-container');
 
-            const div = document.createElement('div');
-            div.className = 'input-group flex items-center';
+        const div = document.createElement('div');
+        div.className = 'input-group flex items-center';
 
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = 'groupId[]';
-            input.placeholder = '120363398680818900@g.us';
-            input.className = 'flex-1 px-2 py-1 border rounded';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'groupId[]';
+        input.placeholder = '120363398680818900@g.us';
+        input.className = 'flex-1 px-2 py-1 border rounded';
 
-            const hapusBtn = document.createElement('button');
-            hapusBtn.type = 'button'; // Pastikan ini adalah tombol biasa, bukan submit
-            hapusBtn.textContent = '–';
-            hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
-            hapusBtn.onclick = function () {
-                container.removeChild(div);
-            };
+        const hapusBtn = document.createElement('button');
+        hapusBtn.type = 'button'; // Pastikan ini adalah tombol biasa, bukan submit
+        hapusBtn.textContent = '–';
+        hapusBtn.className = 'ml-2 px-2 py-1 bg-red-500 text-white rounded';
+        hapusBtn.onclick = function () {
+            container.removeChild(div);
+        };
 
-            div.appendChild(input);
-            div.appendChild(hapusBtn);
-            container.appendChild(div);
-        }
-
+        div.appendChild(input);
+        div.appendChild(hapusBtn);
+        container.appendChild(div);
+    }
 </script>
 
 </body>
