@@ -106,12 +106,12 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan'] ?? '') ?></span>
                 </div>
+            </div>
                 <!-- Pilih Warna -->
                 <input type="color" id="overlayColor"
                     class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
                     title="Pilih warna latar belakang"
                     style="z-index:9999;" />
-            </div>
 
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
