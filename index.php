@@ -103,12 +103,10 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
 
                 <!-- Pilih Warna -->
-                <div class="absolute top-4 right-4 flex items-center px-2 py-2 text-gray-500">
                     <input type="color" id="overlayColor"
                         class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
                         title="Pilih warna latar belakang"
                         style="z-index:9999;" />
-                </div>
             </h2>
 
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50 w-full">
