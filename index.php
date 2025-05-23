@@ -9,7 +9,7 @@ if (!$user) {
 }
 
 $menus = $_SESSION['menus'] ?? [];
-require_once 'db.php';
+include 'db.php';
 $stmt = $conn->query("SELECT catatan FROM tb_profil LIMIT 1");
 $profil = $stmt->fetch(PDO::FETCH_ASSOC);
 $catatan = $profil['catatan'] ?? '';
