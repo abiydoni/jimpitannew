@@ -73,7 +73,6 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
             display: inline-block;
             white-space: nowrap;
             animation: marquee 15s linear infinite;
-            transform: translateX(100%);
         }
         @keyframes marquee {
             0% { transform: translateX(100%); }
