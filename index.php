@@ -100,17 +100,16 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
             <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center relative">
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
                 <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
-
-                <!-- Pilih Warna -->
-                    <input type="color" id="overlayColor"
-                        class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
-                        title="Pilih warna latar belakang"
-                        style="z-index:9999;" />
             </h2>
 
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50 w-full">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan'] ?? '') ?></span>
+                                    <!-- Pilih Warna -->
+                    <input type="color" id="overlayColor"
+                        class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
+                        title="Pilih warna latar belakang"
+                        style="z-index:9999;" />
                 </div>
             </div>
 
