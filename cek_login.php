@@ -1,37 +1,60 @@
 <?php
 session_start(); 
-require 'helper/connection.php'; // Assuming this includes the getDatabaseConnection function
+require 'helper/connection.php'; // Fungsi getDatabaseConnection()
 
-$error = ''; // Initialize the error variable
+$error = ''; // Inisialisasi pesan error
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_name = $_POST['user_name'] ?? '';
     $password = $_POST['password'] ?? '';
-    $redirect_option = $_POST['redirect_option'] ?? 'scan_app'; // Default to 'scan_app'
+    $redirect_option = $_POST['redirect_option'] ?? 'scan_app'; // Default ke scan_app
 
     try {
         $pdo = getDatabaseConnection();
 
+        // Cek user berdasarkan username
         $stmt = $pdo->prepare('SELECT * FROM users WHERE user_name = ?');
         $stmt->execute([$user_name]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
-            // Get the current day of the week
-            $currentDay = date('l'); // e.g., "Monday", "Tuesday", etc.
-
-            // Check if the current day is in the user's shift (skip for admin)
-            if ($user['role'] === 'admin' || in_array($currentDay, explode(',', $user['shift']))) {
+            // Cek shift jika bukan admin/s_admin
+            $currentDay = date('l');
+            if (in_array($user['role'], ['admin', 's_admin']) || in_array($currentDay, explode(',', $user['shift']))) {
+                
+                // Simpan user ke session
                 $_SESSION['user'] = $user;
 
-                // Redirect based on the selected option
-                if ($redirect_option === 'dashboard' && $user['role'] === 'user') {
+                // Ambil menu sesuai role
+                $role = $user['role'];
+                switch ($role) {
+                    case 's_admin':
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE s_admin = 1 ORDER BY urutan ASC');
+                        break;
+                    case 'admin':
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE admin = 1 ORDER BY urutan ASC');
+                        break;
+                    case 'user':
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE status = 1 ORDER BY urutan ASC');
+                        break;
+                    case 'warga':
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE warga = 1 ORDER BY urutan ASC');
+                        break;
+                    default:
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE 1 = 0');
+                        break;
+                }
+                $menus = $stmtMenu->fetchAll();
+                $_SESSION['menus'] = $menus;
+
+                // REDIRECT SESUAI PILIHAN
+                if ($redirect_option === 'dashboard' && $role === 'user') {
                     $error = 'Maaf kamu bukan Administrator';
                 } else {
                     if ($redirect_option === 'dashboard') {
-                        header('Location: /dashboard'); // Redirect to Dashboard
+                        header('Location: /dashboard');
                     } else {
-                        header('Location: index.php'); // Redirect to Scan App
+                        header('Location: index.php');
                     }
                     exit;
                 }
@@ -39,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Login gagal! Hari ini bukan jadwalmu jaga';
             }
         } else {
-            $error = 'username atau password salah!';
+            $error = 'Username atau password salah!';
         }
     } catch (PDOException $e) {
         $error = 'Database error: ' . $e->getMessage();
