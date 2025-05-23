@@ -9,7 +9,10 @@ if (!$user) {
 }
 
 $menus = $_SESSION['menus'] ?? [];
-$profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk catatan
+require_once 'db.php';
+$stmt = $conn->query("SELECT catatan FROM tb_profil LIMIT 1");
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
+$catatan = $profil['catatan'] ?? '';
 
 ?>
 
