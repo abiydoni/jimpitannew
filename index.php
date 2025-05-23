@@ -100,7 +100,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
 
             <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center relative">
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
-                <span>Hallo <?= htmlspecialchars($user['name']) ?></span>
+                <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
 
                 <!-- Pilih Warna -->
                 <div class="absolute top-4 right-4 flex items-center px-2 py-2 text-gray-500">
@@ -129,7 +129,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <div class="grid grid-cols-4 md:grid-cols-4 gap-1 text-xs">
                     <?php foreach ($menus as $menu): ?>
                         <a href="api/<?= htmlspecialchars($menu['alamat_url']) ?>.php"
-                            class="py-3 px-3 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
+                            class="py-2 px-2 rounded-lg flex flex-col items-center transition-transform transform hover:scale-110"
                             title="<?= htmlspecialchars($menu['nama']) ?>">
                             <div class="bg-white shadow-md rounded-lg p-2 w-full max-w-lg min-h-[50px] flex items-center justify-center opacity-75">
                                 <ion-icon name="<?= htmlspecialchars($menu['ikon'] ?: 'grid-outline') ?>" class="text-4xl"></ion-icon>
@@ -158,7 +158,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
 
             <!-- Tampilkan Role User (optional) -->
             <div class="text-xs text-gray-400 text-center mt-2">
-                Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
+                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
             </div>
         </div>
     </div>
