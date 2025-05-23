@@ -70,7 +70,8 @@ $groupId = "6285729705810-1505093181@g.us";
                 <button id="emoji-button" type="button" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">
                 😃 Emoji
                 </button>
-                <textarea name="message" rows="15" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-2 border rounded"></textarea>
+                <textarea name="message" rows="15" cols="50" id="message" class="w-full px-2 py-2 border rounded" placeholder="Tulis pesan..."></textarea>
+                <!-- <textarea name="message" rows="15" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-2 border rounded"></textarea> -->
             </div>
 
             <br>
