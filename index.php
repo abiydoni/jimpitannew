@@ -100,7 +100,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
 
             <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center relative">
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
-                <span>Menu Jimpitan</span>
+                <span>Hallo <?= htmlspecialchars($user['name']) ?></span>
 
                 <!-- Pilih Warna -->
                 <div class="absolute top-4 right-4 flex items-center px-2 py-2 text-gray-500">
