@@ -1,52 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Emoji Picker Test</title>
+  <title>Contoh Emoji Picker</title>
   <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
   <style>
     body {
       font-family: sans-serif;
-      padding: 20px;
+      padding: 2rem;
     }
     textarea {
       width: 100%;
-      height: 100px;
-      padding: 10px;
+      height: 150px;
+      margin-top: 10px;
     }
     #emoji-button {
-      margin-top: 10px;
-      padding: 6px 10px;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background-color: #ddd;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <h2>Emoji Picker Demo</h2>
-  
-  <textarea id="message" placeholder="Tulis pesan..."></textarea><br>
-  <button id="emoji-button">😊 Emoji</button>
+  <h2>Contoh Emoji Picker</h2>
+  <button id="emoji-button">😀 Emoji</button><br>
+  <textarea id="message" placeholder="Tulis pesan di sini..."></textarea>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('#emoji-button');
-    const textarea = document.querySelector('#message');
-    const picker = new EmojiButton();
+      const button = document.querySelector('#emoji-button');
+      const textarea = document.querySelector('#message');
 
-    picker.on('emoji', emoji => {
+      const picker = new EmojiButton({
+        position: 'bottom-start',
+        theme: 'light'
+      });
+
+      picker.on('emoji', emoji => {
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
-        textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
         textarea.focus();
-    });
+        textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+      });
 
-    button.addEventListener('click', () => {
+      button.addEventListener('click', () => {
         picker.togglePicker(button);
-    });
+      });
     });
   </script>
 
