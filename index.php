@@ -97,22 +97,23 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
     <div class="relative z-10">
         <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
 
-            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center relative">
-                <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
-                <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
+            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <ion-icon name="information-circle-outline" class="text-3xl"></ion-icon>
+                    <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
+                </div>
+                
+                <!-- Pilih Warna -->
+                <input type="color" id="overlayColor"
+                    class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
+                    title="Pilih warna latar belakang"
+                    style="z-index:9999;" />
             </h2>
 
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50 w-full">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan'] ?? '') ?></span>
                 </div>
-            </div>
-                <!-- Pilih Warna -->
-                <input type="color" id="overlayColor"
-                    class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
-                    title="Pilih warna latar belakang"
-                    style="z-index:9999;" />
-
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
                 <div class="text-3xl font-semibold text-gray-500" id="time"></div>
