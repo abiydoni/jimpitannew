@@ -55,7 +55,8 @@ $groupId = "6285729705810-1505093181@g.us";
             <label>ID Group WA:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="groupId[]" value=<?php $groupId ?> class="flex-1 px-2 py-1 border rounded" readonly>
+                    <input type="hidden" name="groupId[]" value="<?= htmlspecialchars($groupId) ?>">
+                    <!-- <input type="text" name="groupId[]" value="<?= htmlspecialchars($groupId) ?>" class="flex-1 px-2 py-1 border rounded"> -->
                     <!-- <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button> -->
                 </div>
             </div>
