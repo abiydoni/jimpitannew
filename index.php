@@ -9,11 +9,10 @@ if (!$user) {
 }
 
 $menus = $_SESSION['menus'] ?? [];
-include 'api/db.php';
-$stmt = $conn->query("SELECT catatan FROM tb_profil LIMIT 1");
+require_once 'api/db.php';
+$stmt = $pdo->query("SELECT catatan FROM tb_profil LIMIT 1");
 $profil = $stmt->fetch(PDO::FETCH_ASSOC);
 $catatan = $profil['catatan'] ?? '';
-
 ?>
 
 <!DOCTYPE html>
