@@ -29,16 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $role = $user['role'];
                 switch ($role) {
                     case 's_admin':
-                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE s_admin = 1 ORDER BY urutan ASC');
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE s_admin = 1 ORDER BY nama ASC');
                         break;
                     case 'admin':
-                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE admin = 1 ORDER BY urutan ASC');
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE admin = 1 ORDER BY nama ASC');
                         break;
                     case 'user':
-                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE status = 1 ORDER BY urutan ASC');
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE status = 1 ORDER BY nama ASC');
                         break;
                     case 'warga':
-                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE warga = 1 ORDER BY urutan ASC');
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE warga = 1 ORDER BY nama ASC');
                         break;
                     default:
                         $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE 1 = 0');
