@@ -52,7 +52,7 @@ $groupId = "6285729705810-1505093181@g.us";
             </div>
         <?php endif; ?>
         <form method="post" action="send_wa_group.php">
-            <label>ID Group WA:</label>
+            <!-- <label>ID Group WA:</label> -->
             <div id="nomor-container">
                 <div class="input-group flex items-center">
                     <input type="hidden" name="groupId[]" value="<?= htmlspecialchars($groupId) ?>">
