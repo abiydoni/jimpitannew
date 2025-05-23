@@ -147,11 +147,13 @@ $groupId = "6285729705810-1505093181@g.us";
 
   picker.on('emoji', emoji => {
     const textarea = document.querySelector('#message');
+      textarea.focus(); // fokus dulu supaya selectionStart valid
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+      textarea.focus(); // fokuskan lagi supaya tetap aktif
   });
 
   button.addEventListener('click', () => {
