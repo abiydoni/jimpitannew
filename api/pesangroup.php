@@ -32,22 +32,21 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const button = document.querySelector('#emoji-button');
-      const textarea = document.querySelector('#message');
-      const picker = new EmojiButton();
+    const button = document.querySelector('#emoji-button');
+    const textarea = document.querySelector('#message');
+    const picker = new EmojiButton();
 
-      picker.on('emoji', emoji => {
+    picker.on('emoji', emoji => {
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
-        const text = textarea.value;
-        textarea.value = text.substring(0, start) + emoji + text.substring(end);
+        textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
         textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
         textarea.focus();
-      });
+    });
 
-      button.addEventListener('click', () => {
+    button.addEventListener('click', () => {
         picker.togglePicker(button);
-      });
+    });
     });
   </script>
 
