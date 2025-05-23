@@ -101,10 +101,12 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
             <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center relative">
                 <ion-icon name="information-circle-outline" class="text-3xl mr-2"></ion-icon>
                 <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
-
+                <!-- Tampilkan Role User (optional) -->
+                <div class="text-xs text-gray-400 text-center mt-2">
+                    Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
+                </div>
                 <!-- Pilih Warna -->
                 <div class="absolute top-4 right-4 flex items-center px-2 py-2 text-gray-500">
-                    <span class="mr-2 text-xs">Pilih Warna</span>
                     <input type="color" id="overlayColor"
                         class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
                         title="Pilih warna latar belakang"
@@ -156,11 +158,6 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <a href="dashboard/logout.php" title="Logout">
                     <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
                 </a>
-            </div>
-
-            <!-- Tampilkan Role User (optional) -->
-            <div class="text-xs text-gray-400 text-center mt-2">
-                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
             </div>
         </div>
     </div>
