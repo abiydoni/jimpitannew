@@ -1,10 +1,10 @@
 RewriteEngine On
 
-# Jika URL tanpa ekstensi, dan file .php ada, arahkan ke file .php
+# Hilangkan ekstensi .php dari URL
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^([^\.]+)$ $1.php [L]
 
-# Redirect akses .php ke versi tanpa ekstensi
+# Redirect dari login.php → login
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
 RewriteRule ^ %1 [R=301,L]
