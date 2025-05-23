@@ -15,7 +15,7 @@ include "cek_login.php"
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<form action="/login" method="POST">
+<form action="login.php" method="POST">
 <div class="screen-1">
     <div class="email">
         <label for="user_name">User</label>
