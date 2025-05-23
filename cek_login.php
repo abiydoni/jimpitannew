@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             // Cek shift jika bukan admin/s_admin
             $currentDay = date('l');
-            if (in_array($user['role'], ['admin', 's_admin']) || in_array($currentDay, explode(',', $user['shift']))) {
+            if (in_array($user['role'], ['admin', 's_admin', 'warga']) || in_array($currentDay, explode(',', $user['shift']))) {
                 
                 // Simpan user ke session
                 $_SESSION['user'] = $user;
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['menus'] = $menus;
 
                 // REDIRECT SESUAI PILIHAN
-                if ($redirect_option === 'dashboard' && $role === 'user') {
+                if ($redirect_option === 'dashboard' && $role === 'user','warga') {
                     $error = 'Maaf kamu bukan Administrator';
                 } else {
                     if ($redirect_option === 'dashboard') {
