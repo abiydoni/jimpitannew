@@ -33,6 +33,7 @@ $groupId = "6285729705810-1505093181@g.us";
             cursor: pointer;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
@@ -66,6 +67,9 @@ $groupId = "6285729705810-1505093181@g.us";
             <div class="input-group mt-4">
                 <label>Pesan:</label><br>
                 <!-- <textarea name="message" rows="15" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-2 border rounded"><?php echo htmlspecialchars($pesan); ?></textarea> -->
+                <button id="emoji-button" type="button" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                😃 Emoji
+                </button>
                 <textarea name="message" rows="15" cols="50" placeholder="Tulis pesan..." class="w-full px-2 py-2 border rounded"></textarea>
             </div>
 
@@ -135,6 +139,23 @@ $groupId = "6285729705810-1505093181@g.us";
         div.appendChild(hapusBtn);
         container.appendChild(div);
     }
+</script>
+<script>
+  const button = document.querySelector('#emoji-button');
+  const picker = new EmojiButton();
+
+  picker.on('emoji', emoji => {
+    const textarea = document.querySelector('#message');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
+    textarea.focus();
+    textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+  });
+
+  button.addEventListener('click', () => {
+    picker.togglePicker(button);
+  });
 </script>
 
 </body>
