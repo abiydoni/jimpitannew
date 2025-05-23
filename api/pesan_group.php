@@ -35,15 +35,17 @@ $groupId = "6285729705810-1505093181@g.us";
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
     <style>
-    .emoji-picker {
-    z-index: 999999 !important;
-    position: absolute !important;
-    }
-    body, html, .container {
-    overflow: visible !important;
-    }
-    </style>
+        /* Atur container agar picker bisa tampil di atas */
+        body, html {
+        overflow: visible !important;
+        }
 
+        /* Paksa emoji picker berada di atas segalanya */
+        .emoji-picker {
+        z-index: 999999 !important;
+        position: absolute !important;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
     <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
@@ -153,29 +155,32 @@ $groupId = "6285729705810-1505093181@g.us";
 </script>
 <script>
   const button = document.querySelector('#emoji-button');
-  const picker = new EmojiButton();
+  const picker = new EmojiButton({
+    position: 'bottom-start',
+    rootElement: document.body, // Penting: pasang di body, bukan di div
+    theme: 'light'
+  });
+
+  // Tambahkan z-index tinggi saat muncul
+  picker.on('picker:show', () => {
+    const pickerEl = document.querySelector('.emoji-picker');
+    if (pickerEl) {
+      pickerEl.style.zIndex = '999999';
+    }
+  });
 
   picker.on('emoji', emoji => {
     const textarea = document.querySelector('#message');
-      textarea.focus(); // fokus dulu supaya selectionStart valid
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-      textarea.focus(); // fokuskan lagi supaya tetap aktif
   });
 
   button.addEventListener('click', () => {
     picker.togglePicker(button);
   });
-
-  const picker = new EmojiButton({
-  position: 'top-start', // atau 'bottom-start' kalau terlalu atas
-  rootElement: document.body
-  });
-
 </script>
-
 </body>
 </html>
