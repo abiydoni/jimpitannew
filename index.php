@@ -101,8 +101,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <div class="flex items-center gap-2">
                     <ion-icon name="information-circle-outline" class="text-3xl"></ion-icon>
                     <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
-                </div>
-                
+                </div>                
                 <!-- Pilih Warna -->
                 <input type="color" id="overlayColor"
                     class="w-8 h-8 border-none p-0 cursor-pointer rounded-full bg-transparent"
@@ -114,6 +113,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
                     <span class="animate-marquee"><?= htmlspecialchars($profil['catatan'] ?? '') ?></span>
                 </div>
+            </div>
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
                 <div class="text-3xl font-semibold text-gray-500" id="time"></div>
