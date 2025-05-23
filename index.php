@@ -140,7 +140,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                 </div>
             </div>
 
-            <?php if ($user['role'] !== 'warga'): ?>
+            <?php if (strtolower($user['role']) !== 'warga'): ?>
                 <!-- Scan Button -->
                 <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
                     <h1 class="text-center font-bold mb-2 text-gray-500">Scan Disini..!</h1>
