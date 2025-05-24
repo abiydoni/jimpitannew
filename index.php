@@ -210,7 +210,8 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
                     .catch(error => console.error('Service Worker registration failed:', error));
             });
         }
-
+    </script>
+    <script>
         // Color picker overlay control
         const colorPicker = document.getElementById('overlayColor');
         const overlay = document.getElementById('overlayDiv');
