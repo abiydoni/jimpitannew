@@ -45,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // 🚫 warga dan user tidak boleh masuk dashboard
                 if ($redirect_option === 'dashboard' && in_array($role, ['user', 'warga'])) {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
+                    // Tampilkan error dan hentikan eksekusi
+                    echo "<p>$error</p>";
+                    exit;
                 } else {
                     $redirect = ($redirect_option === 'dashboard') ? '/dashboard' : 'index.php';
                     header("Location: $redirect");
