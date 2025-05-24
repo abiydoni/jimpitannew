@@ -2,9 +2,8 @@
 session_start();
 
 // Pastikan user sudah login
-$user = $_SESSION['user'] ?? null;
-if (!$user) {
-    header('Location: login.php');
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
     exit;
 }
 
