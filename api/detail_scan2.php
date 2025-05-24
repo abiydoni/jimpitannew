@@ -60,7 +60,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
-            <div class="overflow-auto rounded-md bg-white/50 p-2">
+            <div class="overflow-auto rounded-md bg-white p-1">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class='bg-gray-100 border-b'>
