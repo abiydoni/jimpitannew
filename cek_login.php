@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "<p>$error</p>";
                     exit;
                 } else {
-                    $redirect = ($redirect_option === 'dashboard') ? '/dashboard' : 'index.php';
+                    $redirect = ($redirect_option === 'dashboard') ? '/dashboard/index.php' : 'index.php';
                     header("Location: $redirect");
                     exit;
                 }
