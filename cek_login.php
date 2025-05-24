@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
                 } else {
                     if ($redirect_option === 'dashboard') {
-                        header('Location: /dashboard'); // Redirect to Dashboard
+                        header('Location: /dashboard/index.php'); // Redirect to Dashboard
                     } else {
                         header('Location: index.php'); // Redirect to Scan App
                     }
