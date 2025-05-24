@@ -48,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     if ($redirect_option === 'dashboard') {
                         header('Location: /dashboard/index.php'); // Redirect to Dashboard
-                            echo "masuk";
-
                     } else {
                         header('Location: index.php'); // Redirect to Scan App
                     }
