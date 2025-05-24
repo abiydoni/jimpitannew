@@ -47,18 +47,22 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
+    <!-- <div id="overlayDiv" class="absolute inset-0"></div> -->
             <!-- Loader GIF loading -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
+    <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
-            <table class='min-w-full border-collapse text-sm text-gray-700'>
-                <thead class="sticky top-0">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
+            <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-1">
+            <table class="min-w-full border-collapse text-sm text-gray-700">
+                <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class='bg-gray-100 border-b'>
                         <th>No.</th>
                         <th>Nama KK</th>
@@ -78,6 +82,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <div class="mt-1 font-bold text-gray-700 text-left text-xl">
@@ -93,6 +98,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
+
 <script>
   // Menambahkan event listener untuk semua elemen tombol/link
   document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
@@ -165,5 +171,11 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         $(document).ready(updateTable);
 
     </script>
+    <script>
+        const overlay = document.getElementById('overlayDiv');
+        const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+        overlay.style.backgroundColor = savedColor;
+    </script>
+
 </body>
 </html>
