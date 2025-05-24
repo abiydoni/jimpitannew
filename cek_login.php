@@ -47,12 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
                 } else {
                     if ($redirect_option === 'dashboard') {
-                        header('Location: dashboard');
-                        exit;
+                        header('Location: /dashboard/index.php');
                     } else {
                         header('Location: index.php');
-                        exit;
                     }
+                    exit;
                 }
             } else {
                 $error = 'Login gagal! Hari ini bukan jadwalmu jaga';
