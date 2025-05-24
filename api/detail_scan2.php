@@ -55,7 +55,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
 
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
 
-    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
