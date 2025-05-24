@@ -49,52 +49,53 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
 <body class="bg-gray-100 font-poppins text-gray-800">
     <!-- <div id="overlayDiv" class="absolute inset-0"></div> -->
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
-            <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
+    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
+                <!-- Loader GIF loading -->
+        <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
+            <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
+        </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
-        <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
-        <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
+        <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
+            <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
+            <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
 
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
-            <table class='min-w-full border-collapse text-sm text-gray-700'>
-                <thead class="sticky top-0">
-                    <tr class='bg-gray-100 border-b'>
-                        <th>No.</th>
-                        <th>Nama KK</th>
-                        <th class='text-center'>Nominal</th>
-                        <th>Jaga</th>
-                    </tr>
-                </thead>
-                <tbody id='data-table'>
-                    <?php $no = 1; ?>
-                    <?php foreach ($data as $row): ?>
-                        <tr class='border-b hover:bg-gray-50'>
-                            <td><?= $no++ ?></td>
-                            <td><?= htmlspecialchars($row["kk_name"]) ?></td>
-                            <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($row["collector"]) ?></td>
+            <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
+                <table class='min-w-full border-collapse text-sm text-gray-700'>
+                    <thead class="sticky top-0">
+                        <tr class='bg-gray-100 border-b'>
+                            <th>No.</th>
+                            <th>Nama KK</th>
+                            <th class='text-center'>Nominal</th>
+                            <th>Jaga</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody id='data-table'>
+                        <?php $no = 1; ?>
+                        <?php foreach ($data as $row): ?>
+                            <tr class='border-b hover:bg-gray-50'>
+                                <td><?= $no++ ?></td>
+                                <td><?= htmlspecialchars($row["kk_name"]) ?></td>
+                                <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
+                                <td><?= htmlspecialchars($row["collector"]) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="mt-1 font-bold text-gray-700 text-left text-xl">
-            Total Nominal Setor: Rp <span id="total-nominal"><?= number_format($total_nominal, 0, ',', '.') ?></span>
-        </div>
-        <div class="mt-4 font-bold text-gray-700 text-left">
-            Total Scan: <span id="total-scans"><?= number_format($total_scans, 0, ',', '.') ?></span>
-        </div>
+            <div class="mt-1 font-bold text-gray-700 text-left text-xl">
+                Total Nominal Setor: Rp <span id="total-nominal"><?= number_format($total_nominal, 0, ',', '.') ?></span>
+            </div>
+            <div class="mt-4 font-bold text-gray-700 text-left">
+                Total Scan: <span id="total-scans"><?= number_format($total_scans, 0, ',', '.') ?></span>
+            </div>
 
-        <button class="fixed bottom-4 right-4 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
-            onclick="window.location.href='../index.php'" title="Pergi ke menu">
-            <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
+            <button class="fixed bottom-4 right-4 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+                onclick="window.location.href='../index.php'" title="Pergi ke menu">
+                <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+        </div>
     </div>
-
 <script>
   // Menambahkan event listener untuk semua elemen tombol/link
   document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
