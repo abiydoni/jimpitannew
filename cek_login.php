@@ -43,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['menus'] = $menus;
 
                 // 🚫 warga dan user tidak boleh masuk dashboard
-                if ($redirect_option === 'dashboard' && in_array($role, ['user', 'warga'])) {
+                // if ($redirect_option === 'dashboard' && in_array($role, ['user', 'warga'])) {
+                if ($redirect_option === 'dashboard' && $user['role'] === 'user') {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
                 } else {
                     if ($redirect_option === 'dashboard') {
