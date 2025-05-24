@@ -1,4 +1,6 @@
 <?php
+session_start();
+$error = '';
 include "cek_login.php"
 ?>
 
