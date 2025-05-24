@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $menus = $stmtMenu->fetchAll();
                 $_SESSION['menus'] = $menus;
 
-                // 🚫 warga dan user tidak boleh masuk dashboard
+                // warga dan user tidak boleh masuk dashboard
                 if ($redirect_option === 'dashboard' && in_array($role, ['user', 'warga'])) {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
                 } else {
                     if ($redirect_option === 'dashboard') {
-                        header('Location: dashboard'); // Redirect to Dashboard
+                        header('Location: dashboard');
                     } else {
-                        header('Location: index.php'); // Redirect to Scan App
+                        header('Location: index.php');
                     }
                     exit;
                 }
