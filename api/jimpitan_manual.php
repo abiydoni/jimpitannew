@@ -71,6 +71,7 @@ if (isset($_GET['delete'])) {
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
 
     <style>
         table th, table td {
@@ -110,14 +111,18 @@ if (isset($_GET['delete'])) {
             <?php endif; ?>
             <form method="POST" action="submit_jimpitan.php">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama KK</label>
-                        <select name="report_id" required class="w-full border rounded px-2 py-1">
-                            <option value="">Pilih KK</option>
-                            <?php foreach($master_kk as $kk): ?>
-                                <option value="<?= $kk['code_id'] ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div x-data="dropdownSearch()" class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama KK</label>
+                        <input x-model="search" @click="open = true" @input="open = true" type="text" placeholder="Cari KK..." 
+                            class="w-full border rounded px-2 py-1" />
+
+                        <ul x-show="open" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+                            <template x-for="kk in filteredOptions" :key="kk.code_id">
+                                <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.kk_name"></li>
+                            </template>
+                        </ul>
+
+                        <input type="hidden" name="report_id" :value="selectedOption ? selectedOption.code_id : ''" required />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tanggal Jimpitan</label>
@@ -142,7 +147,7 @@ if (isset($_GET['delete'])) {
                         <th>Nama KK</th>
                         <th class='text-center'>Nominal</th>
                         <th>Jaga</th>
-                        <th>Aksi</th>
+                        <th class='text-center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id='data-table'>
@@ -253,5 +258,25 @@ if (isset($_GET['delete'])) {
         const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
         overlay.style.backgroundColor = savedColor;
     </script>
+    <script>
+        function dropdownSearch() {
+            return {
+                open: false,
+                search: '',
+                selectedOption: null,
+                options: <?php echo json_encode($master_kk); ?>,
+                get filteredOptions() {
+                    if (this.search === '') return this.options;
+                    return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
+                },
+                selectOption(kk) {
+                    this.selectedOption = kk;
+                    this.search = kk.kk_name;
+                    this.open = false;
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
