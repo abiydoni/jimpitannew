@@ -102,7 +102,7 @@ $menus = $_SESSION['menus'] ?? [];
     <div class="relative z-10">
         <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
 
-            <h2 class="text-xl font-bold text-gray-700 mb-2 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-gray-700 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <ion-icon name="information-circle-outline" class="text-xl"></ion-icon>
                     <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
