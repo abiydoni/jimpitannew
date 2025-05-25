@@ -7,6 +7,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 // include 'api/get_info.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -115,6 +116,8 @@ if (!isset($_SESSION['user'])) {
   </style>
 </head>
 <body>
+      <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
+
 <div id="landscapeBlocker">
   <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
   <p>Please rotate your device to portrait mode.</p>
@@ -188,5 +191,11 @@ if (!isset($_SESSION['user'])) {
         updateData();
     });
 </script>
+    <script>
+        const overlay = document.getElementById('overlayDiv');
+        const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+        overlay.style.backgroundColor = savedColor;
+    </script>
+
 </body>
 </html>
