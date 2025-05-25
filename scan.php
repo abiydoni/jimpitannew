@@ -6,7 +6,14 @@ if (!isset($_SESSION['user'])) {
     header('Location: login.php'); // Redirect to login page
     exit;
 }
-// include 'api/get_info.php';
+require_once 'api/db.php';
+$stmt = $pdo->query("SELECT cp, hp FROM tb_profil LIMIT 1");
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$cp = $profil['cp'] ?? 'Nama Kontak Tidak Ada';
+$hp = $profil['hp'] ?? 'Nomor HP Tidak Ada';
+// Ubah 0 jadi 62 jika perlu
+$hp_link = preg_replace('/^0/', '62', $hp);
 
 ?>
 
@@ -116,14 +123,14 @@ if (!isset($_SESSION['user'])) {
   </style>
 </head>
 <body>
-      <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
+      <!-- <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div> -->
 
 <div id="landscapeBlocker">
   <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
   <p>Please rotate your device to portrait mode.</p>
 </div>
 
-<div class="container">
+<div class="container" id="overlayDiv">
   <h3>Jimpitan RT.07 Randuares</h3>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -151,8 +158,8 @@ if (!isset($_SESSION['user'])) {
 
   <div id="qr-reader"></div> <!-- QR camera dimulai -->
 
-  <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: Setyo Adi Hermawan</p>
-  <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/6285786740013" target="_blank">+62 857-8674-0013</a></p>
+<p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: <?= htmlspecialchars($cp) ?></p>
+<p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/<?= htmlspecialchars($hp_link) ?>" target="_blank"><?= htmlspecialchars($hp) ?></a></p>
 </div>
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
