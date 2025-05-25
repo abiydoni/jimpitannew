@@ -113,10 +113,6 @@ $menus = $_SESSION['menus'] ?? [];
                     title="Pilih warna latar belakang"
                     style="z-index:9999;" />
             </h2>
-            <!-- Tampilkan Role User (optional) -->
-            <div class="text-xs text-gray-500 text-center">
-                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
-            </div>
 
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50 w-full">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
@@ -155,6 +151,10 @@ $menus = $_SESSION['menus'] ?? [];
                     </a>
                 </div>
             <?php endif; ?>
+            <!-- Tampilkan Role User (optional) -->
+            <div class="text-xs text-gray-500 text-center mt-2">
+                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
+            </div>
 
             <!-- Logout Floating Button -->
             <div class="floating-button" style="margin-right: 70px;">
