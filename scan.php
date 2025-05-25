@@ -123,44 +123,42 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </style>
 </head>
 <body>
-      <!-- <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div> -->
-
-<div id="landscapeBlocker">
-  <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
-  <p>Please rotate your device to portrait mode.</p>
-</div>
-
-<div class="container shadow-lg rounded-lg" id="overlayDiv">
-  <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const today = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const tanggalHariIni = today.toLocaleDateString('id-ID', options);
-      document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
-    });
-  </script>
-  <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
-  <!-- <h4 id="totalScan">
-    Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
-  </h4> -->
-  <a href="api/detail_scan.php"><h4 id="totalScan">Menunggu data...</h4></a>
-
-    <div class="floating-button" style="margin-right : 70px;">
-      <a href="index.php"><i class="bx bx-arrow-back bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
-    </div>
-    <div class="floating-button">
-      <label for="qr-input-file" id="fileInputLabel" style="color: white;">
-        <i class="bx bxs-camera" style="font-size:24px; color: white;"></i>
-      </label>
-      <input type="file" id="qr-input-file" accept="image/*" capture hidden>
+  <div id="landscapeBlocker">
+    <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
+    <p>Please rotate your device to portrait mode.</p>
   </div>
 
-  <div id="qr-reader"></div> <!-- QR camera dimulai -->
+  <div class="container">
+    <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const tanggalHariIni = today.toLocaleDateString('id-ID', options);
+        document.getElementById('tanggalHariIni').innerText = `Hari: ${tanggalHariIni}`;
+      });
+    </script>
+    <p style="color:grey; font-size: 14px; text-align: center;" id="tanggalHariIni"></p>
+    <!-- <h4 id="totalScan">
+      Jumlah Scan: Rp. <?php echo number_format($totalScan, 0, ',', '.'); ?> dan <?php echo $totalData; ?> KK
+    </h4> -->
+    <a href="api/detail_scan.php"><h4 id="totalScan">Menunggu data...</h4></a>
 
-<p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: <?= htmlspecialchars($cp) ?></p>
-<p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/<?= htmlspecialchars($hp_link) ?>" target="_blank"><?= htmlspecialchars($hp) ?></a></p>
-</div>
+      <div class="floating-button" style="margin-right : 70px;">
+        <a href="index.php"><i class="bx bx-arrow-back bx-tada bx-flip-horizontal" style="font-size:24px" ></i></a>
+      </div>
+      <div class="floating-button">
+        <label for="qr-input-file" id="fileInputLabel" style="color: white;">
+          <i class="bx bxs-camera" style="font-size:24px; color: white;"></i>
+        </label>
+        <input type="file" id="qr-input-file" accept="image/*" capture hidden>
+    </div>
+
+    <div id="qr-reader"></div> <!-- QR camera dimulai -->
+
+    <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: <?= htmlspecialchars($cp) ?></p>
+    <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/<?= htmlspecialchars($hp_link) ?>" target="_blank"><?= htmlspecialchars($hp) ?></a></p>
+  </div>
 
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
@@ -198,11 +196,5 @@ $hp_link = preg_replace('/^0/', '62', $hp);
         updateData();
     });
 </script>
-    <script>
-        const overlay = document.getElementById('overlayDiv');
-        const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
-        overlay.style.backgroundColor = savedColor;
-    </script>
-
 </body>
 </html>
