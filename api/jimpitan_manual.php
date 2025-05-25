@@ -109,7 +109,7 @@ if (isset($_GET['delete'])) {
                 </div>
                 <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
-            <form onsubmit="return validateForm()">
+            <form action="submit_jimpitan.php" method="POST" onsubmit="return validateForm()">
                 <!-- Dropdown dengan pencarian (Alpine.js) -->
                 <div x-data="dropdownSearch()" class="relative w-full mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama KK</label>
