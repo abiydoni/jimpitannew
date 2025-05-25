@@ -97,9 +97,9 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
     <div class="relative z-10">
         <div class="flex flex-col max-w-4xl mx-auto p-4 rounded-lg" style="max-width: 60vh;">
 
-            <h2 class="text-2xl font-bold text-gray-700 mb-2 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-gray-700 mb-2 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <ion-icon name="information-circle-outline" class="text-3xl"></ion-icon>
+                    <ion-icon name="information-circle-outline" class="text-xl"></ion-icon>
                     <span>Hello.. <?= htmlspecialchars($user['name']) ?></span>
                 </div>                
                 <!-- Pilih Warna -->
@@ -139,7 +139,7 @@ $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk 
             <?php if (strtolower($user['role']) !== 'warga'): ?>
                 <!-- Scan Button -->
                 <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-                    <h1 class="text-center font-bold mb-2 text-gray-500">Scan Disini..!</h1>
+                    <!-- <h1 class="text-center font-bold mb-2 text-gray-500">Scan Disini..!</h1> -->
                     <a href="scan.php"
                     class="w-20 h-20 bg-red-600 hover:bg-red-800 text-white rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110">
                         <ion-icon name="barcode-outline" class="text-4xl"></ion-icon>
