@@ -90,6 +90,12 @@ if (isset($_GET['delete'])) {
     </div> -->
 
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+            <?= htmlspecialchars($_SESSION['error']) ?>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Input Jimpitan Manual</h1>
