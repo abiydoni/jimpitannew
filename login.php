@@ -1,5 +1,7 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Jakarta');
+
 $error = '';
 include "cek_login.php"
 ?>

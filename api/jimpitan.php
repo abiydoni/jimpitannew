@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Jakarta');
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
