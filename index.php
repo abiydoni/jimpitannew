@@ -10,7 +10,7 @@ if (!$user) {
 require_once 'api/db.php';
 $stmt = $pdo->query("SELECT catatan FROM tb_profil LIMIT 1");
 $profil = $stmt->fetch(PDO::FETCH_ASSOC);
-// $catatan = $profil['catatan'] ?? '';
+$catatan = $profil['catatan'] ?? '';
 
 $user = $_SESSION['user']; // <--- Tambahkan ini
 $menus = $_SESSION['menus'] ?? [];
@@ -113,10 +113,14 @@ $menus = $_SESSION['menus'] ?? [];
                     title="Pilih warna latar belakang"
                     style="z-index:9999;" />
             </h2>
+            <!-- Tampilkan Role User (optional) -->
+            <div class="text-xs text-gray-400 text-center mt-2">
+                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
+            </div>
 
             <div class="flex flex-col items-center p-2 rounded-lg mb-2 bg-gray-800 opacity-50 w-full">
                 <div class="text-sm font-semibold text-white overflow-hidden w-full">
-                    <span class="animate-marquee"><?= htmlspecialchars($profil['catatan'] ?? '') ?></span>
+                    <span class="animate-marquee"><?= htmlspecialchars($catatan) ?></span>
                 </div>
             </div>
             <!-- Tanggal dan Waktu -->
@@ -157,11 +161,6 @@ $menus = $_SESSION['menus'] ?? [];
                 <a href="dashboard/logout.php" title="Logout">
                     <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
                 </a>
-            </div>
-
-            <!-- Tampilkan Role User (optional) -->
-            <div class="text-xs text-gray-400 text-center mt-2">
-                Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
             </div>
         </div>
     </div>
