@@ -188,10 +188,7 @@ $menus = $_SESSION['menus'] ?? [];
             const now = new Date();
 
             const tanggalFormatter = new Intl.DateTimeFormat('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
 
             const tanggal = tanggalFormatter.format(now);
@@ -199,10 +196,11 @@ $menus = $_SESSION['menus'] ?? [];
             const jam = String(now.getHours()).padStart(2, '0');
             const menit = String(now.getMinutes()).padStart(2, '0');
             const detik = String(now.getSeconds()).padStart(2, '0');
-            const waktu = `${jam}:${menit}:${detik}`;
 
             document.getElementById('date').textContent = tanggal;
-            document.getElementById('time').textContent = waktu;
+            document.getElementById('hours').textContent = jam;
+            document.getElementById('minutes').textContent = menit;
+            document.getElementById('seconds').textContent = detik;
         }
 
         setInterval(updateTime, 1000);
