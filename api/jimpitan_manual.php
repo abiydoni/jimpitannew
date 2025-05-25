@@ -76,9 +76,9 @@ if (isset($_POST['submit'])) {
 <body class="bg-gray-100 font-poppins text-gray-800">
     <!-- <div id="overlayDiv" class="absolute inset-0"></div> -->
             <!-- Loader GIF loading -->
-    <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <!-- <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
-    </div>
+    </div> -->
 
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
 
