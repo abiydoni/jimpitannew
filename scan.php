@@ -131,7 +131,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
 </div>
 
 <div class="container shadow-lg rounded-lg" id="overlayDiv">
-  <h3>Jimpitan RT.07 Randuares</h3>
+  <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const today = new Date();
