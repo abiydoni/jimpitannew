@@ -23,7 +23,7 @@ $stmt = $pdo->prepare("
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
     WHERE report.jimpitan_date = CURDATE()
-          AND report.kode_u = 'system'
+          AND LOWER(report.kode_u) = 'system'
     ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
@@ -96,6 +96,12 @@ if (isset($_GET['delete'])) {
             <?= htmlspecialchars($_SESSION['error']) ?>
         </div>
         <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+            <?= htmlspecialchars($_SESSION['success']) ?>
+        </div>
+        <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
 
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
