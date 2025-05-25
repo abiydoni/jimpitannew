@@ -123,7 +123,7 @@ $menus = $_SESSION['menus'] ?? [];
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
                 <div class="flex items-baseline space-x-1 text-gray-500">
                     <span class="text-5xl font-extrabold" id="hours"></span>:<span class="text-5xl font-extrabold" id="minutes"></span>
-                    <span id="seconds" class="text-xs relative -top-2"></span>
+                    <span id="seconds" class="text-xl relative -top-5"></span>
                 </div>
                 <div class="text-gray-500" id="date"></div>
             </div>
