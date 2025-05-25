@@ -2,11 +2,12 @@
 session_start();
 
 // Pastikan user sudah login
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+$user = $_SESSION['user'] ?? null;
+if (!$user) {
+    header('Location: login.php');
     exit;
 }
-
+$user = $_SESSION['user']; // <--- Tambahkan ini
 $menus = $_SESSION['menus'] ?? [];
 $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk catatan
 
