@@ -91,23 +91,23 @@ if (isset($_GET['delete'])) {
     </div> -->
 
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-            <?= htmlspecialchars($_SESSION['error']) ?>
-        </div>
-        <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
-    <?php if (isset($_SESSION['success'])): ?>
-        <div class="bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
-            <?= htmlspecialchars($_SESSION['success']) ?>
-        </div>
-        <?php unset($_SESSION['success']); ?>
-    <?php endif; ?>
 
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Input Jimpitan Manual</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
         <div class="mb-4 bg-white p-4 rounded-md shadow">
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?= htmlspecialchars($_SESSION['error']) ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?= htmlspecialchars($_SESSION['success']) ?>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
             <form method="POST" action="submit_jimpitan.php">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -205,6 +205,13 @@ if (isset($_GET['delete'])) {
                                 <td>${row.kk_name}</td>
                                 <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
                                 <td>${row.collector}</td>
+                                <td class="flex justify-center space-x-2">
+                                    <a href="jimpitan_manual.php?delete=${row.id}" 
+                                    onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                        <i class='bx bx-trash'></i>
+                                    </a>
+                                </td>
                             </tr>
                         `);
                     });
