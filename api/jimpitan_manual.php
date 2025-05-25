@@ -154,11 +154,19 @@ if (isset($_GET['delete'])) {
                             <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
                             <td><?= htmlspecialchars($row["collector"]) ?></td>
                             <td class="flex justify-center space-x-2">
-                                <a href="jimpitan_manual.php?delete=<?php echo $row['id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-                                    <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
-                                </a>
+                                <?php if ($row['collector'] == 'system'): ?>
+                                    <a href="jimpitan_manual.php?delete=<?php echo $row['id']; ?>" 
+                                    onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" 
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                        <i class='bx bx-trash'></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="bg-gray-400 text-white font-bold py-1 px-3 rounded cursor-not-allowed">
+                                        <i class='bx bx-trash'></i>
+                                    </span>
+                                <?php endif; ?>
                             </td>
-                        </tr>
+                       </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -198,7 +206,19 @@ if (isset($_GET['delete'])) {
                     console.log(response); // Periksa output ini di konsol browser
                     const data = JSON.parse(response);
                     $('#data-table').empty();
+
                     data.data.forEach((row, index) => {
+                        // Tentukan tombol hapus aktif atau tidak berdasarkan collector
+                        const actionButton = row.collector === 'system'
+                            ? `<a href="jimpitan_manual.php?delete=${row.id}" 
+                                onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                <i class='bx bx-trash'></i>
+                            </a>`
+                            : `<span class="bg-gray-400 text-white font-bold py-1 px-3 rounded cursor-not-allowed">
+                                <i class='bx bx-trash'></i>
+                            </span>`;
+
                         $('#data-table').append(`
                             <tr class='border-b hover:bg-gray-50'>
                                 <td>${index + 1}</td>
@@ -206,15 +226,12 @@ if (isset($_GET['delete'])) {
                                 <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
                                 <td>${row.collector}</td>
                                 <td class="flex justify-center space-x-2">
-                                    <a href="jimpitan_manual.php?delete=${row.id}" 
-                                    onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
-                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-                                        <i class='bx bx-trash'></i>
-                                    </a>
+                                    ${actionButton}
                                 </td>
                             </tr>
                         `);
                     });
+
                     $('#total-scans').text(data.data.length);
                     $('#total-nominal').text(parseInt(data.total_nominal).toLocaleString());
                 },
