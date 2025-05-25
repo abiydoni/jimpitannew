@@ -23,7 +23,7 @@ $stmt = $pdo->prepare("
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
     WHERE report.jimpitan_date = CURDATE()
-          AND report.collector = 'system'
+          AND report.kode_u = 'system'
     ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
@@ -70,6 +70,7 @@ if (isset($_GET['delete'])) {
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
         table th, table td {
