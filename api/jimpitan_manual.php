@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
             </form>
         </div>
 
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 50vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 45vh;">
             <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-1">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
