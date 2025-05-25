@@ -172,30 +172,6 @@ if (isset($_GET['delete'])) {
     </div>
 
     <script>
-    // Menambahkan event listener untuk semua elemen tombol/link
-    document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-        element.addEventListener('click', function (e) {
-        // Mencegah form disubmit langsung atau link berpindah halaman
-        e.preventDefault();
-
-        // Tampilkan loader
-        document.getElementById('loader').classList.remove('hidden');
-        
-        // Jika itu adalah form submit, submit form setelah beberapa detik
-        if (this.type === 'submit') {
-            setTimeout(function() {
-            this.closest('form').submit();
-            }.bind(this), 500); // Tunggu 500ms sebelum submit form
-        } else {
-            // Jika itu link, pindahkan halaman setelah beberapa detik
-            setTimeout(() => {
-            window.location.href = this.href;
-            }, 500); // Tunggu 500ms sebelum pindah halaman
-        }
-        });
-    });
-    </script>
-    <script>
         // Menampilkan tanggal dalam format Indonesia
         function formatTanggalIndonesia() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
