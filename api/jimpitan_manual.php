@@ -110,7 +110,8 @@ if (isset($_GET['delete'])) {
                 <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
             <form onsubmit="return validateForm()">
-                <div x-data="dropdownSearch()" class="relative w-full">
+                <!-- Dropdown dengan pencarian (Alpine.js) -->
+                <div x-data="dropdownSearch()" class="relative w-full mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama KK</label>
                     <input x-model="search" @click="open = true" @input="open = true" type="text" placeholder="Cari KK..." 
                         class="w-full border rounded px-2 py-1" />
@@ -121,11 +122,16 @@ if (isset($_GET['delete'])) {
                         </template>
                     </ul>
 
-                    <!-- Input hidden untuk menyimpan report_id -->
-                    <input id="hiddenReportId" type="hidden" name="report_id" :value="selectedOption ? selectedOption.code_id : ''" />
+                    <input type="hidden" id="hiddenReportId" name="report_id" :value="selectedOption ? selectedOption.code_id : ''">
                 </div>
 
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Simpan</button>
+                <!-- Input Tanggal -->
+                <div class="mb-4">
+                    <label for="jimpitan_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Jimpitan</label>
+                    <input type="date" id="jimpitan_date" name="jimpitan_date" required class="w-full border rounded px-2 py-1" />
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
             </form>
         </div>
 
@@ -270,11 +276,25 @@ if (isset($_GET['delete'])) {
 
     function validateForm() {
         const reportId = document.getElementById('hiddenReportId').value;
+        const jimpitanDate = document.getElementById('jimpitan_date').value;
+
         if (!reportId) {
-            alert("Silakan pilih Nama KK terlebih dahulu.");
-            return false; // Stop submit
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops!',
+                text: 'Silakan pilih Nama KK terlebih dahulu.',
+            });
+            return false;
         }
-        return true; // Lanjutkan submit
+        if (!jimpitanDate) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops!',
+                text: 'Silakan pilih tanggal Jimpitan.',
+            });
+            return false;
+        }
+        return true; // Valid, form dikirim
     }
     </script>
 </body>
