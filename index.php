@@ -121,7 +121,9 @@ $menus = $_SESSION['menus'] ?? [];
             </div>
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col items-center p-4 rounded-lg mb-4">
-                <div class="text-3xl font-semibold text-gray-500" id="time"></div>
+                <div class="text-3xl font-semibold text-gray-500" id="time">
+                    <span id="hours"></span>:<span id="minutes"></span>:<span id="seconds" class="text-sm"></span>
+                </div>
                 <div class="text-gray-500" id="date"></div>
             </div>
 
