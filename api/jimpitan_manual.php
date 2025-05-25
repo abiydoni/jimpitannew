@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail</title>
+    <title>Jimpitan Manual</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -83,29 +83,35 @@ if (isset($_POST['submit'])) {
     <div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none"></div>
 
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
-        <h1 class="text-xl font-bold text-gray-700 mb-2">Data Scan Jimpitan</h1>
+        <h1 class="text-xl font-bold text-gray-700 mb-2">Input Jimpitan Manual</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
         <div class="mb-4 bg-white p-4 rounded-md shadow">
-            <form id="jimpitanForm">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form method="POST" action="proses_simpan.php">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label>Nama KK</label>
-                        <select name="report_id" required>...</select>
+                        <label class="block text-sm font-medium text-gray-700">Nama KK</label>
+                        <select name="report_id" required class="w-full border rounded px-2 py-1">
+                            <option value="">Pilih KK</option>
+                            <?php foreach($master_kk as $kk): ?>
+                                <option value="<?= $kk['code_id'] ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div>
-                        <label>Tanggal Jimpitan</label>
-                        <input type="date" name="jimpitan_date" required value="<?= date('Y-m-d') ?>">
-                    </div>
-                    <div>
-                        <label>Nominal</label>
-                        <input type="number" value="<?= $tarif ?>" readonly class="bg-gray-100">
+                        <label class="block text-sm font-medium text-gray-700">Tanggal Jimpitan</label>
+                        <input type="date" name="jimpitan_date" required class="w-full border rounded px-2 py-1" value="<?= date('Y-m-d') ?>">
                     </div>
                 </div>
-                <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Simpan</button>
+                <input type="hidden" name="collector" value="system" />
+                <input type="hidden" name="kode_u" value="system" />
+                <input type="hidden" name="nama_u" value="system" />
+                <button type="submit" name="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center gap-1">
+                    <ion-icon name="save-outline"></ion-icon> Simpan
+                </button>
             </form>
         </div>
 
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 73vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-height: 50vh;">
             <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-1">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
@@ -218,33 +224,6 @@ if (isset($_POST['submit'])) {
         const overlay = document.getElementById('overlayDiv');
         const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
         overlay.style.backgroundColor = savedColor;
-    </script>
-    <script>
-        $('#jimpitanForm').on('submit', function(e) {
-            e.preventDefault();
-            Swal.showLoading();
-
-            $.ajax({
-                url: 'submit_jimpitan.php',
-                type: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    Swal.close();
-                    if (response.status === 'success') {
-                        Swal.fire('Berhasil', response.message, 'success').then(() => location.reload());
-                    } else if (response.status === 'duplicate') {
-                        Swal.fire('Duplikat', response.message, 'warning');
-                    } else {
-                        Swal.fire('Gagal', response.message, 'error');
-                    }
-                },
-                error: function() {
-                    Swal.close();
-                    Swal.fire('Error', 'Gagal mengirim data ke server.', 'error');
-                }
-            });
-        });
     </script>
 </body>
 </html>
