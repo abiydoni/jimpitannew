@@ -48,7 +48,16 @@ if (isset($_POST['submit'])) {
     // Refresh halaman agar data tabel terupdate
     echo "<script>location.reload();</script>";
 }
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $r_id = $_GET['delete'];
+    $sql = "DELETE FROM report WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$r_id]);
 
+    header("Location: jimpitan_manual.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -120,6 +129,7 @@ if (isset($_POST['submit'])) {
                         <th>Nama KK</th>
                         <th class='text-center'>Nominal</th>
                         <th>Jaga</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id='data-table'>
@@ -130,6 +140,11 @@ if (isset($_POST['submit'])) {
                             <td><?= htmlspecialchars($row["kk_name"]) ?></td>
                             <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
                             <td><?= htmlspecialchars($row["collector"]) ?></td>
+                            <td class="flex justify-center space-x-2">
+                                <a href="jimpitan_manual.php?delete=<?php echo $row['id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                    <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
