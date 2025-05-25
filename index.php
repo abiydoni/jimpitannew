@@ -7,9 +7,14 @@ if (!$user) {
     header('Location: login.php');
     exit;
 }
+require_once 'api/db.php';
+$stmt = $pdo->query("SELECT catatan FROM tb_profil LIMIT 1");
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
+// $catatan = $profil['catatan'] ?? '';
+
 $user = $_SESSION['user']; // <--- Tambahkan ini
 $menus = $_SESSION['menus'] ?? [];
-$profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk catatan
+// $profil = $_SESSION['profil'] ?? []; // Asumsikan profil di-session juga, untuk catatan
 
 ?>
 
