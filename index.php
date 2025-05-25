@@ -114,7 +114,7 @@ $menus = $_SESSION['menus'] ?? [];
                     style="z-index:9999;" />
             </h2>
             <!-- Tampilkan Role User (optional) -->
-            <div class="text-xs text-gray-400 text-center mt-2">
+            <div class="text-xs text-gray-700">
                 Anda Login sebagai: <strong><?= htmlspecialchars($user['role']) ?></strong>
             </div>
 
