@@ -109,32 +109,23 @@ if (isset($_GET['delete'])) {
                 </div>
                 <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
-            <form method="POST" action="submit_jimpitan.php">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div x-data="dropdownSearch()" class="relative w-full">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama KK</label>
-                        <input x-model="search" @click="open = true" @input="open = true" type="text" placeholder="Cari KK..." 
-                            class="w-full border rounded px-2 py-1" />
+            <form onsubmit="return validateForm()">
+                <div x-data="dropdownSearch()" class="relative w-full">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama KK</label>
+                    <input x-model="search" @click="open = true" @input="open = true" type="text" placeholder="Cari KK..." 
+                        class="w-full border rounded px-2 py-1" />
 
-                        <ul x-show="open" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
-                            <template x-for="kk in filteredOptions" :key="kk.code_id">
-                                <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.kk_name"></li>
-                            </template>
-                        </ul>
+                    <ul x-show="open" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+                        <template x-for="kk in filteredOptions" :key="kk.code_id">
+                            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.kk_name"></li>
+                        </template>
+                    </ul>
 
-                        <input type="hidden" name="report_id" :value="selectedOption ? selectedOption.code_id : ''" required />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Tanggal Jimpitan</label>
-                        <input type="date" name="jimpitan_date" required class="w-full border rounded px-2 py-1" value="<?= date('Y-m-d') ?>">
-                    </div>
+                    <!-- Input hidden untuk menyimpan report_id -->
+                    <input id="hiddenReportId" type="hidden" name="report_id" :value="selectedOption ? selectedOption.code_id : ''" />
                 </div>
-                <input type="hidden" name="collector" value="system" />
-                <input type="hidden" name="kode_u" value="system" />
-                <input type="hidden" name="nama_u" value="system" />
-                <button type="submit" name="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center gap-1">
-                    <ion-icon name="save-outline"></ion-icon> Simpan
-                </button>
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Simpan</button>
             </form>
         </div>
 
@@ -259,24 +250,32 @@ if (isset($_GET['delete'])) {
         overlay.style.backgroundColor = savedColor;
     </script>
     <script>
-        function dropdownSearch() {
-            return {
-                open: false,
-                search: '',
-                selectedOption: null,
-                options: <?php echo json_encode($master_kk); ?>,
-                get filteredOptions() {
-                    if (this.search === '') return this.options;
-                    return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
-                },
-                selectOption(kk) {
-                    this.selectedOption = kk;
-                    this.search = kk.kk_name;
-                    this.open = false;
-                }
+    function dropdownSearch() {
+        return {
+            open: false,
+            search: '',
+            selectedOption: null,
+            options: <?php echo json_encode($master_kk); ?>,
+            get filteredOptions() {
+                if (this.search === '') return this.options;
+                return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
+            },
+            selectOption(kk) {
+                this.selectedOption = kk;
+                this.search = kk.kk_name;
+                this.open = false;
             }
         }
-    </script>
+    }
 
+    function validateForm() {
+        const reportId = document.getElementById('hiddenReportId').value;
+        if (!reportId) {
+            alert("Silakan pilih Nama KK terlebih dahulu.");
+            return false; // Stop submit
+        }
+        return true; // Lanjutkan submit
+    }
+    </script>
 </body>
 </html>
