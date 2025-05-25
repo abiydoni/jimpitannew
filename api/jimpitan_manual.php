@@ -101,7 +101,7 @@ if (isset($_GET['delete'])) {
         <h1 class="text-xl font-bold text-gray-700 mb-2">Input Jimpitan Manual</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
         <div class="mb-4 bg-white p-4 rounded-md shadow">
-            <form method="POST" action="proses_simpan.php">
+            <form method="POST" action="submit_jimpitan.php">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama KK</label>
