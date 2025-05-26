@@ -146,8 +146,8 @@ if (isset($_GET['delete'])) {
             </form>
         </div>
 
-        <div class="flex-1 border rounded-md mb-4">
-            <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-1" style="max-height: 45vh;">
+        <div class="flex-1 border rounded-md mb-0">
+            <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-0" style="max-height: 45vh;">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class='bg-gray-100 border-b'>
