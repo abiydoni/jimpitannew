@@ -18,23 +18,6 @@ $stmt_tarif = $pdo->prepare("SELECT tarif FROM tb_tarif WHERE kode_tarif = 'TR00
 $stmt_tarif->execute();
 $tarif = $stmt_tarif->fetchColumn();
 
-// SQL statement untuk mengambil data hari ini
-$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
-
-$stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.* 
-    FROM report 
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = ?
-    ORDER BY report.scan_time DESC
-");
-$stmt->execute($jimpitan_date);
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Hitung total scan
-$total_scans = count($data);
-$total_nominal = array_sum(array_column($data, 'nominal'));
-
 // Proses penyimpanan data jika form disubmit
 if (isset($_POST['submit'])) {
     $report_id = $_POST['report_id'];
@@ -206,7 +189,7 @@ if (isset($_GET['delete'])) {
         // Fungsi untuk memperbarui tabel setiap 60 detik
         function updateTable() {
             $.ajax({
-                url: 'get_data.php',
+                url: 'get_data2.php',
                 method: 'GET',
                 success: function(response) {
                     console.log(response); // Periksa output ini di konsol browser
