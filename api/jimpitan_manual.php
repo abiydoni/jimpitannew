@@ -43,9 +43,10 @@ if (isset($_GET['delete'])) {
     header("Location: jimpitan_manual.php");
     exit();
 }
-if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
-    $jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
+$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
+if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
     $stmt = $pdo->prepare("
         SELECT master_kk.kk_name, report.* 
         FROM report 
