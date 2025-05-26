@@ -148,16 +148,19 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     const data = JSON.parse(response);
                     $('#data-table').empty();
                     data.data.forEach((row, index) => {
-                        // Tambahkan logika untuk menambahkan kelas Tailwind jika collector == 'system'
-                        const collectorClass = row.collector === 'system' 
-                            ? 'bg-blue-200 text-blue-900 font-bold px-2 py-1 rounded'
-                            : '';
+                        let collectorText;
+                        if (row.collector === 'system') {
+                            collectorText = `<span class="bg-blue-200 text-blue-900 font-bold px-2 py-1 rounded">${row.collector}</span>`;
+                        } else {
+                            collectorText = row.collector;
+                        }
+
                         $('#data-table').append(`
                             <tr class='border-b hover:bg-gray-50'>
                                 <td>${index + 1}</td>
                                 <td>${row.kk_name}</td>
                                 <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
-                                <td class="${collectorClass}">${row.collector}</td>
+                                <td>${collectorText}</td>
                             </tr>
                         `);
                     });
