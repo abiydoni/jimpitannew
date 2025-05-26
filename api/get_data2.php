@@ -11,11 +11,13 @@ $stmt = $pdo->prepare("
     WHERE report.jimpitan_date = ?
     ORDER BY report.scan_time DESC
 ");
-$stmt->execute($jimpitan_date);
+$stmt->execute([$jimpitan_date]);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Hitung total nominal
 $total_scans = count($data);
 $total_nominal = array_sum(array_column($data, 'nominal'));
+
 // Kembalikan data dalam format JSON
 echo json_encode([
     'data' => $data,
