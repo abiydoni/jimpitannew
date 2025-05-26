@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Jika sudah ada, bisa redirect dengan pesan error, atau langsung ke halaman input dengan pesan
         // Contoh: simpan pesan di session dan redirect
         $_SESSION['error'] = "Data untuk KK ini pada tanggal yang dipilih sudah ada.";
-        header('Location: jimpitan_manual.php');
+        header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
         exit;
     }
 
