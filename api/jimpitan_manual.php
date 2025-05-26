@@ -280,23 +280,24 @@ if (isset($_GET['delete'])) {
         overlay.style.backgroundColor = savedColor;
     </script>
     <script>
-    function dropdownSearch() {
-        return {
-            open: false,
-            search: '',
-            selectedOption: null,
-            options: <?php echo json_encode($master_kk); ?>,
-            get filteredOptions() {
-                if (this.search === '') return this.options;
-                return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
-            },
-            selectOption(kk) {
-                this.selectedOption = kk;
-                this.search = kk.kk_name;
-                this.open = false;
+    <script>
+        function dropdownSearch() {
+            return {
+                open: false,
+                search: '',
+                selectedOption: null,
+                options: <?= json_encode($master_kk) ?>,
+                get filteredOptions() {
+                    return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
+                },
+                selectOption(kk) {
+                    this.selectedOption = kk;
+                    this.search = kk.kk_name;
+                    this.open = false;
+                }
             }
         }
-    }
+    </script>
 
     function validateForm() {
         const reportId = document.getElementById('hiddenReportId').value;
