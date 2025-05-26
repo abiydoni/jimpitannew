@@ -107,13 +107,13 @@ if (isset($_GET['delete'])) {
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
         <div class="mb-4 bg-white p-4 rounded-md shadow">
             <?php if (isset($_SESSION['error'])): ?>
-                <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm" role="alert">
+                <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
                     <?= htmlspecialchars($_SESSION['error']) ?>
                 </div>
                 <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
             <?php if (isset($_SESSION['success'])): ?>
-                <div class="bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm" role="alert">
+                <div class="bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
                     <?= htmlspecialchars($_SESSION['success']) ?>
                 </div>
                 <?php unset($_SESSION['success']); ?>
