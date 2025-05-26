@@ -7,9 +7,8 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Check if user is admin
-if ($_SESSION['user']['role'] !== 'admin') {
-    header('Location: ../login.php'); // Redirect to unauthorized page
+if (!in_array($_SESSION['user']['role'], ['admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
     exit;
 }
 // Include the database connection

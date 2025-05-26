@@ -7,8 +7,8 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Periksa apakah pengguna adalah admin
-if ($_SESSION['user']['role'] !== 'admin') {
+// Periksa apakah pengguna adalah admin atau s_admin
+if (!in_array($_SESSION['user']['role'], ['admin', 's_admin'])) {
     header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
     exit;
 }
