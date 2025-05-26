@@ -43,6 +43,8 @@ if (isset($_GET['delete'])) {
     header("Location: jimpitan_manual.php");
     exit();
 }
+$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
 ?>
 
 <!DOCTYPE html>
