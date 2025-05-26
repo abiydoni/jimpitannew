@@ -141,13 +141,17 @@ if (isset($_GET['delete'])) {
                         class="w-full border rounded px-2 py-1"
                         onchange="window.location.href='?date=' + this.value" />
                 </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Alasan</label>
+                    <input type="text" id="alasan" name="alasan" placeholder="tulis alasan di sini..." required class="w-full border rounded px-2 py-1"/>
+                </div>
 
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
             </form>
         </div>
 
         <div class="flex-1 border rounded-md mb-0">
-            <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-0" style="max-height: 45vh;">
+            <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-0" style="max-height: 40vh;">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class='bg-gray-100 border-b'>
@@ -291,6 +295,7 @@ if (isset($_GET['delete'])) {
     function validateForm() {
         const reportId = document.getElementById('hiddenReportId').value;
         const jimpitanDate = document.getElementById('jimpitan_date').value;
+        const alasanNya = document.getElementById('alasan').value;
 
         if (!reportId) {
             Swal.fire({
@@ -305,6 +310,14 @@ if (isset($_GET['delete'])) {
                 icon: 'warning',
                 title: 'Oops!',
                 text: 'Silakan pilih tanggal Jimpitan.',
+            });
+            return false;
+        }
+        if (!alasanNya) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops!',
+                text: 'Silakan isi alasannya kenapa.',
             });
             return false;
         }

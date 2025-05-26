@@ -12,6 +12,7 @@ include 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $report_id = $_POST['report_id'];
     $jimpitan_date = $_POST['jimpitan_date'];
+    $alasanNya = $_POST['alasan'];
     $collector = 'system';
     $kode_u = 'system';
     $nama_u = 'system';
@@ -35,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Jika belum ada, insert data baru
-    $stmt_insert = $pdo->prepare("INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt_insert->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u]);
+    $stmt_insert = $pdo->prepare("INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u, alasan) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt_insert->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u, $alasanNya]);
     $_SESSION['success'] = "Data berhasil disimpan!";
     header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
     exit;
