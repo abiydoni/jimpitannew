@@ -19,14 +19,16 @@ $stmt_tarif->execute();
 $tarif = $stmt_tarif->fetchColumn();
 
 // SQL statement untuk mengambil data hari ini
+$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
 $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.* 
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
-    WHERE report.jimpitan_date = CURDATE()
+    WHERE report.jimpitan_date = ?
     ORDER BY report.scan_time DESC
 ");
-$stmt->execute();
+$stmt->execute($jimpitan_date);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Hitung total scan
@@ -128,7 +130,9 @@ if (isset($_GET['delete'])) {
                 <!-- Input Tanggal -->
                 <div class="mb-4">
                     <label for="jimpitan_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Jimpitan</label>
-                    <input type="date" id="jimpitan_date" name="jimpitan_date" value="<?= date('Y-m-d') ?>" required class="w-full border rounded px-2 py-1" />
+                    <input type="date" id="jimpitan_date" name="jimpitan_date" value="<?= htmlspecialchars($jimpitan_date) ?>" required
+                        class="w-full border rounded px-2 py-1"
+                        onchange="window.location.href='?date=' + this.value" />
                 </div>
 
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
