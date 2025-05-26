@@ -226,11 +226,12 @@ if (isset($_GET['delete'])) {
 
                     data.data.forEach((row, index) => {
                         const actionButton = row.collector === 'system'
-                                `<a href="jimpitan_manual.php?delete=${row.id}&date=${encodeURIComponent(jimpitan_date)}" 
-                                onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-                                <i class='bx bx-trash'></i>
-                                </a>`
+                            ? `<a href="jimpitan_manual.php?delete=${row.id}&date=${encodeURIComponent(jimpitan_date)}" 
+                            onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                            <i class='bx bx-trash'></i>
+                            </a>`                            
+                            : `<span class="bg-gray-400 text-white font-bold py-1 px-3 rounded cursor-not-allowed">
                                 <i class='bx bx-trash'></i>
                             </span>`;
 
