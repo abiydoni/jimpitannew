@@ -230,7 +230,7 @@ if (isset($_GET['delete'])) {
                                 onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                 <i class='bx bx-trash'></i>
-                                </a>`                            : `<span class="bg-gray-400 text-white font-bold py-1 px-3 rounded cursor-not-allowed">
+                                </a>`
                                 <i class='bx bx-trash'></i>
                             </span>`;
 
