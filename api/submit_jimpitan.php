@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_insert = $pdo->prepare("INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt_insert->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u]);
     $_SESSION['success'] = "Data berhasil disimpan!";
-    header('Location: jimpitan_manual.php');
+    header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
     exit;
 } else {
     header('Location: jimpitan_manual.php');

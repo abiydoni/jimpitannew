@@ -40,17 +40,11 @@ if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$r_id]);
 
-    header("Location: jimpitan_manual.php");
+    header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
     exit();
 }
 
-if (isset($_POST['jimpitan_date'])) {
-    $jimpitan_date = $_POST['jimpitan_date'];
-} elseif (isset($_GET['date'])) {
-    $jimpitan_date = $_GET['date'];
-} else {
-    $jimpitan_date = date('Y-m-d');
-}
+$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
 if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
     $stmt = $pdo->prepare("
