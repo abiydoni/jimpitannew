@@ -10,7 +10,17 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 // Ambil data master_kk untuk dropdown
-$stmt_kk = $pdo->query("SELECT code_id, kk_name FROM master_kk");
+// $stmt_kk = $pdo->query("SELECT code_id, kk_name FROM master_kk");
+// $master_kk = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt_kk = $pdo->prepare("
+    SELECT code_id, kk_name 
+    FROM master_kk 
+    WHERE code_id NOT IN (
+        SELECT report_id FROM report WHERE jimpitan_date = ?
+    )
+");
+$stmt_kk->execute([$jimpitan_date]);
 $master_kk = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil tarif untuk nominal (kode_tarif = 'TR001')
