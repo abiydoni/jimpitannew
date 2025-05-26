@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Maaf, kamu tidak memiliki akses ke Dashboard';
                 } else {
                     if ($redirect_option === 'dashboard') {
-                        header('Location: dashboard/index.php');
+                        header('Location: dashboard');
                     } else {
                         header('Location: index.php');
                     }
