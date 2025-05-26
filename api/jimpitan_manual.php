@@ -10,17 +10,7 @@ if (!isset($_SESSION['user'])) {
 
 include 'db.php';
 // Ambil data master_kk untuk dropdown
-// $stmt_kk = $pdo->query("SELECT code_id, kk_name FROM master_kk");
-// $master_kk = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
-
-$stmt_kk = $pdo->prepare("
-    SELECT code_id, kk_name 
-    FROM master_kk 
-    WHERE code_id NOT IN (
-        SELECT report_id FROM report WHERE jimpitan_date = ?
-    )
-");
-$stmt_kk->execute([$jimpitan_date]);
+$stmt_kk = $pdo->query("SELECT code_id, kk_name FROM master_kk");
 $master_kk = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil tarif untuk nominal (kode_tarif = 'TR001')
@@ -280,24 +270,23 @@ if (isset($_GET['delete'])) {
         overlay.style.backgroundColor = savedColor;
     </script>
     <script>
-    <script>
-        function dropdownSearch() {
-            return {
-                open: false,
-                search: '',
-                selectedOption: null,
-                options: <?= json_encode($master_kk) ?>,
-                get filteredOptions() {
-                    return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
-                },
-                selectOption(kk) {
-                    this.selectedOption = kk;
-                    this.search = kk.kk_name;
-                    this.open = false;
-                }
+    function dropdownSearch() {
+        return {
+            open: false,
+            search: '',
+            selectedOption: null,
+            options: <?php echo json_encode($master_kk); ?>,
+            get filteredOptions() {
+                if (this.search === '') return this.options;
+                return this.options.filter(kk => kk.kk_name.toLowerCase().includes(this.search.toLowerCase()));
+            },
+            selectOption(kk) {
+                this.selectedOption = kk;
+                this.search = kk.kk_name;
+                this.open = false;
             }
         }
-    </script>
+    }
 
     function validateForm() {
         const reportId = document.getElementById('hiddenReportId').value;
