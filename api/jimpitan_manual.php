@@ -43,8 +43,29 @@ if (isset($_GET['delete'])) {
     header("Location: jimpitan_manual.php");
     exit();
 }
-$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
+    $jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
+    $stmt = $pdo->prepare("
+        SELECT master_kk.kk_name, report.* 
+        FROM report 
+        JOIN master_kk ON report.report_id = master_kk.code_id
+        WHERE report.jimpitan_date = ?
+        ORDER BY report.scan_time DESC
+    ");
+    $stmt->execute([$jimpitan_date]);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $total_scans = count($data);
+    $total_nominal = array_sum(array_column($data, 'nominal'));
+
+    echo json_encode([
+        'data' => $data,
+        'total_scan' => $total_scans,
+        'total_nominal' => $total_nominal,
+    ]);
+    exit; // Hentikan eksekusi agar tidak lanjut render halaman HTML
+}
 ?>
 
 <!DOCTYPE html>
@@ -190,16 +211,20 @@ $jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
         // Fungsi untuk memperbarui tabel setiap 60 detik
         function updateTable() {
+            const selectedDate = $('#jimpitan_date').val(); // Ambil tanggal dari input
             $.ajax({
-                url: 'get_data2.php',
+                url: 'jimpitan_manual.php',
                 method: 'GET',
+                data: {
+                    get_data: 1,
+                    date: selectedDate
+                },
                 success: function(response) {
-                    console.log(response); // Periksa output ini di konsol browser
+                    console.log(response); // Debug di konsol browser
                     const data = JSON.parse(response);
                     $('#data-table').empty();
 
                     data.data.forEach((row, index) => {
-                        // Tentukan tombol hapus aktif atau tidak berdasarkan collector
                         const actionButton = row.collector === 'system'
                             ? `<a href="jimpitan_manual.php?delete=${row.id}" 
                                 onclick="return confirm('Yakin ingin menghapus data ${row.kk_name} ?')" 
