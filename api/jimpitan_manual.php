@@ -317,7 +317,7 @@ if (isset($_GET['delete'])) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops!',
-                text: 'Silakan isi alasannya kenapa.',
+                text: 'Silakan isi alasan kenapa.',
             });
             return false;
         }
