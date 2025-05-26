@@ -18,6 +18,8 @@ $stmt_tarif = $pdo->prepare("SELECT tarif FROM tb_tarif WHERE kode_tarif = 'TR00
 $stmt_tarif->execute();
 $tarif = $stmt_tarif->fetchColumn();
 
+$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
 // Proses penyimpanan data jika form disubmit
 if (isset($_POST['submit'])) {
     $report_id = $_POST['report_id'];
@@ -33,8 +35,6 @@ if (isset($_POST['submit'])) {
     // Refresh halaman agar data tabel terupdate
     echo "<script>location.reload();</script>";
 }
-
-$jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
 if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
     $stmt = $pdo->prepare("
