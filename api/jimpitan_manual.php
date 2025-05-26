@@ -211,7 +211,7 @@ if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
 
         // Fungsi untuk memperbarui tabel setiap 60 detik
         function updateTable() {
-            const selectedDate = $('#jimpitan_date').val(); // Ambil tanggal dari input
+            const selectedDate = $('#jimpitan_date').val() || '<?= date('Y-m-d') ?>'; // Default hari ini jika kosong
             $.ajax({
                 url: 'jimpitan_manual.php',
                 method: 'GET',
@@ -220,7 +220,6 @@ if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
                     date: selectedDate
                 },
                 success: function(response) {
-                    console.log(response); // Debug di konsol browser
                     const data = JSON.parse(response);
                     $('#data-table').empty();
 
