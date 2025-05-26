@@ -78,7 +78,9 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                             <td><?= $no++ ?></td>
                             <td><?= htmlspecialchars($row["kk_name"]) ?></td>
                             <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($row["collector"]) ?></td>
+                            <td class="<?= $row["collector"] === 'system' ? 'bg-blue-200 text-blue-900 font-bold px-2 py-1 rounded' : '' ?>">
+                                <?= htmlspecialchars($row["collector"]) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

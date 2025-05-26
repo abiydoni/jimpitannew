@@ -24,7 +24,6 @@ $stmt = $pdo->prepare("
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
     WHERE report.jimpitan_date = CURDATE()
-          AND LOWER(report.kode_u) = 'system'
     ORDER BY report.scan_time DESC
 ");
 $stmt->execute();
