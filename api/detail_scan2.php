@@ -78,7 +78,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                             <td><?= $no++ ?></td>
                             <td><?= htmlspecialchars($row["kk_name"]) ?></td>
                             <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                            <td class="<?= $row["collector"] === 'system' ? 'bg-blue-500 text-blue-900 px-2 py-1 rounded' : '' ?>">
+                            <td class="<?= $row["collector"] === 'system' ? 'bg-green text-white py-1 rounded' : '' ?>">
                                 <?= htmlspecialchars($row["collector"]) ?>
                             </td>
                         </tr>
@@ -150,7 +150,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                     data.data.forEach((row, index) => {
                         let collectorText;
                         if (row.collector === 'system') {
-                            collectorText = `<span class="bg-blue-500 text-blue-900 px-2 py-1 rounded">${row.collector}</span>`;
+                            collectorText = `<span class="bg-green text-white py-1 rounded">${row.collector}</span>`;
                         } else {
                             collectorText = row.collector;
                         }
