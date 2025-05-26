@@ -33,16 +33,6 @@ if (isset($_POST['submit'])) {
     // Refresh halaman agar data tabel terupdate
     echo "<script>location.reload();</script>";
 }
-// Fungsi untuk menghapus data
-if (isset($_GET['delete'])) {
-    $r_id = $_GET['delete'];
-    $sql = "DELETE FROM report WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$r_id]);
-
-    header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
-    exit();
-}
 
 $jimpitan_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
@@ -66,6 +56,16 @@ if (isset($_GET['get_data']) && $_GET['get_data'] === '1') {
         'total_nominal' => $total_nominal,
     ]);
     exit; // Hentikan eksekusi agar tidak lanjut render halaman HTML
+}
+// Fungsi untuk menghapus data
+if (isset($_GET['delete'])) {
+    $r_id = $_GET['delete'];
+    $sql = "DELETE FROM report WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$r_id]);
+
+    header("Location: jimpitan_manual.php?date=" . urlencode($jimpitan_date));
+    exit();
 }
 ?>
 
