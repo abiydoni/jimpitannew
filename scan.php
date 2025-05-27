@@ -131,7 +131,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </div>
 
   <!-- <div class="container"> -->
-  <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+  <div class="container relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
