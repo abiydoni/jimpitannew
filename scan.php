@@ -124,7 +124,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </style>
 </head>
 <body>
-<div id="overlayDiv" class="absolute inset-0"></div>
+<div id="overlayDiv" class="absolute inset-0">
   <div id="landscapeBlocker">
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
@@ -161,7 +161,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: <?= htmlspecialchars($cp) ?></p>
     <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/<?= htmlspecialchars($hp_link) ?>" target="_blank"><?= htmlspecialchars($hp) ?></a></p>
   </div>
-
+</div>
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
 <script src="js/app.js"></script>
