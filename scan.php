@@ -55,10 +55,10 @@ $hp_link = preg_replace('/^0/', '62', $hp);
         max-width: 30%;
         max-height: 30%;
     }
-    /* .container {
+    .container {
         text-align: center;
-        margin-top: 50px;
-    } */
+        /* margin-top: 50px; */
+    }
     .rounded {
         border-radius: 25px;
     }
@@ -130,7 +130,8 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     <p>Please rotate your device to portrait mode.</p>
   </div>
 
-  <div class="container">
+  <!-- <div class="container"> -->
+  <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
