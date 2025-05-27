@@ -55,10 +55,10 @@ $hp_link = preg_replace('/^0/', '62', $hp);
         max-width: 30%;
         max-height: 30%;
     }
-    .container {
+    /* .container {
         text-align: center;
         margin-top: 50px;
-    }
+    } */
     .rounded {
         border-radius: 25px;
     }
