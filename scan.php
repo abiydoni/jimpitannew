@@ -124,7 +124,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </style>
 </head>
 <body>
-<div id="overlayDiv" class="absolute inset-0">
+<div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none">
   <div id="landscapeBlocker">
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
