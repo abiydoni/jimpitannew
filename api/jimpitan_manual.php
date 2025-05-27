@@ -158,7 +158,7 @@ if (isset($_GET['delete'])) {
                         <th>No.</th>
                         <th>Nama KK</th>
                         <th class='text-center'>Nominal</th>
-                        <th>Jaga</th>
+                        <th>Alasan</th>
                         <th class='text-center'>Aksi</th>
                     </tr>
                 </thead>
@@ -169,7 +169,7 @@ if (isset($_GET['delete'])) {
                             <td><?= $no++ ?></td>
                             <td><?= htmlspecialchars($row["kk_name"]) ?></td>
                             <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($row["collector"]) ?></td>
+                            <td><?= htmlspecialchars($row["alasan"]) ?></td>
                             <td class="flex justify-center space-x-2">
                                 <?php if ($row['collector'] == 'system'): ?>
                                     <a href="jimpitan_manual.php?delete=<?= $row['id'] ?>&date=<?= urlencode($jimpitan_date) ?>"
@@ -244,7 +244,7 @@ if (isset($_GET['delete'])) {
                                 <td>${index + 1}</td>
                                 <td>${row.kk_name}</td>
                                 <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
-                                <td>${row.collector}</td>
+                                <td>${row.alasan}</td>
                                 <td class="flex justify-center space-x-2">
                                     ${actionButton}
                                 </td>
