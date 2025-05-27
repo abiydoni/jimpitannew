@@ -143,9 +143,13 @@ if (isset($_GET['delete'])) {
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alasan</label>
-                    <input type="text" id="alasan" name="alasan" placeholder="tulis alasan di sini..." required class="w-full border rounded px-2 py-1"/>
+                    <input list="alasan-list" type="text" id="alasan" name="alasan" placeholder="Tulis alasan di sini..." required class="w-full border rounded px-2 py-1">
+                    <datalist id="alasan-list">
+                        <option value="QR Rusak">
+                        <option value="QR Tidak Bisa Discan">
+                        <option value="QR Tidak Discan">
+                    </datalist>
                 </div>
-
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
             </form>
         </div>
@@ -313,13 +317,14 @@ if (isset($_GET['delete'])) {
             });
             return false;
         }
-        if (!alasanNya || alasanNya.length < 5) {
+        var alasanNya = document.getElementById("alasan").value.trim();
+        if (alasanNya.length < 5) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops!',
-                text: 'Silakan isi alasan kenapa, minimal 5 karakter.',
+                text: 'Silakan isi alasan minimal 5 karakter.',
             });
-            return false;
+            return false; // form tidak dikirim
         }
         return true; // Valid, form dikirim
     }
