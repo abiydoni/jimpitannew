@@ -124,14 +124,13 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </style>
 </head>
 <body>
-<div id="overlayDiv" class="fixed inset-0 -z-10 pointer-events-none">
   <div id="landscapeBlocker">
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
   </div>
 
   <!-- <div class="container"> -->
-  <div class="container relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+  <div class="container">
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -162,7 +161,6 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     <p style="color:grey; font-size: 10px; text-align: center;">Apabila ada kendala, hubungi: <?= htmlspecialchars($cp) ?></p>
     <p style="color:grey; font-size: 10px; text-align: center;">Ke no HP : <a href="https://wa.me/<?= htmlspecialchars($hp_link) ?>" target="_blank"><?= htmlspecialchars($hp) ?></a></p>
   </div>
-</div>
 <audio id="audio" src="assets/audio/interface.wav"></audio>
 
 <script src="js/app.js"></script>
@@ -200,9 +198,8 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     });
 </script>
 <script>
-    const overlay = document.getElementById('overlayDiv');
     const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
-    overlay.style.backgroundColor = savedColor;
+    document.body.style.backgroundColor = savedColor;
 </script>
 </body>
 </html>
