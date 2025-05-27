@@ -41,7 +41,7 @@ include 'db.php';
         }
     </style>
 </head>
-<body class="bg-gray-100 font-poppins text-gray-800">
+<body>
                     <!-- Loader GIF loading -->
     <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
