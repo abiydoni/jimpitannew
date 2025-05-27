@@ -149,5 +149,9 @@ include 'db.php';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
     </script>
+<script>
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    document.body.style.backgroundColor = savedColor;
+</script>
 </body>
 </html>
