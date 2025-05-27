@@ -124,13 +124,13 @@ $hp_link = preg_replace('/^0/', '62', $hp);
   </style>
 </head>
 <body>
+<div id="overlayDiv" class="absolute inset-0"></div>
   <div id="landscapeBlocker">
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
   </div>
 
   <div class="container">
-    <div id="overlayDiv" class="absolute inset-0"></div>
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
