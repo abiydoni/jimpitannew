@@ -313,11 +313,11 @@ if (isset($_GET['delete'])) {
             });
             return false;
         }
-        if (!alasanNya) {
+        if (!alasanNya || alasanNya.length < 5) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops!',
-                text: 'Silakan isi alasan kenapa.',
+                text: 'Silakan isi alasan kenapa, minimal 5 karakter.',
             });
             return false;
         }
