@@ -317,14 +317,13 @@ if (isset($_GET['delete'])) {
             });
             return false;
         }
-        var alasanNya = document.getElementById("alasan").value.trim();
-        if (alasanNya.length < 5) {
+        if (!alasanNya || alasanNya.length < 5) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops!',
-                text: 'Silakan isi alasan minimal 5 karakter.',
+                text: 'Silakan isi alasan kenapa, minimal 5 karakter.',
             });
-            return false; // form tidak dikirim
+            return false;
         }
         return true; // Valid, form dikirim
     }
