@@ -128,6 +128,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
   </div>
+    <div id="overlayDiv" class="absolute inset-0"></div>
 
   <div class="container">
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
@@ -196,6 +197,11 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     $(document).ready(function() {
         updateData();
     });
+</script>
+<script>
+    const overlay = document.getElementById('overlayDiv');
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    overlay.style.backgroundColor = savedColor;
 </script>
 </body>
 </html>
