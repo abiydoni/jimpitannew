@@ -128,9 +128,9 @@ $hp_link = preg_replace('/^0/', '62', $hp);
     <img src="assets/image/block.gif" alt="Please rotate your device to portrait mode">
     <p>Please rotate your device to portrait mode.</p>
   </div>
-    <div id="overlayDiv" class="absolute inset-0"></div>
 
   <div class="container">
+    <div id="overlayDiv" class="absolute inset-0"></div>
     <h3 style="color:grey;">Jimpitan RT.07 Randuares</h3>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -154,7 +154,7 @@ $hp_link = preg_replace('/^0/', '62', $hp);
           <i class="bx bxs-camera" style="font-size:24px; color: white;"></i>
         </label>
         <input type="file" id="qr-input-file" accept="image/*" capture hidden>
-    </div>
+      </div>
 
     <div id="qr-reader"></div> <!-- QR camera dimulai -->
 
