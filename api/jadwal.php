@@ -71,7 +71,7 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
         <!-- Grid untuk menampilkan tabel -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <?php foreach ($hari_list as $hari): ?>
-                <div class="bg-white shadow-md rounded-lg p-4 w-full">
+                <div class="bg-white shadow-md rounded-lg p-4 w-full bg-opacity-50">
                     <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-2">
                         <?= $shift_mapping[$hari] ?>
                     </h2>
@@ -138,6 +138,10 @@ $hari_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
   });
 </script>
 
+<script>
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    document.body.style.backgroundColor = savedColor;
+</script>
 
 </body>
 </html>

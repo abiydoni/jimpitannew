@@ -94,7 +94,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg bg-opacity-50">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
             Detail Data Jimpitan
@@ -181,6 +181,10 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
             weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
         });
     </script>
+<script>
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    document.body.style.backgroundColor = savedColor;
+</script>
 
 </body>
 </html>

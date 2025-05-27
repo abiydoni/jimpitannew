@@ -105,7 +105,7 @@ if (isset($_GET['delete'])) {
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">Input Jimpitan Manual</h1>
         <p class="text-sm text-gray-500 mb-4">Hari <span id="tanggal"></span></p>
-        <div class="mb-4 bg-white p-4 rounded-md shadow">
+        <div class="mb-4 bg-white p-4 rounded-md shadow bg-opacity-50">
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
                     <?= htmlspecialchars($_SESSION['error']) ?>

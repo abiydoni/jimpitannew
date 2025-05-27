@@ -75,7 +75,7 @@ $stmt->execute();
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg" style="max-width: 60vh;">
+    <div class="flex flex-col max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg bg-opacity-50" style="max-width: 60vh;">
         <h2 class="text-2xl font-semibold mb-4">Laporan Jimpitan Tahun <?php echo $selected_year; ?></h2>
         
         <!-- Form untuk memilih tahun -->
@@ -179,5 +179,9 @@ $stmt->execute();
         // Update URL dengan parameter tahun
         window.location.href = "?tahun=" + tahun;
     }
+</script>
+<script>
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    document.body.style.backgroundColor = savedColor;
 </script>
 </html>
