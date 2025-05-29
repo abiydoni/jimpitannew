@@ -47,7 +47,7 @@ include 'db.php';
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto shadow-lg rounded-lg" style="max-width: 60vh;">
+    <div class="flex flex-col max-w-4xl mx-auto shadow-lg rounded-lg px-4" style="max-width: 60vh;">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
             Data Kepala Keluarga
@@ -55,7 +55,7 @@ include 'db.php';
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto px-4 bg-white bg-opacity-50" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT code_id, kk_name FROM master_kk ORDER BY kk_name ASC");
