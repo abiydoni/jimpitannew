@@ -179,21 +179,28 @@ include 'db.php';
             });
         });
 
-        // Tombol back buatan dengan loader dan menuju halaman sebelumnya
+        // Tombol back buatan
         document.getElementById('customBack').addEventListener('click', function(e) {
             e.preventDefault();
             document.getElementById('loader').classList.remove('hidden');
             setTimeout(() => {
-                window.history.back(); // Pindah halaman sebelumnya
+                window.history.back();
             }, 500);
         });
 
-        // Paksa reload saat kembali dari cache (tombol back HP)
+        // Tangani tombol back dari HP
         window.addEventListener("pageshow", function(event) {
-            // Kalau halaman datang dari cache (bfcache), paksa reload biar loader muncul normal
+            var loader = document.getElementById("loader");
             if (event.persisted) {
-                document.getElementById('loader').classList.remove('hidden');
-                window.location.reload();
+                // Halaman datang dari bfcache (tombol back HP)
+                loader.classList.remove("hidden");
+                // Paksa reload agar loader terlihat nyata dan halaman diperbarui
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            } else {
+                // Halaman load normal (reload atau navigasi)
+                loader.classList.add("hidden");
             }
         });
     </script>
