@@ -171,39 +171,31 @@ include 'db.php';
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
-    <script>
-        // Tampilkan loader saat klik tombol, link, atau submit
-        document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-            element.addEventListener('click', function() {
-                document.getElementById('loader').classList.remove('hidden');
-            });
-        });
+<script>
+  // Menambahkan event listener untuk semua elemen tombol/link
+  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+    element.addEventListener('click', function (e) {
+      // Mencegah form disubmit langsung atau link berpindah halaman
+      e.preventDefault();
 
-        // Tombol back buatan
-        document.getElementById('customBack').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('loader').classList.remove('hidden');
-            setTimeout(() => {
-                window.history.back();
-            }, 500);
-        });
+      // Tampilkan loader
+      document.getElementById('loader').classList.remove('hidden');
+      
+      // Jika itu adalah form submit, submit form setelah beberapa detik
+      if (this.type === 'submit') {
+        setTimeout(function() {
+          this.closest('form').submit();
+        }.bind(this), 500); // Tunggu 500ms sebelum submit form
+      } else {
+        // Jika itu link, pindahkan halaman setelah beberapa detik
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 500); // Tunggu 500ms sebelum pindah halaman
+      }
+    });
+  });
+</script>
 
-        // Tangani tombol back dari HP
-        window.addEventListener("pageshow", function(event) {
-            var loader = document.getElementById("loader");
-            if (event.persisted) {
-                // Halaman datang dari bfcache (tombol back HP)
-                loader.classList.remove("hidden");
-                // Paksa reload agar loader terlihat nyata dan halaman diperbarui
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
-            } else {
-                // Halaman load normal (reload atau navigasi)
-                loader.classList.add("hidden");
-            }
-        });
-    </script>
 
     <script>
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
