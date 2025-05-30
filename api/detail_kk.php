@@ -101,7 +101,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
         </h1>
         <div class="flex-1 rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; font-size: 12px;">
             <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
-            <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
+            <p class="text-sm text-gray-500">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
             <?php if ($data): ?>
             <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 15vh;">
                 <table class="min-w-full border-collapse rounded-md text-sm text-gray-700 ">
@@ -123,7 +123,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                     </tbody>
                 </table>
             </div>
-                <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail</h2>
+                <h2 class="text-lg font-semibold mt-4 text-gray-500">Detail</h2>
             <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 60vh;">
                 <!-- Tabel Detail Per Tanggal -->
                 <table class="min-w-full border-collapse text-sm text-gray-700">
