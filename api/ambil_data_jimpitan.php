@@ -83,6 +83,33 @@ if ($data) {
     $pesan .= "❌ Tidak ada data tersedia.\n";
 }
 
+// Tambahkan data petugas jimpitan (scan > 0) dari tabel report
+$stmt_petugas = $pdo->prepare("
+    SELECT 
+        kode_u, 
+        nama_u, 
+        COUNT(*) as jumlah_scan
+    FROM report
+    WHERE jimpitan_date = CURDATE() - INTERVAL 1 DAY
+    GROUP BY kode_u, nama_u
+    HAVING jumlah_scan > 0
+    ORDER BY jumlah_scan DESC
+");
+$stmt_petugas->execute();
+$data_petugas = $stmt_petugas->fetchAll(PDO::FETCH_ASSOC);
+
+if ($data_petugas) {
+    $pesan .= "\n👤 *Petugas Jimpitan :*\n";
+    $no_petugas = 1;
+    foreach ($data_petugas as $petugas) {
+        $pesan .= $no_petugas . ". {$petugas['nama_u']} ({$petugas['jumlah_scan']} scan)\n";
+        $no_petugas++;
+    }
+    $pesan .= "\n";
+} else {
+    $pesan .= "\n👤 Tidak ada data petugas jimpitan.\n\n";
+}
+
 // Tambahkan penutup
 $pesan .= "\n🌟 Terimakasih atas perhatiannya\n";
 $pesan .= "Info lebih lanjut bisa hubungi *ADMIN*\n\n";
