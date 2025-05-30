@@ -172,28 +172,20 @@ include 'db.php';
         </button>
     </div>
 <script>
-  // Menambahkan event listener untuk semua elemen tombol/link
-  document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-    element.addEventListener('click', function (e) {
-      // Mencegah form disubmit langsung atau link berpindah halaman
-      e.preventDefault();
-
-      // Tampilkan loader
-      document.getElementById('loader').classList.remove('hidden');
-      
-      // Jika itu adalah form submit, submit form setelah beberapa detik
-      if (this.type === 'submit') {
-        setTimeout(function() {
-          this.closest('form').submit();
-        }.bind(this), 500); // Tunggu 500ms sebelum submit form
-      } else {
-        // Jika itu link, pindahkan halaman setelah beberapa detik
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 500); // Tunggu 500ms sebelum pindah halaman
-      }
+    // Tampilkan loader saat klik tombol, link, atau submit
+    document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+        element.addEventListener('click', function() {
+            document.getElementById('loader').classList.remove('hidden');
+        });
     });
-  });
+
+    // Sembunyikan loader saat halaman diload atau back from cache
+    window.addEventListener("pageshow", function() {
+        var loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.add("hidden");
+        }
+    });
 </script>
 
 
