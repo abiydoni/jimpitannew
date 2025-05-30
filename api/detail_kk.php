@@ -99,7 +99,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
             Detail Data Jimpitan
         </h1>
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
+        <div class="flex-1 rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 10vh; font-size: 12px;">
             <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
             <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
             <?php if ($data): ?>
