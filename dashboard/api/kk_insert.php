@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Cek apakah pengguna adalah admin
-if ($_SESSION['user']['role'] !== 'admin') {
+if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
     header('Location: ../login.php');
     exit;
 }

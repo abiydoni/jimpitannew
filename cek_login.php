@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $currentDay = date('l');
             // ✅ warga bisa login kapan saja
-            if (in_array($user['role'], ['admin', 's_admin', 'warga']) || in_array($currentDay, explode(',', $user['shift']))) {
+            if (in_array($user['role'], ['pengurus', 'admin', 's_admin', 'warga']) || in_array($currentDay, explode(',', $user['shift']))) {
                 $_SESSION['user'] = $user;
 
                 $role = $user['role'];
@@ -33,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         break;
                     case 'user':
                         $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE status = 1 ORDER BY nama ASC');
+                        break;
+                    case 'pengurus':
+                        $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE pengurus = 1 ORDER BY nama ASC');
                         break;
                     case 'warga':
                         $stmtMenu = $pdo->query('SELECT * FROM tb_menu WHERE warga = 1 ORDER BY nama ASC');

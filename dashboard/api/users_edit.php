@@ -8,8 +8,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Check if user is admin
-if ($_SESSION['user']['role'] !== 'admin') {
-    header('Location: ../login.php'); // Redirect to unauthorized page
+if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php');
     exit;
 }
 

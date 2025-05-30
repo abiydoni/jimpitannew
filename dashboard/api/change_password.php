@@ -10,6 +10,10 @@ if (!isset($_SESSION['user'])) {
     header('Location: ../login.php'); // Alihkan ke halaman login
     exit;
 }
+if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php');
+    exit;
+}
 
 // Ambil data dari form
 $user_id = $_POST['id_code'] ?? null; // ID pengguna yang ingin diubah passwordnya
