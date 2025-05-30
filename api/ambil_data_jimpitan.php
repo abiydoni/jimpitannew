@@ -109,8 +109,9 @@ if ($data_petugas) {
     $pesan .= "\n👤 Tidak ada data petugas jimpitan.\n";
 }
 $pesan .= "==========================\n";
-$pesan .= "*Info:* Mulai sekarang warga dapat mengakses aplikasi ini\n";
-$pesan .= "*Silahkan klik disini: *https://rt07.appsbee.my.id*\n";
+$pesan .= "*Info :*\n";
+$pesan .= "Mulai sekarang warga dapat mengakses aplikasi ini\n";
+$pesan .= "Silahkan klik disini : *https://rt07.appsbee.my.id*\n";
 $pesan .= "Gunakan User: warga dan Password: warga\n";
 $pesan .= "==========================\n";
 // Tambahkan penutup
