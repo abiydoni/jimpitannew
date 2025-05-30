@@ -99,13 +99,12 @@ $stmt_petugas->execute();
 $data_petugas = $stmt_petugas->fetchAll(PDO::FETCH_ASSOC);
 
 if ($data_petugas) {
-    $pesan .= "\n👤 *Petugas Jimpitan :*\n";
+    $pesan .= "👤 *Petugas Jimpitan :*\n";
     $no_petugas = 1;
     foreach ($data_petugas as $petugas) {
         $pesan .= $no_petugas . ". {$petugas['nama_u']} ({$petugas['jumlah_scan']} scan)\n";
         $no_petugas++;
     }
-    $pesan .= "\n";
 } else {
     $pesan .= "\n👤 Tidak ada data petugas jimpitan.\n";
 }
