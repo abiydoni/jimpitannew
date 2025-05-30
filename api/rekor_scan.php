@@ -171,23 +171,32 @@ include 'db.php';
             <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
     </div>
-<script>
-    // Tampilkan loader saat klik tombol, link, atau submit
-    document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
-        element.addEventListener('click', function() {
-            document.getElementById('loader').classList.remove('hidden');
+    <script>
+        // Tampilkan loader saat klik tombol, link, atau submit
+        document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+            element.addEventListener('click', function() {
+                document.getElementById('loader').classList.remove('hidden');
+            });
         });
-    });
 
-    // Sembunyikan loader saat halaman diload atau back from cache
-    window.addEventListener("pageshow", function() {
-        var loader = document.getElementById("loader");
-        if (loader) {
-            loader.classList.add("hidden");
-        }
-    });
-</script>
+        // Tombol back buatan dengan loader dan menuju halaman sebelumnya
+        document.getElementById('customBack').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loader').classList.remove('hidden');
+            setTimeout(() => {
+                window.history.back(); // Pindah halaman sebelumnya
+            }, 500);
+        });
 
+        // Paksa reload saat kembali dari cache (tombol back HP)
+        window.addEventListener("pageshow", function(event) {
+            // Kalau halaman datang dari cache (bfcache), paksa reload biar loader muncul normal
+            if (event.persisted) {
+                document.getElementById('loader').classList.remove('hidden');
+                window.location.reload();
+            }
+        });
+    </script>
 
     <script>
         // Fungsi untuk menampilkan tanggal dalam format Indonesia
