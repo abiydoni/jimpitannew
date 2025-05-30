@@ -82,7 +82,7 @@ if ($data) {
 } else {
     $pesan .= "❌ Tidak ada data tersedia.\n";
 }
-
+$pesan .= "==========================\n";
 // Tambahkan data petugas jimpitan (scan > 0) dari tabel report
 $stmt_petugas = $pdo->prepare("
     SELECT 
@@ -107,11 +107,11 @@ if ($data_petugas) {
     }
     $pesan .= "\n";
 } else {
-    $pesan .= "\n👤 Tidak ada data petugas jimpitan.\n\n";
+    $pesan .= "\n👤 Tidak ada data petugas jimpitan.\n";
 }
-
+$pesan .= "==========================\n";
 // Tambahkan penutup
-$pesan .= "\n🌟 Terimakasih atas perhatiannya\n";
+$pesan .= "🌟 Terimakasih atas perhatiannya\n";
 $pesan .= "Info lebih lanjut bisa hubungi *ADMIN*\n\n";
 $pesan .= "_- Pesan Otomatis dari System -_";
 ?>
