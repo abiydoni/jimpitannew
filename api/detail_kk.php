@@ -99,11 +99,12 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
             Detail Data Jimpitan
         </h1>
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
             <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
             <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
             <?php if ($data): ?>
-                <table class="min-w-full border-collapse rounded-md text-sm text-gray-700">
+            <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 65vh;">
+                <table class="min-w-full border-collapse rounded-md text-sm text-gray-700 ">
                     <thead class="sticky top-0">
                         <tr class="bg-gray-100 border-b">
                             <th class="text-left">Nama Kepala Keluarga</th>
@@ -121,6 +122,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian');
                         </tr>
                     </tbody>
                 </table>
+            </div>
                 <h2 class="text-lg font-semibold mt-4 text-gray-700">Detail</h2>
             <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 65vh;">
                 <!-- Tabel Detail Per Tanggal -->
