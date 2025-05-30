@@ -99,7 +99,7 @@ $total_nominal = array_sum(array_column($results, 'jumlah_nominal'));
         </form>
 
         <!-- Tabel Data -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 60vh;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 70vh;">
             <?php if (!empty($results)): ?>
                 <table class="min-w-full border-collapse text-sm text-gray-700">
                     <thead class="sticky top-0 bg-gray-100 border-b">
