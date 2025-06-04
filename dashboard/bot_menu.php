@@ -48,7 +48,7 @@ if (isset($_GET['delete'])) {
     }
   </script>
 
-  <div class="max-w-5xl mx-auto bg-white shadow p-6 rounded-xl">
+  <div class="table-data">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
       <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
@@ -129,6 +129,4 @@ if (isset($_GET['delete'])) {
       </form>
     </div>
   </div>
-  <?php
-  include 'footer.php';
-  ?>
+<?php include 'footer.php'; ?>

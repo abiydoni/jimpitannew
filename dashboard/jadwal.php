@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'header.php'; // Sudah termasuk koneksi dan session
 
 // Periksa apakah pengguna sudah masuk
 if (!isset($_SESSION['user'])) {
@@ -37,85 +38,6 @@ $stmt_kk = $pdo->query($sql_kk);
 $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
-    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.css" rel="stylesheet">
-
-    <!-- Boxicons -->
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css">
-
-    <!-- sweetalert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <title>Jadwal Jaga</title>
-</head>
-<body>
-
-    <!-- SIDEBAR -->
-    <section id="sidebar">
-        <a href="#" class="brand">
-            <i class='bx bx-square-rounded'></i>
-            <span class="text">Jimpitan</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="index.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li class="active"><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
-            <li><a href="kk.php"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
-            <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
-            <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
-        </ul>
-        <ul class="side-menu">
-            <li><a href="setting.php"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
-            <li><a href="logout.php" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
-        </ul>
-    </section>
-    <!-- SIDEBAR -->
-
-    <!-- CONTENT -->
-    <section id="content">
-        <!-- NAVBAR -->
-        <nav>
-            <i class='bx bx-menu' ></i>
-            <form action="#">
-                <div class="form-input">
-                    <input type="search" id="search-input" placeholder="Search...">
-                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                </div>
-            </form>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-        </nav>
-        <!-- NAVBAR -->
-
-        <!-- MAIN -->
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Jimpitan - RT07 Salatiga</h1>
-                    <ul class="breadcrumb">
-                        <li>
-                            <a href="#">Users</a>
-                        </li>
-                        <li><i class='bx bx-chevron-right' ></i></li>
-                        <li>
-                            <a class="active" href="index.php">Home</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <div class="table-data">
                 <div class="order">
                     <div class="head">
@@ -165,8 +87,6 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             </div>
-        </main>
-    </div>
 
     <!-- Modal Structure -->
     <div id="myModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
@@ -288,8 +208,7 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    </section>
-
+<?php include 'footer.php'; ?>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

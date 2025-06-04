@@ -8,7 +8,9 @@
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
     <script src="js/script.js"></script>
     <script src="js/grafik.js"></script>
-    <script>
+    <script src="js/print.js"></script>
+	<script src="js/qrcode.min.js"></script>
+<script>
         const searchButton = document.querySelector('#content nav form .form-input button');
         const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
         const searchForm = document.querySelector('#content nav form');
