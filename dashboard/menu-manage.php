@@ -42,42 +42,44 @@ if (isset($_GET['delete'])) {
 $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="max-w-6xl mx-auto bg-white shadow p-4 rounded-xl">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
-      <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
-    </div>
-    <!-- Tabel -->
-    <div class="overflow-x-auto">
-        <table class="min-w-full border text-sm">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="px-3 py-2 border">#</th>
-                    <th class="px-3 py-2 border">Judul</th>
-                    <th class="px-3 py-2 border">Icon</th>
-                    <th class="px-3 py-2 border">URL</th>
-                    <th class="px-3 py-2 border">Urutan</th>
-                    <th class="px-3 py-2 border">Role</th>
-                    <th class="px-3 py-2 border">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($menus as $m): ?>
+<div class="table-data">
+    <div class="order">
+        <div class="head flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
+        <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
+        </div>
+        <!-- Tabel -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full border text-sm">
+                <thead class="bg-gray-200">
                     <tr>
-                        <td class="border px-3 py-2"><?= $m['id'] ?></td>
-                        <td class="border px-3 py-2"><?= $m['title'] ?></td>
-                        <td class="border px-3 py-2"><i class="bx <?= $m['icon'] ?>"></i></td>
-                        <td class="border px-3 py-2"><?= $m['url'] ?></td>
-                        <td class="border px-3 py-2"><?= $m['urutan'] ?></td>
-                        <td class="border px-3 py-2"><?= $m['role'] ?></td>
-                        <td class="border px-3 py-2 space-x-2">
-                            <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600"><i class='bx bx-edit'></i></button>
-                            <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600"><i class='bx bx-trash'></i></a>
-                        </td>
+                        <th class="px-3 py-2 border">#</th>
+                        <th class="px-3 py-2 border">Judul</th>
+                        <th class="px-3 py-2 border">Icon</th>
+                        <th class="px-3 py-2 border">URL</th>
+                        <th class="px-3 py-2 border">Urutan</th>
+                        <th class="px-3 py-2 border">Role</th>
+                        <th class="px-3 py-2 border">Aksi</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($menus as $m): ?>
+                        <tr>
+                            <td class="border px-3 py-2"><?= $m['id'] ?></td>
+                            <td class="border px-3 py-2"><?= $m['title'] ?></td>
+                            <td class="border px-3 py-2"><i class="bx <?= $m['icon'] ?>"></i></td>
+                            <td class="border px-3 py-2"><?= $m['url'] ?></td>
+                            <td class="border px-3 py-2"><?= $m['urutan'] ?></td>
+                            <td class="border px-3 py-2"><?= $m['role'] ?></td>
+                            <td class="border px-3 py-2 space-x-2">
+                                <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
+                                <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600">🗑️</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
