@@ -53,7 +53,7 @@ if (isset($_GET['delete'])) {
       <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
       <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
     </div>
-    <table class="w-full table-auto border border-gray-300 text-sm">
+    <table class="min-w-full border text-sm">
       <thead class="bg-gray-100">
         <tr>
           <th class="border px-2 py-1 text-left">ID</th>
