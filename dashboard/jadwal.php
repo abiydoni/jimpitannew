@@ -209,16 +209,6 @@ $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 <?php include 'footer.php'; ?>
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
-
-    <script src="js/script.js"></script>
-    <script src="js/print.js"></script>
-	<script src="js/qrcode.min.js"></script>
 
     <script>
         function togglePasswordVisibility() {
