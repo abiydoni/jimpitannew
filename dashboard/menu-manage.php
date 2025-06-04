@@ -55,9 +55,9 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                     <tr>
                         <th class="px-3 py-2 border">#</th>
                         <th class="px-3 py-2 border">Judul</th>
-                        <th class="px-3 py-2 border">Icon</th>
+                        <th class="px-3 py-2 border text-center">Icon</th>
                         <th class="px-3 py-2 border">URL</th>
-                        <th class="px-3 py-2 border">Urutan</th>
+                        <th class="px-3 py-2 border text-center">Urutan</th>
                         <th class="px-3 py-2 border">Role</th>
                         <th class="px-3 py-2 border text-center">Aksi</th>
                     </tr>
@@ -67,11 +67,11 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                         <tr>
                             <td class="border px-3 py-2"><?= $m['id'] ?></td>
                             <td class="border px-3 py-2"><?= $m['title'] ?></td>
-                            <td class="border px-3 py-2"><i class="bx <?= $m['icon'] ?>"></i></td>
+                            <td class="border px-3 py-2 text-center"><i class="bx <?= $m['icon'] ?>"></i></td>
                             <td class="border px-3 py-2"><?= $m['url'] ?></td>
-                            <td class="border px-3 py-2"><?= $m['urutan'] ?></td>
+                            <td class="border px-3 py-2 text-center"><?= $m['urutan'] ?></td>
                             <td class="border px-3 py-2"><?= $m['role'] ?></td>
-                            <td class="border px-2 py-1 text-center space-x-2">
+                            <td class="border px-2 py-1 space-x-2 text-center">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600">🗑️</a>
                             </td>

@@ -59,8 +59,8 @@ if (isset($_GET['delete'])) {
             <thead class="bg-gray-200">
               <tr>
                 <th class="border px-2 py-1 text-left">ID</th>
-                <th class="border px-2 py-1 text-left">Parent</th>
-                <th class="border px-2 py-1 text-left">Keyword</th>
+                <th class="border px-2 py-1 text-center">Parent</th>
+                <th class="border px-2 py-1 text-center">Keyword</th>
                 <th class="border px-2 py-1 text-left">Deskripsi</th>
                 <th class="border px-2 py-1 text-left">URL</th>
                 <th class="border px-2 py-1 text-center">Aksi</th>
@@ -70,8 +70,8 @@ if (isset($_GET['delete'])) {
               <?php foreach ($menus as $m): ?>
                 <tr class="hover:bg-gray-50">
                   <td class="border px-2 py-1"><?= $m['id'] ?></td>
-                  <td class="border px-2 py-1"><?= $m['parent_id'] ?? '—' ?></td>
-                  <td class="border px-2 py-1 font-mono"><?= htmlspecialchars($m['keyword']) ?></td>
+                  <td class="border px-2 py-1 text-center"><?= $m['parent_id'] ?? '—' ?></td>
+                  <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
                   <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
                   <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
                   <td class="border px-2 py-1 text-center space-x-2">
