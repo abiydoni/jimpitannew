@@ -77,4 +77,19 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <label for="switch-mode" class="switch-mode"></label>
         </nav>
         <!-- NAVBAR -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                <h1>Jimpitan - RT07 Salatiga</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right' ></i></li>
+                        <li>
+                            <a class="active" href="#">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
