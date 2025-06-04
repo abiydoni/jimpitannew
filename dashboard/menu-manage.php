@@ -59,7 +59,7 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                         <th class="px-3 py-2 border">URL</th>
                         <th class="px-3 py-2 border">Urutan</th>
                         <th class="px-3 py-2 border">Role</th>
-                        <th class="px-3 py-2 border">Aksi</th>
+                        <th class="px-3 py-2 border text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,7 +71,7 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                             <td class="border px-3 py-2"><?= $m['url'] ?></td>
                             <td class="border px-3 py-2"><?= $m['urutan'] ?></td>
                             <td class="border px-3 py-2"><?= $m['role'] ?></td>
-                            <td class="border px-3 py-2 space-x-2">
+                            <td class="border px-2 py-1 text-center space-x-2">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600">🗑️</a>
                             </td>
