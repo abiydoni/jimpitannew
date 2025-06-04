@@ -48,44 +48,46 @@ if (isset($_GET['delete'])) {
     }
   </script>
 
-<div class="max-w-6xl mx-auto bg-white shadow p-4 rounded-xl">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
-      <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
+<div class="table-data">
+    <div class="order">
+        <div class="head">
+          <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
+          <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="border px-2 py-1 text-left">ID</th>
+                <th class="border px-2 py-1 text-left">Parent</th>
+                <th class="border px-2 py-1 text-left">Keyword</th>
+                <th class="border px-2 py-1 text-left">Deskripsi</th>
+                <th class="border px-2 py-1 text-left">URL</th>
+                <th class="border px-2 py-1 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($menus as $m): ?>
+                <tr class="hover:bg-gray-50">
+                  <td class="border px-2 py-1"><?= $m['id'] ?></td>
+                  <td class="border px-2 py-1"><?= $m['parent_id'] ?? '—' ?></td>
+                  <td class="border px-2 py-1 font-mono"><?= htmlspecialchars($m['keyword']) ?></td>
+                  <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
+                  <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
+                  <td class="border px-2 py-1 text-center space-x-2">
+                    <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
+                      ✏️
+                    </button>
+                    <a href="?delete=<?= $m['id'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
+                      🗑️
+                    </a>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
     </div>
-    <div class="overflow-x-auto">
-      <table class="min-w-full border text-sm">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="border px-2 py-1 text-left">ID</th>
-            <th class="border px-2 py-1 text-left">Parent</th>
-            <th class="border px-2 py-1 text-left">Keyword</th>
-            <th class="border px-2 py-1 text-left">Deskripsi</th>
-            <th class="border px-2 py-1 text-left">URL</th>
-            <th class="border px-2 py-1 text-center">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($menus as $m): ?>
-            <tr class="hover:bg-gray-50">
-              <td class="border px-2 py-1"><?= $m['id'] ?></td>
-              <td class="border px-2 py-1"><?= $m['parent_id'] ?? '—' ?></td>
-              <td class="border px-2 py-1 font-mono"><?= htmlspecialchars($m['keyword']) ?></td>
-              <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
-              <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
-              <td class="border px-2 py-1 text-center space-x-2">
-                <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
-                  ✏️
-                </button>
-                <a href="?delete=<?= $m['id'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
-                  🗑️
-                </a>
-              </td>
-            </tr>
-          <?php endforeach ?>
-        </tbody>
-    </table>
-  </div>
 </div>
 
   <!-- Modal Form -->
