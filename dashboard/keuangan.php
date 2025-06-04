@@ -83,7 +83,7 @@ $tanggalSekarang = date("Y-m-d");
                 </div>  
             </div>
     <!-- Modal -->
-    <div id="inputModal" class="fixed inset-0 flex items-center justify-center hidden"> 
+    <div id="inputModal" class="fixed inset-0 flex items-center justify-center hidden transition-opacity duration-300">
         <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
         <div class="modal-container bg-white w-11/12 md:w-1/4 mx-auto shadow-lg" style="border-radius: 15px;"> <!-- Perkecil lebar modal -->
             <div class="modal-header flex justify-between items-center p-4">
@@ -195,21 +195,14 @@ $tanggalSekarang = date("Y-m-d");
         });
 
         // Open modal
-        $('#openModal').click(function() {
-            $('#inputModal').removeClass('hidden').addClass('modal-show'); // Show modal with animation
-            $('#generatedCode').val(''); // Clear the generated code when opening the modal
-            $('#kode').val(''); // Clear the kode input as well
+        $('#openModal').click(function () {
+            $('#inputModal').removeClass('hidden'); // tampilkan modal
+            $('#kode').val('');
         });
 
         // Close modal
-        $('#inputModal').on('click', '.close-modal, .modal-overlay', function() {
-            console.log('Modal closed'); // Debug log
-            $('#inputModal').removeClass('modal-show'); // Remove class for animation
-
-            // Wait for animation to finish before hiding modal
-            setTimeout(function() {
-                $('#inputModal').addClass('hidden'); // Hide modal
-            }, 300); // Duration should match CSS transition
+        $('#inputModal').on('click', '.close-modal, .modal-overlay', function () {
+            $('#inputModal').addClass('hidden'); // sembunyikan modal
         });
 
         // Date picker initialization
@@ -287,6 +280,12 @@ $tanggalSekarang = date("Y-m-d");
         }
         });
     </script>
+    <style>
+        .modal-show {
+            display: flex !important;
+        }
+    </style>
+
     <script>
         // Inisialisasi date picker untuk memilih bulan
         flatpickr("#monthPicker", {
