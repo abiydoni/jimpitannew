@@ -43,11 +43,10 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
 ?>
 
 <div class="max-w-6xl mx-auto bg-white shadow p-4 rounded-xl">
-    <h1 class="text-xl font-bold mb-4">Manajemen Menu Dashboard</h1>
-
-    <!-- Tombol Tambah -->
-    <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+ Tambah Menu</button>
-
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
+      <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
+    </div>
     <!-- Tabel -->
     <div class="overflow-x-auto">
         <table class="min-w-full border text-sm">
