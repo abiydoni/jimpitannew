@@ -1,5 +1,5 @@
 <?php
-require_once 'api/db.php';
+include 'header.php'; // Sudah termasuk koneksi dan session
 
 // Ambil semua menu
 $stmt = $pdo->query("SELECT * FROM tb_botmenu ORDER BY parent_id, id");
@@ -34,12 +34,6 @@ if (isset($_GET['delete'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Manajemen Menu Bot</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     function openModal(data = {}) {
       document.getElementById('modal').classList.remove('hidden');
@@ -53,8 +47,6 @@ if (isset($_GET['delete'])) {
       document.getElementById('modal').classList.add('hidden');
     }
   </script>
-</head>
-<body class="bg-gray-100 p-6">
 
   <div class="max-w-5xl mx-auto bg-white shadow p-6 rounded-xl">
     <div class="flex justify-between items-center mb-4">
@@ -137,5 +129,6 @@ if (isset($_GET['delete'])) {
       </form>
     </div>
   </div>
-</body>
-</html>
+  <?php
+  include 'footer.php';
+  ?>
