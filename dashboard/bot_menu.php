@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'api/db.php';
 
 // Ambil semua menu
 $stmt = $pdo->query("SELECT * FROM tb_botmenu ORDER BY parent_id, id");
