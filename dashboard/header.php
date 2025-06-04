@@ -14,6 +14,13 @@ if (!isset($_SESSION['user'])) {
 }
 // Sertakan koneksi database
 include 'api/db.php';
+// Ambil role dari session
+$role = $_SESSION['user']['role'];
+
+// Ambil semua menu yang mengizinkan role ini
+$stmt = $pdo->prepare("SELECT * FROM tb_dashboard_menu WHERE FIND_IN_SET(?, role) ORDER BY urutan");
+$stmt->execute([$role]);
+$menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -43,16 +50,14 @@ include 'api/db.php';
             <span class="text">Jimpitan</span>
         </a>
         <ul class="side-menu top">
-            <li><a href="index.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li><a href="jadwal.php"><i class='bx bxs-group'></i><span class="text">Jadwal Jaga</span></a></li>
-            <li><a href="kk.php"><i class='bx bxs-group'></i><span class="text">KK</span></a></li>
-            <li><a href="inventaris.php"><i class='bx bxs-group'></i><span class="text">Inventaris</span></a></li>
-            <li><a href="report.php"><i class='bx bxs-report'></i><span class="text">Report</span></a></li>
-            <li><a href="keuangan.php"><i class='bx bxs-wallet'></i><span class="text">Keuangan</span></a></li>
-        </ul>
-        <ul class="side-menu">
-            <li><a href="setting.php"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
-            <li><a href="logout.php" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+            <?php foreach ($menuItems as $item): ?>
+                <li>
+                    <a href="<?= htmlspecialchars($item['url']) ?>">
+                        <i class='bx <?= htmlspecialchars($item['icon']) ?>'></i>
+                        <span class="text"><?= htmlspecialchars($item['title']) ?></span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </section>
     <!-- SIDEBAR -->
