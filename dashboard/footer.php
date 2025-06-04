@@ -10,6 +10,8 @@
     <script src="js/grafik.js"></script>
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
+    <script src="js/monthSelectPlugin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.1/exceljs.min.js"></script>
 <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
         const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');

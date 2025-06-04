@@ -150,7 +150,6 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             </div>
-        </main>
         <!-- Modal Structure -->
         <div id="myModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
             <div class="modal-content bg-white p-2 rounded-lg shadow-md w-1/4"> <!-- Mengatur lebar modal lebih kecil -->
@@ -191,48 +190,7 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </form>
             </div>
         </div>
-    </section>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
-
-    <script src="js/script.js"></script>
-
-    <script>
-        const searchButton = document.querySelector('#content nav form .form-input button');
-        const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
-        const searchForm = document.querySelector('#content nav form');
-
-        searchButton.addEventListener('click', function (e) {
-            if(window.innerWidth < 576) {
-                e.preventDefault();
-                searchForm.classList.toggle('show');
-                if(searchForm.classList.contains('show')) {
-                    searchButtonIcon.classList.replace('bx-search', 'bx-x');
-                } else {
-                    searchButtonIcon.classList.replace('bx-x', 'bx-search');
-                }
-            }
-        })
-
-        if(window.innerWidth < 768) {
-            sidebar.classList.add('hide');
-        } else if(window.innerWidth > 576) {
-            searchButtonIcon.classList.replace('bx-x', 'bx-search');
-            searchForm.classList.remove('show');
-        }
-
-        window.addEventListener('resize', function () {
-            if(this.innerWidth > 576) {
-                searchButtonIcon.classList.replace('bx-x', 'bx-search');
-                searchForm.classList.remove('show');
-            }
-        })
-    </script>
+<?php include 'footer.php'; ?>
     <script>
         // Tambahkan ini setelah script yang ada
         $(document).ready(function() {
@@ -288,10 +246,6 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 </script>
-
-</body>
-</html>
-
 <?php
 // Tutup koneksi
 $pdo = null;

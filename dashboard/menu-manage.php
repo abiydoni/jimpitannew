@@ -42,7 +42,7 @@ if (isset($_GET['delete'])) {
 $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="max-w-6xl mx-auto bg-white shadow p-2 rounded-xl">
+<div class="max-w-6xl mx-auto bg-white shadow p-4 rounded-xl">
     <h1 class="text-xl font-bold mb-4">Manajemen Menu Dashboard</h1>
 
     <!-- Tombol Tambah -->
