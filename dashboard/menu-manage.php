@@ -71,7 +71,7 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                             <td class="border px-3 py-2"><?= $m['url'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['urutan'] ?></td>
                             <td class="border px-3 py-2"><?= $m['role'] ?></td>
-                            <td class="border px-2 py-1 space-x-2 text-center">
+                            <td class="border px-1 py-1 text-center">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600">🗑️</a>
                             </td>

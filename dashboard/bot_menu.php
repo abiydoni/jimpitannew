@@ -74,7 +74,7 @@ if (isset($_GET['delete'])) {
                   <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
                   <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
                   <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
-                  <td class="border px-2 py-1 text-center space-x-2">
+                  <td class="border px-1 py-1 text-center">
                     <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
                       ✏️
                     </button>
