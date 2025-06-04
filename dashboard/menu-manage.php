@@ -62,7 +62,7 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                         <th class="px-3 py-2 border text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-[10px]">
                     <?php foreach ($menus as $m): ?>
                         <tr>
                             <td class="border px-3 py-2"><?= $m['id'] ?></td>

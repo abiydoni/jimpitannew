@@ -66,7 +66,7 @@ if (isset($_GET['delete'])) {
                 <th class="border px-2 py-1 text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-[10px]">
               <?php foreach ($menus as $m): ?>
                 <tr class="hover:bg-gray-50">
                   <td class="border px-2 py-1"><?= $m['id'] ?></td>
