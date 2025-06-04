@@ -105,25 +105,4 @@ include 'api/get_info.php';
                 <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
                 </li>
                 </ul>
-
-                    <!-- <div class="todo">
-                        <div class="head">
-                            <h3>Jaga Malam</h3>
-                        </div>
-                                <ul id="medal-list" class="todo-list">
-                            <li class="first">
-                            </li>
-                        <li class="second">
-                        </li>
-                    <li class="third">
-                    </li>
-                        <li class="fourth">
-                        </li>
-                            <li class="fifth">
-                            </li>
-                            <li class="sixth">
-                            </li>
-                                </ul>
-                            </div> -->
-
 <?php include 'footer.php'; ?>
