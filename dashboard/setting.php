@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include 'header.php';
 // Periksa apakah pengguna sudah masuk
 if (!isset($_SESSION['user'])) {
     header('Location: ../login.php'); // Alihkan ke halaman login
