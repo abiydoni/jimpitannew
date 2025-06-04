@@ -50,7 +50,7 @@ if (isset($_GET['delete'])) {
 
 <div class="table-data">
     <div class="order">
-        <div class="head">
+        <div class="head flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
           <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
         </div>
