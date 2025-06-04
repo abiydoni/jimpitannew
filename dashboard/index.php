@@ -23,24 +23,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 include 'api/get_info.php';
 ?>
 
-        <!-- MAIN -->
-        <main>
-            <div class="head-title">
-                <div class="left">
-                <h1>Jimpitan - RT07 Salatiga</h1>
-                    <ul class="breadcrumb">
-                        <li>
-                            <a href="#">Dashboard</a>
-                        </li>
-                        <li><i class='bx bx-chevron-right' ></i></li>
-                        <li>
-                            <a class="active" href="#">Home</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-
             <ul class="box-info">
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
@@ -143,7 +125,5 @@ include 'api/get_info.php';
                             </li>
                                 </ul>
                             </div> -->
-                    </main>
-            <!-- MAIN -->
 
 <?php include 'footer.php'; ?>
