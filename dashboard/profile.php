@@ -34,55 +34,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!-- <div class="max-w-4xl mx-auto bg-white shadow-md rounded p-6 mt-6 text-sm"> -->
+<!-- <div class="max-w-4xl mx-auto bg-white shadow-md rounded p-4 mt-6 text-sm"> -->
 <div class="table-data">
-    <h2 class="text-xl font-semibold mb-4">📝 Edit Profil Perusahaan</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="kode" value="<?= htmlspecialchars($profil['kode']) ?>">
+    <div class="order">
+        <h2 class="text-xl font-semibold mb-4">📝 Edit Profil Perusahaan</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="kode" value="<?= htmlspecialchars($profil['kode']) ?>">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block font-medium mb-1">Nama Perusahaan</label>
-                <input type="text" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" class="w-full border px-3 py-2 rounded" required>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium mb-1">Nama Perusahaan</label>
+                    <input type="text" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Alamat</label>
+                    <input type="text" name="alamat" value="<?= htmlspecialchars($profil['alamat']) ?>" class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Contact Person</label>
+                    <input type="text" name="cp" value="<?= htmlspecialchars($profil['cp']) ?>" class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">No. HP</label>
+                    <input type="text" name="hp" value="<?= htmlspecialchars($profil['hp']) ?>" class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Logo (optional)</label>
+                    <input type="file" name="logo" class="w-full border px-3 py-2 rounded">
+                    <?php if (!empty($profil['logo'])): ?>
+                        <img src="../api/assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-16 mt-2">
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
+                    <input type="file" name="gambar" class="w-full border px-3 py-2 rounded">
+                    <?php if (!empty($profil['gambar'])): ?>
+                        <img src="../api/assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-16 mt-2">
+                    <?php endif; ?>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium mb-1">Catatan</label>
+                    <textarea name="catatan" rows="4" class="w-full border px-3 py-2 rounded"><?= htmlspecialchars($profil['catatan']) ?></textarea>
+                </div>
             </div>
-            <div>
-                <label class="block font-medium mb-1">Alamat</label>
-                <input type="text" name="alamat" value="<?= htmlspecialchars($profil['alamat']) ?>" class="w-full border px-3 py-2 rounded">
-            </div>
-            <div>
-                <label class="block font-medium mb-1">Contact Person</label>
-                <input type="text" name="cp" value="<?= htmlspecialchars($profil['cp']) ?>" class="w-full border px-3 py-2 rounded">
-            </div>
-            <div>
-                <label class="block font-medium mb-1">No. HP</label>
-                <input type="text" name="hp" value="<?= htmlspecialchars($profil['hp']) ?>" class="w-full border px-3 py-2 rounded">
-            </div>
-            <div>
-                <label class="block font-medium mb-1">Logo (optional)</label>
-                <input type="file" name="logo" class="w-full border px-3 py-2 rounded">
-                <?php if (!empty($profil['logo'])): ?>
-                    <img src="../api/assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-16 mt-2">
-                <?php endif; ?>
-            </div>
-            <div>
-                <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
-                <input type="file" name="gambar" class="w-full border px-3 py-2 rounded">
-                <?php if (!empty($profil['gambar'])): ?>
-                    <img src="../api/assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-16 mt-2">
-                <?php endif; ?>
-            </div>
-            <div class="md:col-span-2">
-                <label class="block font-medium mb-1">Catatan</label>
-                <textarea name="catatan" rows="4" class="w-full border px-3 py-2 rounded"><?= htmlspecialchars($profil['catatan']) ?></textarea>
-            </div>
-        </div>
 
-        <div class="text-right mt-4">
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                💾 Update
-            </button>
-        </div>
-    </form>
+            <div class="text-right mt-4">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                    💾 Update
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <?php include 'footer.php'; ?>
