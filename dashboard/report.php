@@ -19,6 +19,7 @@ $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.* 
     FROM report 
     JOIN master_kk ON report.report_id = master_kk.code_id
+    ORDER BY report.jimpitan_date DESC
 ");
 
 // Execute the SQL statement
@@ -51,6 +52,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <th style="text-align: center;">Nominal</th>
                                     <th style="text-align: center;">Input By</th>
                                     <th style="text-align: center;">Kode User</th>
+                                    <th style="text-align: center;">Scan Time</th>
                                 </tr>
                             </thead>
                             <tbody id="table-body"> <!-- Tambahkan ID untuk tbody -->
@@ -64,6 +66,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["collector"]); ?></td>
                                                 <td><?php echo htmlspecialchars($row["kode_u"]); ?></td>
+                                                <td><?php echo htmlspecialchars($row["scan_time"]); ?></td>
                                             </tr>
                                         <?php endforeach; 
                                     } else {
