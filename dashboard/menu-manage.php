@@ -52,7 +52,7 @@ $result = getPaginatedData(
     'tb_dashboard_menu',
     ['title', 'role', 'url'], // fields to search
     $search,
-    'id',
+    'urutan , id',
     $limit,
     $page
 ?>
