@@ -62,14 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="block font-medium mb-1">Logo (optional)</label>
                     <input type="file" name="logo" class="w-full border px-3 py-2 rounded">
                     <?php if (!empty($profil['logo'])): ?>
-                        <img src="../api/assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-16 mt-2">
+                        <img src="../assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-16 mt-2">
                     <?php endif; ?>
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
                     <input type="file" name="gambar" class="w-full border px-3 py-2 rounded">
                     <?php if (!empty($profil['gambar'])): ?>
-                        <img src="../api/assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-16 mt-2">
+                        <img src="../assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-16 mt-2">
                     <?php endif; ?>
                 </div>
                 <div class="md:col-span-2">
