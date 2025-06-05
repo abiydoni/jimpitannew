@@ -41,25 +41,6 @@ if (isset($_GET['delete'])) {
 // Ambil semua menu
 $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAll(PDO::FETCH_ASSOC);
 
-include 'functions.php';
-
-$search = $_GET['search'] ?? '';
-$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$limit = 10;
-
-$result = getPaginatedData(
-    $pdo,
-    'tb_dashboard_menu',
-    ['title', 'role', 'url'], // fields to search
-    $search,
-    'id',
-    $limit,
-    $page
-);
-
-$menus = $result['data'];
-$totalPages = $result['pages'];
-$currentPage = $result['current'];
 ?>
 
 <div class="table-data" id="menu-table">
@@ -68,14 +49,9 @@ $currentPage = $result['current'];
         <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
         <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
-        <form method="GET" class="mb-4 flex gap-2">
-          <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
-                placeholder="Cari..." class="border px-3 py-2 rounded w-full max-w-xs">
-          <button class="bg-blue-600 text-white px-4 py-2 rounded">🔍 Cari</button>
-        </form>
         <!-- Tabel -->
         <div class="overflow-x-auto">
-            <table class="min-w-full border text-sm">
+          <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="px-3 py-2 border">#</th>
@@ -87,7 +63,7 @@ $currentPage = $result['current'];
                         <th class="px-3 py-2 border text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="text-[10px]">
+                <tbody>
                     <?php foreach ($menus as $m): ?>
                         <tr>
                             <td class="border px-3 py-2"><?= $m['id'] ?></td>
@@ -104,19 +80,6 @@ $currentPage = $result['current'];
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($totalPages > 1): ?>
-                <div class="flex justify-between mt-4 text-sm">
-                <div>Halaman <?= $currentPage ?> dari <?= $totalPages ?></div>
-                <div class="flex gap-1 flex-wrap">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <a href="?search=<?= urlencode($search) ?>&page=<?= $i ?>"
-                        class="px-3 py-1 border rounded <?= $i === $currentPage ? 'bg-blue-600 text-white' : 'hover:bg-gray-100' ?>">
-                        <?= $i ?>
-                    </a>
-                    <?php endfor ?>
-                </div>
-                </div>
-            <?php endif ?>
         </div>
     </div>
 </div>
