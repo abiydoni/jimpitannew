@@ -32,11 +32,6 @@ if (isset($_GET['delete'])) {
     header("Location: manage_menu.php#menu-table");
     exit;
 }
-
-$menus = $result['data'];
-$totalPages = $result['pages'];
-$currentPage = $result['current'];
-
 ?>
 
   <script>
