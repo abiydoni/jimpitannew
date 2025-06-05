@@ -434,7 +434,7 @@ body {
 }
 #content main .table-data .order table th {
   padding-bottom: 12px;
-  font-size: 16px;
+  font-size: 12px;
   text-align: left;
   border-bottom: 1px solid var(--grey);
 }
@@ -457,7 +457,7 @@ body {
   background: var(--grey);
 }
 #content main .table-data .order table tr td .status {
-  font-size: 16px;
+  font-size: 12px;
   padding: 6px 16px;
   color: var(--light);
   border-radius: 20px;
