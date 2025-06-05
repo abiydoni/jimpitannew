@@ -15,7 +15,7 @@ if (!isset($_SESSION['user'])) {
 include 'api/db.php';
 
 // Set default tanggal ke hari ini jika belum ada filter tanggal
-$filterDate = isset($_GET['date']) && $_GET['date'] !== '' ? $_GET['date'] : date('Y-m-d');
+$filterDate = isset($_GET['date']) && $_GET['date'] !== '' ? $_GET['date'] : date('Y-m-d', strtotime('-1 day'));
 
 $stmt = $pdo->prepare("
     SELECT master_kk.kk_name, report.* 
