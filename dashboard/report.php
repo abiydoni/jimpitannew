@@ -23,6 +23,7 @@ if ($filterDate) {
         JOIN master_kk ON report.report_id = master_kk.code_id
         WHERE DATE(jimpitan_date) = :date
         ORDER BY report.jimpitan_date DESC
+        LIMIT 100
     ");
     $stmt->execute([
         ':date' => $filterDate
