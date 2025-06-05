@@ -52,9 +52,14 @@ $result = getPaginatedData(
     'tb_dashboard_menu',
     ['title', 'role', 'url'], // fields to search
     $search,
-    'urutan , id',
+    'id',
     $limit,
     $page
+);
+
+$menus = $result['data'];
+$totalPages = $result['pages'];
+$currentPage = $result['current'];
 ?>
 
 <div class="table-data">
