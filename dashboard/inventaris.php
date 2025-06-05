@@ -71,7 +71,7 @@ $currentPage = $result['current'];
 <div class="table-data" kode="menu-table">
     <div class="order">
         <div class="head flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
+          <h2 class="text-xl font-bold">📋 Daftar Inventori Barang</h2>
           <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
         </div>
         <form method="GET" class="mb-4 flex gap-2">
@@ -129,32 +129,23 @@ $currentPage = $result['current'];
   <!-- Modal Form -->
   <div id="modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl relative">
-      <h2 class="text-lg font-semibold mb-4">📝 Form Menu Bot</h2>
+      <h2 class="text-lg font-semibold mb-4">📝 Form Inventori Barang</h2>
       <form method="POST" class="space-y-4">
         <input type="hidden" name="kode" id="kode">
 
         <div>
-          <label class="block font-medium">Parent Menu</label>
-          <select name="kode_brg" id="kode_brg" class="w-full p-2 border rounded">
-            <option value="">-- Menu Utama --</option>
-            <?php foreach ($menus as $menu): ?>
-              <?php if ($menu['kode_brg'] === null): ?>
-                <option value="<?= $menu['kode'] ?>">
-                  <?= htmlspecialchars($menu['jumlah']) ?> (<?= htmlspecialchars($menu['nama']) ?>)
-                </option>
-              <?php endif; ?>
-            <?php endforeach; ?>
-          </select>
+          <label class="block font-medium">Kode Barang</label>
+          <input type="text" name="kode_brg" id="kode_brg" class="w-full p-2 border rounded" required>
         </div>
 
         <div>
-          <label class="block font-medium">nama</label>
-          <input type="text" name="nama" kode="nama" class="w-full p-2 border rounded" required>
+          <label class="block font-medium">Nama Barang</label>
+          <input type="text" name="nama" id="nama" class="w-full p-2 border rounded" required>
         </div>
 
         <div>
-          <label class="block font-medium">Deskripsi</label>
-          <input type="text" name="jumlah" kode="jumlah" class="w-full p-2 border rounded" required>
+          <label class="block font-medium">Jumlah</label>
+          <input type="text" name="jumlah" id="jumlah" class="w-full p-2 border rounded" required>
         </div>
 
         <div class="flex justify-end space-x-2 pt-4">
