@@ -453,6 +453,9 @@ body {
   border-radius: 50%;
   object-fit: cover;
 }
+#example tbody td {
+  font-size: 12px;
+}
 #content main .table-data .order table tbody tr:hover {
   background: var(--grey);
 }
