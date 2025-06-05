@@ -40,6 +40,21 @@ if (isset($_GET['delete'])) {
 
 // Ambil semua menu
 $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAll(PDO::FETCH_ASSOC);
+
+include 'functions.php';
+
+$search = $_GET['search'] ?? '';
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 10;
+
+$result = getPaginatedData(
+    $pdo,
+    'tb_dashboard_menu',
+    ['title', 'role', 'url'], // fields to search
+    $search,
+    'id',
+    $limit,
+    $page
 ?>
 
 <div class="table-data">
@@ -48,6 +63,11 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
         <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
         <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
+        <form method="GET" class="mb-4 flex gap-2">
+          <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
+                placeholder="Cari..." class="border px-3 py-2 rounded w-full max-w-xs">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded">🔍 Cari</button>
+        </form>
         <!-- Tabel -->
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
@@ -79,6 +99,19 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <?php if ($totalPages > 1): ?>
+                <div class="flex justify-between mt-4 text-sm">
+                <div>Halaman <?= $currentPage ?> dari <?= $totalPages ?></div>
+                <div class="flex gap-1 flex-wrap">
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?search=<?= urlencode($search) ?>&page=<?= $i ?>"
+                        class="px-3 py-1 border rounded <?= $i === $currentPage ? 'bg-blue-600 text-white' : 'hover:bg-gray-100' ?>">
+                        <?= $i ?>
+                    </a>
+                    <?php endfor ?>
+                </div>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 </div>
