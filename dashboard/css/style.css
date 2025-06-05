@@ -461,7 +461,7 @@ body {
 }
 #content main .table-data .order table tr td .status {
   font-size: 12px;
-  padding: 6px 16px;
+  padding: 1px 6px;
   color: var(--light);
   border-radius: 20px;
   font-weight: 700;
