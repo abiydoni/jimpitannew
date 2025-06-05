@@ -114,18 +114,6 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 <?php include 'footer.php'; ?>
-    <script>
-        // Tambahkan ini setelah script yang ada
-        $(document).ready(function() {
-            // Cek apakah DataTable sudah diinisialisasi
-            if (!$.fn.DataTable.isDataTable('#example')) {
-                $('#example').DataTable({
-                    responsive: true
-                });
-            }
-        });
-    </script>
-
 <script>
     const modal = document.getElementById("myModal");
     const openModal = document.getElementById("openModal");
