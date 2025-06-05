@@ -12,6 +12,10 @@
 	<script src="js/qrcode.min.js"></script>
     <script src="js/monthSelectPlugin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.1/exceljs.min.js"></script>
+    <!-- Tambahkan sebelum <script> $(document).ready(... -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
         const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
@@ -43,6 +47,28 @@
             }
         })
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable({
+                responsive: true,
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ entri",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
+                    },
+                    zeroRecords: "Tidak ditemukan data yang cocok",
+                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+                    infoFiltered: "(disaring dari total _MAX_ entri)"
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
 
