@@ -81,7 +81,7 @@ $currentPage = $result['current'];
           <button class="bg-blue-600 text-white px-4 py-2 rounded">🔍 Cari</button>
         </form>
         <div class="overflow-x-auto">
-          <table class="min-w-full border text-sm">
+          <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
             <thead class="bg-gray-200">
               <tr>
                 <th class="border px-2 py-1 text-left">ID</th>
@@ -92,7 +92,7 @@ $currentPage = $result['current'];
                 <th class="border px-2 py-1 text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody class="text-[10px]">
+            <tbody>
               <?php foreach ($menus as $m): ?>
                 <tr class="hover:bg-gray-50">
                   <td class="border px-2 py-1"><?= $m['id'] ?></td>
