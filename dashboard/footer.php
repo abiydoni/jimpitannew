@@ -7,7 +7,6 @@
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/grafik.js"></script>
     <script src="js/print.js"></script>
 	<script src="js/qrcode.min.js"></script>
     <script src="js/monthSelectPlugin.js"></script>

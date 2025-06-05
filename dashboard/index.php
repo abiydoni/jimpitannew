@@ -106,3 +106,51 @@ include 'api/get_info.php';
                 </li>
                 </ul>
 <?php include 'footer.php'; ?>
+  <script>
+    // Fetch data dari API
+    fetch("api/get_saldo.php")
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result); // DEBUG: cek apakah datanya benar
+        createChart(result.labels, result.data);
+      });
+
+    let chartInstance = null;
+
+    function createChart(labels, dataPoints) {
+      const ctx = document.getElementById("myChart").getContext("2d");
+
+      // Hancurkan chart lama jika ada
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Pemasukan Jimpitan per Bulan",
+            data: dataPoints,
+            backgroundColor: "rgba(75, 192, 192, 0.5)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return "Rp" + value.toLocaleString("id-ID");
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
