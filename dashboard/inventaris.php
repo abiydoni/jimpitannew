@@ -2,7 +2,7 @@
 include 'header.php'; // Sudah termasuk koneksi dan session
 
 // Ambil semua menu
-$stmt = $pdo->query("SELECT * FROM tb_botmenu ORDER BY parent_id, id");
+$stmt = $pdo->query("SELECT * FROM tb_barang ORDER BY kode_brg");
 $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Handle Create / Update
@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jumlah = trim($_POST['jumlah']);
 
     if ($kode) {
-        $stmt = $pdo->prepare("UPDATE tb_botmenu SET kode_brg = ?, nama = ?, jumlah = ? WHERE kode = ?");
+        $stmt = $pdo->prepare("UPDATE tb_barang SET kode_brg = ?, nama = ?, jumlah = ? WHERE kode = ?");
         $stmt->execute([$kode_brg, $nama, $jumlah, $kode]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO tb_botmenu (kode_brg, nama, jumlah) VALUES (?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO tb_barang (kode_brg, nama, jumlah) VALUES (?, ?, ?)");
         $stmt->execute([$kode_brg, $nama, $jumlah]);
     }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Handle Delete
 if (isset($_GET['delete'])) {
-    $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE kode = ?");
+    $stmt = $pdo->prepare("DELETE FROM tb_barang WHERE kode = ?");
     $stmt->execute([$_GET['delete']]);
     header("Location: manage_menu.php#menu-table");
     exit;
@@ -40,7 +40,7 @@ $limit = 10;
 
 $result = getPaginatedData(
     $pdo,
-    'tb_botmenu',
+    'tb_barang',
     ['nama', 'jumlah'], // fields to search
     $search,
     'kode_brg, kode',
