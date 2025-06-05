@@ -439,7 +439,7 @@ body {
   border-bottom: 1px solid var(--grey);
 }
 #content main .table-data .order table td {
-  padding: 5px 0;
+  padding: 1px 0;
 }
 #content main .table-data .order table tr td:first-child {
   display: flex;
