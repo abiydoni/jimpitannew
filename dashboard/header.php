@@ -53,7 +53,7 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($menuItems as $item): ?>
                 <li>
                     <a href="<?= htmlspecialchars($item['url']) ?>">
-                        <i class='bx <?= htmlspecialchars($item['icon']) ?>text-4xl'></i>
+                        <i class='bx <?= htmlspecialchars($item['icon']) ?> text-4xl'></i>
                         <span class="text"><?= htmlspecialchars($item['title']) ?></span>
                     </a>
                 </li>
