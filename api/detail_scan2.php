@@ -60,32 +60,34 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
 
         <div class="flex-1 border rounded-md mb-0">
             <div class="overflow-auto rounded-md bg-white bg-opacity-50 p-0" style="max-height: 73vh;">
-            <table class="min-w-full border-collapse text-sm text-gray-700">
-                <thead class="sticky top-0 bg-gray-100 border-b">
-                    <tr class='bg-gray-100 border-b'>
-                        <th>No.</th>
-                        <th>Nama KK</th>
-                        <th class='text-center'>Nominal</th>
-                        <th>Jaga</th>
-                    </tr>
-                </thead>
-                <tbody id='data-table'>
-                    <?php $no = 1; ?>
-                    <?php foreach ($data as $row): ?>
-                        <tr class='border-b hover:bg-gray-50'>
-                            <td><?= $no++ ?></td>
-                            <td><?= htmlspecialchars($row["kk_name"]) ?></td>
-                            <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
-                            <td>
-                                <?= $row["collector"] === 'system' 
-                                    ? '<span class="bg-red-500 text-white px-1 py-1 rounded">' . htmlspecialchars($row["collector"]) . '</span>' 
-                                    : htmlspecialchars($row["collector"]) 
-                                ?>
-                            </td>
+                <table class="min-w-full border-collapse text-sm text-gray-700">
+                    <thead class="sticky top-0 bg-gray-100 border-b">
+                        <tr class='bg-gray-100 border-b'>
+                            <th>No.</th>
+                            <th>Nama KK</th>
+                            <th class='text-center'>Nominal</th>
+                            <th>Jaga</th>
+                            <th>Jam Scan</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id='data-table'>
+                        <?php $no = 1; ?>
+                        <?php foreach ($data as $row): ?>
+                            <tr class='border-b hover:bg-gray-50'>
+                                <td><?= $no++ ?></td>
+                                <td><?= htmlspecialchars($row["kk_name"]) ?></td>
+                                <td class="text-center"><?= number_format($row["nominal"], 0, ',', '.') ?></td>
+                                <td>
+                                    <?= $row["collector"] === 'system' 
+                                        ? '<span class="bg-red-500 text-white px-1 py-1 rounded">' . htmlspecialchars($row["collector"]) . '</span>' 
+                                        : htmlspecialchars($row["collector"]) 
+                                    ?>
+                                </td>
+                                <td><?= htmlspecialchars(substr($row["scan_time"], 11)) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 

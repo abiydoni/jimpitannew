@@ -67,6 +67,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                         <th>Nama KK</th>
                         <th class='text-center'>Nominal</th>
                         <th>Jaga</th>
+                        <th>Jam Scan</th>
                     </tr>
                 </thead>
                 <tbody id='data-table'>
@@ -82,6 +83,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                                     : htmlspecialchars($row["collector"]) 
                                 ?>
                             </td>
+                            <td><?= htmlspecialchars(substr($row["scan_time"], 11)) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
