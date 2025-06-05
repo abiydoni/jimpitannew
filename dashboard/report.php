@@ -14,16 +14,31 @@ if (!isset($_SESSION['user'])) {
 // Include the database connection
 include 'api/db.php';
 
-// Prepare the SQL statement to select only today's shift
-$stmt = $pdo->prepare("
-    SELECT master_kk.kk_name, report.* 
-    FROM report 
-    JOIN master_kk ON report.report_id = master_kk.code_id
-    ORDER BY report.jimpitan_date DESC
-");
+$filterMonth = isset($_GET['month']) ? $_GET['month'] : '';
+$filterYear = isset($_GET['year']) ? $_GET['year'] : '';
 
-// Execute the SQL statement
-$stmt->execute();
+if ($filterMonth && $filterYear) {
+    $stmt = $pdo->prepare("
+        SELECT master_kk.kk_name, report.* 
+        FROM report 
+        JOIN master_kk ON report.report_id = master_kk.code_id
+        WHERE MONTH(jimpitan_date) = :month AND YEAR(jimpitan_date) = :year
+        ORDER BY report.jimpitan_date DESC
+    ");
+    $stmt->execute([
+        ':month' => $filterMonth,
+        ':year' => $filterYear
+    ]);
+} else {
+    // Default: tampilkan semua
+    $stmt = $pdo->prepare("
+        SELECT master_kk.kk_name, report.* 
+        FROM report 
+        JOIN master_kk ON report.report_id = master_kk.code_id
+        ORDER BY report.jimpitan_date DESC
+    ");
+    $stmt->execute();
+}
 
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,6 +49,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
+                        <?php if ($filterMonth && $filterYear): ?>
+                            <p>Filter: <strong><?= date("F", mktime(0, 0, 0, $filterMonth, 10)) . ' ' . $filterYear ?></strong></p>
+                        <?php endif; ?>
+                        <a href="report.php" class="btn-clear-filter">Reset Filter</a>
                         <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
                         </button>
@@ -92,4 +111,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 console.log("Bulan dan tahun yang dipilih:", dateStr);
             }
         });
+        onChange: function(selectedDates, dateStr, instance) {
+            const date = selectedDates[0];
+            const month = date.getMonth() + 1; // getMonth 0-11
+            const year = date.getFullYear();
+            
+            // Redirect dengan parameter GET
+            window.location.href = `report.php?month=${month}&year=${year}`;
+        }
+
     </script>
