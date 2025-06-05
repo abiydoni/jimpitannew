@@ -164,6 +164,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                                 <td>${row.kk_name}</td>
                                 <td class="text-center">${parseInt(row.nominal).toLocaleString()}</td>
                                 <td>${collectorText}</td>
+                                <td><?= htmlspecialchars(substr($row["scan_time"], 11)) ?></td>
                             </tr>
                         `);
                     });
