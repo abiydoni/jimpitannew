@@ -80,6 +80,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 <?php include 'footer.php'; ?>
     <script>
+        // Tambahkan ini setelah script yang ada
+        $(document).ready(function() {
+            // Cek apakah DataTable sudah diinisialisasi
+            if (!$.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable({
+                    responsive: true
+                });
+            }
+        });
+    </script>
+    <script>
         flatpickr("#monthPicker", {
             plugins: [
                 new monthSelectPlugin({
@@ -93,26 +104,3 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     </script>
-    
-<!-- <script>
-    // Fungsi untuk mengurutkan tabel berdasarkan kolom tanggal
-    const tableBody = document.getElementById('table-body');
-    const sortDateButton = document.getElementById('sort-date');
-    let ascending = false; // Urutan awal: terbaru ke terlama
-
-    sortDateButton.addEventListener('click', () => {
-      const rows = Array.from(tableBody.querySelectorAll('tr'));
-
-      rows.sort((a, b) => {
-        const dateA = new Date(a.cells[2].innerText);
-        const dateB = new Date(b.cells[2].innerText);
-        return ascending ? dateA - dateB : dateB - dateA;
-      });
-
-      ascending = !ascending; // Balik urutan setiap klik
-      rows.forEach(row => tableBody.appendChild(row)); // Re-attach rows yang sudah diurutkan
-
-      // Update simbol panah untuk indikasi sorting
-    //   sortDateButton.querySelector('span').innerHTML = ascending ? '&#9660;' : '&#9650;';
-    });
-  </script> -->
