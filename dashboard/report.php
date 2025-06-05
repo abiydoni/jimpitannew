@@ -14,30 +14,19 @@ if (!isset($_SESSION['user'])) {
 // Include the database connection
 include 'api/db.php';
 
-$filterDate = isset($_GET['date']) ? $_GET['date'] : '';
+// Set default tanggal ke hari ini jika belum ada filter tanggal
+$filterDate = isset($_GET['date']) && $_GET['date'] !== '' ? $_GET['date'] : date('Y-m-d');
 
-if ($filterDate) {
-    $stmt = $pdo->prepare("
-        SELECT master_kk.kk_name, report.* 
-        FROM report 
-        JOIN master_kk ON report.report_id = master_kk.code_id
-        WHERE DATE(jimpitan_date) = :date
-        ORDER BY report.jimpitan_date DESC
-        LIMIT 100
-    ");
-    $stmt->execute([
-        ':date' => $filterDate
-    ]);
-} else {
-    // Default: tampilkan semua
-    $stmt = $pdo->prepare("
-        SELECT master_kk.kk_name, report.* 
-        FROM report 
-        JOIN master_kk ON report.report_id = master_kk.code_id
-        ORDER BY report.jimpitan_date DESC
-    ");
-    $stmt->execute();
-}
+$stmt = $pdo->prepare("
+    SELECT master_kk.kk_name, report.* 
+    FROM report 
+    JOIN master_kk ON report.report_id = master_kk.code_id
+    WHERE DATE(jimpitan_date) = :date
+    ORDER BY report.jimpitan_date DESC
+");
+$stmt->execute([
+    ':date' => $filterDate
+]);
 
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
