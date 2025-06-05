@@ -56,14 +56,15 @@ $currentPage = $result['current'];
 
   <script>
     function openModal(data = {}) {
-      document.getElementBykode('modal').classList.remove('hidden');
-      document.getElementBykode('kode').value = data.kode || '';
-      document.getElementBykode('kode_brg').value = data.kode_brg || '';
-      document.getElementBykode('nama').value = data.nama || '';
-      document.getElementBykode('jumlah').value = data.jumlah || '';
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('kode').value = data.kode || '';
+      document.getElementById('kode_brg').value = data.kode_brg || '';
+      document.getElementById('nama').value = data.nama || '';
+      document.getElementById('jumlah').value = data.jumlah || '';
     }
+
     function closeModal() {
-      document.getElementBykode('modal').classList.add('hidden');
+      document.getElementById('modal').classList.add('hidden');
     }
   </script>
 
@@ -130,7 +131,7 @@ $currentPage = $result['current'];
     <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl relative">
       <h2 class="text-lg font-semibold mb-4">📝 Form Menu Bot</h2>
       <form method="POST" class="space-y-4">
-        <input type="hidden" name="kode" kode="kode">
+        <input type="hidden" name="kode" id="kode">
 
         <div>
           <label class="block font-medium">Parent Menu</label>
