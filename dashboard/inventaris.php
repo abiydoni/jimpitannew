@@ -7,18 +7,17 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Handle Create / Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'] ?? '';
-    $parent_id = $_POST['parent_id'] ?: null;
-    $keyword = trim($_POST['keyword']);
-    $description = trim($_POST['description']);
-    $url = trim($_POST['url']);
+    $kode = $_POST['kode'] ?? '';
+    $kode_brg = $_POST['kode_brg'] ?: null;
+    $nama = trim($_POST['nama']);
+    $jumlah = trim($_POST['jumlah']);
 
-    if ($id) {
-        $stmt = $pdo->prepare("UPDATE tb_botmenu SET parent_id = ?, keyword = ?, description = ?, url = ? WHERE id = ?");
-        $stmt->execute([$parent_id, $keyword, $description, $url, $id]);
+    if ($kode) {
+        $stmt = $pdo->prepare("UPDATE tb_botmenu SET kode_brg = ?, nama = ?, jumlah = ? WHERE kode = ?");
+        $stmt->execute([$kode_brg, $nama, $jumlah, $kode]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO tb_botmenu (parent_id, keyword, description, url) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$parent_id, $keyword, $description, $url]);
+        $stmt = $pdo->prepare("INSERT INTO tb_botmenu (kode_brg, nama, jumlah) VALUES (?, ?, ?)");
+        $stmt->execute([$kode_brg, $nama, $jumlah]);
     }
 
     header("Location: manage_menu.php#menu-table");
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Handle Delete
 if (isset($_GET['delete'])) {
-    $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE id = ?");
+    $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE kode = ?");
     $stmt->execute([$_GET['delete']]);
     header("Location: manage_menu.php#menu-table");
     exit;
@@ -42,9 +41,9 @@ $limit = 10;
 $result = getPaginatedData(
     $pdo,
     'tb_botmenu',
-    ['keyword', 'description', 'url'], // fields to search
+    ['nama', 'jumlah'], // fields to search
     $search,
-    'parent_id, id',
+    'kode_brg, kode',
     $limit,
     $page
 );
@@ -57,19 +56,18 @@ $currentPage = $result['current'];
 
   <script>
     function openModal(data = {}) {
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('id').value = data.id || '';
-      document.getElementById('parent_id').value = data.parent_id || '';
-      document.getElementById('keyword').value = data.keyword || '';
-      document.getElementById('description').value = data.description || '';
-      document.getElementById('url').value = data.url || '';
+      document.getElementBykode('modal').classList.remove('hidden');
+      document.getElementBykode('kode').value = data.kode || '';
+      document.getElementBykode('kode_brg').value = data.kode_brg || '';
+      document.getElementBykode('nama').value = data.nama || '';
+      document.getElementBykode('jumlah').value = data.jumlah || '';
     }
     function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
+      document.getElementBykode('modal').classList.add('hidden');
     }
   </script>
 
-<div class="table-data" id="menu-table">
+<div class="table-data" kode="menu-table">
     <div class="order">
         <div class="head flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
@@ -84,27 +82,25 @@ $currentPage = $result['current'];
           <table class="min-w-full border text-sm">
             <thead class="bg-gray-200">
               <tr>
-                <th class="border px-2 py-1 text-left">ID</th>
+                <th class="border px-2 py-1 text-left">kode</th>
                 <th class="border px-2 py-1 text-center">Parent</th>
-                <th class="border px-2 py-1 text-center">Keyword</th>
+                <th class="border px-2 py-1 text-center">nama</th>
                 <th class="border px-2 py-1 text-left">Deskripsi</th>
-                <th class="border px-2 py-1 text-left">URL</th>
                 <th class="border px-2 py-1 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody class="text-[10px]">
               <?php foreach ($menus as $m): ?>
                 <tr class="hover:bg-gray-50">
-                  <td class="border px-2 py-1"><?= $m['id'] ?></td>
-                  <td class="border px-2 py-1 text-center"><?= $m['parent_id'] ?? '—' ?></td>
-                  <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
-                  <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
-                  <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
+                  <td class="border px-2 py-1"><?= $m['kode'] ?></td>
+                  <td class="border px-2 py-1 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
+                  <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['nama']) ?></td>
+                  <td class="border px-2 py-1"><?= htmlspecialchars($m['jumlah']) ?></td>
                   <td class="border px-1 py-1 text-center">
                     <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
                       ✏️
                     </button>
-                    <a href="?delete=<?= $m['id'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
+                    <a href="?delete=<?= $m['kode'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
                       🗑️
                     </a>
                   </td>
@@ -134,16 +130,16 @@ $currentPage = $result['current'];
     <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl relative">
       <h2 class="text-lg font-semibold mb-4">📝 Form Menu Bot</h2>
       <form method="POST" class="space-y-4">
-        <input type="hidden" name="id" id="id">
+        <input type="hidden" name="kode" kode="kode">
 
         <div>
           <label class="block font-medium">Parent Menu</label>
-          <select name="parent_id" id="parent_id" class="w-full p-2 border rounded">
+          <select name="kode_brg" id="kode_brg" class="w-full p-2 border rounded">
             <option value="">-- Menu Utama --</option>
             <?php foreach ($menus as $menu): ?>
-              <?php if ($menu['parent_id'] === null): ?>
-                <option value="<?= $menu['id'] ?>">
-                  <?= htmlspecialchars($menu['description']) ?> (<?= htmlspecialchars($menu['keyword']) ?>)
+              <?php if ($menu['kode_brg'] === null): ?>
+                <option value="<?= $menu['kode'] ?>">
+                  <?= htmlspecialchars($menu['jumlah']) ?> (<?= htmlspecialchars($menu['nama']) ?>)
                 </option>
               <?php endif; ?>
             <?php endforeach; ?>
@@ -151,18 +147,13 @@ $currentPage = $result['current'];
         </div>
 
         <div>
-          <label class="block font-medium">Keyword</label>
-          <input type="text" name="keyword" id="keyword" class="w-full p-2 border rounded" required>
+          <label class="block font-medium">nama</label>
+          <input type="text" name="nama" kode="nama" class="w-full p-2 border rounded" required>
         </div>
 
         <div>
           <label class="block font-medium">Deskripsi</label>
-          <input type="text" name="description" id="description" class="w-full p-2 border rounded" required>
-        </div>
-
-        <div>
-          <label class="block font-medium">URL (jika ada)</label>
-          <input type="text" name="url" id="url" class="w-full p-2 border rounded">
+          <input type="text" name="jumlah" kode="jumlah" class="w-full p-2 border rounded" required>
         </div>
 
         <div class="flex justify-end space-x-2 pt-4">
