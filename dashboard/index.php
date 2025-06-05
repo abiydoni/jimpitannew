@@ -103,7 +103,7 @@ include 'api/get_info.php';
 
                 </li>
                 <li>
-                <canvas id="myChart" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
+                    <canvas id="myChart" style="height: 400px;" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
                 </li>
                 </ul>
 <?php include 'footer.php'; ?>
@@ -125,6 +125,9 @@ include 'api/get_info.php';
       if (chartInstance) {
         chartInstance.destroy();
       }
+        if (typeof Chart === 'undefined') {
+        alert("Chart.js belum dimuat!");
+        }
 
       chartInstance = new Chart(ctx, {
         type: "bar",
