@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$parent_id, $keyword, $description, $url]);
     }
 
-    header("Location: manage_menu.php");
+    header("Location: manage_menu.php#menu-table");
     exit;
 }
 
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE id = ?");
     $stmt->execute([$_GET['delete']]);
-    header("Location: manage_menu.php");
+    header("Location: manage_menu.php#menu-table");
     exit;
 }
 
@@ -69,7 +69,7 @@ $currentPage = $result['current'];
     }
   </script>
 
-<div class="table-data">
+<div class="table-data" id="menu-table">
     <div class="order">
         <div class="head flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>

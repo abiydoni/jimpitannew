@@ -11,7 +11,7 @@ if (isset($_POST['add_menu'])) {
         $_POST['urutan'],
         $_POST['role']
     ]);
-    header("Location: menu-manage.php");
+    header("Location: menu-manage.php#menu-table");
     exit;
 }
 
@@ -26,7 +26,7 @@ if (isset($_POST['edit_menu'])) {
         $_POST['role'],
         $_POST['id']
     ]);
-    header("Location: menu-manage.php");
+    header("Location: menu-manage.php#menu-table");
     exit;
 }
 
@@ -34,7 +34,7 @@ if (isset($_POST['edit_menu'])) {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_dashboard_menu WHERE id=?");
     $stmt->execute([$_GET['delete']]);
-    header("Location: menu-manage.php");
+    header("Location: menu-manage.php#menu-table");
     exit;
 }
 
@@ -62,7 +62,7 @@ $totalPages = $result['pages'];
 $currentPage = $result['current'];
 ?>
 
-<div class="table-data">
+<div class="table-data" id="menu-table">
     <div class="order">
         <div class="head flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold">📋 Manajemen Menu Dashboard</h2>
