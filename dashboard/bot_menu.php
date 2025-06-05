@@ -81,7 +81,7 @@ $currentPage = $result['current'];
           <button class="bg-blue-600 text-white px-4 py-2 rounded">🔍 Cari</button>
         </form>
         <div class="overflow-x-auto">
-          <table class="min-w-full border text-sm">
+          <table class="min-w-full border">
             <thead class="bg-gray-200">
               <tr>
                 <th class="border px-2 py-1 text-left">ID</th>
