@@ -128,7 +128,7 @@ function printSelectedEntries(entries) {
 					height: 100%;
 				}
 				.container {
-					width: 45%; /* Adjust width to fit 2 per row */
+					width: 30%; /* Adjust width to fit 2 per row */
 					margin: 2mm; /* Add margin for spacing */
 					text-align: center;
 					position: relative;
