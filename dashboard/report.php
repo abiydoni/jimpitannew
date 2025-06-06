@@ -135,7 +135,7 @@ if (strtotime($filterDate)) {
     flatpickr("#monthPicker", {
         plugins: [
             new monthSelectPlugin({
-                shorthand: false,
+                shorthand: true,
                 dateFormat: "F Y",
                 altFormat: "F Y",
             })
