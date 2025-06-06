@@ -50,14 +50,13 @@ if (strtotime($filterDate)) {
                         placeholder="Pilih Tanggal"
                         value="<?= htmlspecialchars($filterDate) ?>">
 
-                        <a href="report.php" class="btn-clear-filter">Reset Filter</a>
-                        <!-- <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
-                            <i class='bx bx-refresh'></i> Refresh
+                        <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
+                            <i class='bx bx-refresh'></i> Reset
                         </button>
                         <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
                         <button type="button" id="reportBtn" class="btn-download">
                             <i class='bx bxs-file-export'></i> Unduh
-                        </button> -->
+                        </button>
                     </div>
                     <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
@@ -117,6 +116,50 @@ if (strtotime($filterDate)) {
             altFormat: "d F Y",
             onChange: function(selectedDates, dateStr, instance) {
                 window.location.href = `report.php?date=${dateStr}`;
+            }
+        });
+    </script>
+    <script>
+        flatpickr("#monthPicker", {
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, // Gunakan nama bulan singkat (Jan, Feb, Mar, dll.)
+                    dateFormat: "F Y", // Format untuk nilai yang dikembalikan
+                    altFormat: "F Y", // Format untuk tampilan input
+                })
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                console.log("Bulan dan tahun yang dipilih:", dateStr);
+            }
+        });
+
+        const searchButton = document.querySelector('#content nav form .form-input button');
+        const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
+        const searchForm = document.querySelector('#content nav form');
+
+        searchButton.addEventListener('click', function (e) {
+            if(window.innerWidth < 576) {
+                e.preventDefault();
+                searchForm.classList.toggle('show');
+                if(searchForm.classList.contains('show')) {
+                    searchButtonIcon.classList.replace('bx-search', 'bx-x');
+                } else {
+                    searchButtonIcon.classList.replace('bx-x', 'bx-search');
+                }
+            }
+        })
+
+        if(window.innerWidth < 768) {
+            sidebar.classList.add('hide');
+        } else if(window.innerWidth > 576) {
+            searchButtonIcon.classList.replace('bx-x', 'bx-search');
+            searchForm.classList.remove('show');
+        }
+
+        window.addEventListener('resize', function () {
+            if(this.innerWidth > 576) {
+                searchButtonIcon.classList.replace('bx-x', 'bx-search');
+                searchForm.classList.remove('show');
             }
         });
     </script>
