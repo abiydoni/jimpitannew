@@ -64,7 +64,6 @@ include 'api/get_info.php';
                         <div class="order">
                             <div class="head">
                                 <h3>Jaga Malam Hari ini</h3>
-                            </div>
                                 <?php
                                     // Mengatur locale ke bahasa Indonesia
                                     setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
@@ -75,7 +74,8 @@ include 'api/get_info.php';
 
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
-                              <br><br>
+                            </div>
+                              <br>
                             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                                 <thead class="bg-gray-200">
                                     <tr>
