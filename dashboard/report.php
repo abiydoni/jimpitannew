@@ -37,6 +37,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
+                        <?php if ($filterDate): ?>
+                            <p>Filter: <strong><?= date("d F Y", strtotime($filterDate)) ?></strong></p>
+                        <?php endif; ?>
                         <input
                         type="text"
                         id="datePicker"
@@ -44,9 +47,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         class="custom-select"
                         placeholder="Pilih Tanggal"
                         value="<?= $filterDate ? date('d F Y', strtotime($filterDate)) : '' ?>">
-                        <?php if ($filterDate): ?>
-                            <p>Filter: <strong><?= date("d F Y", strtotime($filterDate)) ?></strong></p>
-                        <?php endif; ?>
                         <a href="report.php" class="btn-clear-filter">Reset Filter</a>
                         <!-- <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
