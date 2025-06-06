@@ -47,12 +47,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $displayDate = date("d F Y", strtotime($filterDate));
                         }
                         ?>
-
-                        <!-- Tampilkan teks filter -->
-                        <?php if ($displayDate): ?>
-                        <p>Filter: <strong><?= $displayDate ?></strong></p>
-                        <?php endif; ?>
-
                         <!-- Input date picker -->
                         <input
                         type="text"
