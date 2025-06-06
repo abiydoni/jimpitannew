@@ -51,7 +51,7 @@ if (strtotime($filterDate)) {
                         value="<?= htmlspecialchars($filterDate) ?>">
 
                         <a href="report.php" class="btn-clear-filter">Reset Filter</a>
-                        
+
                         <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
                         </button>
@@ -97,27 +97,59 @@ if (strtotime($filterDate)) {
                 </div>
             </div>
 <?php include 'footer.php'; ?>
-    <!-- <script>
-        flatpickr("#monthPicker", {
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true, // Gunakan nama bulan singkat (Jan, Feb, Mar, dll.)
-                    dateFormat: "F Y", // Format untuk nilai yang dikembalikan
-                    altFormat: "F Y", // Format untuk tampilan input
-                })
-            ],
-            onChange: function(selectedDates, dateStr, instance) {
-                console.log("Bulan dan tahun yang dipilih:", dateStr);
+<script>
+    flatpickr("#datePicker", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d F Y",
+        onChange: function(selectedDates, dateStr, instance) {
+            window.location.href = `report.php?date=${dateStr}`;
+        }
+    });
+</script>
+
+<script>
+    flatpickr("#monthPicker", {
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true, // Gunakan nama bulan singkat (Jan, Feb, Mar, dll.)
+                dateFormat: "F Y", // Format untuk nilai yang dikembalikan
+                altFormat: "F Y", // Format untuk tampilan input
+            })
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            console.log("Bulan dan tahun yang dipilih:", dateStr);
+        }
+    });
+
+    const searchButton = document.querySelector('#content nav form .form-input button');
+    const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
+    const searchForm = document.querySelector('#content nav form');
+
+    searchButton.addEventListener('click', function (e) {
+        if(window.innerWidth < 576) {
+            e.preventDefault();
+            searchForm.classList.toggle('show');
+            if(searchForm.classList.contains('show')) {
+                searchButtonIcon.classList.replace('bx-search', 'bx-x');
+            } else {
+                searchButtonIcon.classList.replace('bx-x', 'bx-search');
             }
-        });
-    </script> -->
-    <script>
-        flatpickr("#datePicker", {
-            dateFormat: "Y-m-d",
-            altInput: true,
-            altFormat: "d F Y",
-            onChange: function(selectedDates, dateStr, instance) {
-                window.location.href = `report.php?date=${dateStr}`;
-            }
-        });
-    </script>
+        }
+    })
+
+    if(window.innerWidth < 768) {
+        sidebar.classList.add('hide');
+    } else if(window.innerWidth > 576) {
+        searchButtonIcon.classList.replace('bx-x', 'bx-search');
+        searchForm.classList.remove('show');
+    }
+
+    window.addEventListener('resize', function () {
+        if(this.innerWidth > 576) {
+            searchButtonIcon.classList.replace('bx-x', 'bx-search');
+            searchForm.classList.remove('show');
+        }
+    });
+</script>
+
