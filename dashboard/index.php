@@ -61,7 +61,6 @@ include 'api/get_info.php';
             <ul class="box-info">
                 <li>
                     <div class="table-data">
-                        <div class="order">
                             <div class='p-2'>
                                 <h3>Jaga Malam Hari ini</h3>
                             </div>
@@ -98,7 +97,6 @@ include 'api/get_info.php';
                                 ?>
                                 </tbody>
                             </table>                        
-                        </div>
                     </div>
 
                 </li>
