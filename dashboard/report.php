@@ -37,7 +37,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
-                        <input type="text" id="datePicker" name="date" class="custom-select" placeholder="Pilih Tanggal" value="<?= date('d F Y', strtotime($filterDate)) ?>">
+                        <input
+                        type="text"
+                        id="datePicker"
+                        name="date"
+                        class="custom-select"
+                        placeholder="Pilih Tanggal"
+                        value="<?= $filterDate ? date('d F Y', strtotime($filterDate)) : '' ?>">
                         <?php if ($filterDate): ?>
                             <p>Filter: <strong><?= date("d F Y", strtotime($filterDate)) ?></strong></p>
                         <?php endif; ?>
