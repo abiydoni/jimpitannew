@@ -51,13 +51,14 @@ if (strtotime($filterDate)) {
                         value="<?= htmlspecialchars($filterDate) ?>">
 
                         <a href="report.php" class="btn-clear-filter">Reset Filter</a>
-                        <!-- <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
+                        
+                        <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
                         </button>
                         <input type="text" id="monthPicker" name="month-year" class="custom-select" placeholder="Pilih Bulan & Tahun">
                         <button type="button" id="reportBtn" class="btn-download">
                             <i class='bx bxs-file-export'></i> Unduh
-                        </button> -->
+                        </button>
                     </div>
                     <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
