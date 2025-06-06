@@ -168,8 +168,8 @@ function printSelectedEntries(entries) {
 
     new QRCode(qrCodeDiv, {
       text: entry.codeID,
-      width: 200,
-      height: 200,
+      width: 175,
+      height: 175,
       colorDark: "#000000",
       // colorLight: 'rgba(255, 255, 255, 0)',
       correctLevel: QRCode.CorrectLevel.H,
