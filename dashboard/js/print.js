@@ -128,8 +128,8 @@ function printSelectedEntries(entries) {
 					height: 100%;
 				}
 				.container {
-					width: 30%; /* Adjust width to fit 2 per row */
-					margin: 2mm; /* Add margin for spacing */
+					width: 40%; /* Adjust width to fit 2 per row */
+					margin: 1mm; /* Add margin for spacing */
 					text-align: center;
 					position: relative;
 					border: 1px solid #000; /* Add border around each container */
