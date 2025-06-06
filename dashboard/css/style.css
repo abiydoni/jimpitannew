@@ -66,6 +66,22 @@ body {
 .dataTables_wrapper .dataTables_info {
   font-size: 12px !important;
 }
+/* Perkecil teks pada "Tampilkan entri" (length menu) */
+.dataTables_wrapper .dataTables_length label {
+  font-size: 12px !important;
+}
+
+/* Perkecil teks pada "Cari" */
+.dataTables_wrapper .dataTables_filter label {
+  font-size: 12px !important;
+}
+
+/* Perkecil input box-nya juga jika ingin */
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+  font-size: 12px !important;
+  padding: 2px 4px !important;
+}
 
 /* SIDEBAR */
 #sidebar {
