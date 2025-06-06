@@ -107,78 +107,56 @@ function printSelectedEntries(entries) {
   var iframeDoc = iframe.contentWindow.document;
   iframeDoc.open();
   iframeDoc.write(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Print QR Codes</title>
-	<style>
-		@page { 
-			size: A4;
-			margin: 1cm;
-		}
-		body {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-items: flex-start;
-			margin: 0;
-			font-family: 'Segoe UI', sans-serif;
-		}
-		.container {
-			width: 48%;
-			box-sizing: border-box;
-			margin-bottom: 15mm;
-			padding: 15px;
-			border: 1px solid #ccc;
-			border-radius: 10px;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-			text-align: center;
-		}
-		.qrCode {
-			margin: 0 auto;
-			width: 150px;
-			height: 150px;
-		}
-		.NamaKK {
-			margin-top: 10px;
-			font-size: 20px;
-			font-weight: 600;
-			color: #333;
-		}
-		.CodeText {
-			font-size: 16px;
-			color: #555;
-			margin-top: 4px;
-		}
-		/* Optional custom font (replace if needed) */
-		@font-face {
-			font-family: 'Adumu';
-			src: url('Adumu.ttf'); /* Pastikan font ini tersedia jika dipakai */
-		}
-	</style>
-</head>
-<body>
-
-	<!-- Contoh 1 -->
-	<div class="container">
-		<img src="qr1.png" alt="QR Code" class="qrCode">
-		<div class="NamaKK">Keluarga A</div>
-		<div class="CodeText">Kode: 123456</div>
-	</div>
-
-	<!-- Contoh 2 -->
-	<div class="container">
-		<img src="qr2.png" alt="QR Code" class="qrCode">
-		<div class="NamaKK">Keluarga B</div>
-		<div class="CodeText">Kode: 789012</div>
-	</div>
-
-	<!-- Tambahkan container lainnya di sini -->
-	
-</body>
-</html>
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Print QR Codes</title>
+			<style>
+				@page { 
+					size: A4;
+					margin: 2; /* Adjust margins as necessary */
+				}
+				body {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: space-around;
+					align-items: center;
+					padding: 0;
+					margin: 0;
+					height: 100%;
+				}
+				.container {
+					width: 45%; /* Adjust width to fit 2 per row */
+					margin: 1mm; /* Add margin for spacing */
+					text-align: center;
+					position: relative;
+					border: 1px solid #000; /* Add border around each container */
+					border-radius: 5px; /* Optional: add border radius */
+					padding: 10px; /* Add padding for spacing inside the border */
+				}
+				.qrCode {
+					margin: 0 auto;
+				}
+				.NamaKK, .CodeText {
+					font-family: 'Adumu';
+					margin-top: 10px;
+				}
+				.NamaKK {
+					font-size: 24px; /* Adjust size as needed */
+				}
+				.CodeText {
+					font-size: 18px; /* Adjust size as needed */
+				}
+				/* Page break style */
+				.page-break {
+					page-break-after: always; /* Add page break after this element */
+					display: block; /* Ensure it occupies space */
+				}
+			</style>
+		</head>
+		<body>
 		`);
 
   entries.forEach(function (entry, index) {
