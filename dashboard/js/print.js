@@ -116,7 +116,7 @@ function printSelectedEntries(entries) {
 			<style>
 				@page { 
 					size: A4;
-					margin: 0; /* Adjust margins as necessary */
+					margin: 2; /* Adjust margins as necessary */
 				}
 				body {
 					display: flex;
@@ -128,7 +128,7 @@ function printSelectedEntries(entries) {
 					height: 100%;
 				}
 				.container {
-					width: 40%; /* Adjust width to fit 2 per row */
+					width: 45%; /* Adjust width to fit 2 per row */
 					margin: 1mm; /* Add margin for spacing */
 					text-align: center;
 					position: relative;
@@ -137,7 +137,7 @@ function printSelectedEntries(entries) {
 					padding: 10px; /* Add padding for spacing inside the border */
 				}
 				.qrCode {
-					margin: 1 auto;
+					margin: 0 auto;
 				}
 				.NamaKK, .CodeText {
 					font-family: 'Adumu';
