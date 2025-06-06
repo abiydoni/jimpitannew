@@ -60,10 +60,10 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
-                                    <a href="setting.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                    <a href="setting.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
                                 </td>
