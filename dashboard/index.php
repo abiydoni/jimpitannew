@@ -75,7 +75,7 @@ include 'api/get_info.php';
 
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
-
+                              <br><br>
                             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                                 <thead class="bg-gray-200">
                                     <tr>
