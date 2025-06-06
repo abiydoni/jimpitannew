@@ -56,6 +56,17 @@ body {
   overflow-x: hidden;
 }
 
+/* Ukuran font untuk elemen pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+}
+
+/* Jika kamu ingin memperkecil info total data juga */
+.dataTables_wrapper .dataTables_info {
+  font-size: 12px !important;
+}
+
 /* SIDEBAR */
 #sidebar {
   position: fixed;
