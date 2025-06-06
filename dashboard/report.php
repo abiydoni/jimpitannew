@@ -38,22 +38,22 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
                         <?php
-                        // Ambil data dari GET (atau POST kalau kamu pakai method post)
-                        $filterDate = $_GET['date'] ?? '';
+                        // Ambil filter dari GET atau default hari ini
+                        $filterDate = $_GET['date'] ?? date('Y-m-d');
 
-                        // Format tanggal untuk ditampilkan
-                        $formattedDate = '';
-                        if (!empty($filterDate) && strtotime($filterDate)) {
-                            $formattedDate = date('d F Y', strtotime($filterDate));
+                        // Format untuk tampilan ke user (contoh: 06 Juni 2025)
+                        $displayDate = '';
+                        if (strtotime($filterDate)) {
+                            $displayDate = date("d F Y", strtotime($filterDate));
                         }
                         ?>
 
-                        <!-- Tampilan filter -->
-                        <?php if ($formattedDate): ?>
-                        <p>Filter: <strong><?= $formattedDate ?></strong></p>
+                        <!-- Tampilkan teks filter -->
+                        <?php if ($displayDate): ?>
+                        <p>Filter: <strong><?= $displayDate ?></strong></p>
                         <?php endif; ?>
 
-                        <!-- Input date -->
+                        <!-- Input date picker -->
                         <input
                         type="text"
                         id="datePicker"
@@ -62,7 +62,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         placeholder="Pilih Tanggal"
                         value="<?= htmlspecialchars($filterDate) ?>">
 
-                        <!-- Tombol reset -->
                         <a href="report.php" class="btn-clear-filter">Reset Filter</a>
                         <!-- <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
