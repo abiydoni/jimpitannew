@@ -63,7 +63,7 @@ include 'api/get_info.php';
                     <div class="table-data">
                         <div class="order">
                             <div class='p-2'>
-                                <h4>Jaga Malam Hari ini</h4>
+                                <h3>Jaga Malam Hari ini</h3>
                             </div>
                             <?php
                                 // Mengatur locale ke bahasa Indonesia
