@@ -37,16 +37,32 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="order">
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
-                        <?php if ($filterDate): ?>
-                            <p>Filter: <strong><?= date("d F Y", strtotime($filterDate)) ?></strong></p>
+                        <?php
+                        // Ambil data dari GET (atau POST kalau kamu pakai method post)
+                        $filterDate = $_GET['date'] ?? '';
+
+                        // Format tanggal untuk ditampilkan
+                        $formattedDate = '';
+                        if (!empty($filterDate) && strtotime($filterDate)) {
+                            $formattedDate = date('d F Y', strtotime($filterDate));
+                        }
+                        ?>
+
+                        <!-- Tampilan filter -->
+                        <?php if ($formattedDate): ?>
+                        <p>Filter: <strong><?= $formattedDate ?></strong></p>
                         <?php endif; ?>
+
+                        <!-- Input date -->
                         <input
                         type="text"
                         id="datePicker"
                         name="date"
                         class="custom-select"
                         placeholder="Pilih Tanggal"
-                        value="<?= $filterDate ? date('d F Y', strtotime($filterDate)) : '' ?>">
+                        value="<?= htmlspecialchars($filterDate) ?>">
+
+                        <!-- Tombol reset -->
                         <a href="report.php" class="btn-clear-filter">Reset Filter</a>
                         <!-- <button type="button" id="refreshBtn" class="btn-refresh" onclick="window.location.href='report.php';">
                             <i class='bx bx-refresh'></i> Refresh
