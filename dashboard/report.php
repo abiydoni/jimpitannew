@@ -31,23 +31,17 @@ $stmt->execute([
 // Fetch all results
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Format untuk ditampilkan di datePicker
+$displayDate = '';
+if (strtotime($filterDate)) {
+    $displayDate = date('d F Y', strtotime($filterDate));
+}
 ?>
 
             <div class="table-data">
                 <div class="order">
                     <div class="head">
                         <h3>LAPORAN JIMPITAN</h3>
-                        <?php
-                        // Ambil filter dari GET atau default hari ini
-                        $filterDate = $_GET['date'] ?? date('Y-m-d');
-
-                        // Format untuk tampilan ke user (contoh: 06 Juni 2025)
-                        $displayDate = '';
-                        if (strtotime($filterDate)) {
-                            $displayDate = date("d F Y", strtotime($filterDate));
-                        }
-                        ?>
-                        <!-- Input date picker -->
                         <input
                         type="text"
                         id="datePicker"
