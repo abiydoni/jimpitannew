@@ -25,6 +25,7 @@ if ($aksi == 'read') {
   }
 } elseif ($aksi == 'save') {
   $data = $_POST;
+  $negara = $_POST['negara'] ?? 'Indonesia';
   unset($data['aksi']);
 
   if (!empty($data['id_warga'])) {

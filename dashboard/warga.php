@@ -77,7 +77,7 @@ function generateKodeWarga($prefix = 'RT07') {
         <textarea name="alamat" id="alamat" placeholder="Alamat: Jl..." class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
         <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="0" min="0">
         <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="0" min="0">
-        <select id="negara" name="negara" class="selectWilayah border p-1.5 rounded text-sm">
+        <select id="negara" name="negara" class="selectWilayah border p-1.5 rounded text-sm" readonly>
         <option value="Indonesia">Indonesia</option>
         </select>
         <select id="propinsi" name="propinsi" class="selectWilayah border p-1.5 rounded text-sm">
