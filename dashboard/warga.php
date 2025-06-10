@@ -148,13 +148,53 @@ function generateKodeWarga($prefix = 'RT07') {
     });
 
     function editData(id) {
-      $.post('api/warga_action.php', { aksi: 'get', id }, function(data) {
+    $.post('api/warga_action.php', { aksi: 'get', id }, function(data) {
         const obj = JSON.parse(data);
+
+        // Isi field biasa
         for (let key in obj) {
-          $('#' + key).val(obj[key]);
+        $('#' + key).val(obj[key]);
         }
+
+        // Isi dropdown wilayah secara berurutan
+        $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (provinsiData) {
+        $('#propinsi').html('<option value="">Pilih Provinsi</option>');
+        $.each(provinsiData, function (i, p) {
+            $('#propinsi').append(`<option value="${p.id}">${p.name}</option>`);
+        });
+
+        $('#propinsi').val(obj.propinsi).trigger('change');
+
+        $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + obj.propinsi + ".json", function (kotaData) {
+            $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
+            $.each(kotaData, function (i, k) {
+            $('#kota').append(`<option value="${k.id}">${k.name}</option>`);
+            });
+
+            $('#kota').val(obj.kota).trigger('change');
+
+            $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/districts/" + obj.kota + ".json", function (kecData) {
+            $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+            $.each(kecData, function (i, kc) {
+                $('#kecamatan').append(`<option value="${kc.id}">${kc.name}</option>`);
+            });
+
+            $('#kecamatan').val(obj.kecamatan).trigger('change');
+
+            $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/villages/" + obj.kecamatan + ".json", function (kelData) {
+                $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+                $.each(kelData, function (i, kel) {
+                $('#kelurahan').append(`<option value="${kel.name}">${kel.name}</option>`);
+                });
+
+                $('#kelurahan').val(obj.kelurahan).trigger('change');
+            });
+            });
+        });
+        });
+
         openModal();
-      });
+    });
     }
 
     function hapusData(id) {
