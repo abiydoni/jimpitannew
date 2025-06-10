@@ -24,7 +24,7 @@ function generateKodeWarga($prefix = 'RT07') {
     <div class="order overflow-x-auto">
         <div class="head">
             <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
-            <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+ Tambah Warga</button>
+            <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+</button>
         </div>
         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
             <thead class="bg-gray-200">
@@ -239,8 +239,9 @@ function generateKodeWarga($prefix = 'RT07') {
 
 <script>
 $(document).ready(function () {
-  // Load provinsi
+  // Load data propinsi saat halaman dimuat
   $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
+    $('#propinsi').html('<option value="">Pilih Provinsi</option>');
     $.each(data, function (i, provinsi) {
       $('#propinsi').append($('<option>', {
         value: provinsi.id,
@@ -249,13 +250,15 @@ $(document).ready(function () {
     });
   });
 
-  // Load kota/kabupaten saat provinsi dipilih
+  // Ketika provinsi dipilih
   $('#propinsi').on('change', function () {
     var provinsiId = $(this).val();
-    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
+    $('#kota').html('<option>Loading...</option>');
     $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
     $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+
     $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + provinsiId + ".json", function (data) {
+      $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
       $.each(data, function (i, kota) {
         $('#kota').append($('<option>', {
           value: kota.id,
@@ -265,12 +268,14 @@ $(document).ready(function () {
     });
   });
 
-  // Load kecamatan saat kota dipilih
+  // Ketika kota/kabupaten dipilih
   $('#kota').on('change', function () {
     var kotaId = $(this).val();
-    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+    $('#kecamatan').html('<option>Loading...</option>');
     $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+
     $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/districts/" + kotaId + ".json", function (data) {
+      $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
       $.each(data, function (i, kec) {
         $('#kecamatan').append($('<option>', {
           value: kec.id,
@@ -280,14 +285,16 @@ $(document).ready(function () {
     });
   });
 
-  // Load kelurahan saat kecamatan dipilih
+  // Ketika kecamatan dipilih
   $('#kecamatan').on('change', function () {
     var kecamatanId = $(this).val();
-    $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+    $('#kelurahan').html('<option>Loading...</option>');
+
     $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/villages/" + kecamatanId + ".json", function (data) {
+      $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
       $.each(data, function (i, kel) {
         $('#kelurahan').append($('<option>', {
-          value: kel.name,
+          value: kel.name, // pakai nama sebagai value
           text: kel.name
         }));
       });
