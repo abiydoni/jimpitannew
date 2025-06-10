@@ -1,8 +1,6 @@
         </main>
     </div>
     </section>
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
@@ -19,37 +17,6 @@
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-
-    <script>
-    function initDataTable() {
-        $('#example').DataTable({
-        responsive: true,
-        destroy: true, // agar tidak error jika dipanggil ulang setelah loadData()
-        language: {
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            infoEmpty: "Tidak ada data",
-            zeroRecords: "Tidak ditemukan",
-            paginate: {
-            first: "Awal",
-            last: "Akhir",
-            next: "→",
-            previous: "←"
-            }
-        }
-        });
-    }
-
-    function loadData() {
-        $.post('api/warga_action.php', { aksi: 'read' }, function(data) {
-        $('#data-warga').html(data);
-        initDataTable(); // panggil setelah data dimuat
-        });
-    }
-
-    $(document).ready(loadData);
-    </script>
 
     <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
@@ -82,25 +49,28 @@
             }
         })
     </script>
+
     <script>
         $(document).ready(function() {
-            $('#example').DataTable({
-                responsive: true,
-                language: {
-                    search: "Cari:",
-                    lengthMenu: "Tampilkan _MENU_ entri",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    paginate: {
-                        first: "Pertama",
-                        last: "Terakhir",
-                        next: "Berikutnya",
-                        previous: "Sebelumnya"
-                    },
-                    zeroRecords: "Tidak ditemukan data yang cocok",
-                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-                    infoFiltered: "(disaring dari total _MAX_ entri)"
-                }
-            });
+            if ($('#example').length) {
+                $('#example').DataTable({
+                    responsive: true,
+                    language: {
+                        search: "Cari:",
+                        lengthMenu: "Tampilkan _MENU_ entri",
+                        info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                        paginate: {
+                            first: "Pertama",
+                            last: "Terakhir",
+                            next: "Berikutnya",
+                            previous: "Sebelumnya"
+                        },
+                        zeroRecords: "Tidak ditemukan data yang cocok",
+                        infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+                        infoFiltered: "(disaring dari total _MAX_ entri)"
+                    }
+                });
+            }
         });
     </script>
 

@@ -14,7 +14,7 @@ include 'api/db.php';
 
 
 <div class="table-data">
-    <div class="order overflow-x-auto">
+    <div id="data-warga" class="order overflow-x-auto">
         <div class="head">
             <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+ Tambah Warga</button>
