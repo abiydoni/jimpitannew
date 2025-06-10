@@ -156,6 +156,8 @@ function generateKodeWarga($prefix = 'RT07') {
         $('#' + key).val(obj[key]);
         }
 
+        $('#negara').val(obj.negara).trigger('change'); // Tambahkan ini
+
         // Isi dropdown wilayah secara berurutan
         $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (provinsiData) {
         $('#propinsi').html('<option value="">Pilih Provinsi</option>');
