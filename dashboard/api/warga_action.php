@@ -13,19 +13,19 @@ if ($aksi == 'kode') {
 if ($aksi == 'read') {
     $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");
     $no = 1;
-    while ($row = $stmt->fetch()) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo "<tr>
             <td class='border px-4 py-2'>{$no}</td>
             <td class='border px-4 py-2'>" . htmlspecialchars($row['nama']) . "</td>
-            <td class='border px-4 py-2'>{$row['nik']}</td>
-            <td class='border px-4 py-2'>{$row['jenkel']}</td>
-            <td class='border px-4 py-2'>{$row['tpt_lahir']}, {$row['tgl_lahir']}</td>
+            <td class='border px-4 py-2'>" . htmlspecialchars($row['nik']) . "</td>
+            <td class='border px-4 py-2'>" . htmlspecialchars($row['jenkel']) . "</td>
+            <td class='border px-4 py-2'>" . htmlspecialchars($row['tpt_lahir']) . ", " . htmlspecialchars($row['tgl_lahir']) . "</td>
             <td class='border px-4 py-2'>" . htmlspecialchars($row['alamat']) . "</td>
-            <td class='border px-4 py-2'>{$row['pekerjaan']}</td>
-            <td class='border px-4 py-2'>{$row['hp']}</td>
+            <td class='border px-4 py-2'>" . htmlspecialchars($row['pekerjaan']) . "</td>
+            <td class='border px-4 py-2'>" . htmlspecialchars($row['hp']) . "</td>
             <td class='border px-4 py-2'>
-                <button onclick='editData({$row['id_warga']})' class='text-blue-600'>Edit</button> |
-                <button onclick='hapusData({$row['id_warga']})' class='text-red-600'>Hapus</button>
+                <button onclick=\"editData('{$row['id_warga']}')\" class='bg-yellow-500 text-white px-2 py-1 rounded text-xs'>Edit</button>
+                <button onclick=\"hapusData('{$row['id_warga']}')\" class='bg-red-600 text-white px-2 py-1 rounded text-xs'>Hapus</button>
             </td>
         </tr>";
         $no++;
@@ -33,81 +33,53 @@ if ($aksi == 'read') {
     exit;
 }
 
-if ($aksi == 'get') {
-    $id = $_POST['id'] ?? 0;
+if ($aksi == 'get' && isset($_POST['id'])) {
     $stmt = $pdo->prepare("SELECT * FROM tb_warga WHERE id_warga = ?");
-    $stmt->execute([$id]);
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    echo json_encode($data);
+    $stmt->execute([$_POST['id']]);
+    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
     exit;
 }
 
 if ($aksi == 'save') {
     $data = [
-        'kode' => $_POST['kode'] ?? '',
-        'nama' => $_POST['nama'] ?? '',
-        'nik' => $_POST['nik'] ?? '',
-        'hubungan' => $_POST['hubungan'] ?? '',
-        'nikk' => $_POST['nikk'] ?? '',
-        'jenkel' => $_POST['jenkel'] ?? '',
-        'tpt_lahir' => $_POST['tpt_lahir'] ?? '',
-        'tgl_lahir' => $_POST['tgl_lahir'] ?? '',
-        'alamat' => $_POST['alamat'] ?? '',
-        'rt' => $_POST['rt'] ?? 0,
-        'rw' => $_POST['rw'] ?? 0,
-        'negara' => $_POST['negara'] ?? '',
-        'propinsi' => $_POST['propinsi'] ?? '',
-        'kota' => $_POST['kota'] ?? '',
-        'kecamatan' => $_POST['kecamatan'] ?? '',
-        'kelurahan' => $_POST['kelurahan'] ?? '',
-        'agama' => $_POST['agama'] ?? '',
-        'status' => $_POST['status'] ?? '',
-        'pekerjaan' => $_POST['pekerjaan'] ?? '',
-        'hp' => $_POST['hp'] ?? '',
+        'kode' => $_POST['kode'],
+        'nama' => $_POST['nama'],
+        'nik' => $_POST['nik'],
+        'hubungan' => $_POST['hubungan'],
+        'nikk' => $_POST['nikk'],
+        'jenkel' => $_POST['jenkel'],
+        'tpt_lahir' => $_POST['tpt_lahir'],
+        'tgl_lahir' => $_POST['tgl_lahir'],
+        'alamat' => $_POST['alamat'],
+        'rt' => $_POST['rt'],
+        'rw' => $_POST['rw'],
+        'negara' => $_POST['negara'],
+        'propinsi' => $_POST['propinsi'],
+        'kota' => $_POST['kota'],
+        'kecamatan' => $_POST['kecamatan'],
+        'kelurahan' => $_POST['kelurahan'],
+        'agama' => $_POST['agama'],
+        'status' => $_POST['status'],
+        'pekerjaan' => $_POST['pekerjaan'],
+        'hp' => $_POST['hp']
     ];
 
-    $id = $_POST['id_warga'] ?? '';
-
-    if ($id) {
-        // Update
-        $stmt = $pdo->prepare("UPDATE tb_warga SET 
-            kode=?, nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?,
-            negara=?, propinsi=?, kota=?, kecamatan=?, kelurahan=?, agama=?, status=?, pekerjaan=?, hp=? 
-            WHERE id_warga=?");
-        $stmt->execute([
-            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'],
-            $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'],
-            $data['rt'], $data['rw'], $data['negara'], $data['propinsi'], $data['kota'],
-            $data['kecamatan'], $data['kelurahan'], $data['agama'], $data['status'],
-            $data['pekerjaan'], $data['hp'], $id
-        ]);
+    if (!empty($_POST['id_warga'])) {
+        $data['id_warga'] = $_POST['id_warga'];
+        $stmt = $pdo->prepare("UPDATE tb_warga SET kode=:kode, nama=:nama, nik=:nik, hubungan=:hubungan, nikk=:nikk, jenkel=:jenkel, tpt_lahir=:tpt_lahir, tgl_lahir=:tgl_lahir, alamat=:alamat, rt=:rt, rw=:rw, negara=:negara, propinsi=:propinsi, kota=:kota, kecamatan=:kecamatan, kelurahan=:kelurahan, agama=:agama, status=:status, pekerjaan=:pekerjaan, hp=:hp WHERE id_warga=:id_warga");
+        $stmt->execute($data);
     } else {
-        // Insert
-        $stmt = $pdo->prepare("INSERT INTO tb_warga (
-            kode, nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw,
-            negara, propinsi, kota, kecamatan, kelurahan, agama, status, pekerjaan, hp
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        )");
-        $stmt->execute([
-            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'],
-            $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'],
-            $data['rt'], $data['rw'], $data['negara'], $data['propinsi'], $data['kota'],
-            $data['kecamatan'], $data['kelurahan'], $data['agama'], $data['status'],
-            $data['pekerjaan'], $data['hp']
-        ]);
+        $stmt = $pdo->prepare("INSERT INTO tb_warga (kode, nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw, negara, propinsi, kota, kecamatan, kelurahan, agama, status, pekerjaan, hp) VALUES (:kode, :nama, :nik, :hubungan, :nikk, :jenkel, :tpt_lahir, :tgl_lahir, :alamat, :rt, :rw, :negara, :propinsi, :kota, :kecamatan, :kelurahan, :agama, :status, :pekerjaan, :hp)");
+        $stmt->execute($data);
     }
-
-    echo 'success';
     exit;
 }
 
-if ($aksi == 'delete') {
-    $id = $_POST['id'] ?? 0;
+if ($aksi == 'delete' && isset($_POST['id'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga = ?");
-    $stmt->execute([$id]);
-    echo 'deleted';
+    $stmt->execute([$_POST['id']]);
     exit;
 }
 
-echo 'Invalid Request';
+echo "Aksi tidak valid";
+exit;

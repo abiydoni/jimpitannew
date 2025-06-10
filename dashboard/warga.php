@@ -118,8 +118,8 @@ function generateKodeWarga($prefix = 'RT07') {
 
       <!-- Tombol aksi -->
       <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="closeModal()" class="px-3 py-1.5 border rounded text-sm">Batal</button>
-        <button type="submit" class="px-3 py-1.5 bg-blue-600 text-white rounded text-sm">Simpan</button>
+        <button type="button" class="w-full sm:w-auto px-3 py-1.5 border rounded text-sm">Batal</button>
+        <button type="submit" class="w-full sm:w-auto px-3 py-1.5 bg-blue-600 text-white rounded text-sm">Simpan</button>
       </div>
     </form>
   </div>
@@ -135,14 +135,18 @@ function generateKodeWarga($prefix = 'RT07') {
     }
 
     $('#formWarga').on('submit', function(e) {
-      e.preventDefault();
-      $.post('api/warga_action.php', $(this).serialize(), function() {
+    e.preventDefault();
+    if (!$('#nama').val()) {
+        alert("Nama wajib diisi!");
+        return;
+    }
+    $.post('api/warga_action.php', $(this).serialize(), function() {
         loadData();
         closeModal();
         $('#formWarga')[0].reset();
         $('#id_warga').val('');
         $('.selectWilayah').val(null).trigger('change');
-      });
+    });
     });
 
     function editData(id) {
@@ -156,12 +160,13 @@ function generateKodeWarga($prefix = 'RT07') {
 
         // Isi dropdown wilayah secara berurutan
         $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (provinsiData) {
-        $('#propinsi').html('<option value="">Pilih Provinsi</option>');
-        $.each(provinsiData, function (i, p) {
-            $('#propinsi').append(`<option value="${p.id}">${p.name}</option>`);
-        });
+            $('#propinsi').html('<option value="">Pilih Provinsi</option>');
+            $.each(provinsiData, function (i, p) {
+                $('#propinsi').append(`<option value="${p.id}">${p.name}</option>`);
+            });
 
-        $('#propinsi').val(obj.propinsi).trigger('change');
+            setTimeout(() => { $('#propinsi').val(obj.propinsi).trigger('change'); }, 200);
+        });
 
         $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + obj.propinsi + ".json", function (kotaData) {
             $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
@@ -223,7 +228,9 @@ function generateKodeWarga($prefix = 'RT07') {
     }
 
     function closeModal() {
-      $('#modal').addClass('hidden').removeClass('flex');
+    $('#modal').addClass('hidden').removeClass('flex');
+    $('#formWarga')[0].reset();
+    $('#id_warga').val('');
     }
 
     // Load data on page load
@@ -287,12 +294,4 @@ $(document).ready(function () {
     });
   });
 });
-
-// $(document).ready(function () {
-//   $('.selectWilayah').select2({
-//     width: '100%',
-//     placeholder: 'Pilih opsi',
-//     allowClear: true
-//   });
-// });
 </script>
