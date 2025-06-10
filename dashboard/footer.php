@@ -19,7 +19,39 @@
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-<script>
+
+    <script>
+    function initDataTable() {
+        $('#example').DataTable({
+        responsive: true,
+        destroy: true, // agar tidak error jika dipanggil ulang setelah loadData()
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            infoEmpty: "Tidak ada data",
+            zeroRecords: "Tidak ditemukan",
+            paginate: {
+            first: "Awal",
+            last: "Akhir",
+            next: "→",
+            previous: "←"
+            }
+        }
+        });
+    }
+
+    function loadData() {
+        $.post('api/warga_action.php', { aksi: 'read' }, function(data) {
+        $('#data-warga').html(data);
+        initDataTable(); // panggil setelah data dimuat
+        });
+    }
+
+    $(document).ready(loadData);
+    </script>
+
+    <script>
         const searchButton = document.querySelector('#content nav form .form-input button');
         const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
         const searchForm = document.querySelector('#content nav form');
