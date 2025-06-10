@@ -70,19 +70,19 @@ include 'api/db.php';
         <textarea name="alamat" id="alamat" placeholder="Alamat: Jl..." class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
         <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="0" min="0">
         <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="0" min="0">
-        <select id="negara" class="border p-1.5 rounded text-sm">
+        <select id="negara" class="selectWilayah border p-1.5 rounded text-sm">
         <option value="indonesia">Indonesia</option>
         </select>
-        <select id="propinsi" name="propinsi" class="border p-1.5 rounded text-sm">
+        <select id="propinsi" name="propinsi" class="selectWilayah border p-1.5 rounded text-sm">
         <option value="">Pilih Provinsi</option>
         </select>
-        <select id="kota" name="kota" class="border p-1.5 rounded text-sm">
+        <select id="kota" name="kota" class="selectWilayah border p-1.5 rounded text-sm">
         <option value="">Pilih Kota/Kabupaten</option>
         </select>
-        <select id="kecamatan" name="kecamatan" class="border p-1.5 rounded text-sm">
+        <select id="kecamatan" name="kecamatan" class="selectWilayah border p-1.5 rounded text-sm">
         <option value="">Pilih Kecamatan</option>
         </select>
-        <select id="kelurahan" name="kelurahan" class="border p-1.5 rounded text-sm">
+        <select id="kelurahan" name="kelurahan" class="selectWilayah border p-1.5 rounded text-sm">
         <option value="">Pilih Kelurahan/Desa</option>
         </select>
         <select name="agama" id="agama" class="border p-1.5 rounded text-sm">
@@ -224,6 +224,14 @@ $(document).ready(function () {
         }));
       });
     });
+  });
+});
+
+$(document).ready(function () {
+  $('.selectWilayah').select2({
+    width: '100%',
+    placeholder: 'Pilih opsi',
+    allowClear: true
   });
 });
 </script>
