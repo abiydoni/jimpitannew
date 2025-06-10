@@ -51,29 +51,57 @@ include 'api/db.php';
 
       <!-- Grid form -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <input type="text" name="kode" id="kode" placeholder="Kode" class="border p-1.5 rounded text-sm">
+        <input type="text" name="kode" id="kode" placeholder="Kode: RT0700001" class="border p-1.5 rounded text-sm">
         <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-1.5 rounded text-sm">
         <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-1.5 rounded text-sm">
-        <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border p-1.5 rounded text-sm">
+        <!-- <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border p-1.5 rounded text-sm"> -->
+        <select name="hubungan" id="hubungan" class="border p-1.5 rounded text-sm">
+          <option value="Suami">Suami</option>
+          <option value="Istri">Istri</option>
+          <option value="Anak">Anak</option>
+          <option value="Soudara Lain">Saudara Lain</option>
+        </select>
         <input type="text" name="nikk" id="nikk" placeholder="NIK KK" class="border p-1.5 rounded text-sm">
         <select name="jenkel" id="jenkel" class="border p-1.5 rounded text-sm">
-          <option value="">Jenis Kelamin</option>
-          <option value="Laki-laki">Laki-laki</option>
-          <option value="Perempuan">Perempuan</option>
+          <option value="L">Laki-laki</option>
+          <option value="P">Perempuan</option>
         </select>
         <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-1.5 rounded text-sm">
         <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm">
         <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
-        <input type="text" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm">
-        <input type="text" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm">
+        <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm">
+        <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm">
         <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border p-1.5 rounded text-sm">
         <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border p-1.5 rounded text-sm">
         <input type="text" name="kota" id="kota" placeholder="Kota" class="border p-1.5 rounded text-sm">
         <input type="text" name="propinsi" id="propinsi" placeholder="Provinsi" class="border p-1.5 rounded text-sm">
         <input type="text" name="negara" id="negara" placeholder="Negara" class="border p-1.5 rounded text-sm">
-        <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-1.5 rounded text-sm">
-        <input type="text" name="status" id="status" placeholder="Status" class="border p-1.5 rounded text-sm">
-        <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-1.5 rounded text-sm">
+        <!-- <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-1.5 rounded text-sm"> -->
+        <select name="agama" id="agama" class="border p-1.5 rounded text-sm">
+          <option value="Islam">Islam</option>
+          <option value="Kristen">Kristen</option>
+          <option value="Katolik">Katolik</option>
+          <option value="Hindu">Hindu</option>
+          <option value="Budha">Budha</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+        <!-- <input type="text" name="status" id="status" placeholder="Status" class="border p-1.5 rounded text-sm"> -->
+        <select name="status" id="status" class="border p-1.5 rounded text-sm">
+          <option value="K">Kawin</option>
+          <option value="TK">Tidak Kawin</option>
+          <option value="J">Janda</option>
+          <option value="D">Duda</option>
+          <option value="P">Pelajar</option>
+          <option value="L">Lainnya</option>
+        </select>
+        <!-- <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-1.5 rounded text-sm"> -->
+        <select name="pekerjaan" id="pekerjaan" class="border p-1.5 rounded text-sm">
+          <option value="PNS">PNS</option>
+          <option value="Swasta">Karyawan Swasta</option>
+          <option value="Wirausaha">Wirausaha</option>
+          <option value="Pelajar">Pelajar</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
         <input type="text" name="hp" id="hp" placeholder="Nomor HP" class="border p-1.5 rounded text-sm">
       </div>
 
