@@ -10,6 +10,13 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 include 'api/db.php';
+
+function generateKodeWarga($prefix = 'RT07') {
+    global $pdo;
+    $stmt = $pdo->query("SELECT COUNT(*) FROM tb_warga");
+    $count = $stmt->fetchColumn();
+    return $prefix . str_pad($count + 1, 5, '0', STR_PAD_LEFT);
+}
 ?>
 
 
@@ -108,7 +115,7 @@ include 'api/db.php';
           <option value="Pelajar">Pelajar</option>
           <option value="Lainnya">Lainnya</option>
         </select>
-        <input type="text" name="hp" id="hp" placeholder="Nomor HP: 08..." class="border p-1.5 rounded text-sm">
+        <input type="tel" name="hp" id="hp" placeholder="Nomor HP: 08..." class="border p-1.5 rounded text-sm">
       </div>
 
       <!-- Tombol aksi -->
@@ -136,6 +143,7 @@ include 'api/db.php';
         closeModal();
         $('#formWarga')[0].reset();
         $('#id_warga').val('');
+        $('.selectWilayah').val(null).trigger('change');
       });
     });
 
