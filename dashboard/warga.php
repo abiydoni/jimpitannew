@@ -67,10 +67,10 @@ include 'api/db.php';
           <option value="P">Perempuan</option>
         </select>
         <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-1.5 rounded text-sm">
-        <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm">
+        <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm" value="<?= date('Y-m-d') ?>">
         <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
-        <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm">
-        <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm">
+        <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="1" min="1">
+        <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="1" min="1">
         <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border p-1.5 rounded text-sm">
         <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border p-1.5 rounded text-sm">
         <input type="text" name="kota" id="kota" placeholder="Kota" class="border p-1.5 rounded text-sm">
