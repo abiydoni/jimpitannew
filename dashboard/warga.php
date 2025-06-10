@@ -67,7 +67,7 @@ include 'api/db.php';
         </select>
         <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-1.5 rounded text-sm">
         <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm" value="<?= date('Y-m-d') ?>">
-        <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
+        <textarea name="alamat" id="alamat" placeholder="Alamat: Jl..." class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
         <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="0" min="0">
         <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="0" min="0">
         <select id="negara" class="border p-1.5 rounded text-sm">
@@ -108,7 +108,7 @@ include 'api/db.php';
           <option value="Pelajar">Pelajar</option>
           <option value="Lainnya">Lainnya</option>
         </select>
-        <input type="text" name="hp" id="hp" placeholder="Nomor HP" class="border p-1.5 rounded text-sm">
+        <input type="text" name="hp" id="hp" placeholder="Nomor HP: 08..." class="border p-1.5 rounded text-sm">
       </div>
 
       <!-- Tombol aksi -->
@@ -168,7 +168,7 @@ include 'api/db.php';
     // Load data on page load
     $(document).ready(loadData);
   </script>
-  
+
 <script>
 $(document).ready(function () {
   // Load provinsi
