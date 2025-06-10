@@ -2,6 +2,7 @@
 // warga_action.php
 include 'db.php';
 
+$aksi = $_POST['aksi'] ?? '';
 if ($_POST['aksi'] == 'kode') {
     $stmt = $pdo->query("SELECT COUNT(*) FROM tb_warga");
     $count = $stmt->fetchColumn();
