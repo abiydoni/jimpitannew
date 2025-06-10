@@ -2,7 +2,12 @@
 // warga_action.php
 include 'db.php';
 
-$aksi = $_POST['aksi'] ?? '';
+if ($_POST['aksi'] == 'kode') {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM tb_warga");
+    $count = $stmt->fetchColumn();
+    echo 'RT07' . str_pad($count + 1, 5, '0', STR_PAD_LEFT);
+    exit;
+}
 
 if ($aksi == 'read') {
   $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");

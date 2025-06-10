@@ -58,9 +58,9 @@ function generateKodeWarga($prefix = 'RT07') {
 
       <!-- Grid form -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <input type="text" name="kode" id="kode" placeholder="Kode: RT0700001" class="border p-1.5 rounded text-sm">
-        <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-1.5 rounded text-sm">
-        <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-1.5 rounded text-sm">
+        <input type="text" name="kode" id="kode" placeholder="Kode: RT0700001" class="border p-1.5 rounded text-sm" required>
+        <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-1.5 rounded text-sm" required>
+        <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-1.5 rounded text-sm" required>
         <select name="hubungan" id="hubungan" class="border p-1.5 rounded text-sm">
           <option value="Suami">Suami</option>
           <option value="Istri">Istri</option>
@@ -206,10 +206,17 @@ function generateKodeWarga($prefix = 'RT07') {
     function openModal() {
     $('#modal').removeClass('hidden').addClass('flex');
 
-    // Inisialisasi Select2 saat modal dibuka
+    // Reset dan set kode warga
+    $('#formWarga')[0].reset();
+    $('#id_warga').val('');
+    $.post('api/warga_action.php', { aksi: 'kode' }, function(kode) {
+        $('#kode').val(kode);
+    });
+
+    $('.selectWilayah').val(null).trigger('change');
     $('.selectWilayah').select2({
         width: '100%',
-        dropdownParent: $('#modal'), // agar tidak tertutup modal
+        dropdownParent: $('#modal'),
         placeholder: 'Pilih opsi',
         allowClear: true
     });
