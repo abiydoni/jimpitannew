@@ -29,6 +29,7 @@ include 'api/db.php';
                 <th class="px-4 py-2 border">TTL</th>
                 <th class="px-4 py-2 border">Alamat</th>
                 <th class="px-4 py-2 border">Pekerjaan</th>
+                <th class="px-4 py-2 border">No HP</th>
                 <th class="px-4 py-2 border">Aksi</th>
             </tr>
             </thead>
@@ -73,6 +74,7 @@ include 'api/db.php';
         <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-1.5 rounded text-sm">
         <input type="text" name="status" id="status" placeholder="Status" class="border p-1.5 rounded text-sm">
         <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-1.5 rounded text-sm">
+        <input type="text" name="hp" id="hp" placeholder="Nomor HP" class="border p-1.5 rounded text-sm">
       </div>
 
       <!-- Tombol aksi -->

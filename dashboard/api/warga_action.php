@@ -16,6 +16,7 @@ if ($aksi == 'read') {
       <td class='border px-4 py-2'>" . $row['tpt_lahir'] . ", " . $row['tgl_lahir'] . "</td>
       <td class='border px-4 py-2'>" . $row['alamat'] . "</td>
       <td class='border px-4 py-2'>" . $row['pekerjaan'] . "</td>
+      <td class='border px-4 py-2'>" . $row['hp'] . "</td>
       <td class='border px-4 py-2'>
         <button onclick=\"editData(" . $row['id_warga'] . ")\" class='text-blue-600 hover:text-blue-400 font-bold py-1 px-1'><i class='bx bx-edit'></i></button>
         <button onclick=\"hapusData(" . $row['id_warga'] . ")\" class='text-red-600 hover:text-red-400 font-bold py-1 px-1'><i class='bx bx-trash'></i></button>
