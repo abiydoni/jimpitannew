@@ -158,7 +158,15 @@ include 'api/db.php';
     }
 
     function openModal() {
-      $('#modal').removeClass('hidden flex').addClass('flex');
+    $('#modal').removeClass('hidden').addClass('flex');
+
+    // Inisialisasi Select2 saat modal dibuka
+    $('.selectWilayah').select2({
+        width: '100%',
+        dropdownParent: $('#modal'), // agar tidak tertutup modal
+        placeholder: 'Pilih opsi',
+        allowClear: true
+    });
     }
 
     function closeModal() {
@@ -227,11 +235,11 @@ $(document).ready(function () {
   });
 });
 
-$(document).ready(function () {
-  $('.selectWilayah').select2({
-    width: '100%',
-    placeholder: 'Pilih opsi',
-    allowClear: true
-  });
-});
+// $(document).ready(function () {
+//   $('.selectWilayah').select2({
+//     width: '100%',
+//     placeholder: 'Pilih opsi',
+//     allowClear: true
+//   });
+// });
 </script>
