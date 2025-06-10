@@ -14,7 +14,7 @@ include 'api/db.php';
 
 
 <div class="table-data">
-    <div class="order">
+    <div class="order overflow-x-auto">
         <div class="head">
             <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+ Tambah Warga</button>
@@ -41,42 +41,47 @@ include 'api/db.php';
 </div>
 
 <!-- MODAL FORM -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-    <div class="bg-white p-6 rounded-lg w-full max-w-xl relative overflow-y-auto max-h-[90vh]">
-    <h2 class="text-xl font-semibold mb-4">Form Warga</h2>
-    <form id="formWarga">
-        <input type="hidden" name="id_warga" id="id_warga">
-        <input type="hidden" name="aksi" value="save">
-        
-        <!-- Form fields -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <input type="text" name="kode" id="kode" placeholder="Kode" class="border p-2 rounded">
-        <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-2 rounded">
-        <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-2 rounded">
-        <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border p-2 rounded">
-        <input type="text" name="nikk" id="nikk" placeholder="NIK KK" class="border p-2 rounded">
-        <input type="text" name="jenkel" id="jenkel" placeholder="Jenis Kelamin" class="border p-2 rounded">
-        <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-2 rounded">
-        <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-2 rounded">
-        <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-2 rounded col-span-1 sm:col-span-2"></textarea>
-        <input type="text" name="rt" id="rt" placeholder="RT" class="border p-2 rounded">
-        <input type="text" name="rw" id="rw" placeholder="RW" class="border p-2 rounded">
-        <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border p-2 rounded">
-        <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border p-2 rounded">
-        <input type="text" name="kota" id="kota" placeholder="Kota" class="border p-2 rounded">
-        <input type="text" name="propinsi" id="propinsi" placeholder="Provinsi" class="border p-2 rounded">
-        <input type="text" name="negara" id="negara" placeholder="Negara" class="border p-2 rounded">
-        <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-2 rounded">
-        <input type="text" name="status" id="status" placeholder="Status" class="border p-2 rounded">
-        <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-2 rounded">
-        </div>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 px-2">
+  <div class="bg-white p-4 rounded-lg w-full max-w-md relative overflow-y-auto max-h-[90vh] text-sm">
+    <h2 class="text-lg font-semibold mb-3">Form Warga</h2>
+    <form id="formWarga" class="space-y-3">
+      <input type="hidden" name="id_warga" id="id_warga">
+      <input type="hidden" name="aksi" value="save">
 
-        <div class="flex justify-end gap-2">
-        <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button>
-        </div>
+      <!-- Grid form -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input type="text" name="kode" id="kode" placeholder="Kode" class="border p-1.5 rounded text-sm">
+        <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-1.5 rounded text-sm">
+        <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-1.5 rounded text-sm">
+        <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border p-1.5 rounded text-sm">
+        <input type="text" name="nikk" id="nikk" placeholder="NIK KK" class="border p-1.5 rounded text-sm">
+        <select name="jenkel" id="jenkel" class="border p-1.5 rounded text-sm">
+          <option value="">Jenis Kelamin</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+        <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-1.5 rounded text-sm">
+        <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm">
+        <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
+        <input type="text" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm">
+        <input type="text" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm">
+        <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border p-1.5 rounded text-sm">
+        <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border p-1.5 rounded text-sm">
+        <input type="text" name="kota" id="kota" placeholder="Kota" class="border p-1.5 rounded text-sm">
+        <input type="text" name="propinsi" id="propinsi" placeholder="Provinsi" class="border p-1.5 rounded text-sm">
+        <input type="text" name="negara" id="negara" placeholder="Negara" class="border p-1.5 rounded text-sm">
+        <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-1.5 rounded text-sm">
+        <input type="text" name="status" id="status" placeholder="Status" class="border p-1.5 rounded text-sm">
+        <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-1.5 rounded text-sm">
+      </div>
+
+      <!-- Tombol aksi -->
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeModal()" class="px-3 py-1.5 border rounded text-sm">Batal</button>
+        <button type="submit" class="px-3 py-1.5 bg-blue-600 text-white rounded text-sm">Simpan</button>
+      </div>
     </form>
-    </div>
+  </div>
 </div>
 
   <?php include 'footer.php'; ?>
