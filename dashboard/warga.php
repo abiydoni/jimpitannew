@@ -19,7 +19,7 @@ include 'api/db.php';
             <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">+ Tambah Warga</button>
         </div>
-        <table class="min-w-full bg-white border">
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
             <thead class="bg-gray-200">
             <tr>
                 <th class="px-4 py-2 border">No</th>
