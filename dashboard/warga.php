@@ -54,7 +54,6 @@ include 'api/db.php';
         <input type="text" name="kode" id="kode" placeholder="Kode: RT0700001" class="border p-1.5 rounded text-sm">
         <input type="text" name="nama" id="nama" placeholder="Nama" class="border p-1.5 rounded text-sm">
         <input type="text" name="nik" id="nik" placeholder="NIK" class="border p-1.5 rounded text-sm">
-        <!-- <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border p-1.5 rounded text-sm"> -->
         <select name="hubungan" id="hubungan" class="border p-1.5 rounded text-sm">
           <option value="Suami">Suami</option>
           <option value="Istri">Istri</option>
@@ -69,14 +68,23 @@ include 'api/db.php';
         <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border p-1.5 rounded text-sm">
         <input type="date" name="tgl_lahir" id="tgl_lahir" class="border p-1.5 rounded text-sm" value="<?= date('Y-m-d') ?>">
         <textarea name="alamat" id="alamat" placeholder="Alamat" class="border p-1.5 rounded col-span-1 sm:col-span-2 text-sm"></textarea>
-        <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="1" min="1">
-        <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="1" min="1">
-        <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border p-1.5 rounded text-sm">
-        <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border p-1.5 rounded text-sm">
-        <input type="text" name="kota" id="kota" placeholder="Kota" class="border p-1.5 rounded text-sm">
-        <input type="text" name="propinsi" id="propinsi" placeholder="Provinsi" class="border p-1.5 rounded text-sm">
-        <input type="text" name="negara" id="negara" placeholder="Negara" class="border p-1.5 rounded text-sm">
-        <!-- <input type="text" name="agama" id="agama" placeholder="Agama" class="border p-1.5 rounded text-sm"> -->
+        <input type="number" name="rt" id="rt" placeholder="RT" class="border p-1.5 rounded text-sm" value="0" min="0">
+        <input type="number" name="rw" id="rw" placeholder="RW" class="border p-1.5 rounded text-sm" value="0" min="0">
+        <select id="negara" class="border p-1.5 rounded text-sm">
+        <option value="indonesia">Indonesia</option>
+        </select>
+        <select id="propinsi" name="propinsi" class="border p-1.5 rounded text-sm">
+        <option value="">Pilih Provinsi</option>
+        </select>
+        <select id="kota" name="kota" class="border p-1.5 rounded text-sm">
+        <option value="">Pilih Kota/Kabupaten</option>
+        </select>
+        <select id="kecamatan" name="kecamatan" class="border p-1.5 rounded text-sm">
+        <option value="">Pilih Kecamatan</option>
+        </select>
+        <select id="kelurahan" name="kelurahan" class="border p-1.5 rounded text-sm">
+        <option value="">Pilih Kelurahan/Desa</option>
+        </select>
         <select name="agama" id="agama" class="border p-1.5 rounded text-sm">
           <option value="Islam">Islam</option>
           <option value="Kristen">Kristen</option>
@@ -85,7 +93,6 @@ include 'api/db.php';
           <option value="Budha">Budha</option>
           <option value="Lainnya">Lainnya</option>
         </select>
-        <!-- <input type="text" name="status" id="status" placeholder="Status" class="border p-1.5 rounded text-sm"> -->
         <select name="status" id="status" class="border p-1.5 rounded text-sm">
           <option value="K">Kawin</option>
           <option value="TK">Tidak Kawin</option>
@@ -94,7 +101,6 @@ include 'api/db.php';
           <option value="P">Pelajar</option>
           <option value="L">Lainnya</option>
         </select>
-        <!-- <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border p-1.5 rounded text-sm"> -->
         <select name="pekerjaan" id="pekerjaan" class="border p-1.5 rounded text-sm">
           <option value="PNS">PNS</option>
           <option value="Swasta">Karyawan Swasta</option>
@@ -162,3 +168,62 @@ include 'api/db.php';
     // Load data on page load
     $(document).ready(loadData);
   </script>
+  
+<script>
+$(document).ready(function () {
+  // Load provinsi
+  $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
+    $.each(data, function (i, provinsi) {
+      $('#propinsi').append($('<option>', {
+        value: provinsi.id,
+        text: provinsi.name
+      }));
+    });
+  });
+
+  // Load kota/kabupaten saat provinsi dipilih
+  $('#propinsi').on('change', function () {
+    var provinsiId = $(this).val();
+    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
+    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+    $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+    $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + provinsiId + ".json", function (data) {
+      $.each(data, function (i, kota) {
+        $('#kota').append($('<option>', {
+          value: kota.id,
+          text: kota.name
+        }));
+      });
+    });
+  });
+
+  // Load kecamatan saat kota dipilih
+  $('#kota').on('change', function () {
+    var kotaId = $(this).val();
+    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+    $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+    $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/districts/" + kotaId + ".json", function (data) {
+      $.each(data, function (i, kec) {
+        $('#kecamatan').append($('<option>', {
+          value: kec.id,
+          text: kec.name
+        }));
+      });
+    });
+  });
+
+  // Load kelurahan saat kecamatan dipilih
+  $('#kecamatan').on('change', function () {
+    var kecamatanId = $(this).val();
+    $('#kelurahan').html('<option value="">Pilih Kelurahan/Desa</option>');
+    $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/villages/" + kecamatanId + ".json", function (data) {
+      $.each(data, function (i, kel) {
+        $('#kelurahan').append($('<option>', {
+          value: kel.name,
+          text: kel.name
+        }));
+      });
+    });
+  });
+});
+</script>
