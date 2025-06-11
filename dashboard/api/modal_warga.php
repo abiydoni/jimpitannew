@@ -82,10 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label>Hubungan</label><input type="text" name="hubungan" id="hubungan" class="input w-full border"></div>
         <div><label>Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="input w-full border"></div>
         <div><label>Negara</label><select name="negara" id="negara" class="input w-full border"><option value="Indonesia" selected>Indonesia</option></select></div>
-        <div><label for="provinsi">Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
-        <div><label for="kota">>Kota/Kabupaten</label><select name="kota" id="kota" class="input w-full border"></select></div>
-        <div><label for="kecamatan">Kecamatan</label><select name="kecamatan" id="kecamatan" class="input w-full border"></select></div>
-        <div><label for="kelurahan">Kelurahan</label><select name="kelurahan" id="kelurahan" class="input w-full border"></select></div>
+        <div><label>Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
+        <div><label>Kota/Kabupaten</label><select name="kota" id="kota" class="input w-full border"></select></div>
+        <div><label>Kecamatan</label><select name="kecamatan" id="kecamatan" class="input w-full border"></select></div>
+        <div><label>Kelurahan</label><select name="kelurahan" id="kelurahan" class="input w-full border"></select></div>
       </div>
 
       <div class="flex justify-end pt-4 border-t">
@@ -105,75 +105,79 @@ function bukaModalWarga() {
 function closeModal() {
   document.getElementById('modalWarga').classList.add('hidden');
 }
+</script>
 
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const provinsiEl = document.getElementById('provinsi');
+  const kotaEl = document.getElementById('kota');
+  const kecamatanEl = document.getElementById('kecamatan');
+  const kelurahanEl = document.getElementById('kelurahan');
 
-async function initWilayah() {
-  try {
-    const prov = await fetchJSON('https://api.datawilayah.com/api/provinsi.json');
-    document.getElementById('provinsi').innerHTML =
-      '<option value="">Pilih Provinsi</option>' +
-      prov.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-  } catch (e) {
-    alert('Gagal memuat provinsi: ' + e.message);
+  // Load provinsi saat modal dibuka
+  async function loadProvinsi() {
+    try {
+      const res = await fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+      const data = await res.json();
+      provinsiEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
+        data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    } catch (e) {
+      provinsiEl.innerHTML = '<option>Gagal memuat provinsi</option>';
+      console.error(e);
+    }
   }
-}
 
-document.getElementById('provinsi').addEventListener('change', async e => {
-  const id = e.target.value;
-  if (!id) return;
-  try {
-    const data = await fetchJSON(`https://api.datawilayah.com/api/kabupaten_kota/${id}.json`);
-    document.getElementById('kota').innerHTML =
-      '<option value="">Pilih Kota/Kab</option>' +
-      data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
-  } catch (e) {
-    alert('Gagal memuat kota/kabupaten');
+  provinsiEl.addEventListener('change', async () => {
+    const id = provinsiEl.value;
+    try {
+      const res = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${id}.json`);
+      const data = await res.json();
+      kotaEl.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>' +
+        data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+      kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
+      kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
+    } catch (e) {
+      kotaEl.innerHTML = '<option>Gagal memuat kota</option>';
+      console.error(e);
+    }
+  });
+
+  kotaEl.addEventListener('change', async () => {
+    const id = kotaEl.value;
+    try {
+      const res = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${id}.json`);
+      const data = await res.json();
+      kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>' +
+        data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+      kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
+    } catch (e) {
+      kecamatanEl.innerHTML = '<option>Gagal memuat kecamatan</option>';
+      console.error(e);
+    }
+  });
+
+  kecamatanEl.addEventListener('change', async () => {
+    const id = kecamatanEl.value;
+    try {
+      const res = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${id}.json`);
+      const data = await res.json();
+      kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>' +
+        data.map(k => `<option value="${k.name}">${k.name}</option>`).join('');
+    } catch (e) {
+      kelurahanEl.innerHTML = '<option>Gagal memuat kelurahan</option>';
+      console.error(e);
+    }
+  });
+
+  // Trigger load saat modal dibuka
+  window.bukaModalWarga = function() {
+    document.getElementById('formWarga').reset();
+    loadProvinsi();
+    document.getElementById('modalWarga').classList.remove('hidden');
+  }
+
+  window.closeModal = function() {
+    document.getElementById('modalWarga').classList.add('hidden');
   }
 });
-
-document.getElementById('kota').addEventListener('change', async e => {
-  const id = e.target.value;
-  if (!id) return;
-  try {
-    const data = await fetchJSON(`https://api.datawilayah.com/api/kecamatan/${id}.json`);
-    document.getElementById('kecamatan').innerHTML =
-      '<option value="">Pilih Kecamatan</option>' +
-      data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
-  } catch (e) {
-    alert('Gagal memuat kecamatan');
-  }
-});
-
-document.getElementById('kecamatan').addEventListener('change', async e => {
-  const id = e.target.value;
-  if (!id) return;
-  try {
-    const data = await fetchJSON(`https://api.datawilayah.com/api/desa_kelurahan/${id}.json`);
-    document.getElementById('kelurahan').innerHTML =
-      '<option value="">Pilih Kelurahan</option>' +
-      data.map(k => `<option value="${k.name}">${k.name}</option>`).join('');
-  } catch (e) {
-    alert('Gagal memuat kelurahan');
-  }
-});
-
-// Panggil saat modal dibuka
-function bukaModalWarga() {
-  document.getElementById('formWarga').reset();
-  document.getElementById('provinsi').innerHTML = '';
-  document.getElementById('kota').innerHTML = '';
-  document.getElementById('kecamatan').innerHTML = '';
-  document.getElementById('kelurahan').innerHTML = '';
-  initWilayah();
-  document.getElementById('modalWarga').classList.remove('hidden');
-}
-
-function closeModal() {
-  document.getElementById('modalWarga').classList.add('hidden');
-}
 </script>
