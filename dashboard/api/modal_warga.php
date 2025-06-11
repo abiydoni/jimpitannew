@@ -12,19 +12,19 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium">NIK</label>
-          <input type="text" name="nik" id="nik" maxlength="16" required class="w-full input border border-gray-300 rounded">
+          <input type="text" name="nik" id="nik" maxlength="16" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">No KK</label>
-          <input type="text" name="nokk" id="nokk" maxlength="16" required class="w-full input border border-gray-300 rounded">
+          <input type="text" name="nokk" id="nokk" maxlength="16" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">Nama Lengkap</label>
-          <input type="text" name="nama" id="nama" required class="w-full input border border-gray-300 rounded">
+          <input type="text" name="nama" id="nama" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">Jenis Kelamin</label>
-          <select name="jenkel" id="jenkel" required class="w-full input border border-gray-300 rounded">
+          <select name="jenkel" id="jenkel" required class="w-full input border border-gray-300 rounded-sm">
             <option value="">Pilih Jenis Kelamin</option>
             <option value="L">Laki-laki</option>
             <option value="P">Perempuan</option>
@@ -32,15 +32,15 @@
         </div>
         <div>
           <label class="block text-sm font-medium">Tempat Lahir</label>
-          <input type="text" name="tpt_lahir" id="tpt_lahir" required class="w-full input border border-gray-300 rounded">
+          <input type="text" name="tpt_lahir" id="tpt_lahir" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">Tanggal Lahir</label>
-          <input type="date" name="tgl_lahir" id="tgl_lahir" required class="w-full input border border-gray-300 rounded">
+          <input type="date" name="tgl_lahir" id="tgl_lahir" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">Agama</label>
-          <select name="agama" id="agama" required class="w-full input border border-gray-300 rounded">
+          <select name="agama" id="agama" required class="w-full input border border-gray-300 rounded-sm">
             <option value="">Pilih Agama</option>
             <option>Islam</option>
             <option>Kristen</option>
@@ -52,7 +52,7 @@
         </div>
         <div>
           <label class="block text-sm font-medium">Status Perkawinan</label>
-          <select name="status" id="status" required class="w-full input border border-gray-300 rounded">
+          <select name="status" id="status" required class="w-full input border border-gray-300 rounded-sm">
             <option value="">Pilih Status</option>
             <option>Belum Kawin</option>
             <option>Kawin</option>
@@ -62,15 +62,15 @@
         </div>
         <div>
           <label class="block text-sm font-medium">Pekerjaan</label>
-          <input type="text" name="pekerjaan" id="pekerjaan" class="w-full input border border-gray-300 rounded">
+          <input type="text" name="pekerjaan" id="pekerjaan" class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">No HP</label>
-          <input type="text" name="hp" id="hp" class="w-full input border border-gray-300 rounded">
+          <input type="text" name="hp" id="hp" class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">Hubungan</label>
-          <select name="hubungan" id="hubungan" required class="w-full input border border-gray-300 rounded">
+          <select name="hubungan" id="hubungan" required class="w-full input border border-gray-300 rounded-sm">
             <option value="">Pilih</option>
             <option>Suami</option>
             <option>Istri</option>
@@ -80,18 +80,18 @@
         </div>
         <div>
           <label class="block text-sm font-medium">Upload Foto</label>
-          <input type="file" name="foto" id="foto" accept="image/*" class="w-full input border border-gray-300 rounded">
+          <input type="file" name="foto" id="foto" accept="image/*" class="w-full input border border-gray-300 rounded-sm">
           <img id="previewFoto" class="mt-2 max-h-32" />
         </div>
         <div>
           <label class="block text-sm font-medium">Alamat (Jalan/Gang)</label>
-          <input type="text" name="alamat" id="alamat" required class="w-full input border border-gray-300 rounded">
+          <input type="text" name="alamat" id="alamat" required class="w-full input border border-gray-300 rounded-sm">
         </div>
         <div>
           <label class="block text-sm font-medium">RT/RW</label>
           <div class="flex gap-2">
-            <input type="text" name="rt" id="rt" maxlength="3" placeholder="RT" class="input w-1/2 border border-gray-300 rounded">
-            <input type="text" name="rw" id="rw" maxlength="3" placeholder="RW" class="input w-1/2 border border-gray-300 rounded">
+            <input type="text" name="rt" id="rt" maxlength="3" placeholder="RT" class="input w-1/2 border border-gray-300 rounded-sm">
+            <input type="text" name="rw" id="rw" maxlength="3" placeholder="RW" class="input w-1/2 border border-gray-300 rounded-sm">
           </div>
         </div>
       </div>
@@ -100,24 +100,24 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium">Provinsi</label>
-          <select name="provinsi" id="provinsi" required class="w-full input border border-gray-300 rounded"></select>
+          <select name="provinsi" id="provinsi" required class="w-full input border border-gray-300 rounded-sm"></select>
         </div>
         <div>
           <label class="block text-sm font-medium">Kabupaten/Kota</label>
-          <select name="kota" id="kota" required class="w-full input border border-gray-300 rounded"></select>
+          <select name="kota" id="kota" required class="w-full input border border-gray-300 rounded-sm"></select>
         </div>
         <div>
           <label class="block text-sm font-medium">Kecamatan</label>
-          <select name="kecamatan" id="kecamatan" required class="w-full input border border-gray-300 rounded"></select>
+          <select name="kecamatan" id="kecamatan" required class="w-full input border border-gray-300 rounded-sm"></select>
         </div>
         <div>
           <label class="block text-sm font-medium">Kelurahan</label>
-          <select name="kelurahan" id="kelurahan" required class="w-full input border border-gray-300 rounded"></select>
+          <select name="kelurahan" id="kelurahan" required class="w-full input border border-gray-300 rounded-sm"></select>
         </div>
       </div>
 
       <div class="flex justify-end pt-4 border-t">
-        <button type="button" onclick="closeModal()" class="btn-secondary mr-2 border border-gray-300 rounded">Batal</button>
+        <button type="button" onclick="closeModal()" class="btn-secondary mr-2">Batal</button>
         <button type="submit" class="btn-primary">Simpan</button>
       </div>
     </form>
