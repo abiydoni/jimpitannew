@@ -106,80 +106,34 @@ function closeModal() {
   document.getElementById('modalWarga').classList.add('hidden');
 }
 
-// Fungsi fetch dengan error handling
 async function fetchJSON(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
 
-// Inisialisasi provinsi saat modal dibuka
 async function initWilayah() {
-  const prov = document.getElementById('provinsi');
-  prov.innerHTML = '<option>Memuat...</option>';
-  try {
-    const json = await fetchJSON('https://wilayah.id/api/provinces.json');
-    prov.innerHTML = '<option value="">Pilih Provinsi</option>' +
-      json.data.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
-  } catch (e) {
-    prov.innerHTML = '<option>Gagal memuat</option>';
-    console.error(e);
-  }
+  const json = await fetchJSON('wilayah.php?type=provinces');
+  // json.data = [{code, name}, ...]
+  provEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
+    json.data.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
 }
 
 async function loadRegency(provCode) {
-  const kota = document.getElementById('kota');
-  kota.innerHTML = '<option>Memuat...</option>';
-  try {
-    const json = await fetchJSON(`https://wilayah.id/api/regencies/${provCode}.json`);
-    kota.innerHTML = '<option value="">Pilih Kota/Kab</option>' +
-      json.data.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
-  } catch (e) {
-    kota.innerHTML = '<option>Gagal memuat</option>';
-    console.error(e);
-  }
+  const json = await fetchJSON(`wilayah.php?type=regencies&id=${provCode}`);
+  kotaEl.innerHTML = '<option value="">Pilih Kota/Kab</option>' +
+    json.data.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
 }
 
 async function loadDistrict(regCode) {
-  const kec = document.getElementById('kecamatan');
-  kec.innerHTML = '<option>Memuat...</option>';
-  try {
-    const json = await fetchJSON(`https://wilayah.id/api/districts/${regCode}.json`);
-    kec.innerHTML = '<option value="">Pilih Kecamatan</option>' +
-      json.data.map(d => `<option value="${d.code}">${d.name}</option>`).join('');
-  } catch (e) {
-    kec.innerHTML = '<option>Gagal memuat</option>';
-    console.error(e);
-  }
+  const json = await fetchJSON(`wilayah.php?type=districts&id=${regCode}`);
+  kecEl.innerHTML = '<option value="">Pilih Kecamatan</option>' +
+    json.data.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
 }
 
 async function loadVillage(distCode) {
-  const kel = document.getElementById('kelurahan');
-  kel.innerHTML = '<option>Memuat...</option>';
-  try {
-    const json = await fetchJSON(`https://wilayah.id/api/villages/${distCode}.json`);
-    kel.innerHTML = '<option value="">Pilih Kelurahan</option>' +
-      json.data.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
-  } catch (e) {
-    kel.innerHTML = '<option>Gagal memuat</option>';
-    console.error(e);
-  }
-}
-
-// Event listener untuk dropdown chaining
-document.getElementById('provinsi').addEventListener('change', e => loadRegency(e.target.value));
-document.getElementById('kota').addEventListener('change', e => loadDistrict(e.target.value));
-document.getElementById('kecamatan').addEventListener('change', e => loadVillage(e.target.value));
-
-// Panggil initWilayah() saat modal ditampilkan
-function bukaModalWarga() {
-  document.getElementById('modalWarga').classList.remove('hidden');
-  document.getElementById('formWarga').reset();
-  initWilayah();
-  document.getElementById('modalTitle').innerText = 'Tambah Warga';
-}
-
-function closeModal() {
-  document.getElementById('modalWarga').classList.add('hidden');
+  const json = await fetchJSON(`wilayah.php?type=villages&id=${distCode}`);
+  kelEl.innerHTML = '<option value="">Pilih Kelurahan</option>' +
+    json.data.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
 }
 </script>
