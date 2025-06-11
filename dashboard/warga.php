@@ -1,434 +1,96 @@
 <?php
 session_start();
-include 'header.php';
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman login
-    exit;
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
 }
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-include 'api/db.php';
+require 'db.php';
 ?>
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Warga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Manajemen Data Warga</h1>
+        <!-- Tombol Aksi -->
+        <div class="mb-4 flex flex-wrap gap-2">
+            <button id="btnTambah" class="bg-blue-500 text-white px-4 py-2 rounded">➕ Tambah Data</button>
+            <button id="btnImport" class="bg-green-500 text-white px-4 py-2 rounded">⬆️ Import Excel</button>
+            <button onclick="exportExcel()" class="bg-yellow-500 text-white px-4 py-2 rounded">⬇️ Export Excel</button>
+            <input type="text" id="searchInput" placeholder="🔍 Cari warga..." class="border px-2 py-1 rounded w-full sm:w-auto flex-grow">
+        </div>
 
-<div class="table-data">
-    <div class="order overflow-x-auto">
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-semibold">Data Warga</h1>
-        <button id="btnTambah" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          +
-        </button>
-      </div>
-      <a href="api/export_warga.php" target="_blank" class="bg-green-600 text-white px-3 py-1 rounded">Export Excel</a>
-      <form action="api/import_warga.php" method="POST" enctype="multipart/form-data" class="inline">
-        <input type="file" name="excel_file" required class="text-sm">
-        <button type="submit" class="bg-yellow-500 px-3 py-1 text-white rounded">Import Excel</button>
-      </form>
-      <a href='api/cetak_warga.php?id=<?= $r['id_warga'] ?>' target='_blank' class="bg-gray-600 text-white px-2 py-1 text-xs">Cetak</a>
-
-      <!-- Tabel Data Warga -->
-      <div id="dataWarga" class="overflow-x-auto">
-        <table class="min-w-full bg-white rounded shadow">
-          <thead class="bg-gray-200 text-gray-700">
-            <tr>
-              <th class="py-2 px-4 border">No</th>
-              <th class="py-2 px-4 border">Nama</th>
-              <th class="py-2 px-4 border">NIK</th>
-              <th class="py-2 px-4 border">HP</th>
-              <th class="py-2 px-4 border">Alamat</th>
-              <th class="py-2 px-4 border">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="dataWarga">
-            <!-- Data diisi lewat jQuery AJAX -->
-          </tbody>
-        </table>
-      </div>
+        <!-- Tabel Data -->
+        <div class="overflow-x-auto bg-white rounded shadow">
+            <table class="min-w-full divide-y divide-gray-200" id="tabelWarga">
+                <thead class="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                    <tr>
+                        <th class="px-3 py-2">Foto</th>
+                        <th class="px-3 py-2">NIK</th>
+                        <th class="px-3 py-2">Nama</th>
+                        <th class="px-3 py-2">Alamat</th>
+                        <th class="px-3 py-2">Wilayah</th>
+                        <th class="px-3 py-2">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody" class="divide-y divide-gray-200 text-sm">
+                    <!-- Data akan dimuat via AJAX -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Modal Warga -->
-    <div id="modalWarga" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white w-full max-w-3xl rounded shadow p-6 relative overflow-y-auto max-h-screen">
-        <h2 class="text-lg font-semibold mb-4">Form Warga</h2>
-
-        <form id="formWarga" enctype="multipart/form-data">
-          <input type="hidden" name="id_warga" id="id_warga">
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label>NIK</label>
-              <input type="text" name="nik" id="nik" maxlength="16" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div>
-              <label>NIKK</label>
-              <input type="text" name="nikk" id="nikk" maxlength="16" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div>
-              <label>Nama</label>
-              <input type="text" name="nama" id="nama" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div>
-              <label>HP</label>
-              <input type="text" name="hp" id="hp" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div>
-              <label>Hubungan</label>
-              <select name="hubungan" id="hubungan" required class="w-full border rounded px-2 py-1">
-                <option value="">- Pilih -</option>
-                <option value="Suami">Suami</option>
-                <option value="Istri">Istri</option>
-                <option value="Anak">Anak</option>
-                <option value="Keluarga Lain">Keluarga Lain</option>
-              </select>
-            </div>
-            <div>
-              <label>Jenis Kelamin</label>
-              <select name="jenkel" id="jenkel" required class="w-full border rounded px-2 py-1">
-                <option value="L">Laki-laki</option>
-                <option value="P">Perempuan</option>
-              </select>
-            </div>
-            <div>
-              <label>Tempat Lahir</label>
-              <input type="text" name="tpt_lahir" id="tpt_lahir" required class="w-full border rounded px-2 py-1" placeholder="Misal: Surabaya">
-            </div>
-            <div>
-              <label>Tanggal Lahir</label>
-              <input type="date" name="tgl_lahir" id="tgl_lahir" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div class="md:col-span-2">
-              <label>Alamat</label>
-              <textarea name="alamat" id="alamat" required class="w-full border rounded px-2 py-1" rows="2"></textarea>
-            </div>
-            <div>
-              <label>RT</label>
-              <input type="number" name="rt" id="rt" min="1" required class="w-full border rounded px-2 py-1">
-            </div>
-            <div>
-              <label>RW</label>
-              <input type="number" name="rw" id="rw" min="1" required class="w-full border rounded px-2 py-1">
-            </div>
-
-            <!-- Dropdown Wilayah - provinsi, kota, kecamatan, kelurahan -->
-            <div>
-              <label>Provinsi</label>
-              <select name="propinsi" id="propinsi" required class="w-full border rounded px-2 py-1"></select>
-            </div>
-            <div>
-              <label>Kota/Kabupaten</label>
-              <select name="kota" id="kota" required class="w-full border rounded px-2 py-1"></select>
-            </div>
-            <div>
-              <label>Kecamatan</label>
-              <select name="kecamatan" id="kecamatan" required class="w-full border rounded px-2 py-1"></select>
-            </div>
-            <div>
-              <label>Kelurahan</label>
-              <select name="kelurahan" id="kelurahan" required class="w-full border rounded px-2 py-1"></select>
-            </div>
-
-            <div>
-              <label>Agama</label>
-              <select name="agama" id="agama" class="w-full border rounded px-2 py-1">
-                <option>Islam</option>
-                <option>Kristen</option>
-                <option>Katolik</option>
-                <option>Hindu</option>
-                <option>Budha</option>
-                <option>Lainnya</option>
-              </select>
-            </div>
-            <div>
-              <label>Status</label>
-              <select name="status" id="status" class="w-full border rounded px-2 py-1">
-                <option>Tidak Kawin</option>
-                <option>Kawin</option>
-                <option>Janda</option>
-                <option>Duda</option>
-                <option>Lainnya</option>
-              </select>
-            </div>
-            <div class="md:col-span-2">
-              <label>Pekerjaan</label>
-              <input type="text" name="pekerjaan" id="pekerjaan" class="w-full border rounded px-2 py-1" placeholder="Contoh: Petani, Guru, dll">
-            </div>
-            <div class="md:col-span-2">
-              <label>Foto</label>
-              <input type="file" name="foto" id="foto" class="w-full border rounded px-2 py-1">
-              <img id="previewFoto" src="#" alt="" class="mt-2 w-32 h-auto hidden">
-            </div>
-          </div>
-
-          <div class="mt-6 flex justify-end gap-2">
-            <button type="button" id="btnBatal" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
-            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Simpan</button>
-          </div>
-        </form>
-      </div>
+    <!-- Modal -->
+    <div id="modalForm" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white w-full max-w-2xl p-6 rounded-lg shadow-lg relative">
+            <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-800" onclick="tutupModal()">✖️</button>
+            <form id="formWarga" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" name="nik" id="nik" placeholder="NIK" required class="border px-3 py-2 rounded">
+                    <input type="text" name="nokk" id="nokk" placeholder="No KK" required class="border px-3 py-2 rounded">
+                    <input type="text" name="nama" id="nama" placeholder="Nama" required class="border px-3 py-2 rounded">
+                    <select name="jenkel" id="jenkel" required class="border px-3 py-2 rounded">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                    <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" required class="border px-3 py-2 rounded">
+                    <input type="date" name="tgl_lahir" id="tgl_lahir" required class="border px-3 py-2 rounded">
+                    <input type="text" name="agama" id="agama" placeholder="Agama" required class="border px-3 py-2 rounded">
+                    <input type="text" name="status" id="status" placeholder="Status" required class="border px-3 py-2 rounded">
+                    <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" required class="border px-3 py-2 rounded">
+                    <input type="text" name="hp" id="hp" placeholder="Nomor HP" required class="border px-3 py-2 rounded">
+                </div>
+                <textarea name="alamat" id="alamat" placeholder="Alamat lengkap..." class="border w-full mt-4 px-3 py-2 rounded" required></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <input type="text" name="rt" id="rt" placeholder="RT" required class="border px-3 py-2 rounded">
+                    <input type="text" name="rw" id="rw" placeholder="RW" required class="border px-3 py-2 rounded">
+                    <select id="provinsi" name="provinsi" required class="border px-3 py-2 rounded"></select>
+                    <select id="kota" name="kota" required class="border px-3 py-2 rounded"></select>
+                    <select id="kecamatan" name="kecamatan" required class="border px-3 py-2 rounded"></select>
+                    <select id="kelurahan" name="kelurahan" required class="border px-3 py-2 rounded"></select>
+                </div>
+                <div class="mt-4">
+                    <label>Upload Foto:</label>
+                    <input type="file" name="foto" id="foto" accept="image/*" class="block mt-1">
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">💾 Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-  // Script jQuery untuk buka modal & preview foto
-  $('#btnTambah').click(function () {
-    $('#formWarga')[0].reset();
-    $('#previewFoto').hide();
-    $('#modalWarga').removeClass('hidden');
-  });
-
-  $('#btnBatal').click(function () {
-    $('#modalWarga').addClass('hidden');
-  });
-
-  $('#foto').change(function () {
-    let reader = new FileReader();
-    reader.onload = function (e) {
-      $('#previewFoto').attr('src', e.target.result).show();
-    };
-    reader.readAsDataURL(this.files[0]);
-  });
-</script>
-
-<script>
-$(document).ready(function () {
-  // Load provinsi saat halaman dibuka
-  $.get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
-    $('#propinsi').append('<option value="">- Pilih Provinsi -</option>');
-    $.each(data, function (i, prov) {
-      $('#propinsi').append(`<option value="${prov.id}" data-nama="${prov.name}">${prov.name}</option>`);
-    });
-  });
-
-  // Load kota ketika provinsi berubah
-  $('#propinsi').on('change', function () {
-    const provID = $(this).val();
-    const provNama = $(this).find(':selected').data('nama');
-    $('#kota').html('<option value="">Memuat...</option>');
-    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provID}.json`, function (data) {
-      $('#kota').html('<option value="">- Pilih Kota/Kabupaten -</option>');
-      $.each(data, function (i, kota) {
-        $('#kota').append(`<option value="${kota.id}" data-nama="${kota.name}">${kota.name}</option>`);
-      });
-    });
-  });
-
-  // Load kecamatan ketika kota berubah
-  $('#kota').on('change', function () {
-    const kotaID = $(this).val();
-    const kotaNama = $(this).find(':selected').data('nama');
-    $('#kecamatan').html('<option value="">Memuat...</option>');
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kotaID}.json`, function (data) {
-      $('#kecamatan').html('<option value="">- Pilih Kecamatan -</option>');
-      $.each(data, function (i, kec) {
-        $('#kecamatan').append(`<option value="${kec.id}" data-nama="${kec.name}">${kec.name}</option>`);
-      });
-    });
-  });
-
-  // Load kelurahan ketika kecamatan berubah
-  $('#kecamatan').on('change', function () {
-    const kecID = $(this).val();
-    const kecNama = $(this).find(':selected').data('nama');
-    $('#kelurahan').html('<option value="">Memuat...</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecID}.json`, function (data) {
-      $('#kelurahan').html('<option value="">- Pilih Kelurahan -</option>');
-      $.each(data, function (i, kel) {
-        $('#kelurahan').append(`<option value="${kel.name}">${kel.name}</option>`);
-      });
-    });
-  });
-});
-</script>
-
-<script>
-  // Saat halaman siap, muat data provinsi
-  $(document).ready(function () {
-    loadProvinsi();
-  });
-
-  function loadProvinsi() {
-    $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
-      $('#propinsi').html('<option value="">Pilih Provinsi</option>');
-      $.each(data, function (i, prov) {
-        $('#propinsi').append(`<option value="${prov.id}" data-nama="${prov.name}">${prov.name}</option>`);
-      });
-    });
-  }
-
-  $('#propinsi').on('change', function () {
-    let idProv = $(this).val();
-    let namaProv = $(this).find(':selected').data('nama');
-    $('#propinsi option:selected').val(namaProv); // ubah value ke nama
-
-    if (idProv) {
-      $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${idProv}.json`, function (data) {
-        $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>');
-        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
-        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-        $.each(data, function (i, kota) {
-          $('#kota').append(`<option value="${kota.id}" data-nama="${kota.name}">${kota.name}</option>`);
-        });
-      });
-    }
-  });
-
-  $('#kota').on('change', function () {
-    let idKota = $(this).val();
-    let namaKota = $(this).find(':selected').data('nama');
-    $('#kota option:selected').val(namaKota);
-
-    if (idKota) {
-      $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${idKota}.json`, function (data) {
-        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
-        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-        $.each(data, function (i, kec) {
-          $('#kecamatan').append(`<option value="${kec.id}" data-nama="${kec.name}">${kec.name}</option>`);
-        });
-      });
-    }
-  });
-
-  $('#kecamatan').on('change', function () {
-    let idKec = $(this).val();
-    let namaKec = $(this).find(':selected').data('nama');
-    $('#kecamatan option:selected').val(namaKec);
-
-    if (idKec) {
-      $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${idKec}.json`, function (data) {
-        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-        $.each(data, function (i, kel) {
-          $('#kelurahan').append(`<option value="${kel.name}">${kel.name}</option>`);
-        });
-      });
-    }
-  });
-
-  $('#kelurahan').on('change', function () {
-    // pastikan value-nya tetap nama
-    $('#kelurahan option:selected').val($('#kelurahan option:selected').text());
-  });
-</script>
-
-<script>
-  // Submit Form Tambah/Update
-  $('#formWarga').submit(function (e) {
-    e.preventDefault();
-
-    var formData = new FormData(this);
-
-    $.ajax({
-      url: 'warga_action.php',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function (res) {
-        let data = JSON.parse(res);
-        if (data.status == 'success') {
-          alert(data.message);
-          $('#modalWarga').hide();
-          $('#formWarga')[0].reset();
-          loadWarga();
-        } else {
-          alert(data.message);
-        }
-      },
-      error: function () {
-        alert("Gagal mengirim data.");
-      }
-    });
-  });
-</script>
-
-<script>
-function loadWarga() {
-  $.ajax({
-    url: 'warga_action.php',
-    type: 'POST',
-    data: { action: 'read' },
-    success: function (res) {
-      $('#dataWarga').html(res); // ✅ Target tbody
-    }
-  });
-}
-
-$(document).ready(function() {
-  loadWarga(); // ✅ Load saat halaman dimuat
-});
-</script>
-
-<script>
-  // Tombol Edit
-  $(document).on('click', '.editBtn', function () {
-    var id = $(this).data('id');
-
-    $.ajax({
-      url: 'warga_action.php',
-      type: 'POST',
-      data: { action: 'get', id: id },
-      success: function (res) {
-        // Isi form modal
-        $('#id_warga').val(res.id_warga);
-        $('#nama').val(res.nama);
-        $('#nik').val(res.nik);
-        $('#hubungan').val(res.hubungan);
-        $('#nikk').val(res.nikk);
-        $('#jenkel').val(res.jenkel);
-        $('#tpt_lahir').val(res.tpt_lahir);
-        $('#tgl_lahir').val(res.tgl_lahir);
-        $('#alamat').val(res.alamat);
-        $('#rt').val(res.rt);
-        $('#rw').val(res.rw);
-        $('#kelurahan').val(res.kelurahan);
-        $('#kecamatan').val(res.kecamatan);
-        $('#kota').val(res.kota);
-        $('#propinsi').val(res.propinsi);
-        $('#negara').val(res.negara);
-        $('#agama').val(res.agama);
-        $('#status').val(res.status);
-        $('#pekerjaan').val(res.pekerjaan);
-        $('#hp').val(res.hp);
-        
-        $('#modalWarga').show();
-      },
-      error: function () {
-        alert("Gagal mengambil data.");
-      }
-    });
-  });
-</script>
-
-<script>
-  $(document).on('click', '.hapusBtn', function () {
-    var id = $(this).data('id');
-    if (confirm('Yakin ingin menghapus data ini?')) {
-      $.ajax({
-        url: 'warga_action.php',
-        type: 'POST',
-        data: { action: 'delete', id: id },
-        success: function (res) {
-          if (res.status === 'success') {
-            alert(res.message);
-            loadWarga();
-          } else {
-            alert("Gagal menghapus data.");
-          }
-        },
-        error: function () {
-          alert("Terjadi kesalahan.");
-        }
-      });
-    }
-  });
-</script>
-
-  <?php include 'footer.php'; ?>
-
+    <input type="file" id="fileExcel" accept=".xlsx" class="hidden">
+    <script src="warga.js"></script>
+</body>
+</html>
