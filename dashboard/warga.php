@@ -172,6 +172,84 @@ include 'api/db.php';
 </div>
 
 <script>
+  // Script jQuery untuk buka modal & preview foto
+  $('#btnTambah').click(function () {
+    $('#formWarga')[0].reset();
+    $('#previewFoto').hide();
+    $('#modalWarga').removeClass('hidden');
+  });
+
+  $('#btnBatal').click(function () {
+    $('#modalWarga').addClass('hidden');
+  });
+
+  $('#foto').change(function () {
+    let reader = new FileReader();
+    reader.onload = function (e) {
+      $('#previewFoto').attr('src', e.target.result).show();
+    };
+    reader.readAsDataURL(this.files[0]);
+  });
+</script>
+
+<script>
+$(document).ready(function () {
+  // Load provinsi saat halaman dibuka
+  $.get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
+    $('#propinsi').append('<option value="">- Pilih Provinsi -</option>');
+    $.each(data, function (i, prov) {
+      $('#propinsi').append(`<option value="${prov.id}" data-nama="${prov.name}">${prov.name}</option>`);
+    });
+  });
+
+  // Load kota ketika provinsi berubah
+  $('#propinsi').on('change', function () {
+    const provID = $(this).val();
+    const provNama = $(this).find(':selected').data('nama');
+    $('#kota').html('<option value="">Memuat...</option>');
+    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
+
+    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provID}.json`, function (data) {
+      $('#kota').html('<option value="">- Pilih Kota/Kabupaten -</option>');
+      $.each(data, function (i, kota) {
+        $('#kota').append(`<option value="${kota.id}" data-nama="${kota.name}">${kota.name}</option>`);
+      });
+    });
+  });
+
+  // Load kecamatan ketika kota berubah
+  $('#kota').on('change', function () {
+    const kotaID = $(this).val();
+    const kotaNama = $(this).find(':selected').data('nama');
+    $('#kecamatan').html('<option value="">Memuat...</option>');
+    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
+
+    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kotaID}.json`, function (data) {
+      $('#kecamatan').html('<option value="">- Pilih Kecamatan -</option>');
+      $.each(data, function (i, kec) {
+        $('#kecamatan').append(`<option value="${kec.id}" data-nama="${kec.name}">${kec.name}</option>`);
+      });
+    });
+  });
+
+  // Load kelurahan ketika kecamatan berubah
+  $('#kecamatan').on('change', function () {
+    const kecID = $(this).val();
+    const kecNama = $(this).find(':selected').data('nama');
+    $('#kelurahan').html('<option value="">Memuat...</option>');
+
+    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecID}.json`, function (data) {
+      $('#kelurahan').html('<option value="">- Pilih Kelurahan -</option>');
+      $.each(data, function (i, kel) {
+        $('#kelurahan').append(`<option value="${kel.name}">${kel.name}</option>`);
+      });
+    });
+  });
+});
+</script>
+
+<script>
   // Saat halaman siap, muat data provinsi
   $(document).ready(function () {
     loadProvinsi();
@@ -356,80 +434,3 @@ include 'api/db.php';
 
   <?php include 'footer.php'; ?>
 
-<script>
-  // Script jQuery untuk buka modal & preview foto
-  $('#btnTambah').click(function () {
-    $('#formWarga')[0].reset();
-    $('#previewFoto').hide();
-    $('#modalWarga').removeClass('hidden');
-  });
-
-  $('#btnBatal').click(function () {
-    $('#modalWarga').addClass('hidden');
-  });
-
-  $('#foto').change(function () {
-    let reader = new FileReader();
-    reader.onload = function (e) {
-      $('#previewFoto').attr('src', e.target.result).show();
-    };
-    reader.readAsDataURL(this.files[0]);
-  });
-</script>
-
-<script>
-$(document).ready(function () {
-  // Load provinsi saat halaman dibuka
-  $.get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (data) {
-    $('#propinsi').append('<option value="">- Pilih Provinsi -</option>');
-    $.each(data, function (i, prov) {
-      $('#propinsi').append(`<option value="${prov.id}" data-nama="${prov.name}">${prov.name}</option>`);
-    });
-  });
-
-  // Load kota ketika provinsi berubah
-  $('#propinsi').on('change', function () {
-    const provID = $(this).val();
-    const provNama = $(this).find(':selected').data('nama');
-    $('#kota').html('<option value="">Memuat...</option>');
-    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provID}.json`, function (data) {
-      $('#kota').html('<option value="">- Pilih Kota/Kabupaten -</option>');
-      $.each(data, function (i, kota) {
-        $('#kota').append(`<option value="${kota.id}" data-nama="${kota.name}">${kota.name}</option>`);
-      });
-    });
-  });
-
-  // Load kecamatan ketika kota berubah
-  $('#kota').on('change', function () {
-    const kotaID = $(this).val();
-    const kotaNama = $(this).find(':selected').data('nama');
-    $('#kecamatan').html('<option value="">Memuat...</option>');
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kotaID}.json`, function (data) {
-      $('#kecamatan').html('<option value="">- Pilih Kecamatan -</option>');
-      $.each(data, function (i, kec) {
-        $('#kecamatan').append(`<option value="${kec.id}" data-nama="${kec.name}">${kec.name}</option>`);
-      });
-    });
-  });
-
-  // Load kelurahan ketika kecamatan berubah
-  $('#kecamatan').on('change', function () {
-    const kecID = $(this).val();
-    const kecNama = $(this).find(':selected').data('nama');
-    $('#kelurahan').html('<option value="">Memuat...</option>');
-
-    $.get(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecID}.json`, function (data) {
-      $('#kelurahan').html('<option value="">- Pilih Kelurahan -</option>');
-      $.each(data, function (i, kel) {
-        $('#kelurahan').append(`<option value="${kel.name}">${kel.name}</option>`);
-      });
-    });
-  });
-});
-</script>
