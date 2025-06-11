@@ -37,7 +37,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Daftar Warga</h3>
+                        <h3>Data Warga</h3>
                         <div class="mb-4 text-center">
                             <button type="button" id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
@@ -51,10 +51,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Nama</th>
                                 <th>NIK</th>
                                 <th>NIKK</th>
-                                <th style="text-align: center;">Jenkel</th>
+                                <th>Jenkel</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tgl Lahir</th>
-                                <th>Alamat</th>
+                                <th>RT</th>
+                                <th>RW</th>
+                                <th>No.HP</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
@@ -68,7 +70,9 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($row["jenkel"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["tpt_lahir"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["tgl_lahir"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["alamat"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["rt"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["rw"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["hp"]); ?></td>
                                 <td class="flex justify-center space-x-2">
                                     <button onclick="openEditTarifModal('<?php echo $row['kode']; ?>', '<?php echo $row['nama']; ?>', '<?php echo $row['nik']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
