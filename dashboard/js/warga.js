@@ -66,59 +66,73 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Load wilayah dari API EMSIFA
-async function loadProvinsi(selected = "") {
-  const prov = document.getElementById("provinsi");
-  prov.innerHTML = '<option value="">Pilih Provinsi</option>';
-  const res = await fetch(
-    "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"
-  );
-  const data = await res.json();
-  data.forEach((d) => {
-    const opt = new Option(d.name, d.id);
-    if (d.id == selected) opt.selected = true;
-    prov.appendChild(opt);
+const API = "https://www.emsifa.com/api-wilayah-indonesia/api/";
+
+$(document).ready(function () {
+  loadProvinsi();
+
+  $("#provinsi").on("change", function () {
+    let provId = $(this).val();
+    if (provId) {
+      loadKota(provId);
+    }
+  });
+
+  $("#kota").on("change", function () {
+    let kotaId = $(this).val();
+    if (kotaId) {
+      loadKecamatan(kotaId);
+    }
+  });
+
+  $("#kecamatan").on("change", function () {
+    let kecId = $(this).val();
+    if (kecId) {
+      loadKelurahan(kecId);
+    }
+  });
+});
+
+function loadProvinsi() {
+  $.getJSON(`${API}provinsi.json`, function (data) {
+    $("#provinsi").html('<option value="">-- Pilih Provinsi --</option>');
+    data.forEach((item) => {
+      $("#provinsi").append(`<option value="${item.id}">${item.name}</option>`);
+    });
   });
 }
 
-async function loadKota(provId, selected = "") {
-  const kota = document.getElementById("kota");
-  kota.innerHTML = '<option value="">Pilih Kota</option>';
-  const res = await fetch(
-    `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`
-  );
-  const data = await res.json();
-  data.forEach((d) => {
-    const opt = new Option(d.name, d.id);
-    if (d.id == selected) opt.selected = true;
-    kota.appendChild(opt);
+function loadKota(provId) {
+  $.getJSON(`${API}regencies/${provId}.json`, function (data) {
+    $("#kota").html('<option value="">-- Pilih Kota --</option>');
+    $("#kecamatan").html('<option value="">-- Pilih Kecamatan --</option>');
+    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
+    data.forEach((item) => {
+      $("#kota").append(`<option value="${item.id}">${item.name}</option>`);
+    });
   });
 }
 
-async function loadKecamatan(kotaId, selected = "") {
-  const kec = document.getElementById("kecamatan");
-  kec.innerHTML = '<option value="">Pilih Kecamatan</option>';
-  const res = await fetch(
-    `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kotaId}.json`
-  );
-  const data = await res.json();
-  data.forEach((d) => {
-    const opt = new Option(d.name, d.id);
-    if (d.id == selected) opt.selected = true;
-    kec.appendChild(opt);
+function loadKecamatan(kotaId) {
+  $.getJSON(`${API}districts/${kotaId}.json`, function (data) {
+    $("#kecamatan").html('<option value="">-- Pilih Kecamatan --</option>');
+    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
+    data.forEach((item) => {
+      $("#kecamatan").append(
+        `<option value="${item.id}">${item.name}</option>`
+      );
+    });
   });
 }
 
-async function loadKelurahan(kecId, selected = "") {
-  const kel = document.getElementById("kelurahan");
-  kel.innerHTML = '<option value="">Pilih Kelurahan</option>';
-  const res = await fetch(
-    `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecId}.json`
-  );
-  const data = await res.json();
-  data.forEach((d) => {
-    const opt = new Option(d.name, d.name);
-    if (d.name == selected) opt.selected = true;
-    kel.appendChild(opt);
+function loadKelurahan(kecId) {
+  $.getJSON(`${API}villages/${kecId}.json`, function (data) {
+    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
+    data.forEach((item) => {
+      $("#kelurahan").append(
+        `<option value="${item.id}">${item.name}</option>`
+      );
+    });
   });
 }
 
@@ -141,4 +155,8 @@ function bukaModalWarga() {
   $("#warga_id").val("");
   $("#modalWargaTitle").text("Tambah Data Warga");
   $("#modalWarga").removeClass("hidden").addClass("flex");
+}
+
+function tutupModalWarga() {
+  $("#modalWarga").addClass("hidden").removeClass("flex");
 }

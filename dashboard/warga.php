@@ -91,4 +91,4 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include 'footer.php'; ?>
 
 <!-- Script wilayah dan form -->
-<script src="js/warga.js"></script>
+<script src="js/warga.js?<?= time() ?>"></script>
