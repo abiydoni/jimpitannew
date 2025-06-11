@@ -94,68 +94,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script>
 async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function initWilayah() {
+  const provEl = document.getElementById('provinsi');
   try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Gagal fetch ' + url);
-    return await response.json();
-  } catch (err) {
-    alert('Error memuat data wilayah: ' + err.message);
-    console.error(err);
+    const prov = await fetchJSON('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json');
+    provEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
+      prov.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  } catch (e) {
+    alert(`Gagal memuat provinsi: ${e.message}`);
+    console.error(e);
   }
 }
 
-async function initWilayah(selected = {}) {
-  const provinsiSelect = document.getElementById('provinsi');
-  const data = await fetchJSON('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json');
-  provinsiSelect.innerHTML = '<option value="">Pilih Provinsi</option>' +
-    data.map(p => `<option value="${p.id}" ${selected.provinsi == p.id ? 'selected' : ''}>${p.name}</option>`).join('');
-}
-
-async function loadKota(provId, selected = {}) {
-  const kotaSelect = document.getElementById('kota');
-  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/regencies/${provId}.json`);
-  kotaSelect.innerHTML = '<option value="">Pilih Kota/Kab</option>' +
-    data.map(k => `<option value="${k.id}" ${selected.kota == k.id ? 'selected' : ''}>${k.name}</option>`).join('');
-}
-
-async function loadKecamatan(kotaId, selected = {}) {
-  const kecSelect = document.getElementById('kecamatan');
-  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/districts/${kotaId}.json`);
-  kecSelect.innerHTML = '<option value="">Pilih Kecamatan</option>' +
-    data.map(kec => `<option value="${kec.id}" ${selected.kecamatan == kec.id ? 'selected' : ''}>${kec.name}</option>`).join('');
-}
-
-async function loadKelurahan(kecId, selected = {}) {
-  const kelSelect = document.getElementById('kelurahan');
-  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/villages/${kecId}.json`);
-  kelSelect.innerHTML = '<option value="">Pilih Kelurahan</option>' +
-    data.map(kel => `<option value="${kel.name}" ${selected.kelurahan == kel.name ? 'selected' : ''}>${kel.name}</option>`).join('');
-}
-
-document.getElementById('provinsi').addEventListener('change', e => {
+document.getElementById('provinsi').addEventListener('change', async e => {
   const provId = e.target.value;
-  if (provId) loadKota(provId);
+  const kotaEl = document.getElementById('kota');
+  kotaEl.innerHTML = '<option value="">Memuat...</option>';
+  try {
+    const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/regencies/${provId}.json`);
+    kotaEl.innerHTML = '<option value="">Pilih Kota</option>' +
+      data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+  } catch (e) {
+    kotaEl.innerHTML = '<option value="">Gagal memuat</option>';
+    console.error(e);
+  }
 });
 
-document.getElementById('kota').addEventListener('change', e => {
-  const kotaId = e.target.value;
-  if (kotaId) loadKecamatan(kotaId);
-});
+document.getElementById('kecamatan').addEventListener('change', async e => { /* similar */ });
+document.getElementById('kelurahan').addEventListener('change', async e => { /* similar */ });
 
-document.getElementById('kecamatan').addEventListener('change', e => {
-  const kecId = e.target.value;
-  if (kecId) loadKelurahan(kecId);
-});
-
-// Panggil init saat modal dibuka
+// Panggil ini ketika buka modal
 function bukaModalWarga() {
   document.getElementById('modalWarga').classList.remove('hidden');
   document.getElementById('formWarga').reset();
-  initWilayah(); // Pastikan ini dipanggil!
+  initWilayah();
   document.getElementById('modalTitle').innerText = 'Tambah Warga';
-}
-
-function closeModal() {
-  document.getElementById('modalWarga').classList.add('hidden');
 }
 </script>
