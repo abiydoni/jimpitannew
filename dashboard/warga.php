@@ -85,41 +85,34 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <!-- Modal Structure -->
         <div id="myModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-            <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
-            <h3 class="text-lg font-bold text-gray-800">Input Data Tarif</h3>
-            <form action="api/tarif_save.php" method="POST" class="space-y-1"> <!-- Mengurangi jarak antar elemen -->
-                <div class="bg-white p-1 rounded-lg shadow-md"> <!-- Mengurangi padding -->
+            <div class="modal-content bg-white p-2 rounded-lg shadow-md w-1/4"> <!-- Mengatur lebar modal lebih kecil -->
+                <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+                <h3 class="text-lg font-bold text-gray-800">Input Data Tarif</h3>
+                <form action="api/tarif_save.php" method="POST" class="space-y-1"> <!-- Mengurangi jarak antar elemen -->
                     <label class="block text-sm font-medium text-gray-700">Kode Tarif:</label>
                     <input type="text" name="kode_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>                
-                </div>
-                <div class="bg-white p-1 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
                     <input type="text" name="nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
-                <div class="bg-white p-1 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Tarif:</label>
                     <input type="text" name="tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
-                <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
-            </form>
+                    <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
+                </form>
+            </div>
         </div>
         <div id="editTarifModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-            <span id="closeeditTarifModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
-            <h3 class="text-lg font-bold text-gray-800">Edit Tarif</h3>
-            <form action="api/tarif_edit.php" method="POST" class="space-y-2">
-                <input type="hidden" name="kode_tarif" id="edit_kode_tarif">
-                <div class="bg-white p-2 rounded-lg shadow-md">
+            <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
+                <span id="closeeditTarifModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+                <h3 class="text-lg font-bold text-gray-800">Edit Tarif</h3>
+                <form action="api/tarif_edit.php" method="POST" class="space-y-2">
+                    <input type="hidden" name="kode_tarif" id="edit_kode_tarif">
                     <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
                     <input type="text" name="nama_tarif" id="edit_nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
-                <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Tarif:</label>
                     <input type="text" name="tarif" id="edit_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                </div>
-                <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
-            </form>
+                    <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
+                </form>
+            </div>
         </div>
-
 <?php include 'footer.php'; ?>
 <script>
     const modal = document.getElementById("myModal");
