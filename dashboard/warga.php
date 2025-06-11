@@ -43,7 +43,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
             <thead class="bg-gray-200">
                 <tr>
                     <th>Kode</th>
