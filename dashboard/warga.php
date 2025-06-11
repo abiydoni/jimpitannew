@@ -51,7 +51,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Nama</th>
                                 <th>NIK</th>
                                 <th>NIKK</th>
-                                <thstyle="text-align: center;">Jenkel</thstyle=>
+                                <th style="text-align: center;">Jenkel</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tgl Lahir</th>
                                 <th>Alamat</th>
@@ -119,6 +119,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
             </form>
         </div>
+
 <?php include 'footer.php'; ?>
 <script>
     const modal = document.getElementById("myModal");
