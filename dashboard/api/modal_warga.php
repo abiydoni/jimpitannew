@@ -58,10 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Tanggal Lahir<input type="date" id="tgl_lahir" name="tgl_lahir" required class="border w-full"></label>
 
         <!-- Wilayah Dropdown -->
-        <label>Provinsi<select id="provinsi" name="provinsi" class="border w-full"></select></label>
-        <label>Kab/Kota<select id="kota" name="kota" class="border w-full"></select></label>
-        <label>Kecamatan<select id="kecamatan" name="kecamatan" class="border w-full"></select></label>
-        <label>Kelurahan<select id="kelurahan" name="kelurahan" class="border w-full"></select></label>
+        <label>Provinsi
+          <select id="provinsi" name="provinsi" required class="border w-full"></select>
+        </label>
+        <label>Kab/Kota
+          <select id="kota" name="kota" required class="border w-full"></select>
+        </label>
+        <label>Kecamatan
+          <select id="kecamatan" name="kecamatan" required class="border w-full"></select>
+        </label>
+        <label>Kelurahan
+          <select id="kelurahan" name="kelurahan" required class="border w-full"></select>
+        </label>
 
         <label>Alamat<input type="text" id="alamat" name="alamat" class="border w-full"></label>
         <label>RT<input type="text" id="rt" name="rt" class="border w-full"></label>
@@ -85,53 +93,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-// inisialisasi dropdown wilayah
 async function fetchJSON(url) {
-  const res = await fetch(url);
-  return await res.json();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Gagal fetch ' + url);
+    return await response.json();
+  } catch (err) {
+    alert('Error memuat data wilayah: ' + err.message);
+    console.error(err);
+  }
 }
 
 async function initWilayah(selected = {}) {
-  const pEl = document.getElementById('provinsi');
-  const prov = await fetchJSON('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json');
-  pEl.innerHTML = '<option>Pilih Provinsi</option>' +
-    prov.map(x => `<option value="${x.id}" ${x.id==selected.provinsi?'selected':''}>${x.name}</option>`).join('');
-  if(selected.provinsi) loadKota(selected.provinsi, selected);
+  const provinsiSelect = document.getElementById('provinsi');
+  const data = await fetchJSON('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json');
+  provinsiSelect.innerHTML = '<option value="">Pilih Provinsi</option>' +
+    data.map(p => `<option value="${p.id}" ${selected.provinsi == p.id ? 'selected' : ''}>${p.name}</option>`).join('');
 }
 
 async function loadKota(provId, selected = {}) {
-  const kEl = document.getElementById('kota');
-  const kota = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/regencies/${provId}.json`);
-  kEl.innerHTML = '<option>Pilih Kota/Kab</option>' +
-    kota.map(x => `<option value="${x.id}" ${x.id==selected.kota?'selected':''}>${x.name}</option>`).join('');
-  if(selected.kota) loadKecamatan(selected.kota, selected);
+  const kotaSelect = document.getElementById('kota');
+  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/regencies/${provId}.json`);
+  kotaSelect.innerHTML = '<option value="">Pilih Kota/Kab</option>' +
+    data.map(k => `<option value="${k.id}" ${selected.kota == k.id ? 'selected' : ''}>${k.name}</option>`).join('');
 }
 
 async function loadKecamatan(kotaId, selected = {}) {
-  const cEl = document.getElementById('kecamatan');
-  const kec = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/districts/${kotaId}.json`);
-  cEl.innerHTML = '<option>Pilih Kecamatan</option>' +
-    kec.map(x => `<option value="${x.id}" ${x.id==selected.kecamatan?'selected':''}>${x.name}</option>`).join('');
-  if(selected.kecamatan) loadKelurahan(selected.kecamatan, selected);
+  const kecSelect = document.getElementById('kecamatan');
+  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/districts/${kotaId}.json`);
+  kecSelect.innerHTML = '<option value="">Pilih Kecamatan</option>' +
+    data.map(kec => `<option value="${kec.id}" ${selected.kecamatan == kec.id ? 'selected' : ''}>${kec.name}</option>`).join('');
 }
 
 async function loadKelurahan(kecId, selected = {}) {
-  const lEl = document.getElementById('kelurahan');
-  const kel = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/villages/${kecId}.json`);
-  lEl.innerHTML = '<option>Pilih Kelurahan</option>' +
-    kel.map(x => `<option value="${x.name}" ${x.name==selected.kelurahan?'selected':''}>${x.name}</option>`).join('');
+  const kelSelect = document.getElementById('kelurahan');
+  const data = await fetchJSON(`https://emsifa.github.io/api-wilayah-indonesia/api/villages/${kecId}.json`);
+  kelSelect.innerHTML = '<option value="">Pilih Kelurahan</option>' +
+    data.map(kel => `<option value="${kel.name}" ${selected.kelurahan == kel.name ? 'selected' : ''}>${kel.name}</option>`).join('');
 }
 
-document.getElementById('provinsi').addEventListener('change', e => loadKota(e.target.value));
-document.getElementById('kota').addEventListener('change', e => loadKecamatan(e.target.value));
-document.getElementById('kecamatan').addEventListener('change', e => loadKelurahan(e.target.value));
+document.getElementById('provinsi').addEventListener('change', e => {
+  const provId = e.target.value;
+  if (provId) loadKota(provId);
+});
 
+document.getElementById('kota').addEventListener('change', e => {
+  const kotaId = e.target.value;
+  if (kotaId) loadKecamatan(kotaId);
+});
+
+document.getElementById('kecamatan').addEventListener('change', e => {
+  const kecId = e.target.value;
+  if (kecId) loadKelurahan(kecId);
+});
+
+// Panggil init saat modal dibuka
 function bukaModalWarga() {
   document.getElementById('modalWarga').classList.remove('hidden');
   document.getElementById('formWarga').reset();
-  initWilayah();
+  initWilayah(); // Pastikan ini dipanggil!
   document.getElementById('modalTitle').innerText = 'Tambah Warga';
 }
+
 function closeModal() {
   document.getElementById('modalWarga').classList.add('hidden');
 }
