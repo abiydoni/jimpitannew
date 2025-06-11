@@ -29,7 +29,7 @@ include 'api/db.php';
       <a href='api/cetak_warga.php?id=<?= $r['id_warga'] ?>' target='_blank' class="bg-gray-600 text-white px-2 py-1 text-xs">Cetak</a>
 
       <!-- Tabel Data Warga -->
-      <div id="tabelWarga" class="overflow-x-auto">
+      <div id="dataWarga" class="overflow-x-auto">
         <table class="min-w-full bg-white rounded shadow">
           <thead class="bg-gray-200 text-gray-700">
             <tr>
@@ -349,21 +349,20 @@ $(document).ready(function () {
 </script>
 
 <script>
-  function loadWarga() {
-    $.ajax({
-      url: 'warga_action.php',
-      type: 'POST',
-      data: { action: 'read' },
-      success: function (res) {
-        $('#dataWarga').html(res);
-      }
-    });
-  }
-
-  // Panggil saat page load
-  $(document).ready(function () {
-    loadWarga();
+function loadWarga() {
+  $.ajax({
+    url: 'warga_action.php',
+    type: 'POST',
+    data: { action: 'read' },
+    success: function (res) {
+      $('#dataWarga').html(res); // ✅ Target tbody
+    }
   });
+}
+
+$(document).ready(function() {
+  loadWarga(); // ✅ Load saat halaman dimuat
+});
 </script>
 
 <script>

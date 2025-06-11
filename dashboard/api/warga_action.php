@@ -74,39 +74,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Read / Tampilkan Tabel
     if ($action == 'read') {
         $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        ob_start();
-        ?>
-        <table class="table-auto w-full text-sm">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th>Nama</th>
-                    <th>NIK</th>
-                    <th>HP</th>
-                    <th>Alamat</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($rows as $r): ?>
-                <tr>
-                    <td><?= htmlspecialchars($r['nama']) ?></td>
-                    <td><?= htmlspecialchars($r['nik']) ?></td>
-                    <td><?= htmlspecialchars($r['hp']) ?></td>
-                    <td><?= htmlspecialchars($r['alamat']) ?></td>
-                    <td>
-                        <button class="editBtn bg-blue-500 text-white px-2 py-1 text-xs" data-id="<?= $r['id_warga'] ?>">Edit</button>
-                        <button class="hapusBtn bg-red-500 text-white px-2 py-1 text-xs" data-id="<?= $r['id_warga'] ?>">Hapus</button>
-                    </td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-        <?php
-        echo ob_get_clean();
+
+        foreach ($rows as $r) {
+            echo "<tr>
+                <td>" . htmlspecialchars($r['nama']) . "</td>
+                <td>" . htmlspecialchars($r['nik']) . "</td>
+                <td>" . htmlspecialchars($r['hp']) . "</td>
+                <td>" . htmlspecialchars($r['alamat']) . "</td>
+                <td>
+                    <button class='editBtn bg-blue-500 text-white px-2 py-1 text-xs' data-id='" . $r['id_warga'] . "'>Edit</button>
+                    <button class='hapusBtn bg-red-500 text-white px-2 py-1 text-xs' data-id='" . $r['id_warga'] . "'>Hapus</button>
+                </td>
+            </tr>";
+        }
+
         exit;
     }
 
