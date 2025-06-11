@@ -17,20 +17,20 @@ include 'api/db.php';
 
 // Fungsi untuk menghapus data
 if (isset($_GET['delete'])) {
-    $kode_tarif = $_GET['delete'];
-    $sql = "DELETE FROM tb_tarif WHERE kode_tarif=?";
+    $kode = $_GET['delete'];
+    $sql = "DELETE FROM tb_warga WHERE kode=?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$kode_tarif]);
+    $stmt->execute([$kode]);
 
-    header("Location: setting.php");
+    header("Location: warga.php");
     exit();
 }
 
 
 // Ambil data dari tabel users
-$sql = "SELECT * FROM tb_tarif";
+$sql = "SELECT * FROM tb_warga";
 $stmt = $pdo->query($sql);
-$tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -47,23 +47,35 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th style="text-align: left;">Kode Tarif</th>
-                                <th style="text-align: center;">Nama Tarif</th>
-                                <th style="text-align: center;">Tarif</th>
+                                <th style="text-align: left;">Kode</th>
+                                <th style="text-align: center;">Nama</th>
+                                <th style="text-align: center;">NIK</th>
+                                <th style="text-align: center;">HUB</th>
+                                <th style="text-align: center;">NIKK</th>
+                                <th style="text-align: center;">X</th>
+                                <th style="text-align: center;">Tempat Lahir</th>
+                                <th style="text-align: center;">Tgl Lahir</th>
+                                <th style="text-align: center;">Alamat</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($tarif_1 as $tarif): ?>
+                        <?php foreach($data as $row): ?>
                             <tr class="border-b hover:bg-gray-100">
-                                <td><?php echo htmlspecialchars($tarif["kode_tarif"]); ?></td>
-                                <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
-                                <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["kode"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["nama"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["nik"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["hubungan"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["nikk"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["jenkel"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["tpt_lahir"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["tgl_lahir"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["alamat"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
+                                    <button onclick="openEditTarifModal('<?php echo $row['kode']; ?>', '<?php echo $row['nama']; ?>', '<?php echo $row['nik']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
-                                    <a href="setting.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
+                                    <a href="warga.php?delete=<?php echo $row['kode']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['nama']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
                                 </td>
