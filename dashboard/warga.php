@@ -10,6 +10,8 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 include 'api/db.php';
+$stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");
+$wargas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
