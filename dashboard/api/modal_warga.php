@@ -97,6 +97,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
+function bukaModalWarga() {
+  document.getElementById('modalWarga').classList.remove('hidden');
+  document.getElementById('formWarga').reset();
+}
+
+function closeModal() {
+  document.getElementById('modalWarga').classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const negaraEl = document.getElementById('negara');
   const provinsiEl = document.getElementById('provinsi');
