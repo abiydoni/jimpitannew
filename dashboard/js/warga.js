@@ -68,72 +68,59 @@ document.addEventListener("DOMContentLoaded", () => {
 // Load wilayah dari API EMSIFA
 const API = "https://www.emsifa.com/api-wilayah-indonesia/api/";
 
-$(document).ready(function () {
-  loadProvinsi();
-
-  $("#provinsi").on("change", function () {
-    let provId = $(this).val();
-    if (provId) {
-      loadKota(provId);
-    }
-  });
-
-  $("#kota").on("change", function () {
-    let kotaId = $(this).val();
-    if (kotaId) {
-      loadKecamatan(kotaId);
-    }
-  });
-
-  $("#kecamatan").on("change", function () {
-    let kecId = $(this).val();
-    if (kecId) {
-      loadKelurahan(kecId);
-    }
-  });
-});
-
 function loadProvinsi() {
-  $.getJSON(`${API}provinsi.json`, function (data) {
-    $("#provinsi").html('<option value="">-- Pilih Provinsi --</option>');
-    data.forEach((item) => {
-      $("#provinsi").append(`<option value="${item.id}">${item.name}</option>`);
+  fetch(`${API}provinsi.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      const provinsiSelect = document.getElementById("provinsi");
+      provinsiSelect.innerHTML =
+        '<option value="">-- Pilih Provinsi --</option>';
+      data.forEach((item) => {
+        provinsiSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+      });
     });
-  });
 }
 
 function loadKota(provId) {
-  $.getJSON(`${API}regencies/${provId}.json`, function (data) {
-    $("#kota").html('<option value="">-- Pilih Kota --</option>');
-    $("#kecamatan").html('<option value="">-- Pilih Kecamatan --</option>');
-    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
-    data.forEach((item) => {
-      $("#kota").append(`<option value="${item.id}">${item.name}</option>`);
+  fetch(`${API}regencies/${provId}.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      const kota = document.getElementById("kota");
+      const kecamatan = document.getElementById("kecamatan");
+      const kelurahan = document.getElementById("kelurahan");
+      kota.innerHTML = '<option value="">-- Pilih Kota --</option>';
+      kecamatan.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+      kelurahan.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+      data.forEach((item) => {
+        kota.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+      });
     });
-  });
 }
 
 function loadKecamatan(kotaId) {
-  $.getJSON(`${API}districts/${kotaId}.json`, function (data) {
-    $("#kecamatan").html('<option value="">-- Pilih Kecamatan --</option>');
-    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
-    data.forEach((item) => {
-      $("#kecamatan").append(
-        `<option value="${item.id}">${item.name}</option>`
-      );
+  fetch(`${API}districts/${kotaId}.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      const kecamatan = document.getElementById("kecamatan");
+      const kelurahan = document.getElementById("kelurahan");
+      kecamatan.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+      kelurahan.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+      data.forEach((item) => {
+        kecamatan.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+      });
     });
-  });
 }
 
 function loadKelurahan(kecId) {
-  $.getJSON(`${API}villages/${kecId}.json`, function (data) {
-    $("#kelurahan").html('<option value="">-- Pilih Kelurahan --</option>');
-    data.forEach((item) => {
-      $("#kelurahan").append(
-        `<option value="${item.id}">${item.name}</option>`
-      );
+  fetch(`${API}villages/${kecId}.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      const kelurahan = document.getElementById("kelurahan");
+      kelurahan.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+      data.forEach((item) => {
+        kelurahan.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+      });
     });
-  });
 }
 
 // Reset form modal
