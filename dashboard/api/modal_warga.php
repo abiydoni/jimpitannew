@@ -81,33 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label>No HP</label><input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka" class="input w-full border"></div>
         <div><label>Hubungan</label><input type="text" name="hubungan" id="hubungan" class="input w-full border"></div>
         <div><label>Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="input w-full border"></div>
-        <div>
-          <label for="negara" class="block font-medium">Negara</label>
-          <select name="negara" id="negara" class="w-full border rounded px-3 py-2">
-            <option value="">Pilih Negara</option>
-            <option value="Indonesia" selected>Indonesia</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="provinsi" class="block font-medium">Provinsi</label>
-          <select name="provinsi" id="provinsi" class="w-full border rounded px-3 py-2"></select>
-        </div>
-
-        <div>
-          <label for="kota" class="block font-medium">Kota/Kabupaten</label>
-          <select name="kota" id="kota" class="w-full border rounded px-3 py-2"></select>
-        </div>
-
-        <div>
-          <label for="kecamatan" class="block font-medium">Kecamatan</label>
-          <select name="kecamatan" id="kecamatan" class="w-full border rounded px-3 py-2"></select>
-        </div>
-
-        <div>
-          <label for="kelurahan" class="block font-medium">Kelurahan/Desa</label>
-          <select name="kelurahan" id="kelurahan" class="w-full border rounded px-3 py-2"></select>
-        </div>
+        <div><label>Negara</label><select name="negara" id="negara" class="input w-full border"><option value="Indonesia" selected>Indonesia</option></select></div>
+        <div><label>Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
+        <div><label>Kota/Kabupaten</label><select name="kota" id="kota" class="input w-full border"></select></div>
+        <div><label>Kecamatan</label><select name="kecamatan" id="kecamatan" class="input w-full border"></select></div>
+        <div><label>Kelurahan</label><select name="kelurahan" id="kelurahan" class="input w-full border"></select></div>
       </div>
 
       <div class="flex justify-end pt-4 border-t">
@@ -128,56 +106,80 @@ function closeModal() {
   document.getElementById('modalWarga').classList.add('hidden');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const negaraEl = document.getElementById('negara');
-  const provinsiEl = document.getElementById('provinsi');
-  const kotaEl = document.getElementById('kota');
-  const kecamatanEl = document.getElementById('kecamatan');
-  const kelurahanEl = document.getElementById('kelurahan');
+// Fungsi fetch dengan error handling
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
 
-  negaraEl.addEventListener('change', async () => {
-    if (negaraEl.value === 'Indonesia') {
-      try {
-        const res = await fetch('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json');
-        const data = await res.json();
-        provinsiEl.innerHTML = '<option value="">Pilih Provinsi</option>' + data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-      } catch (err) {
-        alert('Gagal memuat data provinsi');
-      }
-    }
-  });
+// Inisialisasi provinsi saat modal dibuka
+async function initWilayah() {
+  const prov = document.getElementById('provinsi');
+  prov.innerHTML = '<option>Memuat...</option>';
+  try {
+    const json = await fetchJSON('https://wilayah.id/api/provinces.json');
+    prov.innerHTML = '<option value="">Pilih Provinsi</option>' +
+      json.data.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
+  } catch (e) {
+    prov.innerHTML = '<option>Gagal memuat</option>';
+    console.error(e);
+  }
+}
 
-  provinsiEl.addEventListener('change', async () => {
-    const id = provinsiEl.value;
-    try {
-      const res = await fetch(`https://emsifa.github.io/api-wilayah-indonesia/api/regencies/${id}.json`);
-      const data = await res.json();
-      kotaEl.innerHTML = '<option value="">Pilih Kota</option>' + data.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-    } catch (err) {
-      alert('Gagal memuat data kota');
-    }
-  });
+async function loadRegency(provCode) {
+  const kota = document.getElementById('kota');
+  kota.innerHTML = '<option>Memuat...</option>';
+  try {
+    const json = await fetchJSON(`https://wilayah.id/api/regencies/${provCode}.json`);
+    kota.innerHTML = '<option value="">Pilih Kota/Kab</option>' +
+      json.data.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
+  } catch (e) {
+    kota.innerHTML = '<option>Gagal memuat</option>';
+    console.error(e);
+  }
+}
 
-  kotaEl.addEventListener('change', async () => {
-    const id = kotaEl.value;
-    try {
-      const res = await fetch(`https://emsifa.github.io/api-wilayah-indonesia/api/districts/${id}.json`);
-      const data = await res.json();
-      kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>' + data.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-    } catch (err) {
-      alert('Gagal memuat data kecamatan');
-    }
-  });
+async function loadDistrict(regCode) {
+  const kec = document.getElementById('kecamatan');
+  kec.innerHTML = '<option>Memuat...</option>';
+  try {
+    const json = await fetchJSON(`https://wilayah.id/api/districts/${regCode}.json`);
+    kec.innerHTML = '<option value="">Pilih Kecamatan</option>' +
+      json.data.map(d => `<option value="${d.code}">${d.name}</option>`).join('');
+  } catch (e) {
+    kec.innerHTML = '<option>Gagal memuat</option>';
+    console.error(e);
+  }
+}
 
-  kecamatanEl.addEventListener('change', async () => {
-    const id = kecamatanEl.value;
-    try {
-      const res = await fetch(`https://emsifa.github.io/api-wilayah-indonesia/api/villages/${id}.json`);
-      const data = await res.json();
-      kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>' + data.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
-    } catch (err) {
-      alert('Gagal memuat data kelurahan');
-    }
-  });
-});
+async function loadVillage(distCode) {
+  const kel = document.getElementById('kelurahan');
+  kel.innerHTML = '<option>Memuat...</option>';
+  try {
+    const json = await fetchJSON(`https://wilayah.id/api/villages/${distCode}.json`);
+    kel.innerHTML = '<option value="">Pilih Kelurahan</option>' +
+      json.data.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
+  } catch (e) {
+    kel.innerHTML = '<option>Gagal memuat</option>';
+    console.error(e);
+  }
+}
+
+// Event listener untuk dropdown chaining
+document.getElementById('provinsi').addEventListener('change', e => loadRegency(e.target.value));
+document.getElementById('kota').addEventListener('change', e => loadDistrict(e.target.value));
+document.getElementById('kecamatan').addEventListener('change', e => loadVillage(e.target.value));
+
+// Panggil initWilayah() saat modal ditampilkan
+function bukaModalWarga() {
+  document.getElementById('modalWarga').classList.remove('hidden');
+  document.getElementById('formWarga').reset();
+  initWilayah();
+  document.getElementById('modalTitle').innerText = 'Tambah Warga';
+}
+
+function closeModal() {
+  document.getElementById('modalWarga').classList.add('hidden');
+}
 </script>
