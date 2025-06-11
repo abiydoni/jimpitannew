@@ -134,3 +134,11 @@ function resetForm() {
       }</option>`;
   });
 }
+
+function bukaModalWarga() {
+  // Reset form
+  $("#formWarga")[0].reset();
+  $("#warga_id").val("");
+  $("#modalWargaTitle").text("Tambah Data Warga");
+  $("#modalWarga").removeClass("hidden").addClass("flex");
+}
