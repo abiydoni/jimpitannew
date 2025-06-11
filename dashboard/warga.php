@@ -37,7 +37,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="table-data">
                 <div class="order">
                     <div class="head">
-                        <h3>Daftar Tarif</h3>
+                        <h3>Daftar Warga</h3>
                         <div class="mb-4 text-center">
                             <button type="button" id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
@@ -47,15 +47,14 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th style="text-align: left;">Kode</th>
-                                <th style="text-align: center;">Nama</th>
-                                <th style="text-align: center;">NIK</th>
-                                <th style="text-align: center;">HUB</th>
-                                <th style="text-align: center;">NIKK</th>
-                                <th style="text-align: center;">X</th>
-                                <th style="text-align: center;">Tempat Lahir</th>
-                                <th style="text-align: center;">Tgl Lahir</th>
-                                <th style="text-align: center;">Alamat</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>NIKK</th>
+                                <thstyle="text-align: center;">Jenkel</thstyle=>
+                                <th>Tempat Lahir</th>
+                                <th>Tgl Lahir</th>
+                                <th>Alamat</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
@@ -65,7 +64,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($row["kode"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nama"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nik"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["hubungan"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nikk"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["jenkel"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["tpt_lahir"]); ?></td>
@@ -87,43 +85,39 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <!-- Modal Structure -->
         <div id="myModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-            <div class="modal-content bg-white p-2 rounded-lg shadow-md w-1/4"> <!-- Mengatur lebar modal lebih kecil -->
-                <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
-                <h3 class="text-lg font-bold text-gray-800">Input Data Tarif</h3>
-                <form action="api/tarif_save.php" method="POST" class="space-y-1"> <!-- Mengurangi jarak antar elemen -->
-                    <div class="bg-white p-1 rounded-lg shadow-md"> <!-- Mengurangi padding -->
-                        <label class="block text-sm font-medium text-gray-700">Kode Tarif:</label>
-                        <input type="text" name="kode_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>                
-                    </div>
-                    <div class="bg-white p-1 rounded-lg shadow-md">
-                        <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
-                        <input type="text" name="nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                    </div>
-                    <div class="bg-white p-1 rounded-lg shadow-md">
-                        <label class="block text-sm font-medium text-gray-700">Tarif:</label>
-                        <input type="text" name="tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                    </div>
-                    <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
-                </form>
-            </div>
+            <span id="closeModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Input Data Tarif</h3>
+            <form action="api/tarif_save.php" method="POST" class="space-y-1"> <!-- Mengurangi jarak antar elemen -->
+                <div class="bg-white p-1 rounded-lg shadow-md"> <!-- Mengurangi padding -->
+                    <label class="block text-sm font-medium text-gray-700">Kode Tarif:</label>
+                    <input type="text" name="kode_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>                
+                </div>
+                <div class="bg-white p-1 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
+                    <input type="text" name="nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-1 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Tarif:</label>
+                    <input type="text" name="tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
+            </form>
         </div>
         <div id="editTarifModal" class="modal hidden fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-md w-1/3">
-                <span id="closeeditTarifModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
-                <h3 class="text-lg font-bold text-gray-800">Edit Tarif</h3>
-                <form action="api/tarif_edit.php" method="POST" class="space-y-2">
-                    <input type="hidden" name="kode_tarif" id="edit_kode_tarif">
-                    <div class="bg-white p-2 rounded-lg shadow-md">
-                        <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
-                        <input type="text" name="nama_tarif" id="edit_nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                    </div>
-                    <div class="bg-white p-2 rounded-lg shadow-md">
-                        <label class="block text-sm font-medium text-gray-700">Tarif:</label>
-                        <input type="text" name="tarif" id="edit_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                    </div>
-                    <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
-                </form>
-            </div>
+            <span id="closeeditTarifModal" class="close cursor-pointer text-gray-500 float-right">&times;</span>
+            <h3 class="text-lg font-bold text-gray-800">Edit Tarif</h3>
+            <form action="api/tarif_edit.php" method="POST" class="space-y-2">
+                <input type="hidden" name="kode_tarif" id="edit_kode_tarif">
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
+                    <input type="text" name="nama_tarif" id="edit_nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <div class="bg-white p-2 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700">Tarif:</label>
+                    <input type="text" name="tarif" id="edit_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
+            </form>
         </div>
 <?php include 'footer.php'; ?>
 <script>
