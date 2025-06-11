@@ -91,6 +91,6 @@ require 'db.php';
     </div>
 
     <input type="file" id="fileExcel" accept=".xlsx" class="hidden">
-    <script src="warga.js"></script>
+    <script src="js/warga.js"></script>
 </body>
 </html>
