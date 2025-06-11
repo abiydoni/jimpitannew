@@ -358,7 +358,7 @@ $(document).ready(function () {
       type: 'POST',
       data: { action: 'read' },
       success: function (res) {
-        $('#tabelWarga').html(res);
+        $('#dataWarga').html(res);
       }
     });
   }
