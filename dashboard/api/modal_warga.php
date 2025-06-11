@@ -81,11 +81,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label>No HP</label><input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka" class="input w-full border"></div>
         <div><label>Hubungan</label><input type="text" name="hubungan" id="hubungan" class="input w-full border"></div>
         <div><label>Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="input w-full border"></div>
-        <div><label>Negara</label><select name="negara" id="negara" class="input w-full border"><option value="Indonesia" selected>Indonesia</option></select></div>
-        <div><label>Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
-        <div><label>Kota/Kabupaten</label><select name="kota" id="kota" class="input w-full border"></select></div>
-        <div><label>Kecamatan</label><select name="kecamatan" id="kecamatan" class="input w-full border"></select></div>
-        <div><label>Kelurahan</label><select name="kelurahan" id="kelurahan" class="input w-full border"></select></div>
+        <div>
+          <label for="negara" class="block font-medium">Negara</label>
+          <select name="negara" id="negara" class="w-full border rounded px-3 py-2">
+            <option value="">Pilih Negara</option>
+            <option value="Indonesia" selected>Indonesia</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="provinsi" class="block font-medium">Provinsi</label>
+          <select name="provinsi" id="provinsi" class="w-full border rounded px-3 py-2"></select>
+        </div>
+
+        <div>
+          <label for="kota" class="block font-medium">Kota/Kabupaten</label>
+          <select name="kota" id="kota" class="w-full border rounded px-3 py-2"></select>
+        </div>
+
+        <div>
+          <label for="kecamatan" class="block font-medium">Kecamatan</label>
+          <select name="kecamatan" id="kecamatan" class="w-full border rounded px-3 py-2"></select>
+        </div>
+
+        <div>
+          <label for="kelurahan" class="block font-medium">Kelurahan/Desa</label>
+          <select name="kelurahan" id="kelurahan" class="w-full border rounded px-3 py-2"></select>
+        </div>
       </div>
 
       <div class="flex justify-end pt-4 border-t">
