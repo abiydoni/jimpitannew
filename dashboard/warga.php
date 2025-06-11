@@ -1,10 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-require 'db.php';
+// if (!isset($_SESSION['username'])) {
+//     header("Location: login.php");
+//     exit();
+// }
+require 'api/db.php';
 ?>
 
 <!DOCTYPE html>
