@@ -1,5 +1,7 @@
 <?php
 session_start();
+setlocale(LC_TIME, 'id_ID.utf8');
+
 include 'header.php';
 
 // Periksa apakah pengguna sudah masuk
@@ -52,8 +54,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>NIK</th>
                                 <th>NIKK</th>
                                 <th>Jenkel</th>
-                                <th>Tempat Lahir</th>
-                                <th>Tgl Lahir</th>
+                                <th>Tempat/Tanggal Lahir</th>
                                 <th>RT</th>
                                 <th>RW</th>
                                 <th>No.HP</th>
@@ -61,15 +62,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($data as $row): ?>
+                        <?php foreach($data as $row):
+                            $timestamp = strtotime($row['tgl_lahir']);
+                            $tanggal = strftime('%e %B %Y', $timestamp);
+                        ?>
                             <tr class="border-b hover:bg-gray-100">
                                 <td><?php echo htmlspecialchars($row["kode"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nama"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nik"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nikk"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["jenkel"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["tpt_lahir"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["tgl_lahir"]); ?></td>
+                                <td><?php echo htmlspecialchars($row['tpt_lahir'] . ', ' . $tanggal); ?></td>
                                 <td><?php echo htmlspecialchars($row["rt"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["rw"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["hp"]); ?></td>
