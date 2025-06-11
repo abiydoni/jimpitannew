@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const nik = formData.get("nik");
     const nokk = formData.get("nokk");
 
-    if (nik.length !== 16 || nokk.length !== 16) {
-      alert("NIK dan No KK harus 16 digit.");
+    if (!/^\d{16}$/.test(nik) || !/^\d{16}$/.test(nokk)) {
+      alert("NIK dan No KK harus 16 digit angka.");
       return;
     }
 
@@ -147,3 +147,23 @@ function bukaModalWarga() {
 function tutupModalWarga() {
   $("#modalWarga").addClass("hidden").removeClass("flex");
 }
+
+function resetForm() {
+  const form = document.getElementById("formWarga");
+  form.reset();
+  form.querySelector("#id").value = "";
+
+  [provinsiSelect, kotaSelect, kecamatanSelect, kelurahanSelect].forEach(
+    (el, i) => {
+      const labels = ["Provinsi", "Kota", "Kecamatan", "Kelurahan"];
+      el.innerHTML = `<option value="">-- Pilih ${labels[i]} --</option>`;
+    }
+  );
+}
+
+document.getElementById("foto").addEventListener("change", (e) => {
+  const [file] = e.target.files;
+  if (file) {
+    document.getElementById("previewFoto").src = URL.createObjectURL(file);
+  }
+});

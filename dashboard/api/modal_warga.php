@@ -81,6 +81,7 @@
         <div>
           <label class="block text-sm font-medium">Upload Foto</label>
           <input type="file" name="foto" id="foto" accept="image/*" class="w-full input">
+          <img id="previewFoto" class="mt-2 max-h-32" />
         </div>
         <div>
           <label class="block text-sm font-medium">Alamat (Jalan/Gang)</label>
