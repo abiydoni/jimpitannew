@@ -53,6 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<div id="modalWarga" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h2 class="text-xl font-semibold" id="modalTitle">Tambah Warga</h2>
+      <button onclick="closeModal()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
+    </div>
+
     <form id="formWarga" enctype="multipart/form-data" method="POST" class="px-4 py-2 space-y-3 text-xs">
       <input type="hidden" name="id" id="id">
       <input type="hidden" name="kode" id="kode">
