@@ -73,9 +73,9 @@ if (strtotime($filterDate)) {
             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
+                        <th style="text-align: center;" id="sort-date">Tanggal</th>
                         <th style="text-align: Left;">Nama KK</th>
                         <th style="text-align: center;">Code</th>
-                        <th style="text-align: center;" id="sort-date">Tanggal</th>
                         <th style="text-align: center;">Nominal</th>
                         <th style="text-align: center;">Input By</th>
                         <th style="text-align: center;">Kode User</th>
@@ -87,9 +87,9 @@ if (strtotime($filterDate)) {
                         if ($data) {
                             foreach ($data as $row): ?>
                                 <tr class="border-b hover:bg-gray-100">
+                                    <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
                                     <td><?php echo htmlspecialchars($row["kk_name"]); ?></td>
                                     <td><?php echo htmlspecialchars($row["report_id"]); ?></td>
-                                    <td><?php echo htmlspecialchars($row["jimpitan_date"]); ?></td>
                                     <td><?php echo htmlspecialchars($row["nominal"]); ?></td>
                                     <td><?php echo htmlspecialchars($row["collector"]); ?></td>
                                     <td><?php echo htmlspecialchars($row["kode_u"]); ?></td>
