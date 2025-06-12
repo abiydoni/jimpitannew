@@ -60,12 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button onclick="closeModal()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
 
-    <form id="formWarga" enctype="multipart/form-data" method="POST" class="px-4 py-2 space-y-3 text-sm">
+    <form id="formWarga" enctype="multipart/form-data" method="POST" class="px-4 py-2 space-y-4 text-sm">
       <input type="hidden" name="id" id="id">
       <input type="hidden" name="kode" id="kode">
       <input type="hidden" name="foto_lama" id="foto_lama">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <!-- Form Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <div><label for="nik" class="block mb-1 font-medium">NIK</label><input type="text" name="nik" id="nik" required pattern="\d{16}" title="Harus 16 digit angka" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="nokk" class="block mb-1 font-medium">No KK</label><input type="text" name="nokk" id="nokk" required pattern="\d{16}" title="Harus 16 digit angka" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="nama" class="block mb-1 font-medium">Nama</label><input type="text" name="nama" id="nama" required class="w-full h-9 border rounded-md px-2"></div>
@@ -79,12 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label for="tgl_lahir" class="block mb-1 font-medium">Tanggal Lahir</label><input type="date" name="tgl_lahir" id="tgl_lahir" required class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="agama" class="block mb-1 font-medium">Agama</label>
           <select name="agama" id="agama" required class="w-full h-9 border rounded-md px-2">
-            <option>Islam</option>
-            <option>Kristen</option>
-            <option>Katolik</option>
-            <option>Hindu</option>
-            <option>Budha</option>
-            <option>Konghucu</option>
+            <option>Islam</option><option>Kristen</option><option>Katolik</option><option>Hindu</option><option>Budha</option><option>Konghucu</option>
           </select>
         </div>
         <div><label for="status" class="block mb-1 font-medium">Status</label>
@@ -98,37 +94,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div><label for="pekerjaan" class="block mb-1 font-medium">Pekerjaan</label>
           <select name="pekerjaan" id="pekerjaan" required class="w-full h-9 border rounded-md px-2">
-            <option value="Tidak Bekerja">Tidak Bekerja</option>
-            <option value="Pelajar/Mahasiswa">Pelajar/Mahasiswa</option>
-            <option value="Pensiunan">Pensiunan</option>
-            <option value="Wiraswasta">Wiraswasta</option>
-            <option value="Swasta">Karyawan Swasta</option>
-            <option value="PNS">PNS</option>
-            <option value="TNI">TNI</option>
-            <option value="POLRI">POLRI</option>
-            <option value="BUMN/BUMD">Karyawan BUMN/BUMD</option>
-            <option value="Buruh">Buruh Harian Lepas</option>
-            <option value="Honorer">Karyawan Honorer</option>
-            <option>Lainnya</option>
+            <option>Tidak Bekerja</option><option>Pelajar/Mahasiswa</option><option>Pensiunan</option>
+            <option>Wiraswasta</option><option>Swasta</option><option>PNS</option><option>TNI</option><option>POLRI</option>
+            <option>BUMN/BUMD</option><option>Buruh</option><option>Honorer</option><option>Lainnya</option>
           </select>
         </div>
-        <div><label for="alamat" class="block mb-1 font-medium">Alamat</label><input type="text" name="alamat" id="alamat" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="rt" class="block mb-1 font-medium">RT</label><input type="text" name="rt" id="rt" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="rw" class="block mb-1 font-medium">RW</label><input type="text" name="rw" id="rw" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="hp" class="block mb-1 font-medium">No HP</label><input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka" class="w-full h-9 border rounded-md px-2"></div>
         <div><label for="hubungan" class="block mb-1 font-medium">Hubungan</label>
           <select name="hubungan" id="hubungan" required class="w-full h-9 border rounded-md px-2">
-            <option>Kepala Keluarga</option>
-            <option>Suami</option>
-            <option>Istri</option>
-            <option>Anak</option>
-            <option>Menantu</option>
-            <option>Orang Tua</option>
-            <option>Mertua</option>
-            <option>Cucu</option>
-            <option>Famili Lain</option>
-            <option>Pembantu</option>
-            <option>Lainnya</option>
+            <option>Kepala Keluarga</option><option>Suami</option><option>Istri</option><option>Anak</option><option>Menantu</option>
+            <option>Orang Tua</option><option>Mertua</option><option>Cucu</option><option>Famili Lain</option><option>Pembantu</option><option>Lainnya</option>
           </select>
         </div>
         <div><label for="foto" class="block mb-1 font-medium">Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="w-full h-9 border rounded-md px-2 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-sm file:bg-gray-100"></div>
@@ -139,11 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label for="kelurahan" class="block mb-1 font-medium">Kelurahan</label><select name="kelurahan" id="kelurahan" class="w-full h-9 border rounded-md px-2"></select></div>
       </div>
 
+      <!-- Alamat (1 kolom penuh) -->
+      <div>
+        <label for="alamat" class="block mb-1 font-medium">Alamat</label>
+        <input type="text" name="alamat" id="alamat" class="w-full h-9 border rounded-md px-2">
+      </div>
+
+      <!-- Tombol -->
       <div class="flex justify-end pt-3 border-t mt-4">
         <button type="button" onclick="closeModal()" class="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-md text-sm mr-2">Batal</button>
         <button type="submit" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm">Simpan</button>
       </div>
     </form>
+
   </div>
 </div>
 
