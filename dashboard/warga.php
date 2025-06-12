@@ -88,6 +88,4 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Modal Form Warga -->
 <?php include 'api/modal_warga.php'; ?>
 
-<!-- Script editWarga -->
-
 <?php include 'footer.php'; ?>
