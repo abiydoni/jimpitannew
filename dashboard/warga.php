@@ -92,7 +92,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
 function editWarga(kode) {
   $.ajax({
-    url: 'warga_action.php',
+    url: 'api/warga_action.php',
     type: 'POST',
     data: { action: 'get', kode: kode },
     dataType: 'json',
@@ -103,7 +103,7 @@ function editWarga(kode) {
       $('#nkk').val(data.nkk);
       $('#nama').val(data.nama);
       $('#hubungan').val(data.hubungan);
-      $('#jk').val(data.jk);
+      $('#jenkel').val(data.jenkel);
       $('#tmp_lahir').val(data.tmp_lahir);
       $('#tgl_lahir').val(data.tgl_lahir);
       $('#alamat').val(data.alamat);
@@ -138,6 +138,30 @@ function editWarga(kode) {
     }
   });
 }
+</script>
+
+<script>
+$('#formWarga').on('submit', function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  formData.append('action', 'save');
+
+  $.ajax({
+    url: 'api/warga_action.php',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (res) {
+      alert(res);
+      $('#modalWarga').addClass('hidden');
+      location.reload(); // refresh tabel warga
+    },
+    error: function () {
+      alert('Gagal menyimpan data');
+    }
+  });
+});
 </script>
 
 <?php include 'footer.php'; ?>
