@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
       provinsiEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
         data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
 
-      kotaEl.innerHTML = '<option value="">Pilih Kota</option>';
+      kotaEl.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
       kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
       kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
 
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
 
       kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
-      
+
     } catch (e) {
       kecamatanEl.innerHTML = '<option>Gagal memuat kecamatan</option>';
       console.error(e);
