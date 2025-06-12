@@ -60,25 +60,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button onclick="closeModal()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
 
-    <form id="formWarga" enctype="multipart/form-data" method="POST" class="px-6 py-4 space-y-4">
+    <form id="formWarga" enctype="multipart/form-data" method="POST" class="px-4 py-3 space-y-3 text-sm text-gray-800">
       <input type="hidden" name="id" id="id">
       <input type="hidden" name="kode" id="kode">
       <input type="hidden" name="foto_lama" id="foto_lama">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label>NIK</label><input type="text" name="nik" id="nik" required pattern="\d{16}" title="Harus 16 digit angka" class="input w-full border"></div>
-        <div><label>No KK</label><input type="text" name="nokk" id="nokk" required pattern="\d{16}" title="Harus 16 digit angka" class="input w-full border"></div>
-        <div><label>Nama</label><input type="text" name="nama" id="nama" required class="input w-full border"></div>
-        <div><label>Jenis Kelamin</label>
-          <select name="jenkel" id="jenkel" required class="input w-full border">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block mb-1 font-medium">NIK</label>
+          <input type="text" name="nik" id="nik" required pattern="\d{16}" title="Harus 16 digit angka"
+            class="w-full border border-gray-300 rounded px-3 py-1.5 focus:outline-none focus:ring focus:ring-blue-200">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">No KK</label>
+          <input type="text" name="nokk" id="nokk" required pattern="\d{16}" title="Harus 16 digit angka"
+            class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Nama</label>
+          <input type="text" name="nama" id="nama" required class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Jenis Kelamin</label>
+          <select name="jenkel" id="jenkel" required class="w-full border border-gray-300 rounded px-3 py-1.5">
             <option value="L">Laki-laki</option>
             <option value="P">Perempuan</option>
           </select>
         </div>
-        <div><label>Tempat Lahir</label><input type="text" name="tpt_lahir" id="tpt_lahir" required class="input w-full border"></div>
-        <div><label>Tanggal Lahir</label><input type="date" name="tgl_lahir" id="tgl_lahir" required class="input w-full border"></div>
-        <div><label>Agama</label>
-          <select name="agama" id="agama" required class="input w-full border">
+        <div>
+          <label class="block mb-1 font-medium">Tempat Lahir</label>
+          <input type="text" name="tpt_lahir" id="tpt_lahir" required class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Tanggal Lahir</label>
+          <input type="date" name="tgl_lahir" id="tgl_lahir" required class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Agama</label>
+          <select name="agama" id="agama" required class="w-full border border-gray-300 rounded px-3 py-1.5">
             <option value="Islam">Islam</option>
             <option value="Kristen">Kristen</option>
             <option value="Katolik">Katolik</option>
@@ -87,8 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="Konghucu">Konghucu</option>
           </select>
         </div>
-        <div><label>Status</label>
-          <select name="status" id="status" required class="input w-full border">
+        <div>
+          <label class="block mb-1 font-medium">Status</label>
+          <select name="status" id="status" required class="w-full border border-gray-300 rounded px-3 py-1.5">
             <option value="TK">Tidak Kawin</option>
             <option value="K">Kawin</option>
             <option value="CH">Cerai Hidup</option>
@@ -96,29 +116,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="Lainnya">Lainnya</option>
           </select>
         </div>
-        <div><label>Pekerjaan</label>
-          <select name="pekerjaan" id="pekerjaan" required class="input w-full border">
+        <div>
+          <label class="block mb-1 font-medium">Pekerjaan</label>
+          <select name="pekerjaan" id="pekerjaan" required class="w-full border border-gray-300 rounded px-3 py-1.5">
             <option value="Tidak Bekerja">Tidak Bekerja</option>
             <option value="Pelajar/Mahasiswa">Pelajar/Mahasiswa</option>
             <option value="Pensiunan">Pensiunan</option>
             <option value="Wiraswasta">Wiraswasta</option>
             <option value="Swasta">Karyawan Swasta</option>
-            <option value="PNS ">PNS</option>
+            <option value="PNS">PNS</option>
             <option value="TNI">TNI</option>
             <option value="POLRI">POLRI</option>
             <option value="BUMN/BUMD">Karyawan BUMN/BUMD</option>
             <option value="Buruh">Buruh Harian Lepas</option>
             <option value="Honorer">Karyawan Honorer</option>
-            <option value="POLRI">POLRI</option>
             <option value="Lainnya">Jenis Pekerjaan Lainnya</option>
           </select>
         </div>
-        <div><label>Alamat</label><input type="text" name="alamat" id="alamat" class="input w-full border"></div>
-        <div><label>RT</label><input type="text" name="rt" id="rt" class="input w-full border"></div>
-        <div><label>RW</label><input type="text" name="rw" id="rw" class="input w-full border"></div>
-        <div><label>No HP</label><input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka" class="input w-full border"></div>
-        <div><label>Hubungan</label>
-          <select name="hubungan" id="hubungan" required class="input w-full border">
+        <div>
+          <label class="block mb-1 font-medium">Alamat</label>
+          <input type="text" name="alamat" id="alamat" class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">RT</label>
+          <input type="text" name="rt" id="rt" class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">RW</label>
+          <input type="text" name="rw" id="rw" class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">No HP</label>
+          <input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka"
+            class="w-full border border-gray-300 rounded px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Hubungan</label>
+          <select name="hubungan" id="hubungan" required class="w-full border border-gray-300 rounded px-3 py-1.5">
             <option value="Kepala Keluarga">Kepala Keluarga</option>
             <option value="Suami">Suami</option>
             <option value="Istri">Istri</option>
@@ -132,17 +166,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="Lainnya">Lainnya</option>
           </select>
         </div>
-        <div><label>Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="input w-full border"></div>
-        <div><label>Negara</label><select name="negara" id="negara" class="input w-full border"><option value="Indonesia" selected>Indonesia</option></select></div>
-        <div><label>Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
-        <div><label>Kota/Kabupaten</label><select name="kota" id="kota" class="input w-full border"></select></div>
-        <div><label>Kecamatan</label><select name="kecamatan" id="kecamatan" class="input w-full border"></select></div>
-        <div><label>Kelurahan</label><select name="kelurahan" id="kelurahan" class="input w-full border"></select></div>
+        <div>
+          <label class="block mb-1 font-medium">Foto</label>
+          <input type="file" name="foto" id="foto" accept="image/*"
+            class="w-full border border-gray-300 rounded px-3 py-1.5 bg-white">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Negara</label>
+          <select name="negara" id="negara" class="w-full border border-gray-300 rounded px-3 py-1.5">
+            <option value="Indonesia" selected>Indonesia</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Provinsi</label>
+          <select name="provinsi" id="provinsi" class="w-full border border-gray-300 rounded px-3 py-1.5"></select>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Kota/Kabupaten</label>
+          <select name="kota" id="kota" class="w-full border border-gray-300 rounded px-3 py-1.5"></select>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Kecamatan</label>
+          <select name="kecamatan" id="kecamatan" class="w-full border border-gray-300 rounded px-3 py-1.5"></select>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">Kelurahan</label>
+          <select name="kelurahan" id="kelurahan" class="w-full border border-gray-300 rounded px-3 py-1.5"></select>
+        </div>
       </div>
 
-      <div class="flex justify-end pt-4 border-t">
-        <button type="button" onclick="closeModal()" class="btn-secondary mr-2">Batal</button>
-        <button type="submit" class="btn-primary">Simpan</button>
+      <div class="flex justify-end pt-3 border-t mt-4">
+        <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-100 mr-2">Batal</button>
+        <button type="submit" class="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">Simpan</button>
       </div>
     </form>
   </div>
