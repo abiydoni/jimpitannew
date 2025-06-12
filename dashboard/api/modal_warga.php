@@ -151,9 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       provinsiEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
         data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-        kotaE1.innerHTML = '<option value="">Pilih Kota</option>';
-        kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
-        kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';        
+
+      kotaEl.innerHTML = '<option value="">Pilih Kota</option>';
+      kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
+      kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
+
     } catch (e) {
       provinsiEl.innerHTML = '<option>Gagal memuat provinsi</option>';
       console.error(e);
@@ -167,8 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       kotaEl.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>' +
         data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+
       kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
       kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
+
     } catch (e) {
       kotaEl.innerHTML = '<option>Gagal memuat kota</option>';
       console.error(e);
@@ -182,7 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>' +
         data.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+
       kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';
+      
     } catch (e) {
       kecamatanEl.innerHTML = '<option>Gagal memuat kecamatan</option>';
       console.error(e);
