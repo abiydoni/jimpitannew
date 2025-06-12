@@ -151,6 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       provinsiEl.innerHTML = '<option value="">Pilih Provinsi</option>' +
         data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        kotaE1.innerHTML = '<option value="">Pilih Kota</option>';
+        kecamatanEl.innerHTML = '<option value="">Pilih Kecamatan</option>';
+        kelurahanEl.innerHTML = '<option value="">Pilih Kelurahan</option>';        
     } catch (e) {
       provinsiEl.innerHTML = '<option>Gagal memuat provinsi</option>';
       console.error(e);
