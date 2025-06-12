@@ -69,17 +69,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div><label>NIK</label><input type="text" name="nik" id="nik" required pattern="\d{16}" title="Harus 16 digit angka" class="input w-full border"></div>
         <div><label>No KK</label><input type="text" name="nokk" id="nokk" required pattern="\d{16}" title="Harus 16 digit angka" class="input w-full border"></div>
         <div><label>Nama</label><input type="text" name="nama" id="nama" required class="input w-full border"></div>
-        <div><label>Jenis Kelamin</label><select name="jenkel" id="jenkel" required class="input w-full border"><option value="">Pilih</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+        <div><label>Jenis Kelamin</label>
+          <select name="jenkel" id="jenkel" required class="input w-full border">
+            <option value="L">Laki-laki</option>
+            <option value="P">Perempuan</option>
+          </select>
+        </div>
         <div><label>Tempat Lahir</label><input type="text" name="tpt_lahir" id="tpt_lahir" required class="input w-full border"></div>
         <div><label>Tanggal Lahir</label><input type="date" name="tgl_lahir" id="tgl_lahir" required class="input w-full border"></div>
-        <div><label>Agama</label><input type="text" name="agama" id="agama" required class="input w-full border"></div>
-        <div><label>Status</label><input type="text" name="status" id="status" required class="input w-full border"></div>
-        <div><label>Pekerjaan</label><input type="text" name="pekerjaan" id="pekerjaan" class="input w-full border"></div>
+        <div><label>Agama</label>
+          <select name="agama" id="agama" required class="input w-full border">
+            <option value="Islam">Islam</option>
+            <option value="Kristen">Kristen</option>
+            <option value="Katolik">Katolik</option>
+            <option value="Hindu">Hindu</option>
+            <option value="Budha">Budha</option>
+            <option value="Konghucu">Konghucu</option>
+          </select>
+        </div>
+        <div><label>Status</label>
+          <select name="status" id="status" required class="input w-full border">
+            <option value="TK">Tidak Kawin</option>
+            <option value="K">Kawin</option>
+            <option value="CH">Cerai Hidup</option>
+            <option value="CM">Cerai Mati</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div><label>Pekerjaan</label>
+          <select name="pekerjaan" id="pekerjaan" required class="input w-full border">
+            <option value="Tidak Bekerja">Tidak Bekerja</option>
+            <option value="Pelajar/Mahasiswa">Pelajar/Mahasiswa</option>
+            <option value="Pensiunan">Pensiunan</option>
+            <option value="Wiraswasta">Wiraswasta</option>
+            <option value="Swasta">Karyawan Swasta</option>
+            <option value="PNS ">PNS</option>
+            <option value="TNI">TNI</option>
+            <option value="POLRI">POLRI</option>
+            <option value="BUMN/BUMD">Karyawan BUMN/BUMD</option>
+            <option value="Buruh">Buruh Harian Lepas</option>
+            <option value="Honorer">Karyawan Honorer</option>
+            <option value="POLRI">POLRI</option>
+            <option value="Lainnya">Jenis Pekerjaan Lainnya</option>
+          </select>
+        </div>
         <div><label>Alamat</label><input type="text" name="alamat" id="alamat" class="input w-full border"></div>
         <div><label>RT</label><input type="text" name="rt" id="rt" class="input w-full border"></div>
         <div><label>RW</label><input type="text" name="rw" id="rw" class="input w-full border"></div>
         <div><label>No HP</label><input type="text" name="hp" id="hp" pattern="\d{10,}" title="Minimal 10 digit angka" class="input w-full border"></div>
-        <div><label>Hubungan</label><input type="text" name="hubungan" id="hubungan" class="input w-full border"></div>
+        <div><label>Hubungan</label>
+          <select name="hubungan" id="hubungan" required class="input w-full border">
+            <option value="Kepala Keluarga">Kepala Keluarga</option>
+            <option value="Suami">Suami</option>
+            <option value="Istri">Istri</option>
+            <option value="Anak">Anak</option>
+            <option value="Menantu">Menantu</option>
+            <option value="Orang Tua">Orang Tua</option>
+            <option value="Mertua">Mertua</option>
+            <option value="Cucu">Cucu</option>
+            <option value="Famili Lain">Famili Lain</option>
+            <option value="Pembantu">Pembantu</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
         <div><label>Foto</label><input type="file" name="foto" id="foto" accept="image/*" class="input w-full border"></div>
         <div><label>Negara</label><select name="negara" id="negara" class="input w-full border"><option value="Indonesia" selected>Indonesia</option></select></div>
         <div><label>Provinsi</label><select name="provinsi" id="provinsi" class="input w-full border"></select></div>
