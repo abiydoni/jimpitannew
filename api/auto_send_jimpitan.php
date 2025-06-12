@@ -18,7 +18,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 
     // 'Content-Type: application/json',
     'Content-Type: application/x-www-form-urlencoded',
-    'x-session-id: 91e37fbd895dedf2587d3f506ce1718e'
+    'x-session-id: a70d3132d3d9c2ce053747687987b36b'
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
