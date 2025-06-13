@@ -97,7 +97,7 @@ function editCell(cell, field, id) {
     const input = document.createElement("input");
     input.type = "text";
     input.value = oldValue;
-    input.className = "w-full px-1 text-xs border rounded";
+    input.className = "w-full px-1 text-xs border";
 
     input.onblur = () => {
         const newValue = input.value.trim();
