@@ -1,7 +1,14 @@
 <?php
-include 'db.php';
-include 'ambil_data_jimpitan.php';
-$groupId = '120363398680818900@g.us'; // 'Group WA Q'
+include 'get_konfigurasi.php';
+
+// Ambil konfigurasi dari database
+$filePesan = get_konfigurasi('report_jimpitan');
+$groupId = get_konfigurasi('group_id');
+$apiUrl = get_konfigurasi('api_url');
+$sessionId = get_konfigurasi('session_id');
+
+// Ambil isi pesan dari file konfigurasi
+include $filePesan;
 $message = $pesan;
 
 $data = http_build_query([
@@ -9,20 +16,20 @@ $data = http_build_query([
     'message' => $message
 ]);
 
-$ch = curl_init("https://rt07.appsbee.my.id/api/send_wa_group.php");
+$ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    // 'Content-Type: application/x-www-form-urlencoded'
-
-    // 'Content-Type: application/json',
     'Content-Type: application/x-www-form-urlencoded',
-    'x-session-id: a5e8fc21cf1deef0b8646829557f9c95'
+    'x-session-id: ' . $sessionId
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
+
+// Opsional: Tampilkan respons
+// echo $response;
 ?>
