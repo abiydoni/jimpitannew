@@ -1,4 +1,10 @@
 <?php
+include 'get_konfigurasi.php';
+
+// Ambil konfigurasi dari database
+$UrlG = get_konfigurasi('url_phone');
+$sessionId = get_konfigurasi('session_id');
+
 // Cek metode POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -16,7 +22,7 @@ if (empty($nomorList) || !$pesan) {
     exit;
 }
 
-$url = "https://wapi.appsbee.my.id/send-message";
+$url = $UrlG;
 
 $logAll = "";
 $successCount = 0;
@@ -42,7 +48,7 @@ foreach ($nomorList as $nomor) {
         // 'Content-Type: application/json'
 
         'Content-Type: application/json',
-        'x-session-id: a5e8fc21cf1deef0b8646829557f9c95'
+        'x-session-id: ' . $sessionId
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     // ========================
