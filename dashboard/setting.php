@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-        <table class="table-auto w-full border text-sm">
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
             <thead>
                 <tr class="bg-gray-100">
                     <th class="border px-2 py-1">Nama</th>
