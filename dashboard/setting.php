@@ -16,7 +16,7 @@ if (!isset($_SESSION['user'])) {
 include 'api/db.php';
 
 // Ambil semua konfigurasi
-$stmt = $pdo->query("SELECT * FROM tb_konfigurasi");
+$stmt = $pdo->query("SELECT * FROM tb_konfigurasi ORDER BY nama ASC");
 $konfigurasi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Handle form submit
