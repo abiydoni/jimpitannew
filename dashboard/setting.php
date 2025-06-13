@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST">
             <div class="space-y-3 text-xs">
                 <?php foreach ($grouped as $group_id => $items): ?>
-                    <fieldset class="border border-gray-300 rounded p-2">
+                    <fieldset class="border border-gray-300 rounded-lg p-2">
                         <legend class="text-xs font-semibold text-gray-700 px-1">🗂️ <?= $group_id ?></legend>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                             <?php foreach ($items as $item): ?>
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         type="text"
                                         name="value[<?= htmlspecialchars($item['nama']) ?>]"
                                         value="<?= htmlspecialchars($item['value']) ?>"
-                                        class="w-full rounded border border-gray-300 px-1.5 py-0.5 focus:ring focus:ring-blue-200 focus:outline-none text-[11px]"
+                                        class="w-full rounded-lg border border-gray-300 px-1.5 py-0.5 focus:ring focus:ring-blue-200 focus:outline-none text-[11px]"
                                         required
                                     >
                                 </div>
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="mt-3 text-right">
-                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">
+                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 text-xs">
                     💾 Update
                 </button>
             </div>
