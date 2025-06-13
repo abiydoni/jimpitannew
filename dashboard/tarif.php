@@ -22,7 +22,7 @@ if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$kode_tarif]);
 
-    header("Location: setting.php");
+    header("Location: tarif.php");
     exit();
 }
 
