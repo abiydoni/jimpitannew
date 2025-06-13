@@ -36,24 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi WA Otomatis</h1>
         </div>
         <form method="POST">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                 <?php foreach ($konfigurasi as $item): ?>
-                    <div>
-                        <label class="block font-medium text-gray-700 mb-1"><?= htmlspecialchars($item['nama']) ?></label>
+                    <div class="mb-2">
+                        <label class="block font-medium text-gray-700 mb-0.5"><?= htmlspecialchars($item['nama']) ?></label>
                         <input
                             type="text"
                             name="value[<?= htmlspecialchars($item['nama']) ?>]"
                             value="<?= htmlspecialchars($item['value']) ?>"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                            class="w-full rounded border border-gray-300 px-2 py-1 focus:ring focus:ring-blue-200 focus:outline-none text-xs"
                             required
                         >
                     </div>
                 <?php endforeach; ?>
             </div>
 
-            <div class="mt-6">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
-                    Simpan Perubahan
+            <div class="mt-3 text-right">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700 text-xs">
+                    💾 Update
                 </button>
             </div>
         </form>

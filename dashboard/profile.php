@@ -41,45 +41,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="kode" value="<?= htmlspecialchars($profil['kode']) ?>">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                 <div>
                     <label class="block font-medium mb-1">Nama Perusahaan</label>
-                    <input type="text" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" class="w-full border px-2 py-1.5 rounded text-sm" required>
+                    <input type="text" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" class="w-full border px-2 py-1 rounded text-xs" required>
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Alamat</label>
-                    <input type="text" name="alamat" value="<?= htmlspecialchars($profil['alamat']) ?>" class="w-full border px-2 py-1.5 rounded text-sm">
+                    <input type="text" name="alamat" value="<?= htmlspecialchars($profil['alamat']) ?>" class="w-full border px-2 py-1 rounded text-xs">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Contact Person</label>
-                    <input type="text" name="cp" value="<?= htmlspecialchars($profil['cp']) ?>" class="w-full border px-2 py-1.5 rounded text-sm">
+                    <input type="text" name="cp" value="<?= htmlspecialchars($profil['cp']) ?>" class="w-full border px-2 py-1 rounded text-xs">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">No. HP</label>
-                    <input type="text" name="hp" value="<?= htmlspecialchars($profil['hp']) ?>" class="w-full border px-2 py-1.5 rounded text-sm">
+                    <input type="text" name="hp" value="<?= htmlspecialchars($profil['hp']) ?>" class="w-full border px-2 py-1 rounded text-xs">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Logo (optional)</label>
-                    <input type="file" name="logo" class="w-full border px-2 py-1.5 rounded text-sm">
+                    <input type="file" name="logo" class="w-full border px-2 py-1 rounded text-xs">
                     <?php if (!empty($profil['logo'])): ?>
-                        <img src="../assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-12 mt-2">
+                        <img src="../assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-10 mt-1">
                     <?php endif; ?>
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
-                    <input type="file" name="gambar" class="w-full border px-2 py-1.5 rounded text-sm">
+                    <input type="file" name="gambar" class="w-full border px-2 py-1 rounded text-xs">
                     <?php if (!empty($profil['gambar'])): ?>
-                        <img src="../assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-12 mt-2">
+                        <img src="../assets/image/<?= $profil['gambar'] ?>" alt="Gambar" class="h-10 mt-1">
                     <?php endif; ?>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block font-medium mb-1">Catatan</label>
-                    <textarea name="catatan" rows="3" class="w-full border px-2 py-1.5 rounded text-sm"><?= htmlspecialchars($profil['catatan']) ?></textarea>
+                    <textarea name="catatan" rows="2" class="w-full border px-2 py-1 rounded text-xs"><?= htmlspecialchars($profil['catatan']) ?></textarea>
                 </div>
             </div>
 
-            <div class="text-right mt-4">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700 text-sm">
+            <div class="text-right mt-3">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-xs">
                     💾 Update
                 </button>
             </div>

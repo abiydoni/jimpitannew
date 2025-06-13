@@ -4,7 +4,7 @@ include 'get_konfigurasi.php';
 // Ambil konfigurasi dari database
 $filePesan = get_konfigurasi('report2');
 $groupId = get_konfigurasi('group_id1');
-$apiUrl = get_konfigurasi('api_url');
+$apiUrl = get_konfigurasi('api_url_group');
 $sessionId = get_konfigurasi('session_id');
 
 // Ambil isi pesan dari file konfigurasi
