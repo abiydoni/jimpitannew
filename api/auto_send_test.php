@@ -2,8 +2,8 @@
 include 'get_konfigurasi.php';
 
 // Ambil konfigurasi dari database
-$filePesan = get_konfigurasi('report_jimpitan');
-$groupId = get_konfigurasi('group_id');
+$filePesan = get_konfigurasi('report1');
+$groupId = get_konfigurasi('group_id2');
 $apiUrl = get_konfigurasi('api_url');
 $sessionId = get_konfigurasi('session_id');
 
