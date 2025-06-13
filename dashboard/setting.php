@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="table-data">
     <div class="order">
         <div class="head">
-            <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi</h1>
+            <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi WA Otomatis</h1>
         </div>
         <form method="POST">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
