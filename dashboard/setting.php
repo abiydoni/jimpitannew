@@ -30,33 +30,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE tb_konfigurasi SET value = :value WHERE nama = :nama");
         $stmt->execute([':value' => $value, ':nama' => $nama]);
     }
-    echo "<div class='bg-green-100 text-green-800 p-2 mb-4 rounded'>✅ Konfigurasi berhasil diperbarui.</div>";
+    echo "<div class='bg-green-100 text-green-800 p-2 mb-3 rounded text-sm'>✅ Konfigurasi berhasil diperbarui.</div>";
     header("Refresh:1");
 }
 ?>
 
-<div class="table-data">
+<div class="table-data px-2">
     <div class="order">
         <div class="head">
-            <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi Sistem</h1>
+            <h1 class="text-xl font-semibold mb-3">🛠️ Edit Konfigurasi Sistem</h1>
         </div>
 
         <form method="POST">
-            <div class="space-y-5 text-xs">
+            <div class="space-y-3 text-xs">
                 <?php foreach ($grouped as $group_id => $items): ?>
-                    <fieldset class="border border-gray-300 rounded-md p-4">
-                        <legend class="text-sm font-semibold text-gray-700 px-2">🗂️ <?= $group_id ?></legend>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                    <fieldset class="border border-gray-300 rounded p-2">
+                        <legend class="text-xs font-semibold text-gray-700 px-1">🗂️ <?= $group_id ?></legend>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                             <?php foreach ($items as $item): ?>
                                 <div class="mb-1">
-                                    <label class="block font-medium text-gray-700 mb-0.5">
+                                    <label class="block text-gray-700 text-[11px] mb-0.5 font-medium">
                                         <?= htmlspecialchars($item['nama']) ?>
                                     </label>
                                     <input
                                         type="text"
                                         name="value[<?= htmlspecialchars($item['nama']) ?>]"
                                         value="<?= htmlspecialchars($item['value']) ?>"
-                                        class="w-full rounded border border-gray-300 px-2 py-1 focus:ring focus:ring-blue-200 focus:outline-none text-xs"
+                                        class="w-full rounded border border-gray-300 px-1.5 py-0.5 focus:ring focus:ring-blue-200 focus:outline-none text-[11px]"
                                         required
                                     >
                                 </div>
@@ -66,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach; ?>
             </div>
 
-            <div class="mt-4 text-right">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700 text-xs">
+            <div class="mt-3 text-right">
+                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">
                     💾 Update
                 </button>
             </div>
