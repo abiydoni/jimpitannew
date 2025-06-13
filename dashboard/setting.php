@@ -36,25 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi</h1>
         </div>
         <form method="POST">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <?php foreach ($konfigurasi as $item): ?>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700"><?= htmlspecialchars($item['nama']) ?></label>
-                            <input
-                                type="text"
-                                name="value[<?= htmlspecialchars($item['nama']) ?>]"
-                                value="<?= htmlspecialchars($item['value']) ?>"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
-                                required
-                            >
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <?php foreach ($konfigurasi as $item): ?>
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-1"><?= htmlspecialchars($item['nama']) ?></label>
+                        <input
+                            type="text"
+                            name="value[<?= htmlspecialchars($item['nama']) ?>]"
+                            value="<?= htmlspecialchars($item['value']) ?>"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                            required
+                        >
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                Simpan Perubahan
-            </button>
+
+            <div class="mt-6">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                    Simpan Perubahan
+                </button>
+            </div>
         </form>
     </div>
 </div>
