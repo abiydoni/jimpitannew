@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="space-y-5 text-xs">
                 <?php foreach ($grouped as $group_id => $items): ?>
                     <fieldset class="border border-gray-300 rounded-md p-4">
-                        <legend class="text-sm font-semibold text-gray-700 px-2">🗂️ Grup <?= $group_id ?></legend>
+                        <legend class="text-sm font-semibold text-gray-700 px-2">🗂️ <?= $group_id ?></legend>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
                             <?php foreach ($items as $item): ?>
                                 <div class="mb-1">
