@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="table-data px-2">
     <div class="order">
         <div class="head">
-            <h1 class="text-xl font-semibold mb-3">🛠️ Edit Konfigurasi Sistem</h1>
+            <h1 class="text-xl font-semibold mb-3">🛠️ Setting Konfigurasi Sistem</h1>
         </div>
 
         <form method="POST">
