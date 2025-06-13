@@ -2,20 +2,19 @@
 session_start();
 include 'header.php';
 
-// Periksa apakah pengguna sudah masuk
+// Cek login dan hak akses
 if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman login
+    header('Location: ../login.php');
+    exit;
+}
+if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php');
     exit;
 }
 
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-// Sertakan koneksi database
 include 'api/db.php';
 
-// Ambil semua konfigurasi
+// Ambil data dari tb_konfigurasi
 $stmt = $pdo->query("SELECT * FROM tb_konfigurasi ORDER BY nama ASC");
 $konfigurasi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -25,21 +24,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE tb_konfigurasi SET value = :value WHERE nama = :nama");
         $stmt->execute([':value' => $value, ':nama' => $nama]);
     }
-    echo "<div class='bg-green-100 text-green-800 p-2 mb-4'>Konfigurasi berhasil diperbarui.</div>";
-    header("Refresh:1"); // Refresh otomatis
+    echo "<div class='bg-green-100 text-green-800 p-2 mb-4 rounded'>✅ Konfigurasi berhasil diperbarui.</div>";
+    header("Refresh:1");
 }
 ?>
 
 <div class="table-data">
     <div class="order">
         <div class="head">
-            <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi WA Otomatis</h1>
+            <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi Sistem</h1>
         </div>
+
         <form method="POST">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <?php foreach ($konfigurasi as $item): ?>
                     <div class="mb-2">
-                        <label class="block font-medium text-gray-700 mb-0.5"><?= htmlspecialchars($item['nama']) ?></label>
+                        <label class="block font-medium text-gray-700 mb-0.5">
+                            <?= htmlspecialchars($item['nama']) ?>
+                        </label>
                         <input
                             type="text"
                             name="value[<?= htmlspecialchars($item['nama']) ?>]"
@@ -59,4 +61,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
+
 <?php include 'footer.php'; ?>
