@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi WA Otomatis</h1>
         </div>
         <form method="POST">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <?php foreach ($konfigurasi as $item): ?>
                     <div class="mb-2">
                         <label class="block font-medium text-gray-700 mb-0.5"><?= htmlspecialchars($item['nama']) ?></label>
