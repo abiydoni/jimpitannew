@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php
                 include 'db.php';
-                $stmt = $pdo->query("SELECT * FROM tb_konfigurasi_bot ORDER BY nama");
+                $stmt = $pdo->query("SELECT * FROM tb_konfigurasi ORDER BY nama");
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
                 ?>
                 <tr>
