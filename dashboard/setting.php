@@ -29,7 +29,7 @@ include 'api/db.php';
                     <th class="border px-2 py-1">Nama</th>
                     <th class="border px-2 py-1">Value</th>
                     <th class="border px-2 py-1">Keterangan</th>
-                    <th class="border px-2 py-1">Terakhir Update</th>
+                    <th class="border px-2 py-1">Update</th>
                 </tr>
             </thead>
             <tbody>
