@@ -36,19 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 class="text-2xl font-bold mb-4">🛠️ Edit Konfigurasi</h1>
         </div>
         <form method="POST">
-            <?php foreach ($konfigurasi as $item): ?>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700"><?= htmlspecialchars($item['nama']) ?></label>
-                    <input
-                        type="text"
-                        name="value[<?= htmlspecialchars($item['nama']) ?>]"
-                        value="<?= htmlspecialchars($item['value']) ?>"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
-                        required
-                    >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <?php foreach ($konfigurasi as $item): ?>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700"><?= htmlspecialchars($item['nama']) ?></label>
+                            <input
+                                type="text"
+                                name="value[<?= htmlspecialchars($item['nama']) ?>]"
+                                value="<?= htmlspecialchars($item['value']) ?>"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
+                                required
+                            >
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-
+            </div>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 Simpan Perubahan
             </button>
