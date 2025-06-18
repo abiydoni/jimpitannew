@@ -188,25 +188,33 @@ include 'api/db.php';
   <script>
     function loadData() {
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
-        const warga = JSON.parse(data);
-        let html = '';
-        warga.forEach(row => {
-          html += `<tr class="border-b hover:bg-gray-50">
-            <td class="px-4 py-2">${row.nama || '-'}</td>
-            <td class="px-4 py-2">${row.nik || '-'}</td>
-            <td class="px-4 py-2">${row.hubungan || '-'}</td>
-            <td class="px-4 py-2">${row.jenkel || '-'}</td>
-            <td class="px-4 py-2">${row.tpt_lahir || '-'}</td>
-            <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
-            <td class="px-4 py-2">${row.alamat || '-'}</td>
-            <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
-            <td class="px-4 py-2">
-              <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'>Edit</button>
-              <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}">Hapus</button>
-            </td>
-          </tr>`;
-        });
-        $('#dataBody').html(html);
+        try {
+          const warga = JSON.parse(data);
+          let html = '';
+          warga.forEach(row => {
+            html += `<tr class="border-b hover:bg-gray-50">
+              <td class="px-4 py-2">${row.nama || '-'}</td>
+              <td class="px-4 py-2">${row.nik || '-'}</td>
+              <td class="px-4 py-2">${row.hubungan || '-'}</td>
+              <td class="px-4 py-2">${row.jenkel || '-'}</td>
+              <td class="px-4 py-2">${row.tpt_lahir || '-'}</td>
+              <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
+              <td class="px-4 py-2">${row.alamat || '-'}</td>
+              <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
+              <td class="px-4 py-2">
+                <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'>Edit</button>
+                <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}">Hapus</button>
+              </td>
+            </tr>`;
+          });
+          $('#dataBody').html(html);
+        } catch (e) {
+          console.error('Error parsing data:', e);
+          $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data</td></tr>');
+        }
+      }).fail(function(xhr, status, error) {
+        console.error('AJAX Error:', status, error);
+        $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + error + '</td></tr>');
       });
     }
 
@@ -234,10 +242,28 @@ include 'api/db.php';
 
       $('#wargaForm').submit(function(e) {
         e.preventDefault();
-        $.post('api/warga_action.php', $(this).serialize(), function(res) {
+        const formData = $(this).serialize();
+        
+        $.post('api/warga_action.php', formData, function(res) {
           $('#modal').addClass('hidden');
           loadData();
-          alert('Data berhasil disimpan!');
+          if (res === 'success' || res === 'updated') {
+            alert('Data berhasil disimpan!');
+          } else {
+            alert('Response: ' + res);
+          }
+        }).fail(function(xhr, status, error) {
+          console.error('Submit Error:', status, error);
+          let errorMsg = 'Error saving data';
+          if (xhr.responseText) {
+            try {
+              const errorData = JSON.parse(xhr.responseText);
+              errorMsg = errorData.error || errorMsg;
+            } catch (e) {
+              errorMsg = xhr.responseText;
+            }
+          }
+          alert('Error: ' + errorMsg);
         });
       });
 
@@ -253,9 +279,16 @@ include 'api/db.php';
 
       $(document).on('click', '.deleteBtn', function() {
         if (confirm('Yakin ingin menghapus data ini?')) {
-          $.post('api/warga_action.php', { action: 'delete', id_warga: $(this).data('id') }, function() {
+          $.post('api/warga_action.php', { action: 'delete', id_warga: $(this).data('id') }, function(res) {
             loadData();
-            alert('Data berhasil dihapus!');
+            if (res === 'deleted') {
+              alert('Data berhasil dihapus!');
+            } else {
+              alert('Response: ' + res);
+            }
+          }).fail(function(xhr, status, error) {
+            console.error('Delete Error:', status, error);
+            alert('Error deleting data: ' + error);
           });
         }
       });
