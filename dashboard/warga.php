@@ -1,9 +1,9 @@
 <?php
 // File: warga.php
 session_start();
-include 'api/db.php';
 include 'header.php';
 ?>
+
 <div class="table-data">
     <div class="order">
         <div class="head">
@@ -11,24 +11,24 @@ include 'header.php';
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Tambah Warga</button>
             </div>
-            <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
-                <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="py-2 px-4">Nama</th>
-                            <th class="py-2 px-4">NIK</th>
-                            <th class="py-2 px-4">Hubungan</th>
-                            <th class="py-2 px-4">Jenis Kelamin</th>
-                            <th class="py-2 px-4">Tempat Lahir</th>
-                            <th class="py-2 px-4">Tanggal Lahir</th>
-                            <th class="py-2 px-4">Alamat</th>
-                            <th class="py-2 px-4">RT/RW</th>
-                            <th class="py-2 px-4">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataBody"></tbody>
-                </table>
-            </div>
+        </div>
+        <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
+            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4">Nama</th>
+                        <th class="py-2 px-4">NIK</th>
+                        <th class="py-2 px-4">Hubungan</th>
+                        <th class="py-2 px-4">Jenis Kelamin</th>
+                        <th class="py-2 px-4">Tempat Lahir</th>
+                        <th class="py-2 px-4">Tanggal Lahir</th>
+                        <th class="py-2 px-4">Alamat</th>
+                        <th class="py-2 px-4">RT/RW</th>
+                        <th class="py-2 px-4">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody"></tbody>
+            </table>
         </div>
     </div>
 </div>
