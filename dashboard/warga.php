@@ -18,11 +18,8 @@ include 'header.php';
                     <tr>
                         <th class="py-2 px-4">Nama</th>
                         <th class="py-2 px-4">NIK</th>
-                        <th class="py-2 px-4">Hubungan</th>
                         <th class="py-2 px-4">Jenis Kelamin</th>
-                        <th class="py-2 px-4">Tempat Lahir</th>
                         <th class="py-2 px-4">Tanggal Lahir</th>
-                        <th class="py-2 px-4">Alamat</th>
                         <th class="py-2 px-4">RT/RW</th>
                         <th class="py-2 px-4">Aksi</th>
                     </tr>
@@ -194,11 +191,8 @@ include 'header.php';
             html += `<tr class="border-b hover:bg-gray-50">
               <td class="px-4 py-2">${row.nama || '-'}</td>
               <td class="px-4 py-2">${row.nik || '-'}</td>
-              <td class="px-4 py-2">${row.hubungan || '-'}</td>
               <td class="px-4 py-2">${row.jenkel || '-'}</td>
-              <td class="px-4 py-2">${row.tpt_lahir || '-'}</td>
               <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
-              <td class="px-4 py-2">${row.alamat || '-'}</td>
               <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
               <td class="px-4 py-2">
                 <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'>Edit</button>
