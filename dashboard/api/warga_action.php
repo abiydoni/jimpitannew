@@ -1,77 +1,40 @@
-<script>
-$(document).ready(function () {
-  // Simpan data warga (tambah/edit)
-  $('#formWarga').on('submit', function (e) {
-    e.preventDefault();
-    var formData = new FormData(this);
-    $.ajax({
-      url: 'warga_action.php',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function (response) {
-        alert(response);
-        $('#formWarga')[0].reset();
-        $('#modalWarga').addClass('hidden');
-        loadDataWarga();
-      }
-    });
-  });
+<?php
+include 'api/db.php';
 
-  // Ambil data untuk diedit
-  $(document).on('click', '.btnEdit', function () {
-    var id = $(this).data('id');
-    $.ajax({
-      url: 'warga_action.php',
-      type: 'POST',
-      data: { action: 'get', id: id },
-      dataType: 'json',
-      success: function (data) {
-        $('#id').val(data.id);
-        $('#nik').val(data.nik);
-        $('#nkk').val(data.nkk);
-        $('#nama').val(data.nama);
-        $('#hubungan').val(data.hubungan);
-        $('#jk').val(data.jk);
-        $('#tmp_lahir').val(data.tmp_lahir);
-        $('#tgl_lahir').val(data.tgl_lahir);
-        $('#alamat').val(data.alamat);
-        $('#rt').val(data.rt);
-        $('#rw').val(data.rw);
-        $('#agama').val(data.agama);
-        $('#status').val(data.status);
-        $('#pekerjaan').val(data.pekerjaan);
-        $('#hp').val(data.hp);
-        $('#provinsi').val(data.provinsi).trigger('change');
-        setTimeout(function () {
-          $('#kota').val(data.kota).trigger('change');
-        }, 500);
-        setTimeout(function () {
-          $('#kecamatan').val(data.kecamatan).trigger('change');
-        }, 1000);
-        setTimeout(function () {
-          $('#kelurahan').val(data.kelurahan);
-        }, 1500);
-        $('#modalWarga').removeClass('hidden');
-      }
-    });
-  });
+// Simpan atau update
+if (isset($_POST['simpan'])) {
+    $data = $_POST;
+    $id = $data['id_warga'] ?? null;
+    $foto = $_FILES['foto']['name'] ?? '';
 
-  // Hapus data warga
-  $(document).on('click', '.btnHapus', function () {
-    if (confirm("Yakin ingin menghapus data ini?")) {
-      var id = $(this).data('id');
-      $.ajax({
-        url: 'warga_action.php',
-        type: 'POST',
-        data: { action: 'delete', id: id },
-        success: function (response) {
-          alert(response);
-          loadDataWarga();
-        }
-      });
+    if ($foto) {
+        $ext = pathinfo($foto, PATHINFO_EXTENSION);
+        $namaFoto = uniqid() . '.' . $ext;
+        move_uploaded_file($_FILES['foto']['tmp_name'], 'uploads/' . $namaFoto);
+    } else {
+        $namaFoto = $_POST['old_foto'] ?? '';
     }
-  });
-});
-</script>
+
+    if ($id) {
+        $stmt = $pdo->prepare("UPDATE tb_warga SET kode=?, nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?, kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=? WHERE id_warga=?");
+        $stmt->execute([
+            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'], $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'], $data['rt'], $data['rw'], $data['kelurahan'], $data['kecamatan'], $data['kota'], $data['propinsi'], $data['negara'], $data['agama'], $data['status'], $data['pekerjaan'], $namaFoto, $id
+        ]);
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO tb_warga (kode, nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw, kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->execute([
+            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'], $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'], $data['rt'], $data['rw'], $data['kelurahan'], $data['kecamatan'], $data['kota'], $data['propinsi'], $data['negara'], $data['agama'], $data['status'], $data['pekerjaan'], $namaFoto
+        ]);
+    }
+    header('Location: warga.php');
+    exit;
+}
+
+// Hapus
+if (isset($_GET['hapus'])) {
+    $id = $_GET['hapus'];
+    $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga=?");
+    $stmt->execute([$id]);
+    header('Location: warga.php');
+    exit;
+}
