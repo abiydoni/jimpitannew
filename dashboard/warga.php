@@ -9,7 +9,7 @@ include 'header.php';
         <div class="head">
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
-                <button id="tambahBtn" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">+ Tambah Warga</button>
+                <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Tambah Warga</button>
             </div>
             <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                 <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
