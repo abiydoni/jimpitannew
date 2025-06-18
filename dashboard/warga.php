@@ -7,7 +7,7 @@ include 'header.php';
 <div class="table-data">
     <div class="order">
         <div class="head">
-            <h3 class="text-2xl font-bold mb-4">Data Warga</h3>
+            <h3>Data Warga</h3>
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">+ Tambah Warga</button>
             </div>
