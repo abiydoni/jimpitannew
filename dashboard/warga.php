@@ -31,10 +31,10 @@ include 'header.php';
 </div>
 
     <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
-        <h2 id="modalTitle" class="text-xl font-bold mb-4">Tambah Warga</h2>
-        <form id="wargaForm">
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal-overlay">
+    <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto modal-content">
+        <h2 id="modalTitle" class="text-lg font-bold mb-3">Tambah Warga</h2>
+        <form id="wargaForm" class="text-sm">
         <input type="hidden" name="id_warga" id="id_warga">
         <input type="hidden" name="action" id="formAction" value="create">
         <input type="hidden" name="foto" id="foto" value="">
@@ -44,31 +44,31 @@ include 'header.php';
         <input type="hidden" name="kecamatan_nama" id="kecamatan_nama">
         <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <!-- Data Pribadi -->
-            <div class="space-y-4">
-            <h3 class="font-semibold text-lg border-b pb-2">Data Pribadi</h3>
+            <div class="space-y-3">
+            <h3 class="font-semibold text-base border-b pb-1">Data Pribadi</h3>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Nama Lengkap *</label>
-                <input type="text" name="nama" id="nama" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Nama Lengkap *</label>
+                <input type="text" name="nama" id="nama" class="w-full border px-2 py-1 rounded text-sm form-input" required>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">NIK *</label>
-                <input type="text" name="nik" id="nik" class="w-full border px-3 py-2 rounded" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
-                <small class="text-gray-500">Format: 16 digit angka</small>
+                <label class="block text-xs font-medium mb-1">NIK *</label>
+                <input type="text" name="nik" id="nik" class="w-full border px-2 py-1 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
+                <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">NIK KK</label>
-                <input type="text" name="nikk" id="nikk" class="w-full border px-3 py-2 rounded" maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
-                <small class="text-gray-500">Format: 16 digit angka</small>
+                <label class="block text-xs font-medium mb-1">NIK KK</label>
+                <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-1 rounded text-sm form-input" maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
+                <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Hubungan dalam KK *</label>
-                <select name="hubungan" id="hubungan" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Hubungan dalam KK *</label>
+                <select name="hubungan" id="hubungan" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 <option value="">Pilih Hubungan</option>
                 <option value="Kepala Keluarga">Kepala Keluarga</option>
                 <option value="Istri">Istri</option>
@@ -82,8 +82,8 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Jenis Kelamin *</label>
-                <select name="jenkel" id="jenkel" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Jenis Kelamin *</label>
+                <select name="jenkel" id="jenkel" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 <option value="">Pilih Jenis Kelamin</option>
                 <option value="Laki-laki">Laki-laki</option>
                 <option value="Perempuan">Perempuan</option>
@@ -91,19 +91,19 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Tempat Lahir *</label>
-                <input type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Tempat Lahir *</label>
+                <input type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-1 rounded text-sm form-input" required>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Tanggal Lahir *</label>
-                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-3 py-2 rounded" required max="<?php echo date('Y-m-d'); ?>">
-                <small class="text-gray-500">Tidak boleh di masa depan</small>
+                <label class="block text-xs font-medium mb-1">Tanggal Lahir *</label>
+                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-1 rounded text-sm form-input" required max="<?php echo date('Y-m-d'); ?>">
+                <small class="text-gray-500 text-xs">Tidak boleh di masa depan</small>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Agama *</label>
-                <select name="agama" id="agama" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Agama *</label>
+                <select name="agama" id="agama" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 <option value="">Pilih Agama</option>
                 <option value="Islam">Islam</option>
                 <option value="Kristen">Kristen</option>
@@ -116,8 +116,8 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Status Perkawinan *</label>
-                <select name="status" id="status" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Status Perkawinan *</label>
+                <select name="status" id="status" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 <option value="">Pilih Status</option>
                 <option value="Belum Kawin">Belum Kawin</option>
                 <option value="Kawin">Kawin</option>
@@ -127,69 +127,69 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Pekerjaan *</label>
-                <input type="text" name="pekerjaan" id="pekerjaan" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Pekerjaan *</label>
+                <input type="text" name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-1 rounded text-sm form-input" required>
             </div>
             </div>
 
             <!-- Data Alamat -->
-            <div class="space-y-4">
-            <h3 class="font-semibold text-lg border-b pb-2">Data Alamat</h3>
+            <div class="space-y-3">
+            <h3 class="font-semibold text-base border-b pb-1">Data Alamat</h3>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Alamat Lengkap *</label>
-                <textarea name="alamat" id="alamat" class="w-full border px-3 py-2 rounded" rows="3" required></textarea>
+                <label class="block text-xs font-medium mb-1">Alamat Lengkap *</label>
+                <textarea name="alamat" id="alamat" class="w-full border px-2 py-1 rounded text-sm form-input" rows="2" required></textarea>
             </div>
             
             <div class="grid grid-cols-2 gap-2">
                 <div>
-                <label class="block text-sm font-medium mb-1">RT *</label>
-                <input type="text" name="rt" id="rt" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">RT *</label>
+                <input type="text" name="rt" id="rt" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 </div>
                 <div>
-                <label class="block text-sm font-medium mb-1">RW *</label>
-                <input type="text" name="rw" id="rw" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">RW *</label>
+                <input type="text" name="rw" id="rw" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                 </div>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Provinsi *</label>
-                <select name="propinsi" id="propinsi" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-xs font-medium mb-1">Provinsi *</label>
+                <select name="propinsi" id="propinsi" class="w-full border px-2 py-1 rounded text-sm form-input" required>
                     <option value="">Pilih Provinsi</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Kota/Kabupaten *</label>
-                <select name="kota" id="kota" class="w-full border px-3 py-2 rounded" required disabled>
+                <label class="block text-xs font-medium mb-1">Kota/Kabupaten *</label>
+                <select name="kota" id="kota" class="w-full border px-2 py-1 rounded text-sm form-input" required disabled>
                     <option value="">Pilih Kota/Kabupaten</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Kecamatan *</label>
-                <select name="kecamatan" id="kecamatan" class="w-full border px-3 py-2 rounded" required disabled>
+                <label class="block text-xs font-medium mb-1">Kecamatan *</label>
+                <select name="kecamatan" id="kecamatan" class="w-full border px-2 py-1 rounded text-sm form-input" required disabled>
                     <option value="">Pilih Kecamatan</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Kelurahan *</label>
-                <select name="kelurahan" id="kelurahan" class="w-full border px-3 py-2 rounded" required disabled>
+                <label class="block text-xs font-medium mb-1">Kelurahan *</label>
+                <select name="kelurahan" id="kelurahan" class="w-full border px-2 py-1 rounded text-sm form-input" required disabled>
                     <option value="">Pilih Kelurahan</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Negara *</label>
-                <input type="text" name="negara" id="negara" class="w-full border px-3 py-2 rounded" value="Indonesia" required>
+                <label class="block text-xs font-medium mb-1">Negara *</label>
+                <input type="text" name="negara" id="negara" class="w-full border px-2 py-1 rounded text-sm form-input" value="Indonesia" required>
             </div>
             </div>
         </div>
 
-        <div class="flex justify-end mt-6 space-x-2">
-            <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Simpan</button>
+        <div class="flex justify-end mt-4 space-x-2">
+            <button type="button" id="cancelBtn" class="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500 text-sm">Batal</button>
+            <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm">Simpan</button>
         </div>
         </form>
     </div>
@@ -369,6 +369,45 @@ include 'header.php';
         }
       });
 
+      // Tutup modal dengan tombol ESC
+      $(document).keydown(function(e) {
+        if (e.key === 'Escape' && !$('#modal').hasClass('hidden')) {
+          $('#modal').addClass('hidden');
+        }
+      });
+
+      // Validasi real-time untuk NIK
+      $('#nik, #nikk').on('input', function() {
+        const value = $(this).val();
+        const isValid = /^\d*$/.test(value);
+        
+        if (!isValid) {
+          $(this).val(value.replace(/\D/g, ''));
+        }
+        
+        // Validasi panjang NIK
+        if (value.length === 16) {
+          $(this).removeClass('border-red-500').addClass('border-green-500');
+        } else if (value.length > 0) {
+          $(this).removeClass('border-green-500').addClass('border-red-500');
+        } else {
+          $(this).removeClass('border-red-500 border-green-500');
+        }
+      });
+
+      // Submit form dengan Enter pada input terakhir
+      $('#negara').keydown(function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          $('#wargaForm').submit();
+        }
+      });
+
+      // Focus pada input pertama saat modal dibuka
+      $('#modal').on('shown', function() {
+        $('#nama').focus();
+      });
+
       $('#wargaForm').submit(function(e) {
         e.preventDefault();
         
@@ -383,6 +422,11 @@ include 'header.php';
           alert('Silakan pilih wilayah lengkap (Provinsi, Kota, Kecamatan, Kelurahan)');
           return;
         }
+        
+        // Disable tombol submit dan tampilkan loading
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.text();
+        submitBtn.prop('disabled', true).text('Menyimpan...');
         
         const formData = $(this).serialize();
         
@@ -406,10 +450,48 @@ include 'header.php';
             }
           }
           alert('Error: ' + errorMsg);
+        }).always(function() {
+          // Re-enable tombol submit
+          submitBtn.prop('disabled', false).text(originalText);
         });
       });
 
-      $(document).on('click', '.editBtn', function() {
+      // Fungsi untuk menunggu dropdown ter-load
+      function waitForDropdown(selector, maxWait = 5000) {
+        return new Promise((resolve, reject) => {
+          const startTime = Date.now();
+          const checkInterval = setInterval(() => {
+            const element = $(selector);
+            const options = element.find('option');
+            
+            // Cek apakah dropdown sudah ter-load (bukan loading state)
+            if (options.length > 1 && !element.prop('disabled') && 
+                !options.first().text().includes('Loading') && 
+                !options.first().text().includes('Error')) {
+              clearInterval(checkInterval);
+              resolve(element);
+            }
+            
+            // Timeout setelah maxWait ms
+            if (Date.now() - startTime > maxWait) {
+              clearInterval(checkInterval);
+              reject(new Error('Timeout waiting for dropdown'));
+            }
+          }, 100);
+        });
+      }
+
+      // Fungsi untuk set nilai dropdown berdasarkan nama
+      function setDropdownValue(selector, name) {
+        const option = $(`${selector} option[data-name="${name}"]`);
+        if (option.length > 0) {
+          $(selector).val(option.val());
+          return true;
+        }
+        return false;
+      }
+
+      $(document).on('click', '.editBtn', async function() {
         const data = $(this).data('id');
         $('#modalTitle').text('Edit Warga');
         
@@ -426,46 +508,42 @@ include 'header.php';
         
         // Load dropdown wilayah berdasarkan data yang ada
         if (data.propinsi) {
-          // Cari ID provinsi berdasarkan nama
-          $.get('api/wilayah.php', { action: 'provinsi' }, function(provinsiData) {
-            const provinsi = provinsiData.find(p => p.name === data.propinsi);
-            if (provinsi) {
-              $('#propinsi').val(provinsi.id);
-              loadKota(provinsi.id);
+          try {
+            // Pastikan provinsi sudah ter-load
+            await waitForDropdown('#propinsi');
+            
+            // Set provinsi
+            if (setDropdownValue('#propinsi', data.propinsi) && data.kota) {
+              // Load kota
+              loadKota($('#propinsi').val());
               
-              // Cari ID kota berdasarkan nama
-              setTimeout(() => {
-                $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi.id }, function(kotaData) {
-                  const kota = kotaData.find(k => k.name === data.kota);
-                  if (kota) {
-                    $('#kota').val(kota.id);
-                    loadKecamatan(kota.id);
-                    
-                    // Cari ID kecamatan berdasarkan nama
-                    setTimeout(() => {
-                      $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota.id }, function(kecamatanData) {
-                        const kecamatan = kecamatanData.find(k => k.name === data.kecamatan);
-                        if (kecamatan) {
-                          $('#kecamatan').val(kecamatan.id);
-                          loadKelurahan(kecamatan.id);
-                          
-                          // Cari ID kelurahan berdasarkan nama
-                          setTimeout(() => {
-                            $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan.id }, function(kelurahanData) {
-                              const kelurahan = kelurahanData.find(k => k.name === data.kelurahan);
-                              if (kelurahan) {
-                                $('#kelurahan').val(kelurahan.id);
-                              }
-                            });
-                          }, 500);
-                        }
-                      });
-                    }, 500);
-                  }
-                });
-              }, 500);
+              // Tunggu kota ter-load
+              await waitForDropdown('#kota');
+              
+              // Set kota
+              if (setDropdownValue('#kota', data.kota) && data.kecamatan) {
+                // Load kecamatan
+                loadKecamatan($('#kota').val());
+                
+                // Tunggu kecamatan ter-load
+                await waitForDropdown('#kecamatan');
+                
+                // Set kecamatan
+                if (setDropdownValue('#kecamatan', data.kecamatan) && data.kelurahan) {
+                  // Load kelurahan
+                  loadKelurahan($('#kecamatan').val());
+                  
+                  // Tunggu kelurahan ter-load
+                  await waitForDropdown('#kelurahan');
+                  
+                  // Set kelurahan
+                  setDropdownValue('#kelurahan', data.kelurahan);
+                }
+              }
             }
-          });
+          } catch (error) {
+            console.error('Error loading dropdown:', error);
+          }
         }
         
         $('#formAction').val('update');
