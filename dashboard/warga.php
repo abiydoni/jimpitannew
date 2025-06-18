@@ -31,9 +31,11 @@ include 'header.php';
 </div>
 
     <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal-overlay">
-    <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto modal-content">
-        <h2 id="modalTitle" class="text-lg font-bold mb-3">Tambah Warga</h2>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[9999] modal-overlay" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 9999 !important; display: none !important; align-items: center !important; justify-content: center !important; background: rgba(0, 0, 0, 0.5) !important;">
+    <div class="bg-white rounded-lg shadow-xl p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto modal-content relative z-[10000]" style="position: relative !important; z-index: 10000 !important; background: white !important; border-radius: 8px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;">
+        <div class="sticky top-0 bg-white border-b pb-2 mb-4">
+            <h2 id="modalTitle" class="text-lg font-bold">Tambah Warga</h2>
+        </div>
         <form id="wargaForm" class="text-sm">
         <input type="hidden" name="id_warga" id="id_warga">
         <input type="hidden" name="action" id="formAction" value="create">
@@ -187,7 +189,7 @@ include 'header.php';
             </div>
         </div>
 
-        <div class="flex justify-end mt-4 space-x-2">
+        <div class="flex justify-end mt-4 space-x-2 sticky bottom-0 bg-white pt-2 border-t">
             <button type="button" id="cancelBtn" class="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500 text-sm">Batal</button>
             <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm">Simpan</button>
         </div>
@@ -355,24 +357,42 @@ include 'header.php';
         $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-        $('#modal').removeClass('hidden flex').addClass('flex');
+        
+        // Tampilkan modal dengan style yang benar
+        $('#modal').removeClass('hidden').addClass('flex show').css({
+          'display': 'flex !important',
+          'position': 'fixed !important',
+          'top': '0 !important',
+          'left': '0 !important',
+          'right': '0 !important',
+          'bottom': '0 !important',
+          'z-index': '9999 !important',
+          'align-items': 'center !important',
+          'justify-content': 'center !important',
+          'background': 'rgba(0, 0, 0, 0.5) !important'
+        });
+        
+        // Focus pada input pertama
+        setTimeout(() => {
+          $('#nama').focus();
+        }, 100);
       });
 
       $('#cancelBtn').click(() => {
-        $('#modal').addClass('hidden');
+        $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
       });
 
       // Tutup modal ketika klik di luar modal
       $('#modal').click(function(e) {
         if (e.target === this) {
-          $(this).addClass('hidden');
+          $(this).removeClass('flex show').addClass('hidden').css('display', 'none !important');
         }
       });
 
       // Tutup modal dengan tombol ESC
       $(document).keydown(function(e) {
         if (e.key === 'Escape' && !$('#modal').hasClass('hidden')) {
-          $('#modal').addClass('hidden');
+          $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
         }
       });
 
@@ -431,7 +451,7 @@ include 'header.php';
         const formData = $(this).serialize();
         
         $.post('api/warga_action.php', formData, function(res) {
-          $('#modal').addClass('hidden');
+          $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
           loadData();
           if (res === 'success' || res === 'updated') {
             alert('Data berhasil disimpan!');
@@ -547,7 +567,22 @@ include 'header.php';
         }
         
         $('#formAction').val('update');
-        $('#modal').removeClass('hidden flex').addClass('flex');
+        $('#modal').removeClass('hidden').addClass('flex show').css({
+          'display': 'flex !important',
+          'position': 'fixed !important',
+          'top': '0 !important',
+          'left': '0 !important',
+          'right': '0 !important',
+          'bottom': '0 !important',
+          'z-index': '9999 !important',
+          'align-items': 'center !important',
+          'justify-content': 'center !important',
+          'background': 'rgba(0, 0, 0, 0.5) !important'
+        });
+        // Focus pada input pertama
+        setTimeout(() => {
+          $('#nama').focus();
+        }, 100);
       });
 
       $(document).on('click', '.deleteBtn', function() {
