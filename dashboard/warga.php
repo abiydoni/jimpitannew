@@ -50,7 +50,7 @@ include 'api/db.php';
 <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
   <div class="bg-white p-6 rounded w-full max-w-2xl relative">
     <h2 class="text-xl font-bold mb-4" id="modalTitle">Tambah Warga</h2>
-    <form method="post" action="warga_action.php" enctype="multipart/form-data">
+    <form method="post" action="api/warga_action.php" enctype="multipart/form-data">
       <input type="hidden" name="id_warga" id="id_warga">
       <input type="hidden" name="kode" id="kode" value="<?= uniqid() ?>">
 
