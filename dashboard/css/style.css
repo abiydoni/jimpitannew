@@ -198,6 +198,7 @@ body {
   width: calc(100% - 280px);
   left: 280px;
   transition: 0.3s ease;
+  z-index: 1;
 }
 #sidebar.hide ~ #content {
   width: calc(100% - 60px);
@@ -795,29 +796,56 @@ table .dataTable {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(238, 238, 238, 0.8);
-  z-index: 3000; /* Set a high z-index to be above the sidebar */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998; /* Set a very high z-index to be above everything */
   opacity: 0; /* Mulai dengan opacity 0 */
   transition: opacity 0.3s ease; /* Transisi untuk efek fade */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ensure it's above sidebar and content */
+  pointer-events: none; /* Allow clicks to pass through initially */
 }
 
 /* Animasi untuk modal */
 .modal-container {
   position: relative;
-  z-index: 3100; /* Ensure this is higher than the overlay */
-  transform: translateY(-50px); /* Mulai dari posisi di luar tampilan */
+  z-index: 9999; /* Ensure this is higher than the overlay */
+  transform: translateY(-50px) scale(0.95); /* Mulai dari posisi di luar tampilan */
   opacity: 0; /* Mulai dengan opacity 0 */
   transition: transform 0.3s ease, opacity 0.3s ease; /* Transisi untuk efek muncul */
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  /* Ensure it's above everything */
+  pointer-events: auto; /* Re-enable pointer events for modal content */
 }
 
 /* Kelas untuk menunjukkan modal */
 .modal-show .modal-overlay {
   opacity: 1; /* Akhirnya muncul */
+  pointer-events: auto; /* Re-enable pointer events when shown */
 }
 
 .modal-show .modal-container {
-  transform: translateY(0); /* Kembali ke posisi normal */
+  transform: translateY(0) scale(1); /* Kembali ke posisi normal */
   opacity: 1; /* Akhirnya muncul */
+}
+
+/* Ensure modal is above sidebar and content */
+#sidebar {
+  z-index: 2000; /* Lower than modal */
+}
+
+#content {
+  z-index: 1; /* Much lower than modal */
+}
+
+/* Additional modal styles for better visibility */
+.modal-container {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .select2-container .select2-selection--single {

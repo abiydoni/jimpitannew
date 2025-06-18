@@ -358,8 +358,17 @@ include 'header.php';
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
         
+        // Debug: Log sebelum menampilkan modal
+        console.log('Before showing modal - Modal element:', $('#modal')[0]);
+        console.log('Before showing modal - Modal classes:', $('#modal').attr('class'));
+        
         // Tampilkan modal menggunakan class yang sesuai dengan CSS
         $('#modal').removeClass('hidden').addClass('modal-show');
+        
+        // Debug: Log setelah menampilkan modal
+        console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
+        console.log('Modal z-index:', $('#modal').css('z-index'));
+        console.log('Modal container z-index:', $('.modal-container').css('z-index'));
         
         // Focus pada input pertama
         setTimeout(() => {
@@ -368,12 +377,14 @@ include 'header.php';
       });
 
       $('#cancelBtn').click(() => {
+        console.log('Closing modal via cancel button');
         $('#modal').removeClass('modal-show').addClass('hidden');
       });
 
       // Tutup modal ketika klik di luar modal
       $('#modal').click(function(e) {
         if (e.target === this) {
+          console.log('Closing modal via overlay click');
           $(this).removeClass('modal-show').addClass('hidden');
         }
       });
@@ -381,6 +392,7 @@ include 'header.php';
       // Tutup modal dengan tombol ESC
       $(document).keydown(function(e) {
         if (e.key === 'Escape' && !$('#modal').hasClass('hidden')) {
+          console.log('Closing modal via ESC key');
           $('#modal').removeClass('modal-show').addClass('hidden');
         }
       });
