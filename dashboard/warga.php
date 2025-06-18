@@ -2,19 +2,8 @@
 // File: warga.php
 session_start();
 include 'api/db.php';
+include 'header.php';
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Warga</title>
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- DataTables CSS -->
-    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
 <body class="bg-gray-100 p-4">
   <div class="container mx-auto">
     <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
@@ -188,7 +177,8 @@ include 'api/db.php';
     </div>
   </div>
 
-  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
+  <?php include 'footer.php'; ?>
+  
   <script>
     function loadData() {
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
