@@ -5,28 +5,32 @@ include 'api/db.php';
 include 'header.php';
 ?>
 <body class="bg-gray-100 p-4">
-  <div class="container mx-auto">
-    <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
-    <button id="tambahBtn" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">+ Tambah Warga</button>
-    <div class="overflow-x-auto">
-      <table class="min-w-full bg-white shadow rounded">
-        <thead>
-          <tr class="bg-gray-200 text-left">
-            <th class="py-2 px-4">Nama</th>
-            <th class="py-2 px-4">NIK</th>
-            <th class="py-2 px-4">Hubungan</th>
-            <th class="py-2 px-4">Jenis Kelamin</th>
-            <th class="py-2 px-4">Tempat Lahir</th>
-            <th class="py-2 px-4">Tanggal Lahir</th>
-            <th class="py-2 px-4">Alamat</th>
-            <th class="py-2 px-4">RT/RW</th>
-            <th class="py-2 px-4">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="dataBody"></tbody>
-      </table>
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
+                <button id="tambahBtn" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">+ Tambah Warga</button>
+                <div class="overflow-x-auto">
+                <table class="min-w-full bg-white shadow rounded">
+                    <thead>
+                    <tr class="bg-gray-200 text-left">
+                        <th class="py-2 px-4">Nama</th>
+                        <th class="py-2 px-4">NIK</th>
+                        <th class="py-2 px-4">Hubungan</th>
+                        <th class="py-2 px-4">Jenis Kelamin</th>
+                        <th class="py-2 px-4">Tempat Lahir</th>
+                        <th class="py-2 px-4">Tanggal Lahir</th>
+                        <th class="py-2 px-4">Alamat</th>
+                        <th class="py-2 px-4">RT/RW</th>
+                        <th class="py-2 px-4">Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataBody"></tbody>
+                </table>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
   <!-- Modal -->
   <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
@@ -178,7 +182,7 @@ include 'header.php';
   </div>
 
   <?php include 'footer.php'; ?>
-  
+
   <script>
     function loadData() {
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
