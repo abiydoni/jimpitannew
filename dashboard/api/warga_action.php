@@ -26,7 +26,7 @@ if (isset($_POST['simpan'])) {
             $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'], $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'], $data['rt'], $data['rw'], $data['kelurahan'], $data['kecamatan'], $data['kota'], $data['propinsi'], $data['negara'], $data['agama'], $data['status'], $data['pekerjaan'], $namaFoto
         ]);
     }
-    header('Location: warga.php');
+    header('Location: ../warga.php');
     exit;
 }
 
@@ -35,6 +35,6 @@ if (isset($_GET['hapus'])) {
     $id = $_GET['hapus'];
     $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga=?");
     $stmt->execute([$id]);
-    header('Location: warga.php');
+    header('Location: ../warga.php');
     exit;
 }
