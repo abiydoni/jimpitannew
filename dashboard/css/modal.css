@@ -1,44 +1,37 @@
 /* Modal Styles */
 .modal-overlay {
   backdrop-filter: blur(2px);
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal-content {
+.modal-container {
   max-height: 90vh;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e0 #f7fafc;
-  position: relative !important;
-  z-index: 10000 !important;
-  background: white !important;
-  border-radius: 8px !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  margin: 1rem;
 }
 
-.modal-content::-webkit-scrollbar {
+.modal-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.modal-content::-webkit-scrollbar-track {
+.modal-container::-webkit-scrollbar-track {
   background: #f7fafc;
   border-radius: 3px;
 }
 
-.modal-content::-webkit-scrollbar-thumb {
+.modal-container::-webkit-scrollbar-thumb {
   background: #cbd5e0;
   border-radius: 3px;
 }
 
-.modal-content::-webkit-scrollbar-thumb:hover {
+.modal-container::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
 }
 
@@ -90,7 +83,7 @@
 
 /* Responsive Modal */
 @media (max-width: 768px) {
-  .modal-content {
+  .modal-container {
     margin: 1rem;
     max-width: calc(100vw - 2rem);
     max-height: calc(100vh - 2rem);
@@ -113,28 +106,15 @@
   }
 }
 
-.modal-content {
+.modal-container {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Force modal to be on top */
-#modal {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-}
-
-#modal.show {
-  display: flex !important;
-}
-
+/* Modal visibility */
 #modal.hidden {
   display: none !important;
+}
+
+#modal.modal-show {
+  display: flex !important;
 }

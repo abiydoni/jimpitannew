@@ -31,8 +31,8 @@ include 'header.php';
 </div>
 
     <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[9999] modal-overlay" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 9999 !important; display: none !important; align-items: center !important; justify-content: center !important; background: rgba(0, 0, 0, 0.5) !important;">
-    <div class="bg-white rounded-lg shadow-xl p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto modal-content relative z-[10000]" style="position: relative !important; z-index: 10000 !important; background: white !important; border-radius: 8px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;">
+<div id="modal" class="modal-overlay hidden">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 bg-white border-b pb-2 mb-4">
             <h2 id="modalTitle" class="text-lg font-bold">Tambah Warga</h2>
         </div>
@@ -358,19 +358,8 @@ include 'header.php';
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
         
-        // Tampilkan modal dengan style yang benar
-        $('#modal').removeClass('hidden').addClass('flex show').css({
-          'display': 'flex !important',
-          'position': 'fixed !important',
-          'top': '0 !important',
-          'left': '0 !important',
-          'right': '0 !important',
-          'bottom': '0 !important',
-          'z-index': '9999 !important',
-          'align-items': 'center !important',
-          'justify-content': 'center !important',
-          'background': 'rgba(0, 0, 0, 0.5) !important'
-        });
+        // Tampilkan modal menggunakan class yang sesuai dengan CSS
+        $('#modal').removeClass('hidden').addClass('modal-show');
         
         // Focus pada input pertama
         setTimeout(() => {
@@ -379,20 +368,20 @@ include 'header.php';
       });
 
       $('#cancelBtn').click(() => {
-        $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
+        $('#modal').removeClass('modal-show').addClass('hidden');
       });
 
       // Tutup modal ketika klik di luar modal
       $('#modal').click(function(e) {
         if (e.target === this) {
-          $(this).removeClass('flex show').addClass('hidden').css('display', 'none !important');
+          $(this).removeClass('modal-show').addClass('hidden');
         }
       });
 
       // Tutup modal dengan tombol ESC
       $(document).keydown(function(e) {
         if (e.key === 'Escape' && !$('#modal').hasClass('hidden')) {
-          $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
+          $('#modal').removeClass('modal-show').addClass('hidden');
         }
       });
 
@@ -451,7 +440,7 @@ include 'header.php';
         const formData = $(this).serialize();
         
         $.post('api/warga_action.php', formData, function(res) {
-          $('#modal').removeClass('flex show').addClass('hidden').css('display', 'none !important');
+          $('#modal').removeClass('modal-show').addClass('hidden');
           loadData();
           if (res === 'success' || res === 'updated') {
             alert('Data berhasil disimpan!');
@@ -567,18 +556,7 @@ include 'header.php';
         }
         
         $('#formAction').val('update');
-        $('#modal').removeClass('hidden').addClass('flex show').css({
-          'display': 'flex !important',
-          'position': 'fixed !important',
-          'top': '0 !important',
-          'left': '0 !important',
-          'right': '0 !important',
-          'bottom': '0 !important',
-          'z-index': '9999 !important',
-          'align-items': 'center !important',
-          'justify-content': 'center !important',
-          'background': 'rgba(0, 0, 0, 0.5) !important'
-        });
+        $('#modal').removeClass('hidden').addClass('modal-show');
         // Focus pada input pertama
         setTimeout(() => {
           $('#nama').focus();
