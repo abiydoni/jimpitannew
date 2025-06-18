@@ -195,8 +195,8 @@ include 'header.php';
               <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
               <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
               <td class="px-4 py-2">
-                <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'>Edit</button>
-                <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}">Hapus</button>
+                <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
+                <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
               </td>
             </tr>`;
           });
