@@ -1,4 +1,5 @@
 <?php
+// File: warga.php
 session_start();
 include 'api/db.php';
 ?>
@@ -6,104 +7,117 @@ include 'api/db.php';
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Warga</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-gray-100">
-<div class="container mx-auto py-6 px-4">
-  <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
-  <button onclick="openModal()" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Tambah Warga</button>
-
-  <table class="table-auto w-full bg-white rounded shadow">
-    <thead>
-      <tr class="bg-gray-200 text-left">
-        <th class="px-4 py-2">Kode</th>
-        <th class="px-4 py-2">Nama</th>
-        <th class="px-4 py-2">NIK</th>
-        <th class="px-4 py-2">Hubungan</th>
-        <th class="px-4 py-2">Kelurahan</th>
-        <th class="px-4 py-2">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY tgl_warga DESC");
-      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          echo "<tr class='border-t'>";
-          echo "<td class='px-4 py-2'>{$row['kode']}</td>";
-          echo "<td class='px-4 py-2'>{$row['nama']}</td>";
-          echo "<td class='px-4 py-2'>{$row['nik']}</td>";
-          echo "<td class='px-4 py-2'>{$row['hubungan']}</td>";
-          echo "<td class='px-4 py-2'>{$row['kelurahan']}</td>";
-          echo "<td class='px-4 py-2 space-x-2'>
-                  <button onclick='editWarga(".json_encode($row).")' class='bg-yellow-400 text-white px-2 py-1 rounded'>Edit</button>
-                  <a href='warga_action.php?hapus={$row['id_warga']}' onclick='return confirm(\"Yakin hapus?\")' class='bg-red-500 text-white px-2 py-1 rounded'>Hapus</a>
-                </td>";
-          echo "</tr>";
-      }
-      ?>
-    </tbody>
-  </table>
-</div>
-
-<!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-  <div class="bg-white p-6 rounded w-full max-w-2xl relative">
-    <h2 class="text-xl font-bold mb-4" id="modalTitle">Tambah Warga</h2>
-    <form method="post" action="api/warga_action.php" enctype="multipart/form-data">
-      <input type="hidden" name="id_warga" id="id_warga">
-      <input type="hidden" name="kode" id="kode" value="<?= uniqid() ?>">
-
-      <div class="grid grid-cols-2 gap-4">
-        <input type="text" name="nama" id="nama" placeholder="Nama" class="border px-3 py-2 rounded" required>
-        <input type="text" name="nik" id="nik" placeholder="NIK" class="border px-3 py-2 rounded" required>
-        <input type="text" name="hubungan" id="hubungan" placeholder="Hubungan" class="border px-3 py-2 rounded">
-        <input type="text" name="nikk" id="nikk" placeholder="No KK" class="border px-3 py-2 rounded">
-        <input type="text" name="jenkel" id="jenkel" placeholder="Jenis Kelamin" class="border px-3 py-2 rounded">
-        <input type="text" name="tpt_lahir" id="tpt_lahir" placeholder="Tempat Lahir" class="border px-3 py-2 rounded">
-        <input type="date" name="tgl_lahir" id="tgl_lahir" class="border px-3 py-2 rounded">
-        <input type="text" name="alamat" id="alamat" placeholder="Alamat" class="border px-3 py-2 rounded">
-        <input type="text" name="rt" id="rt" placeholder="RT" class="border px-3 py-2 rounded">
-        <input type="text" name="rw" id="rw" placeholder="RW" class="border px-3 py-2 rounded">
-        <input type="text" name="kelurahan" id="kelurahan" placeholder="Kelurahan" class="border px-3 py-2 rounded">
-        <input type="text" name="kecamatan" id="kecamatan" placeholder="Kecamatan" class="border px-3 py-2 rounded">
-        <input type="text" name="kota" id="kota" placeholder="Kota" class="border px-3 py-2 rounded">
-        <input type="text" name="propinsi" id="propinsi" placeholder="Provinsi" class="border px-3 py-2 rounded">
-        <input type="text" name="negara" id="negara" placeholder="Negara" class="border px-3 py-2 rounded">
-        <input type="text" name="agama" id="agama" placeholder="Agama" class="border px-3 py-2 rounded">
-        <input type="text" name="status" id="status" placeholder="Status" class="border px-3 py-2 rounded">
-        <input type="text" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan" class="border px-3 py-2 rounded">
-        <input type="file" name="foto" id="foto" class="border px-3 py-2 rounded">
-      </div>
-      <div class="mt-4 flex justify-end space-x-2">
-        <button type="submit" name="simpan" class="bg-green-600 text-white px-4 py-2 rounded">Simpan</button>
-        <button type="button" onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Batal</button>
-      </div>
-    </form>
+<body class="bg-gray-100 p-4">
+  <div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Data Warga</h1>
+    <button id="tambahBtn" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">+</button>
+    <table class="min-w-full bg-white shadow rounded">
+      <thead>
+        <tr class="bg-gray-200 text-left">
+          <th class="py-2 px-4">Nama</th>
+          <th class="py-2 px-4">NIK</th>
+          <th class="py-2 px-4">Alamat</th>
+          <th class="py-2 px-4">Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="dataBody"></tbody>
+    </table>
   </div>
-</div>
 
-<script>
-function openModal() {
-  document.getElementById('modal').classList.remove('hidden');
-  document.getElementById('modalTitle').innerText = 'Tambah Warga';
-  document.querySelector('form').reset();
-  document.getElementById('id_warga').value = '';
-}
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl">
+      <h2 id="modalTitle" class="text-xl font-bold mb-4">Tambah Warga</h2>
+      <form id="wargaForm">
+        <input type="hidden" name="id_warga" id="id_warga">
+        <input type="hidden" name="action" id="formAction" value="create">
 
-function closeModal() {
-  document.getElementById('modal').classList.add('hidden');
-}
+        <div class="mb-2">
+          <label class="block">Nama</label>
+          <input type="text" name="nama" id="nama" class="w-full border px-2 py-1 rounded" required>
+        </div>
+        <div class="mb-2">
+          <label class="block">NIK</label>
+          <input type="text" name="nik" id="nik" class="w-full border px-2 py-1 rounded" required>
+        </div>
+        <div class="mb-2">
+          <label class="block">Alamat</label>
+          <textarea name="alamat" id="alamat" class="w-full border px-2 py-1 rounded" required></textarea>
+        </div>
 
-function editWarga(data) {
-  openModal();
-  document.getElementById('modalTitle').innerText = 'Edit Warga';
-  for (const key in data) {
-    if (document.getElementById(key)) {
-      document.getElementById(key).value = data[key];
+        <div class="flex justify-end mt-4">
+          <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 bg-gray-400 text-white rounded">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function loadData() {
+      $.post('api/warga_action.php', { action: 'read' }, function(data) {
+        const warga = JSON.parse(data);
+        let html = '';
+        warga.forEach(row => {
+          html += `<tr class="border-b">
+            <td class="px-4 py-2">${row.nama}</td>
+            <td class="px-4 py-2">${row.nik}</td>
+            <td class="px-4 py-2">${row.alamat}</td>
+            <td class="px-4 py-2">
+              <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded" data-id='${JSON.stringify(row)}'>Edit</button>
+              <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2" data-id="${row.id_warga}">Hapus</button>
+            </td>
+          </tr>`;
+        });
+        $('#dataBody').html(html);
+      });
     }
-  }
-}
-</script>
+
+    $(document).ready(function() {
+      loadData();
+
+      $('#tambahBtn').click(() => {
+        $('#modalTitle').text('Tambah Warga');
+        $('#wargaForm')[0].reset();
+        $('#formAction').val('create');
+        $('#modal').removeClass('hidden flex').addClass('flex');
+      });
+
+      $('#cancelBtn').click(() => {
+        $('#modal').addClass('hidden');
+      });
+
+      $('#wargaForm').submit(function(e) {
+        e.preventDefault();
+        $.post('api/warga_action.php', $(this).serialize(), function(res) {
+          $('#modal').addClass('hidden');
+          loadData();
+        });
+      });
+
+      $(document).on('click', '.editBtn', function() {
+        const data = $(this).data('id');
+        $('#modalTitle').text('Edit Warga');
+        for (const key in data) {
+          $(`#${key}`).val(data[key]);
+        }
+        $('#formAction').val('update');
+        $('#modal').removeClass('hidden flex').addClass('flex');
+      });
+
+      $(document).on('click', '.deleteBtn', function() {
+        if (confirm('Yakin ingin menghapus data ini?')) {
+          $.post('api/warga_action.php', { action: 'delete', id_warga: $(this).data('id') }, function() {
+            loadData();
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>

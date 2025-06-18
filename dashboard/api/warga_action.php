@@ -1,40 +1,45 @@
 <?php
+// File: warga_action.php
 include 'api/db.php';
 
-// Simpan atau update
-if (isset($_POST['simpan'])) {
-    $data = $_POST;
-    $id = $data['id_warga'] ?? null;
-    $foto = $_FILES['foto']['name'] ?? '';
+$action = $_POST['action'] ?? '';
 
-    if ($foto) {
-        $ext = pathinfo($foto, PATHINFO_EXTENSION);
-        $namaFoto = uniqid() . '.' . $ext;
-        move_uploaded_file($_FILES['foto']['tmp_name'], 'uploads/' . $namaFoto);
-    } else {
-        $namaFoto = $_POST['old_foto'] ?? '';
-    }
+if ($action == 'create') {
+    $stmt = $pdo->prepare("INSERT INTO tb_warga (
+        nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw,
+        kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    if ($id) {
-        $stmt = $pdo->prepare("UPDATE tb_warga SET kode=?, nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?, kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=? WHERE id_warga=?");
-        $stmt->execute([
-            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'], $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'], $data['rt'], $data['rw'], $data['kelurahan'], $data['kecamatan'], $data['kota'], $data['propinsi'], $data['negara'], $data['agama'], $data['status'], $data['pekerjaan'], $namaFoto, $id
-        ]);
-    } else {
-        $stmt = $pdo->prepare("INSERT INTO tb_warga (kode, nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw, kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->execute([
-            $data['kode'], $data['nama'], $data['nik'], $data['hubungan'], $data['nikk'], $data['jenkel'], $data['tpt_lahir'], $data['tgl_lahir'], $data['alamat'], $data['rt'], $data['rw'], $data['kelurahan'], $data['kecamatan'], $data['kota'], $data['propinsi'], $data['negara'], $data['agama'], $data['status'], $data['pekerjaan'], $namaFoto
-        ]);
-    }
-    header('Location: ../warga.php');
-    exit;
-}
+    $stmt->execute([
+        $_POST['nama'], $_POST['nik'], $_POST['hubungan'], $_POST['nikk'], $_POST['jenkel'],
+        $_POST['tpt_lahir'], $_POST['tgl_lahir'], $_POST['alamat'], $_POST['rt'], $_POST['rw'],
+        $_POST['kelurahan'], $_POST['kecamatan'], $_POST['kota'], $_POST['propinsi'], $_POST['negara'],
+        $_POST['agama'], $_POST['status'], $_POST['pekerjaan'], $_POST['foto']
+    ]);
+    echo 'success';
 
-// Hapus
-if (isset($_GET['hapus'])) {
-    $id = $_GET['hapus'];
-    $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga=?");
-    $stmt->execute([$id]);
-    header('Location: ../warga.php');
-    exit;
-}
+} elseif ($action == 'read') {
+    $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY tgl_warga DESC");
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+
+} elseif ($action == 'update') {
+    $stmt = $pdo->prepare("UPDATE tb_warga SET
+        nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?,
+        kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=?
+        WHERE id_warga = ?");
+
+    $stmt->execute([
+        $_POST['nama'], $_POST['nik'], $_POST['hubungan'], $_POST['nikk'], $_POST['jenkel'],
+        $_POST['tpt_lahir'], $_POST['tgl_lahir'], $_POST['alamat'], $_POST['rt'], $_POST['rw'],
+        $_POST['kelurahan'], $_POST['kecamatan'], $_POST['kota'], $_POST['propinsi'], $_POST['negara'],
+        $_POST['agama'], $_POST['status'], $_POST['pekerjaan'], $_POST['foto'], $_POST['id_warga']
+    ]);
+    echo 'updated';
+
+} elseif ($action == 'delete') {
+    $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga = ?");
+    $stmt->execute([$_POST['id_warga']]);
+    echo 'deleted';
+} else {
+    echo 'invalid action';
+}?>
