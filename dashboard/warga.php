@@ -359,16 +359,43 @@ include 'header.php';
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
         
         // Debug: Log sebelum menampilkan modal
+        console.log('=== MODAL DEBUG START ===');
         console.log('Before showing modal - Modal element:', $('#modal')[0]);
         console.log('Before showing modal - Modal classes:', $('#modal').attr('class'));
+        console.log('Before showing modal - Modal display:', $('#modal').css('display'));
+        console.log('Before showing modal - Modal visibility:', $('#modal').css('visibility'));
+        console.log('Before showing modal - Modal z-index:', $('#modal').css('z-index'));
         
-        // Tampilkan modal menggunakan class yang sesuai dengan CSS
+        // Tampilkan modal dengan cara yang sederhana
         $('#modal').removeClass('hidden').addClass('modal-show');
         
+        // Force modal to be visible
+        setTimeout(() => {
+          $('#modal').css({
+            'display': 'flex',
+            'visibility': 'visible',
+            'opacity': '1',
+            'z-index': '99998'
+          });
+          
+          $('.modal-container').css({
+            'display': 'block',
+            'visibility': 'visible',
+            'opacity': '1',
+            'z-index': '99999'
+          });
+        }, 10);
+        
         // Debug: Log setelah menampilkan modal
-        console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
-        console.log('Modal z-index:', $('#modal').css('z-index'));
-        console.log('Modal container z-index:', $('.modal-container').css('z-index'));
+        setTimeout(() => {
+          console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
+          console.log('After showing modal - Modal z-index:', $('#modal').css('z-index'));
+          console.log('After showing modal - Modal container z-index:', $('.modal-container').css('z-index'));
+          console.log('After showing modal - Modal display:', $('#modal').css('display'));
+          console.log('After showing modal - Modal visibility:', $('#modal').css('visibility'));
+          console.log('After showing modal - Modal opacity:', $('#modal').css('opacity'));
+          console.log('=== MODAL DEBUG END ===');
+        }, 50);
         
         // Focus pada input pertama
         setTimeout(() => {
