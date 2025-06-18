@@ -1,20 +1,37 @@
 /* Modal Styles */
 .modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 99998 !important;
   backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .modal-container {
-  max-height: 90vh;
-  overflow-y: auto;
+  position: relative !important;
+  z-index: 99999 !important;
+  max-height: 90vh !important;
+  max-width: 90vw !important;
+  overflow-y: auto !important;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e0 #f7fafc;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  margin: 1rem;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  margin: 1rem !important;
+  transform: translateY(0) scale(1) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .modal-container::-webkit-scrollbar {
@@ -110,11 +127,38 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Modal visibility */
-#modal.hidden {
+/* Modal visibility - CRITICAL */
+.modal-overlay.hidden {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-#modal.modal-show {
+.modal-overlay.modal-show {
   display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Force modal to be above everything */
+.modal-overlay,
+.modal-container {
+  z-index: 99998 !important;
+}
+
+.modal-container {
+  z-index: 99999 !important;
+}
+
+/* Ensure other elements stay below */
+#sidebar,
+#content,
+#content nav,
+#content main,
+.table-data,
+.order,
+.head {
+  z-index: auto !important;
 }
