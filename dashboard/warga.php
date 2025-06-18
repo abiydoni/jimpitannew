@@ -38,6 +38,11 @@ include 'header.php';
         <input type="hidden" name="id_warga" id="id_warga">
         <input type="hidden" name="action" id="formAction" value="create">
         <input type="hidden" name="foto" id="foto" value="">
+        <!-- Hidden input untuk menyimpan nama wilayah -->
+        <input type="hidden" name="propinsi_nama" id="propinsi_nama">
+        <input type="hidden" name="kota_nama" id="kota_nama">
+        <input type="hidden" name="kecamatan_nama" id="kecamatan_nama">
+        <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Data Pribadi -->
@@ -51,12 +56,14 @@ include 'header.php';
             
             <div>
                 <label class="block text-sm font-medium mb-1">NIK *</label>
-                <input type="text" name="nik" id="nik" class="w-full border px-3 py-2 rounded" required maxlength="16">
+                <input type="text" name="nik" id="nik" class="w-full border px-3 py-2 rounded" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
+                <small class="text-gray-500">Format: 16 digit angka</small>
             </div>
             
             <div>
                 <label class="block text-sm font-medium mb-1">NIK KK</label>
-                <input type="text" name="nikk" id="nikk" class="w-full border px-3 py-2 rounded" maxlength="16">
+                <input type="text" name="nikk" id="nikk" class="w-full border px-3 py-2 rounded" maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
+                <small class="text-gray-500">Format: 16 digit angka</small>
             </div>
             
             <div>
@@ -90,7 +97,8 @@ include 'header.php';
             
             <div>
                 <label class="block text-sm font-medium mb-1">Tanggal Lahir *</label>
-                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-3 py-2 rounded" required>
+                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-3 py-2 rounded" required max="<?php echo date('Y-m-d'); ?>">
+                <small class="text-gray-500">Tidak boleh di masa depan</small>
             </div>
             
             <div>
@@ -145,23 +153,31 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Kelurahan *</label>
-                <input type="text" name="kelurahan" id="kelurahan" class="w-full border px-3 py-2 rounded" required>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-1">Kecamatan *</label>
-                <input type="text" name="kecamatan" id="kecamatan" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-sm font-medium mb-1">Provinsi *</label>
+                <select name="propinsi" id="propinsi" class="w-full border px-3 py-2 rounded" required>
+                    <option value="">Pilih Provinsi</option>
+                </select>
             </div>
             
             <div>
                 <label class="block text-sm font-medium mb-1">Kota/Kabupaten *</label>
-                <input type="text" name="kota" id="kota" class="w-full border px-3 py-2 rounded" required>
+                <select name="kota" id="kota" class="w-full border px-3 py-2 rounded" required disabled>
+                    <option value="">Pilih Kota/Kabupaten</option>
+                </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium mb-1">Provinsi *</label>
-                <input type="text" name="propinsi" id="propinsi" class="w-full border px-3 py-2 rounded" required>
+                <label class="block text-sm font-medium mb-1">Kecamatan *</label>
+                <select name="kecamatan" id="kecamatan" class="w-full border px-3 py-2 rounded" required disabled>
+                    <option value="">Pilih Kecamatan</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Kelurahan *</label>
+                <select name="kelurahan" id="kelurahan" class="w-full border px-3 py-2 rounded" required disabled>
+                    <option value="">Pilih Kelurahan</option>
+                </select>
             </div>
             
             <div>
@@ -182,6 +198,94 @@ include 'header.php';
   <?php include 'footer.php'; ?>
 
   <script>
+    // Fungsi untuk memuat data provinsi
+    function loadProvinsi() {
+      $('#propinsi').html('<option value="">Loading provinsi...</option>');
+      $.get('api/wilayah.php', { action: 'provinsi' }, function(data) {
+        let html = '<option value="">Pilih Provinsi</option>';
+        data.forEach(item => {
+          html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+        });
+        $('#propinsi').html(html);
+      }).fail(function(xhr, status, error) {
+        console.error('Error loading provinsi:', error);
+        $('#propinsi').html('<option value="">Error loading provinsi</option>');
+      });
+    }
+
+    // Fungsi untuk memuat data kota berdasarkan provinsi
+    function loadKota(provinsi_id) {
+      if (!provinsi_id) {
+        $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+        return;
+      }
+      
+      $('#kota').html('<option value="">Loading kota...</option>').prop('disabled', true);
+      $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi_id }, function(data) {
+        let html = '<option value="">Pilih Kota/Kabupaten</option>';
+        data.forEach(item => {
+          html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+        });
+        $('#kota').html(html).prop('disabled', false);
+        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      }).fail(function(xhr, status, error) {
+        console.error('Error loading kota:', error);
+        $('#kota').html('<option value="">Error loading kota</option>').prop('disabled', true);
+      });
+    }
+
+    // Fungsi untuk memuat data kecamatan berdasarkan kota
+    function loadKecamatan(kota_id) {
+      if (!kota_id) {
+        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+        return;
+      }
+      
+      $('#kecamatan').html('<option value="">Loading kecamatan...</option>').prop('disabled', true);
+      $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota_id }, function(data) {
+        let html = '<option value="">Pilih Kecamatan</option>';
+        data.forEach(item => {
+          html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+        });
+        $('#kecamatan').html(html).prop('disabled', false);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      }).fail(function(xhr, status, error) {
+        console.error('Error loading kecamatan:', error);
+        $('#kecamatan').html('<option value="">Error loading kecamatan</option>').prop('disabled', true);
+      });
+    }
+
+    // Fungsi untuk memuat data kelurahan berdasarkan kecamatan
+    function loadKelurahan(kecamatan_id) {
+      if (!kecamatan_id) {
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+        return;
+      }
+      
+      $('#kelurahan').html('<option value="">Loading kelurahan...</option>').prop('disabled', true);
+      $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan_id }, function(data) {
+        let html = '<option value="">Pilih Kelurahan</option>';
+        data.forEach(item => {
+          html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+        });
+        $('#kelurahan').html(html).prop('disabled', false);
+      }).fail(function(xhr, status, error) {
+        console.error('Error loading kelurahan:', error);
+        $('#kelurahan').html('<option value="">Error loading kelurahan</option>').prop('disabled', true);
+      });
+    }
+
+    // Fungsi untuk mendapatkan nama wilayah berdasarkan ID
+    function getWilayahName(element_id) {
+      const element = $(`#${element_id}`);
+      const selectedOption = element.find('option:selected');
+      return selectedOption.data('name') || selectedOption.val();
+    }
+
     function loadData() {
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
         try {
@@ -213,12 +317,44 @@ include 'header.php';
 
     $(document).ready(function() {
       loadData();
+      loadProvinsi(); // Load provinsi saat halaman dimuat
+
+      // Event handler untuk dropdown wilayah
+      $('#propinsi').change(function() {
+        const provinsi_id = $(this).val();
+        const propinsi_nama = getWilayahName('propinsi');
+        $('#propinsi_nama').val(propinsi_nama);
+        loadKota(provinsi_id);
+      });
+
+      $('#kota').change(function() {
+        const kota_id = $(this).val();
+        const kota_nama = getWilayahName('kota');
+        $('#kota_nama').val(kota_nama);
+        loadKecamatan(kota_id);
+      });
+
+      $('#kecamatan').change(function() {
+        const kecamatan_id = $(this).val();
+        const kecamatan_nama = getWilayahName('kecamatan');
+        $('#kecamatan_nama').val(kecamatan_nama);
+        loadKelurahan(kecamatan_id);
+      });
+
+      $('#kelurahan').change(function() {
+        const kelurahan_nama = getWilayahName('kelurahan');
+        $('#kelurahan_nama').val(kelurahan_nama);
+      });
 
       $('#tambahBtn').click(() => {
         $('#modalTitle').text('Tambah Warga');
         $('#wargaForm')[0].reset();
         $('#formAction').val('create');
         $('#negara').val('Indonesia');
+        // Reset dropdown wilayah
+        $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
         $('#modal').removeClass('hidden flex').addClass('flex');
       });
 
@@ -235,6 +371,19 @@ include 'header.php';
 
       $('#wargaForm').submit(function(e) {
         e.preventDefault();
+        
+        // Ambil nama wilayah dari hidden input
+        const propinsi_nama = $('#propinsi_nama').val();
+        const kota_nama = $('#kota_nama').val();
+        const kecamatan_nama = $('#kecamatan_nama').val();
+        const kelurahan_nama = $('#kelurahan_nama').val();
+        
+        // Validasi wilayah
+        if (!propinsi_nama || !kota_nama || !kecamatan_nama || !kelurahan_nama) {
+          alert('Silakan pilih wilayah lengkap (Provinsi, Kota, Kecamatan, Kelurahan)');
+          return;
+        }
+        
         const formData = $(this).serialize();
         
         $.post('api/warga_action.php', formData, function(res) {
@@ -263,9 +412,62 @@ include 'header.php';
       $(document).on('click', '.editBtn', function() {
         const data = $(this).data('id');
         $('#modalTitle').text('Edit Warga');
+        
+        // Set nilai form
         for (const key in data) {
           $(`#${key}`).val(data[key]);
         }
+        
+        // Set nama wilayah ke hidden input
+        $('#propinsi_nama').val(data.propinsi || '');
+        $('#kota_nama').val(data.kota || '');
+        $('#kecamatan_nama').val(data.kecamatan || '');
+        $('#kelurahan_nama').val(data.kelurahan || '');
+        
+        // Load dropdown wilayah berdasarkan data yang ada
+        if (data.propinsi) {
+          // Cari ID provinsi berdasarkan nama
+          $.get('api/wilayah.php', { action: 'provinsi' }, function(provinsiData) {
+            const provinsi = provinsiData.find(p => p.name === data.propinsi);
+            if (provinsi) {
+              $('#propinsi').val(provinsi.id);
+              loadKota(provinsi.id);
+              
+              // Cari ID kota berdasarkan nama
+              setTimeout(() => {
+                $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi.id }, function(kotaData) {
+                  const kota = kotaData.find(k => k.name === data.kota);
+                  if (kota) {
+                    $('#kota').val(kota.id);
+                    loadKecamatan(kota.id);
+                    
+                    // Cari ID kecamatan berdasarkan nama
+                    setTimeout(() => {
+                      $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota.id }, function(kecamatanData) {
+                        const kecamatan = kecamatanData.find(k => k.name === data.kecamatan);
+                        if (kecamatan) {
+                          $('#kecamatan').val(kecamatan.id);
+                          loadKelurahan(kecamatan.id);
+                          
+                          // Cari ID kelurahan berdasarkan nama
+                          setTimeout(() => {
+                            $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan.id }, function(kelurahanData) {
+                              const kelurahan = kelurahanData.find(k => k.name === data.kelurahan);
+                              if (kelurahan) {
+                                $('#kelurahan').val(kelurahan.id);
+                              }
+                            });
+                          }, 500);
+                        }
+                      });
+                    }, 500);
+                  }
+                });
+              }, 500);
+            }
+          });
+        }
+        
         $('#formAction').val('update');
         $('#modal').removeClass('hidden flex').addClass('flex');
       });
