@@ -164,7 +164,7 @@ $menus = $_SESSION['menus'] ?? [];
 
             <!-- Logout Floating Button -->
             <div class="floating-button" style="margin-right: 70px;">
-                <a href="dashboard/logout" title="Logout">
+                <a href="dashboard/logout.php" title="Logout">
                     <i class="bx bx-log-out-circle bx-tada bx-flip-horizontal" style="font-size:24px"></i>
                 </a>
             </div>
