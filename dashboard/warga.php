@@ -740,15 +740,17 @@ include 'header.php';
 
       // Download template Excel
       $('#downloadTemplateBtn').click(function() {
-        // Header lengkap semua field tb_warga kecuali id_warga dan tgl_warga
+        // Header lengkap semua field tb_warga dan field wilayah sesuai backend
         const header = [
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
-          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
+          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp',
+          'propinsi_nama', 'kota_nama', 'kecamatan_nama', 'kelurahan_nama'
         ];
         // Contoh data
         const contoh = [
-          'Budi Santoso', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'Laki-laki', 'Jakarta', '1980-01-01', 'Jl. Mawar No. 1', '01', '02',
-          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890'
+          'Budi Santoso', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'L', 'Jakarta', '1980-01-01', 'Jl. Mawar No. 1', '01', '02',
+          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890',
+          'DKI Jakarta', 'Jakarta Selatan', 'Kebayoran Baru', 'Melawai'
         ];
         const rows = [header, contoh];
         const ws = XLSX.utils.aoa_to_sheet(rows);
