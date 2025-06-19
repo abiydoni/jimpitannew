@@ -10,6 +10,11 @@ include 'header.php';
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Tambah Warga</button>
+                <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Export Excel</button>
+                <button id="downloadTemplateBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">Download Template</button>
+                <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer">Import Excel
+                  <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
+                </label>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -204,6 +209,8 @@ include 'header.php';
 </div>
 
   <?php include 'footer.php'; ?>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
     // Fungsi untuk memuat data provinsi
@@ -603,6 +610,84 @@ include 'header.php';
             alert('Error deleting data: ' + error);
           });
         }
+      });
+
+      // Export ke Excel (semua field)
+      $('#exportBtn').click(function() {
+        $.post('api/warga_action.php', { action: 'read' }, function(data) {
+          try {
+            const warga = JSON.parse(data);
+            if (!warga.length) {
+              alert('Tidak ada data untuk diexport!');
+              return;
+            }
+            // Ambil semua key dari field tb_warga
+            const header = Object.keys(warga[0]);
+            const rows = [header];
+            warga.forEach(row => {
+              rows.push(header.map(h => row[h] || ''));
+            });
+            const ws = XLSX.utils.aoa_to_sheet(rows);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'DataWarga');
+            XLSX.writeFile(wb, 'data_warga.xlsx');
+          } catch (e) {
+            alert('Gagal export: ' + e);
+          }
+        });
+      });
+
+      // Import dari Excel (semua field)
+      $('#importInput').change(function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          if (json.length < 2) {
+            alert('File kosong atau tidak ada data!');
+            return;
+          }
+          const header = json[0];
+          let sukses = 0, gagal = 0;
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row.length) continue;
+            // Buat objek data sesuai header
+            const dataWarga = { action: 'create' };
+            header.forEach((h, idx) => {
+              dataWarga[h] = row[idx] || '';
+            });
+            $.ajax({
+              url: 'api/warga_action.php',
+              type: 'POST',
+              data: dataWarga,
+              async: false,
+              success: function(res) { sukses++; },
+              error: function() { gagal++; }
+            });
+          }
+          loadData();
+          alert('Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal);
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      // Download template Excel
+      $('#downloadTemplateBtn').click(function() {
+        // Header sesuai seluruh field tb_warga
+        const header = [[
+          'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
+          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
+        ]];
+        const ws = XLSX.utils.aoa_to_sheet(header);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'TemplateWarga');
+        XLSX.writeFile(wb, 'template_warga.xlsx');
       });
     });
   </script>
