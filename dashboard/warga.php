@@ -730,14 +730,45 @@ include 'header.php';
             nikSet.add(dataWarga['nik']);
             dataValid.push(dataWarga);
           }
-          // Tampilkan rekap error sebelum kirim ke backend
+          // Tampilkan rekap error sebelum cek ke database
           let info = 'Data valid: ' + dataValid.length + ', Data error: ' + errorList.length;
           if (errorList.length) {
             info += '\n\nDetail error:';
             errorList.forEach(e => {
               info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
             });
-            alert(info); // OK saja
+          }
+          // Cek NIK ke database jika tidak ada error di file
+          if (!errorList.length) {
+            // Ambil semua NIK yang valid
+            const nikList = dataValid.map(d => d.nik);
+            $.ajax({
+              url: 'api/warga_action.php',
+              type: 'POST',
+              data: { action: 'cek_nik', nik_list: nikList },
+              dataType: 'json',
+              async: false,
+              success: function(res) {
+                if (res && res.length) {
+                  // Tandai baris yang NIK-nya sudah ada di database
+                  res.forEach(db => {
+                    dataValid.forEach((d, idx) => {
+                      if (d.nik === db.nik) {
+                        errorList.push({ baris: idx+2, nama: d.nama || '-', nik: d.nik || '-', error: 'NIK sudah terdaftar di database (' + (db.nama || '-') + ')' });
+                      }
+                    });
+                  });
+                }
+              }
+            });
+          }
+          // Jika ada error (baik dari file atau database), tampilkan dan download report error, hentikan proses
+          if (errorList.length) {
+            let infoErr = 'Import dibatalkan! Data error: ' + errorList.length + '\n\nDetail error:';
+            errorList.forEach(e => {
+              infoErr += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+            });
+            alert(infoErr);
             // Otomatis download report error
             let txt = 'Report Error Import Data Warga\n';
             txt += '==============================\n';

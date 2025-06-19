@@ -107,6 +107,21 @@ try {
         $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga = ?");
         $stmt->execute([$_POST['id_warga'] ?? '']);
         echo 'deleted';
+
+    } elseif ($action == 'cek_nik') {
+        // Cek daftar NIK yang sudah ada di database
+        $nikList = $_POST['nik_list'] ?? [];
+        if (!is_array($nikList) || empty($nikList)) {
+            echo json_encode([]);
+            exit;
+        }
+        $inQuery = implode(',', array_fill(0, count($nikList), '?'));
+        $stmt = $pdo->prepare("SELECT nik, nama FROM tb_warga WHERE nik IN ($inQuery)");
+        $stmt->execute($nikList);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result);
+        exit;
+
     } else {
         echo 'invalid action';
     }
