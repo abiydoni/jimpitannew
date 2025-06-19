@@ -707,7 +707,6 @@ include 'header.php';
           }
           loadData();
           alert('Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal);
-          error: function(xhr) { gagal++; alert(xhr.responseText); }
         };
         reader.readAsArrayBuffer(file);
       });
