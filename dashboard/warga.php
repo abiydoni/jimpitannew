@@ -638,11 +638,10 @@ include 'header.php';
               alert('Tidak ada data untuk diexport!');
               return;
             }
-            // Header urut dan mapping sama persis dengan template, tanpa kolom double
+            // Header hanya field wilayah tanpa _nama
             const header = [
               'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
-              'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp',
-              'propinsi_nama', 'kota_nama', 'kecamatan_nama', 'kelurahan_nama'
+              'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
             ];
             const rows = [header];
             warga.forEach(row => {
@@ -744,17 +743,15 @@ include 'header.php';
 
       // Download template Excel
       $('#downloadTemplateBtn').click(function() {
-        // Header lengkap semua field tb_warga dan field wilayah sesuai backend
+        // Header hanya field wilayah tanpa _nama
         const header = [
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
-          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp',
-          'propinsi_nama', 'kota_nama', 'kecamatan_nama', 'kelurahan_nama'
+          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
         ];
         // Contoh data
         const contoh = [
           'Budi Santoso', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'L', 'Jakarta', '1980-01-01', 'Jl. Mawar No. 1', '01', '02',
-          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890',
-          'DKI Jakarta', 'Jakarta Selatan', 'Kebayoran Baru', 'Melawai'
+          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890'
         ];
         const rows = [header, contoh];
         const ws = XLSX.utils.aoa_to_sheet(rows);
