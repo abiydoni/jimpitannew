@@ -708,6 +708,7 @@ include 'header.php';
           }
           const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
           let sukses = 0, gagal = 0;
+          let errorList = [];
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row.length) continue;
@@ -731,12 +732,25 @@ include 'header.php';
                 } catch (e) {
                   msg = xhr.responseText;
                 }
-                alert(msg);
+                // Simpan info error: baris ke, nama, nik, pesan error
+                errorList.push({
+                  baris: i+1,
+                  nama: dataWarga['nama'] || '-',
+                  nik: dataWarga['nik'] || '-',
+                  error: msg
+                });
               }
             });
           }
           loadData();
-          alert('Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal);
+          let info = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
+          if (errorList.length) {
+            info += '\n\nDetail error:';
+            errorList.forEach(e => {
+              info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+            });
+          }
+          alert(info);
         };
         reader.readAsArrayBuffer(file);
       });

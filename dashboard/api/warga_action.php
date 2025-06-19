@@ -19,6 +19,13 @@ try {
             throw new Exception('NIK harus 16 digit angka');
         }
         
+        // Validasi unik NIK
+        $cekNIK = $pdo->prepare('SELECT COUNT(*) FROM tb_warga WHERE nik = ?');
+        $cekNIK->execute([$_POST['nik']]);
+        if ($cekNIK->fetchColumn() > 0) {
+            throw new Exception('NIK sudah terdaftar');
+        }
+        
         // Validasi tanggal lahir
         $tgl_lahir = $_POST['tgl_lahir'] ?? '';
         if ($tgl_lahir && strtotime($tgl_lahir) > time()) {
@@ -58,6 +65,13 @@ try {
         // Validasi NIK (16 digit)
         if (!preg_match('/^\d{16}$/', $_POST['nik'])) {
             throw new Exception('NIK harus 16 digit angka');
+        }
+        
+        // Validasi unik NIK (kecuali untuk dirinya sendiri)
+        $cekNIK = $pdo->prepare('SELECT COUNT(*) FROM tb_warga WHERE nik = ? AND id_warga != ?');
+        $cekNIK->execute([$_POST['nik'], $_POST['id_warga']]);
+        if ($cekNIK->fetchColumn() > 0) {
+            throw new Exception('NIK sudah terdaftar');
         }
         
         // Validasi tanggal lahir
