@@ -110,7 +110,7 @@ try {
 
     } elseif ($action == 'cek_nik') {
         // Cek daftar NIK yang sudah ada di database
-        $nikList = $_POST['nik_list'] ?? [];
+        $nikList = isset($_POST['nik_list']) ? json_decode($_POST['nik_list'], true) : [];
         if (!is_array($nikList) || empty($nikList)) {
             echo json_encode([]);
             exit;

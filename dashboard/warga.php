@@ -745,7 +745,7 @@ include 'header.php';
             $.ajax({
               url: 'api/warga_action.php',
               type: 'POST',
-              data: { action: 'cek_nik', nik_list: nikList },
+              data: { action: 'cek_nik', nik_list: JSON.stringify(nikList) },
               dataType: 'json',
               async: false,
               success: function(res) {
