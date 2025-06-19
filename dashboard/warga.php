@@ -308,8 +308,8 @@ include 'header.php';
           let html = '';
           warga.forEach(row => {
             html += `<tr class="border-b hover:bg-gray-50">
-              <td class="px-4 py-2">${row.nama || '-'}</td>
               <td class="px-4 py-2">${row.nik || '-'}</td>
+              <td class="px-4 py-2">${row.nama || '-'}</td>
               <td class="px-4 py-2">${row.jenkel || '-'}</td>
               <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
               <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
