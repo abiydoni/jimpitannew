@@ -32,7 +32,7 @@ include 'header.php';
 
     <!-- Modal -->
 <div id="modal" class="modal-overlay hidden">
-    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-sm max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 bg-white border-b pb-2 mb-4">
             <h2 id="modalTitle" class="text-lg font-bold">Tambah Warga</h2>
         </div>
