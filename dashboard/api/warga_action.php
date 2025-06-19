@@ -33,14 +33,14 @@ try {
 
         $stmt = $pdo->prepare("INSERT INTO tb_warga (
             nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw,
-            kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto, hp
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan_nama'] ?? '', $_POST['kecamatan_nama'] ?? '', $_POST['kota_nama'] ?? '', $_POST['propinsi_nama'] ?? '', $_POST['negara'] ?? '',
-            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? ''
+            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? ''
         ]);
         echo 'success';
 
@@ -74,14 +74,14 @@ try {
 
         $stmt = $pdo->prepare("UPDATE tb_warga SET
             nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?,
-            kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=?
+            kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=?, hp=?
             WHERE id_warga = ?");
 
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan_nama'] ?? '', $_POST['kecamatan_nama'] ?? '', $_POST['kota_nama'] ?? '', $_POST['propinsi_nama'] ?? '', $_POST['negara'] ?? '',
-            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['id_warga'] ?? ''
+            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? '', $_POST['id_warga'] ?? ''
         ]);
         echo 'updated';
 
