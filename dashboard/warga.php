@@ -707,20 +707,52 @@ include 'header.php';
             return;
           }
           const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
-          let sukses = 0, gagal = 0;
+          let dataValid = [];
           let errorList = [];
+          let nikSet = new Set();
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row.length) continue;
-            // Buat objek data sesuai header
             const dataWarga = { action: 'create' };
             header.forEach((h, idx) => {
               dataWarga[h] = row[idx] || '';
             });
+            // Validasi format NIK
+            if (!/^\d{16}$/.test(dataWarga['nik'] || '')) {
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'NIK harus 16 digit angka' });
+              continue;
+            }
+            // Validasi duplikat NIK di file
+            if (nikSet.has(dataWarga['nik'])) {
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'NIK duplikat di file' });
+              continue;
+            }
+            nikSet.add(dataWarga['nik']);
+            dataValid.push(dataWarga);
+          }
+          // Tampilkan rekap error sebelum kirim ke backend
+          let info = 'Data valid: ' + dataValid.length + ', Data error: ' + errorList.length;
+          if (errorList.length) {
+            info += '\n\nDetail error:';
+            errorList.forEach(e => {
+              info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+            });
+          }
+          if (!dataValid.length) {
+            alert('Tidak ada data valid untuk diimport!\n' + info);
+            return;
+          }
+          if (!confirm(info + '\n\nLanjut import data yang valid?')) {
+            return;
+          }
+          // Kirim data valid ke backend satu per satu, rekap error dari backend (misal: NIK sudah terdaftar)
+          let sukses = 0, gagal = 0;
+          let errorBackend = [];
+          for (let i = 0; i < dataValid.length; i++) {
             $.ajax({
               url: 'api/warga_action.php',
               type: 'POST',
-              data: dataWarga,
+              data: dataValid[i],
               async: false,
               success: function(res) { sukses++; },
               error: function(xhr) {
@@ -732,25 +764,39 @@ include 'header.php';
                 } catch (e) {
                   msg = xhr.responseText;
                 }
-                // Simpan info error: baris ke, nama, nik, pesan error
-                errorList.push({
-                  baris: i+1,
-                  nama: dataWarga['nama'] || '-',
-                  nik: dataWarga['nik'] || '-',
+                errorBackend.push({
+                  baris: i+2, // +2 karena header dan index 0
+                  nama: dataValid[i]['nama'] || '-',
+                  nik: dataValid[i]['nik'] || '-',
                   error: msg
                 });
               }
             });
           }
           loadData();
-          let info = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
-          if (errorList.length) {
-            info += '\n\nDetail error:';
-            errorList.forEach(e => {
-              info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+          let info2 = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
+          if (errorBackend.length) {
+            info2 += '\n\nDetail error backend:';
+            errorBackend.forEach(e => {
+              info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
             });
+            if (confirm(info2 + '\n\nDownload report error ke file .txt?')) {
+              let txt = 'Report Error Import Data Warga (Backend)\n';
+              txt += '==============================\n';
+              errorBackend.forEach(e => {
+                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+              });
+              const blob = new Blob([txt], { type: 'text/plain' });
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'report_error_import_warga.txt';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          } else {
+            alert(info2);
           }
-          alert(info);
         };
         reader.readAsArrayBuffer(file);
       });
