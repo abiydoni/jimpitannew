@@ -21,7 +21,7 @@ include 'header.php';
             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-6 w-20">No</th>
+                        <th class="py-2 px-6 w-10">No</th>
                         <th class="py-2 px-6 w-40 text-left">NIK</th>
                         <th class="py-2 px-6 w-40 text-left">NIK KK</th>
                         <th class="py-2 px-6 w-56 text-left">Nama</th>
@@ -29,7 +29,7 @@ include 'header.php';
                         <th class="py-2 px-6 w-36 text-center">Tanggal Lahir</th>
                         <th class="py-2 px-6 w-32 text-center">RT/RW</th>
                         <th class="py-2 px-6 w-44 text-left">No HP</th>
-                        <th class="py-2 px-6 w-32">Aksi</th>
+                        <th class="py-2 px-6 w-32 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="dataBody"></tbody>
@@ -323,7 +323,7 @@ include 'header.php';
           let html = '';
           warga.forEach((row, idx) => {
             html += `<tr class="border-b hover:bg-gray-50">
-              <td class="px-6 py-2 w-20">${idx + 1}</td>
+              <td class="px-6 py-2 w-10">${idx + 1}</td>
               <td class="px-6 py-2 w-40 text-left">${row.nik || '-'}</td>
               <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
               <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
@@ -331,7 +331,7 @@ include 'header.php';
               <td class="px-6 py-2 w-36 text-center">${row.tgl_lahir || '-'}</td>
               <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
               <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
-              <td class="px-6 py-2 w-32">
+              <td class="px-6 py-2 w-32 text-center">
                 <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
                 <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
               </td>
