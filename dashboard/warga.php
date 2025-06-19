@@ -32,7 +32,7 @@ include 'header.php';
 
     <!-- Modal -->
 <div id="modal" class="modal-overlay hidden">
-    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-sm max-h-[90vh] overflow-y-auto">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-xs max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 bg-white border-b pb-2 mb-4">
             <h2 id="modalTitle" class="text-lg font-bold">Tambah Warga</h2>
         </div>
@@ -132,12 +132,6 @@ include 'header.php';
                 <label class="block text-xs font-medium mb-0.5">Pekerjaan *</label>
                 <input type="text" name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
             </div>
-
-            <div>
-                <label class="block text-xs font-medium mb-0.5">No. HP</label>
-                <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input" maxlength="15" pattern="\d{9,15}" title="Nomor HP harus 9-15 digit angka">
-                <small class="text-gray-500 text-xs">Format: 9-15 digit angka</small>
-            </div>
             </div>
 
             <!-- Data Alamat -->
@@ -191,6 +185,11 @@ include 'header.php';
             <div>
                 <label class="block text-xs font-medium mb-0.5">Negara *</label>
                 <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-0.5">No. HP</label>
+                <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input" maxlength="15" pattern="\d{9,15}" title="Nomor HP harus 9-15 digit angka">
+                <small class="text-gray-500 text-xs">Format: 9-15 digit angka</small>
             </div>
             </div>
         </div>
