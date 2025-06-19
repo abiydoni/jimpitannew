@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Hilangkan .php di URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+
+# Redirect jika user akses dengan .php, hapus ekstensi
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+RewriteRule ^([^.]+)\.php$ /$1 [R=301,L]
