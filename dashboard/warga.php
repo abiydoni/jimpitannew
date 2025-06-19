@@ -748,10 +748,10 @@ include 'header.php';
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
           'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
         ];
-        // Contoh data
+        // Contoh data samaran
         const contoh = [
-          'Budi Santoso', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'L', 'Jakarta', '1980-01-01', 'Jl. Mawar No. 1', '01', '02',
-          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890'
+          'Siti Mawar', '3210987654321098', '3210123456789012', 'Istri', 'P', 'Salatiga', '1992-05-12', 'Jl. Kenanga No. 5', '03', '04',
+          'Kelurahan Melati', 'Kecamatan Sukajadi', 'Kota Salatiga', 'Jawa Tengah', 'Indonesia', 'Islam', 'Kawin', 'Ibu Rumah Tangga', '', '082112223333'
         ];
         const rows = [header, contoh];
         const ws = XLSX.utils.aoa_to_sheet(rows);

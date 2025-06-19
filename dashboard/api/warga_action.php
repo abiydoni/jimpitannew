@@ -25,9 +25,9 @@ try {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
         }
 
-        // Validasi wilayah
-        if (empty($_POST['propinsi_nama']) || empty($_POST['kota_nama']) || 
-            empty($_POST['kecamatan_nama']) || empty($_POST['kelurahan_nama'])) {
+        // Validasi wilayah (tanpa _nama)
+        if (empty($_POST['propinsi']) || empty($_POST['kota']) || 
+            empty($_POST['kecamatan']) || empty($_POST['kelurahan'])) {
             throw new Exception('Data wilayah tidak lengkap');
         }
 
@@ -39,7 +39,7 @@ try {
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
-            $_POST['kelurahan_nama'] ?? '', $_POST['kecamatan_nama'] ?? '', $_POST['kota_nama'] ?? '', $_POST['propinsi_nama'] ?? '', $_POST['negara'] ?? '',
+            $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
             $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? ''
         ]);
         echo 'success';
@@ -66,9 +66,9 @@ try {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
         }
 
-        // Validasi wilayah
-        if (empty($_POST['propinsi_nama']) || empty($_POST['kota_nama']) || 
-            empty($_POST['kecamatan_nama']) || empty($_POST['kelurahan_nama'])) {
+        // Validasi wilayah (tanpa _nama)
+        if (empty($_POST['propinsi']) || empty($_POST['kota']) || 
+            empty($_POST['kecamatan']) || empty($_POST['kelurahan'])) {
             throw new Exception('Data wilayah tidak lengkap');
         }
 
@@ -80,7 +80,7 @@ try {
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
-            $_POST['kelurahan_nama'] ?? '', $_POST['kecamatan_nama'] ?? '', $_POST['kota_nama'] ?? '', $_POST['propinsi_nama'] ?? '', $_POST['negara'] ?? '',
+            $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
             $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? '', $_POST['id_warga'] ?? ''
         ]);
         echo 'updated';
