@@ -21,8 +21,8 @@ include 'header.php';
             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-4">Nama</th>
                         <th class="py-2 px-4">NIK</th>
+                        <th class="py-2 px-4">Nama</th>
                         <th class="py-2 px-4">Jenis Kelamin</th>
                         <th class="py-2 px-4">Tanggal Lahir</th>
                         <th class="py-2 px-4">RT/RW</th>
@@ -612,7 +612,7 @@ include 'header.php';
         }
       });
 
-      // Export ke Excel (semua field, dengan styling)
+      // Export ke Excel (semua field, dengan styling, tanpa id_warga dan tgl_warga)
       $('#exportBtn').click(function() {
         $.post('api/warga_action.php', { action: 'read' }, function(data) {
           try {
@@ -621,8 +621,8 @@ include 'header.php';
               alert('Tidak ada data untuk diexport!');
               return;
             }
-            // Ambil semua key dari field tb_warga
-            const header = Object.keys(warga[0]);
+            // Ambil semua key dari field tb_warga, kecuali id_warga dan tgl_warga
+            const header = Object.keys(warga[0]).filter(h => h !== 'id_warga' && h !== 'tgl_warga');
             const rows = [header];
             warga.forEach(row => {
               rows.push(header.map(h => row[h] || ''));
@@ -671,7 +671,7 @@ include 'header.php';
         });
       });
 
-      // Import dari Excel (semua field)
+      // Import dari Excel (tanpa id_warga dan tgl_warga)
       $('#importInput').change(function(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -686,7 +686,7 @@ include 'header.php';
             alert('File kosong atau tidak ada data!');
             return;
           }
-          const header = json[0];
+          const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
           let sukses = 0, gagal = 0;
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
@@ -713,7 +713,7 @@ include 'header.php';
 
       // Download template Excel
       $('#downloadTemplateBtn').click(function() {
-        // Header lengkap semua field tb_warga
+        // Header lengkap semua field tb_warga kecuali id_warga dan tgl_warga
         const header = [
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
           'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
