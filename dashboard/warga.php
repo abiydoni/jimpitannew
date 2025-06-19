@@ -21,12 +21,14 @@ include 'header.php';
             <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-4">NIK</th>
-                        <th class="py-2 px-4">Nama</th>
-                        <th class="py-2 px-4">Jenis Kelamin</th>
-                        <th class="py-2 px-4">Tanggal Lahir</th>
-                        <th class="py-2 px-4">RT/RW</th>
-                        <th class="py-2 px-4">No HP</th>
+                        <th class="py-2 px-4">No</th>
+                        <th class="py-2 px-4 text-left">NIK</th>
+                        <th class="py-2 px-4 text-left">NIK KK</th>
+                        <th class="py-2 px-4 text-left">Nama</th>
+                        <th class="py-2 px-4 text-center">Jenis Kelamin</th>
+                        <th class="py-2 px-4 text-center">Tanggal Lahir</th>
+                        <th class="py-2 px-4 text-center">RT/RW</th>
+                        <th class="py-2 px-4 text-left">No HP</th>
                         <th class="py-2 px-4">Aksi</th>
                     </tr>
                 </thead>
@@ -69,8 +71,8 @@ include 'header.php';
             </div>
             
             <div>
-                <label class="block text-xs font-medium mb-0.5">NIK KK</label>
-                <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
+                <label class="block text-xs font-medium mb-0.5">NIK KK *</label>
+                <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
                 <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
             </div>
             
@@ -93,8 +95,8 @@ include 'header.php';
                 <label class="block text-xs font-medium mb-0.5">Jenis Kelamin *</label>
                 <select name="jenkel" id="jenkel" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                 <option value="">Pilih Jenis Kelamin</option>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
                 </select>
             </div>
             
@@ -131,12 +133,25 @@ include 'header.php';
                 <option value="Kawin">Kawin</option>
                 <option value="Cerai Hidup">Cerai Hidup</option>
                 <option value="Cerai Mati">Cerai Mati</option>
+                <option value="Lainnya">Lainnya</option>
                 </select>
             </div>
             
             <div>
                 <label class="block text-xs font-medium mb-0.5">Pekerjaan *</label>
-                <input type="text" name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                <select name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                <option value="">Pilih Pekerjaan</option>
+                  <option value="PNS">PNS</option>
+                  <option value="TNI">TNI</option>
+                  <option value="Polri">Polri</option>
+                  <option value="Swasta">Swasta</option>
+                  <option value="Wiraswasta">Wiraswasta</option>
+                  <option value="Petani">Petani</option>
+                  <option value="Pedagang">Pedagang</option>
+                  <option value="Pelajar">Pelajar</option>
+                  <option value="Tidak Bekerja">Tidak Bekerja</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
             </div>
             </div>
 
@@ -306,14 +321,16 @@ include 'header.php';
         try {
           const warga = JSON.parse(data);
           let html = '';
-          warga.forEach(row => {
+          warga.forEach((row, idx) => {
             html += `<tr class="border-b hover:bg-gray-50">
-              <td class="px-4 py-2">${row.nik || '-'}</td>
-              <td class="px-4 py-2">${row.nama || '-'}</td>
-              <td class="px-4 py-2">${row.jenkel || '-'}</td>
-              <td class="px-4 py-2">${row.tgl_lahir || '-'}</td>
-              <td class="px-4 py-2">${row.rt || '-'}/${row.rw || '-'}</td>
-              <td class="px-4 py-2">${row.hp || '-'}</td>
+              <td class="px-4 py-2">${idx + 1}</td>
+              <td class="px-4 py-2 text-left">${row.nik || '-'}</td>
+              <td class="px-4 py-2 text-left">${row.nikk || '-'}</td>
+              <td class="px-4 py-2 text-left">${row.nama || '-'}</td>
+              <td class="px-4 py-2 text-center">${row.jenkel || '-'}</td>
+              <td class="px-4 py-2 text-center">${row.tgl_lahir || '-'}</td>
+              <td class="px-4 py-2 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
+              <td class="px-4 py-2 text-left">${row.hp || '-'}</td>
               <td class="px-4 py-2">
                 <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
                 <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
