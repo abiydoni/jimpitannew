@@ -719,7 +719,17 @@ include 'header.php';
               data: dataWarga,
               async: false,
               success: function(res) { sukses++; },
-              error: function() { gagal++; }
+              error: function(xhr) {
+                gagal++;
+                let msg = 'Gagal import';
+                try {
+                  const res = JSON.parse(xhr.responseText);
+                  msg = res.error || xhr.responseText;
+                } catch (e) {
+                  msg = xhr.responseText;
+                }
+                alert(msg);
+              }
             });
           }
           loadData();
