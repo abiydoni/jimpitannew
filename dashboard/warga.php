@@ -709,6 +709,7 @@ include 'header.php';
           alert('Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal);
         };
         reader.readAsArrayBuffer(file);
+        error: function(xhr) { gagal++; alert(xhr.responseText); }
       });
 
       // Download template Excel
