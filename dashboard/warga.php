@@ -679,12 +679,31 @@ include 'header.php';
 
       // Download template Excel
       $('#downloadTemplateBtn').click(function() {
-        // Header sesuai seluruh field tb_warga
-        const header = [[
+        // Header lengkap semua field tb_warga
+        const header = [
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
           'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
-        ]];
-        const ws = XLSX.utils.aoa_to_sheet(header);
+        ];
+        // Contoh data
+        const contoh = [
+          'Budi Santoso', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'Laki-laki', 'Jakarta', '1980-01-01', 'Jl. Mawar No. 1', '01', '02',
+          'Kelurahan Mawar', 'Kecamatan Melati', 'Kota Jakarta', 'DKI Jakarta', 'Indonesia', 'Islam', 'Kawin', 'Karyawan', '', '081234567890'
+        ];
+        const rows = [header, contoh];
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        // Styling header: bold & background color
+        header.forEach((h, idx) => {
+          const cell = XLSX.utils.encode_cell({ r:0, c:idx });
+          if (!ws[cell]) return;
+          ws[cell].s = {
+            font: { bold: true },
+            fill: { patternType: 'solid', fgColor: { rgb: 'D1E7DD' } },
+            alignment: { horizontal: 'center' }
+          };
+        });
+        // Set auto width
+        const wscols = header.map(() => ({ wch: 18 }));
+        ws['!cols'] = wscols;
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'TemplateWarga');
         XLSX.writeFile(wb, 'template_warga.xlsx');
