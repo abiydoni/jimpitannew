@@ -638,8 +638,12 @@ include 'header.php';
               alert('Tidak ada data untuk diexport!');
               return;
             }
-            // Ambil semua key dari field tb_warga, kecuali id_warga dan tgl_warga
-            const header = Object.keys(warga[0]).filter(h => h !== 'id_warga' && h !== 'tgl_warga');
+            // Header urut dan mapping sama persis dengan template, tanpa kolom double
+            const header = [
+              'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
+              'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp',
+              'propinsi_nama', 'kota_nama', 'kecamatan_nama', 'kelurahan_nama'
+            ];
             const rows = [header];
             warga.forEach(row => {
               rows.push(header.map(h => row[h] || ''));
