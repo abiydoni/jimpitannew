@@ -737,44 +737,23 @@ include 'header.php';
             errorList.forEach(e => {
               info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
             });
-          }
-          if (!dataValid.length) {
-            // Jika tidak ada data valid, tawarkan download report error
-            if (confirm('Tidak ada data valid untuk diimport!\n' + info + '\n\nDownload report error ke file .txt?')) {
-              let txt = 'Report Error Import Data Warga (Validasi Awal)\n';
-              txt += '==============================\n';
-              errorList.forEach(e => {
-                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
-              });
-              const blob = new Blob([txt], { type: 'text/plain' });
-              const link = document.createElement('a');
-              link.href = URL.createObjectURL(blob);
-              link.download = 'report_error_import_warga.txt';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
+            alert(info); // OK saja
+            // Otomatis download report error
+            let txt = 'Report Error Import Data Warga\n';
+            txt += '==============================\n';
+            errorList.forEach(e => {
+              txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+            });
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'report_error_import_warga.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             return;
           }
-          if (!confirm(info + '\n\nLanjut import data yang valid?')) {
-            // Jika user batal, tawarkan download report error
-            if (errorList.length && confirm('Download report error ke file .txt?')) {
-              let txt = 'Report Error Import Data Warga (Validasi Awal)\n';
-              txt += '==============================\n';
-              errorList.forEach(e => {
-                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
-              });
-              const blob = new Blob([txt], { type: 'text/plain' });
-              const link = document.createElement('a');
-              link.href = URL.createObjectURL(blob);
-              link.download = 'report_error_import_warga.txt';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-            return;
-          }
-          // Kirim data valid ke backend satu per satu, rekap error dari backend (misal: NIK sudah terdaftar)
+          // Jika tidak ada error, lanjut kirim ke backend
           let sukses = 0, gagal = 0;
           let errorBackend = [];
           for (let i = 0; i < dataValid.length; i++) {
@@ -804,31 +783,25 @@ include 'header.php';
           }
           loadData();
           let info2 = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
-          if (errorBackend.length || errorList.length) {
+          if (errorBackend.length) {
             info2 += '\n\nDetail error:';
-            errorList.forEach(e => {
-              info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
-            });
             errorBackend.forEach(e => {
               info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
             });
-            if (confirm(info2 + '\n\nDownload report error ke file .txt?')) {
-              let txt = 'Report Error Import Data Warga (Semua Error)\n';
-              txt += '==============================\n';
-              errorList.forEach(e => {
-                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
-              });
-              errorBackend.forEach(e => {
-                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
-              });
-              const blob = new Blob([txt], { type: 'text/plain' });
-              const link = document.createElement('a');
-              link.href = URL.createObjectURL(blob);
-              link.download = 'report_error_import_warga.txt';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
+            alert(info2);
+            // Otomatis download report error backend
+            let txt = 'Report Error Import Data Warga (Backend)\n';
+            txt += '==============================\n';
+            errorBackend.forEach(e => {
+              txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+            });
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'report_error_import_warga.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
           } else {
             alert(info2);
           }
