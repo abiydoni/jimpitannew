@@ -612,7 +612,7 @@ include 'header.php';
         }
       });
 
-      // Export ke Excel (semua field)
+      // Export ke Excel (semua field, dengan styling)
       $('#exportBtn').click(function() {
         $.post('api/warga_action.php', { action: 'read' }, function(data) {
           try {
@@ -628,6 +628,40 @@ include 'header.php';
               rows.push(header.map(h => row[h] || ''));
             });
             const ws = XLSX.utils.aoa_to_sheet(rows);
+            // Styling header: bold & background color
+            header.forEach((h, idx) => {
+              const cell = XLSX.utils.encode_cell({ r:0, c:idx });
+              if (!ws[cell]) return;
+              ws[cell].s = {
+                font: { bold: true },
+                fill: { patternType: 'solid', fgColor: { rgb: 'D1E7DD' } },
+                alignment: { horizontal: 'center' },
+                border: {
+                  top: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  bottom: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  left: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  right: { style: 'thin', color: { rgb: 'AAAAAA' } }
+                }
+              };
+            });
+            // Styling border untuk semua cell data
+            for (let r = 1; r < rows.length; r++) {
+              for (let c = 0; c < header.length; c++) {
+                const cell = XLSX.utils.encode_cell({ r, c });
+                if (!ws[cell]) continue;
+                ws[cell].s = {
+                  border: {
+                    top: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    bottom: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    left: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    right: { style: 'thin', color: { rgb: 'AAAAAA' } }
+                  }
+                };
+              }
+            }
+            // Set auto width
+            const wscols = header.map(() => ({ wch: 18 }));
+            ws['!cols'] = wscols;
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'DataWarga');
             XLSX.writeFile(wb, 'data_warga.xlsx');
