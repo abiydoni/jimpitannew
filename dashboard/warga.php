@@ -26,7 +26,7 @@ include 'header.php';
                         <th class="py-2 px-6 w-40 text-left">NIK KK</th>
                         <th class="py-2 px-6 w-56 text-left">Nama</th>
                         <th class="py-2 px-6 w-32 text-center">Jenis Kelamin</th>
-                        <th class="py-2 px-6 w-36 text-center">Tanggal Lahir</th>
+                        <th class="py-2 px-6 w-36 text-left">Tanggal Lahir</th>
                         <th class="py-2 px-6 w-32 text-center">RT/RW</th>
                         <th class="py-2 px-6 w-44 text-left">No HP</th>
                         <th class="py-2 px-6 w-32 text-center">Aksi</th>
@@ -370,7 +370,7 @@ include 'header.php';
                 <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
                 <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
                 <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
-                <td class="px-6 py-2 w-36 text-center">${tanggalLahir}</td>
+                <td class="px-6 py-2 w-36 text-left">${tanggalLahir}</td>
                 <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
                 <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
                 <td class="px-6 py-2 w-32 text-center">
@@ -1235,14 +1235,14 @@ include 'header.php';
       // --- Dropdown RT dan RW ---
       function isiDropdownRTRW(selectedRT, selectedRW) {
         let opsi = '<option value="">Pilih</option>';
-        for (let i = 1; i <= 99; i++) {
-          const val = i.toString().padStart(2, '0');
+        for (let i = 1; i <= 999; i++) {
+          const val = i.toString().padStart(3, '0');
           opsi += `<option value="${val}"${selectedRT==val?' selected':''}>${val}</option>`;
         }
         $('#rt').html(opsi);
         opsi = '<option value="">Pilih</option>';
-        for (let i = 1; i <= 99; i++) {
-          const val = i.toString().padStart(2, '0');
+        for (let i = 1; i <= 999; i++) {
+          const val = i.toString().padStart(3, '0');
           opsi += `<option value="${val}"${selectedRW==val?' selected':''}>${val}</option>`;
         }
         $('#rw').html(opsi);
