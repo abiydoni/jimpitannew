@@ -784,7 +784,7 @@ include 'header.php';
                         <th class="border border-gray-300 px-2 py-1 text-xs">Hubungan</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="dataBody">
                       ${anggotaHTML}
                     </tbody>
                   </table>
