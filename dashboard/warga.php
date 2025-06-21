@@ -107,8 +107,13 @@ include 'header.php';
             
             <div>
                 <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                <input type="text" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input datepicker" required placeholder="DD-MM-YYYY" readonly>
-                <small class="text-gray-500 text-xs">Klik untuk memilih tanggal</small>
+                <div class="flex gap-2">
+                  <select id="tgl_hari" class="border rounded px-1 py-0.5 text-sm" style="width:60px"></select>
+                  <select id="tgl_bulan" class="border rounded px-1 py-0.5 text-sm" style="width:110px"></select>
+                  <select id="tgl_tahun" class="border rounded px-1 py-0.5 text-sm" style="width:80px"></select>
+                </div>
+                <input type="hidden" name="tgl_lahir" id="tgl_lahir" required>
+                <small class="text-gray-500 text-xs">Pilih hari, bulan, dan tahun</small>
             </div>
             
             <div>
@@ -167,11 +172,11 @@ include 'header.php';
             <div class="grid grid-cols-2 gap-2">
                 <div>
                 <label class="block text-xs font-medium mb-0.5">RT *</label>
-                <input type="text" name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-input" required></select>
                 </div>
                 <div>
                 <label class="block text-xs font-medium mb-0.5">RW *</label>
-                <input type="text" name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-input" required></select>
                 </div>
             </div>
             
@@ -241,8 +246,6 @@ include 'header.php';
   <?php include 'footer.php'; ?>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
 
   <script>
     // Fungsi untuk memuat data provinsi
@@ -398,34 +401,6 @@ include 'header.php';
       loadData();
       loadProvinsi(); // Load provinsi saat halaman dimuat
 
-      // Inisialisasi datepicker untuk tanggal lahir
-      window.tglLahirPicker = flatpickr("#tgl_lahir", {
-        dateFormat: "d-m-Y",
-        allowInput: false,
-        clickOpens: true,
-        maxDate: "today",
-        yearDropdown: true,
-        locale: {
-          firstDayOfWeek: 1,
-          weekdays: {
-            shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-            longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
-          },
-          months: {
-            shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
-            longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-          }
-        },
-        onChange: function(selectedDates, dateStr, instance) {
-          // Validasi tanggal tidak boleh di masa depan
-          if (selectedDates[0] > new Date()) {
-            alert('Tanggal lahir tidak boleh di masa depan');
-            instance.clear();
-            return;
-          }
-        }
-      });
-
       // Event handler untuk dropdown wilayah
       $('#propinsi').change(function() {
         const provinsi_id = $(this).val();
@@ -462,11 +437,6 @@ include 'header.php';
         $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-        
-        // Reset datepicker
-        if (window.tglLahirPicker) {
-          window.tglLahirPicker.clear();
-        }
         
         // Debug: Log sebelum menampilkan modal
         console.log('=== MODAL DEBUG START ===');
@@ -514,18 +484,29 @@ include 'header.php';
         }
       });
 
-      // Validasi real-time untuk NIK
-      $('#nik, #nikk').on('input', function() {
+      // Validasi real-time untuk tanggal lahir
+      $('#tgl_lahir').on('input', function() {
         const value = $(this).val();
-        const isValid = /^\d*$/.test(value);
         
-        if (!isValid) {
-          $(this).val(value.replace(/\D/g, ''));
+        // Hanya izinkan angka dan tanda strip
+        const cleanValue = value.replace(/[^\d-]/g, '');
+        if (cleanValue !== value) {
+          $(this).val(cleanValue);
         }
         
-        // Validasi panjang NIK
-        if (value.length === 16) {
-          $(this).removeClass('border-red-500').addClass('border-green-500');
+        // Validasi format DD-MM-YYYY
+        if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(value)) {
+          const parts = value.split('-');
+          const day = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          const year = parseInt(parts[2]);
+          
+          // Validasi tanggal
+          if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
+            $(this).removeClass('border-red-500').addClass('border-green-500');
+          } else {
+            $(this).removeClass('border-green-500').addClass('border-red-500');
+          }
         } else if (value.length > 0) {
           $(this).removeClass('border-green-500').addClass('border-red-500');
         } else {
@@ -651,16 +632,20 @@ include 'header.php';
         // Set nilai form (kecuali field wilayah)
         for (const key in data) {
           // Skip field wilayah karena akan dihandle secara terpisah
-          if (['propinsi', 'kota', 'kecamatan', 'kelurahan'].includes(key)) {
+          if (["propinsi", "kota", "kecamatan", "kelurahan"].includes(key)) {
             continue;
           }
           // Khusus untuk tanggal lahir, konversi ke format DD-MM-YYYY untuk input
-          if (key === 'tgl_lahir') {
+          if (key === "tgl_lahir") {
             $(`#${key}`).val(formatDateForDisplay(data[key]));
           } else {
             $(`#${key}`).val(data[key]);
           }
         }
+        // Set dropdown tanggal lahir
+        setDropdownTanggalLahir(formatDateForDisplay(data.tgl_lahir));
+        // Set dropdown RT/RW
+        setDropdownRTRW(data.rt, data.rw);
         
         // Set nama wilayah ke hidden input
         $('#propinsi_nama').val(data.propinsi || '');
@@ -710,37 +695,6 @@ include 'header.php';
         
         $('#formAction').val('update');
         $('#modal').removeClass('hidden').addClass('modal-show');
-        
-        // Reinisialisasi datepicker untuk edit
-        if (window.tglLahirPicker) {
-          window.tglLahirPicker.destroy();
-        }
-        window.tglLahirPicker = flatpickr("#tgl_lahir", {
-          dateFormat: "d-m-Y",
-          allowInput: false,
-          clickOpens: true,
-          maxDate: "today",
-          yearDropdown: true,
-          locale: {
-            firstDayOfWeek: 1,
-            weekdays: {
-              shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-              longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
-            },
-            months: {
-              shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
-              longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-            }
-          },
-          onChange: function(selectedDates, dateStr, instance) {
-            // Validasi tanggal tidak boleh di masa depan
-            if (selectedDates[0] > new Date()) {
-              alert('Tanggal lahir tidak boleh di masa depan');
-              instance.clear();
-              return;
-            }
-          }
-        });
         
         // Focus pada input pertama
         setTimeout(() => {
@@ -1219,5 +1173,89 @@ include 'header.php';
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
         }, 500);
       });
+
+      // Validasi real-time untuk NIK
+      $('#nik, #nikk').on('input', function() {
+        const value = $(this).val();
+        const isValid = /^\d*$/.test(value);
+        
+        if (!isValid) {
+          $(this).val(value.replace(/\D/g, ''));
+        }
+        
+        // Validasi panjang NIK
+        if (value.length === 16) {
+          $(this).removeClass('border-red-500').addClass('border-green-500');
+        } else if (value.length > 0) {
+          $(this).removeClass('border-green-500').addClass('border-red-500');
+        } else {
+          $(this).removeClass('border-red-500 border-green-500');
+        }
+      });
+
+      // --- Dropdown tanggal lahir ---
+      function isiDropdownTanggalLahir(selected) {
+        // Hari
+        let hari = '';
+        for (let i = 1; i <= 31; i++) hari += `<option value="${i.toString().padStart(2,'0')}"${selected && selected.hari==i.toString().padStart(2,'0')?' selected':''}>${i}</option>`;
+        $('#tgl_hari').html('<option value="">Hari</option>'+hari);
+        // Bulan
+        const bulanArr = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        let bulan = '';
+        for (let i = 1; i <= 12; i++) bulan += `<option value="${i.toString().padStart(2,'0')}"${selected && selected.bulan==i.toString().padStart(2,'0')?' selected':''}>${bulanArr[i-1]}</option>`;
+        $('#tgl_bulan').html('<option value="">Bulan</option>'+bulan);
+        // Tahun
+        let tahun = '';
+        const now = new Date().getFullYear();
+        for (let i = now; i >= 1900; i--) tahun += `<option value="${i}"${selected && selected.tahun==i?' selected':''}>${i}</option>`;
+        $('#tgl_tahun').html('<option value="">Tahun</option>'+tahun);
+      }
+      // Gabungkan ke hidden field
+      function updateTglLahirHidden() {
+        const h = $('#tgl_hari').val(), b = $('#tgl_bulan').val(), t = $('#tgl_tahun').val();
+        if(h && b && t) $('#tgl_lahir').val(`${h}-${b}-${t}`);
+        else $('#tgl_lahir').val('');
+      }
+      // Inisialisasi saat load
+      isiDropdownTanggalLahir();
+      $('#tgl_hari,#tgl_bulan,#tgl_tahun').on('change', updateTglLahirHidden);
+      // Saat buka modal tambah/reset
+      $('#btnTambah, #btnReset').on('click', function(){
+        isiDropdownTanggalLahir();
+        $('#tgl_lahir').val('');
+      });
+      // Saat edit data, isi dropdown sesuai tanggal
+      function setDropdownTanggalLahir(tgl) {
+        if(!tgl) { isiDropdownTanggalLahir(); return; }
+        const [h,b,t] = tgl.split('-');
+        isiDropdownTanggalLahir({hari:h, bulan:b, tahun:t});
+        $('#tgl_lahir').val(tgl);
+      }
+
+      // --- Dropdown RT dan RW ---
+      function isiDropdownRTRW(selectedRT, selectedRW) {
+        let opsi = '<option value="">Pilih</option>';
+        for (let i = 1; i <= 99; i++) {
+          const val = i.toString().padStart(2, '0');
+          opsi += `<option value="${val}"${selectedRT==val?' selected':''}>${val}</option>`;
+        }
+        $('#rt').html(opsi);
+        opsi = '<option value="">Pilih</option>';
+        for (let i = 1; i <= 99; i++) {
+          const val = i.toString().padStart(2, '0');
+          opsi += `<option value="${val}"${selectedRW==val?' selected':''}>${val}</option>`;
+        }
+        $('#rw').html(opsi);
+      }
+      // Inisialisasi saat load
+      isiDropdownRTRW();
+      // Saat tambah/reset
+      $('#btnTambah, #btnReset').on('click', function(){
+        isiDropdownRTRW();
+      });
+      // Saat edit data, isi RT/RW
+      function setDropdownRTRW(rt, rw) {
+        isiDropdownRTRW(rt, rw);
+      }
     });
   </script>
