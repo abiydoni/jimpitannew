@@ -891,6 +891,1020 @@ include 'header.php';
       });
     }
 
+    $(document).ready(function() {
+      loadData();
+      loadProvinsi(); // Load provinsi saat halaman dimuat
+
+      // Event handler untuk dropdown wilayah
+      $('#propinsi').change(function() {
+        const provinsi_id = $(this).val();
+        const propinsi_nama = getWilayahName('propinsi');
+        $('#propinsi_nama').val(propinsi_nama);
+        loadKota(provinsi_id);
+      });
+
+      $('#kota').change(function() {
+        const kota_id = $(this).val();
+        const kota_nama = getWilayahName('kota');
+        $('#kota_nama').val(kota_nama);
+        loadKecamatan(kota_id);
+      });
+
+      $('#kecamatan').change(function() {
+        const kecamatan_id = $(this).val();
+        const kecamatan_nama = getWilayahName('kecamatan');
+        $('#kecamatan_nama').val(kecamatan_nama);
+        loadKelurahan(kecamatan_id);
+      });
+
+      $('#kelurahan').change(function() {
+        const kelurahan_nama = getWilayahName('kelurahan');
+        $('#kelurahan_nama').val(kelurahan_nama);
+      });
+
+      $('#tambahBtn').click(() => {
+        console.log('=== TAMBAH BUTTON CLICKED ===');
+        console.log('Modal element exists:', $('#modal').length > 0);
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
+        $('#modalTitle').text('Tambah Warga');
+        $('#wargaForm')[0].reset();
+        $('#formAction').val('create');
+        $('#negara').val('Indonesia');
+        // Clear photo preview
+        $('#foto_preview').addClass('hidden');
+        $('#foto_file').val('');
+        // Reset dropdown wilayah
+        $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+        $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+        $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+        
+        // Show modal dengan cara yang sederhana
+        console.log('Showing modal...');
+        $('#modal').removeClass('hidden');
+        $('#modal').addClass('modal-show');
+        $('#modal').show();
+        
+        console.log('Modal should be visible now');
+        console.log('Modal display after show:', $('#modal').css('display'));
+        console.log('Modal classes after show:', $('#modal').attr('class'));
+        console.log('Modal visibility:', $('#modal').css('visibility'));
+        console.log('Modal opacity:', $('#modal').css('opacity'));
+        console.log('Modal z-index:', $('#modal').css('z-index'));
+        
+        // Focus pada input pertama
+        setTimeout(() => {
+          $('#nama').focus();
+        }, 200);
+      });
+
+      // Test modal button
+      $('#testModalBtn').click(() => {
+        console.log('=== TEST MODAL BUTTON CLICKED ===');
+        console.log('Modal element exists:', $('#modal').length > 0);
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
+        $('#modalTitle').text('Test Modal');
+        $('#wargaForm')[0].reset();
+        $('#formAction').val('create');
+        
+        // Show modal dengan cara yang sederhana
+        console.log('Showing modal...');
+        $('#modal').removeClass('hidden');
+        $('#modal').addClass('modal-show');
+        $('#modal').show();
+        
+        console.log('Modal should be visible now');
+        console.log('Modal display after show:', $('#modal').css('display'));
+        console.log('Modal classes after show:', $('#modal').attr('class'));
+        console.log('Modal visibility:', $('#modal').css('visibility'));
+        console.log('Modal opacity:', $('#modal').css('opacity'));
+        console.log('Modal z-index:', $('#modal').css('z-index'));
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          console.log('Auto hiding test modal...');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
+          console.log('Test modal hidden');
+        }, 5000);
+      });
+
+      $('#cancelBtn').click(() => {
+        console.log('=== CLOSING MODAL VIA CANCEL BUTTON ===');
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
+        $('#modal').hide();
+        $('#modal').removeClass('modal-show');
+        $('#modal').addClass('hidden');
+        
+        console.log('Modal hidden via cancel button');
+        console.log('Modal display after hide:', $('#modal').css('display'));
+        console.log('Modal classes after hide:', $('#modal').attr('class'));
+      });
+
+      // Tutup modal ketika klik di luar modal
+      $('#modal').click(function(e) {
+        if (e.target === this) {
+          console.log('=== CLOSING MODAL VIA OVERLAY CLICK ===');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
+          console.log('Modal hidden via overlay click');
+        }
+      });
+
+      // Tutup modal dengan tombol ESC
+      $(document).keydown(function(e) {
+        if (e.key === 'Escape' && $('#modal').is(':visible')) {
+          console.log('=== CLOSING MODAL VIA ESC KEY ===');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
+          console.log('Modal hidden via ESC key');
+        }
+      });
+
+      // Validasi real-time untuk tanggal lahir
+      $('#tgl_lahir').on('input', function() {
+        const value = $(this).val();
+        
+        // Hanya izinkan angka dan tanda strip
+        const cleanValue = value.replace(/[^\d-]/g, '');
+        if (cleanValue !== value) {
+          $(this).val(cleanValue);
+        }
+        
+        // Validasi format DD-MM-YYYY
+        if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(value)) {
+          const parts = value.split('-');
+          const day = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          const year = parseInt(parts[2]);
+          
+          // Validasi tanggal
+          if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
+            $(this).removeClass('border-red-500').addClass('border-green-500');
+          } else {
+            $(this).removeClass('border-green-500').addClass('border-red-500');
+          }
+        } else if (value.length > 0) {
+          $(this).removeClass('border-green-500').addClass('border-red-500');
+        } else {
+          $(this).removeClass('border-red-500 border-green-500');
+        }
+      });
+
+      // Submit form dengan Enter pada input terakhir
+      $('#negara').keydown(function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          $('#wargaForm').submit();
+        }
+      });
+
+      // Focus pada input pertama saat modal dibuka
+      $('#modal').on('shown', function() {
+        $('#nama').focus();
+      });
+
+      $('#wargaForm').submit(function(e) {
+        e.preventDefault();
+        
+        // Ambil nama wilayah dari hidden input
+        const propinsi_nama = $('#propinsi_nama').val();
+        const kota_nama = $('#kota_nama').val();
+        const kecamatan_nama = $('#kecamatan_nama').val();
+        const kelurahan_nama = $('#kelurahan_nama').val();
+        
+        // Validasi wilayah
+        if (!propinsi_nama || !kota_nama || !kecamatan_nama || !kelurahan_nama) {
+          alert('Silakan pilih wilayah lengkap (Provinsi, Kota, Kecamatan, Kelurahan)');
+          return;
+        }
+        
+        // Disable tombol submit dan tampilkan loading
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.text();
+        submitBtn.prop('disabled', true).text('Menyimpan...');
+        
+        // Buat object data dengan nama wilayah, bukan ID
+        const formDataObj = {};
+        $(this).serializeArray().forEach(item => {
+          formDataObj[item.name] = item.value;
+        });
+        
+        // Ganti nilai ID wilayah dengan nama wilayah
+        formDataObj.propinsi = propinsi_nama;
+        formDataObj.kota = kota_nama;
+        formDataObj.kecamatan = kecamatan_nama;
+        formDataObj.kelurahan = kelurahan_nama;
+        
+        // Konversi tanggal lahir dari DD-MM-YYYY ke YYYY-MM-DD
+        if (formDataObj.tgl_lahir) {
+          formDataObj.tgl_lahir = processExcelDate(formDataObj.tgl_lahir);
+        }
+        
+        $.post('api/warga_action.php', formDataObj, function(res) {
+          $('#modal').removeClass('modal-show').addClass('hidden');
+          loadData();
+          if (res === 'success' || res === 'updated') {
+            alert('Data berhasil disimpan!');
+          } else {
+            alert('Response: ' + res);
+          }
+        }).fail(function(xhr, status, error) {
+          console.error('Submit Error:', status, error);
+          let errorMsg = 'Error saving data';
+          if (xhr.responseText) {
+            try {
+              const errorData = JSON.parse(xhr.responseText);
+              errorMsg = errorData.error || errorMsg;
+            } catch (e) {
+              errorMsg = xhr.responseText;
+            }
+          }
+          alert('Error: ' + errorMsg);
+        }).always(function() {
+          // Re-enable tombol submit
+          submitBtn.prop('disabled', false).text(originalText);
+        });
+      });
+
+      // Fungsi untuk menunggu dropdown ter-load
+      function waitForDropdown(selector, maxWait = 5000) {
+        return new Promise((resolve, reject) => {
+          const startTime = Date.now();
+          const checkInterval = setInterval(() => {
+            const element = $(selector);
+            const options = element.find('option');
+            
+            // Cek apakah dropdown sudah ter-load (bukan loading state)
+            if (options.length > 1 && !element.prop('disabled') && 
+                !options.first().text().includes('Loading') && 
+                !options.first().text().includes('Error')) {
+              clearInterval(checkInterval);
+              resolve(element);
+            }
+            
+            // Timeout setelah maxWait ms
+            if (Date.now() - startTime > maxWait) {
+              clearInterval(checkInterval);
+              reject(new Error('Timeout waiting for dropdown'));
+            }
+          }, 100);
+        });
+      }
+
+      // Fungsi untuk set nilai dropdown berdasarkan nama
+      function setDropdownValue(selector, name) {
+        if (!name) return false;
+        
+        const dropdown = $(selector);
+        console.log(`Setting dropdown ${selector} to value: ${name}`);
+        
+        // Method 1: Try to find by data-name attribute
+        let option = dropdown.find(`option[data-name="${name}"]`);
+        if (option.length > 0) {
+          dropdown.val(option.val());
+          console.log(`Found by data-name: ${name}`);
+          return true;
+        }
+        
+        // Method 2: Try to find by exact text match
+        option = dropdown.find(`option:contains("${name}")`).filter(function() {
+          return $(this).text().trim() === name;
+        });
+        if (option.length > 0) {
+          dropdown.val(option.val());
+          console.log(`Found by exact text: ${name}`);
+          return true;
+        }
+        
+        // Method 3: Try to find by partial text match
+        option = dropdown.find(`option:contains("${name}")`);
+        if (option.length > 0) {
+          dropdown.val(option.val());
+          console.log(`Found by partial text: ${name}`);
+          return true;
+        }
+        
+        // Method 4: Try to find by value (if name is actually a value)
+        option = dropdown.find(`option[value="${name}"]`);
+        if (option.length > 0) {
+          dropdown.val(name);
+          console.log(`Found by value: ${name}`);
+          return true;
+        }
+        
+        console.log(`Could not find option for: ${name}`);
+        return false;
+      }
+
+      $(document).on('click', '.editBtn', async function() {
+        console.log('=== EDIT BUTTON CLICKED ===');
+        console.log('Edit button clicked');
+        try {
+          // Decode the encoded JSON data
+          const encodedData = $(this).data('id');
+          console.log('Encoded data:', encodedData);
+          if (!encodedData) {
+            throw new Error('Data tidak ditemukan untuk diedit');
+          }
+          const data = JSON.parse(decodeURIComponent(encodedData));
+          console.log('Decoded edit data:', data);
+          if (!data || typeof data !== 'object') {
+            throw new Error('Data tidak valid untuk diedit');
+          }
+          $('#modalTitle').text('Edit Warga');
+          // Set id_warga for update
+          $('#id_warga').val(data.id_warga || '');
+          // Populate all form fields with detailed logging
+          console.log('Setting form fields...');
+          // Data Pribadi
+          $('#nama').val(data.nama || '');
+          console.log('Set nama:', data.nama);
+          $('#nik').val(data.nik || '');
+          console.log('Set nik:', data.nik);
+          $('#nikk').val(data.nikk || '');
+          console.log('Set nikk:', data.nikk);
+          $('#hubungan').val(data.hubungan || '');
+          console.log('Set hubungan:', data.hubungan);
+          $('#jenkel').val(data.jenkel || '');
+          console.log('Set jenkel:', data.jenkel);
+          $('#tpt_lahir').val(data.tpt_lahir || '');
+          console.log('Set tpt_lahir:', data.tpt_lahir);
+          $('#alamat').val(data.alamat || '');
+          console.log('Set alamat:', data.alamat);
+          $('#negara').val(data.negara || 'Indonesia');
+          console.log('Set negara:', data.negara);
+          $('#agama').val(data.agama || '');
+          console.log('Set agama:', data.agama);
+          $('#status').val(data.status || '');
+          console.log('Set status:', data.status);
+          $('#pekerjaan').val(data.pekerjaan || '');
+          console.log('Set pekerjaan:', data.pekerjaan);
+          $('#hp').val(data.hp || '');
+          console.log('Set hp:', data.hp);
+          // Set tanggal lahir if available
+          if (data.tgl_lahir) {
+            const formattedDate = formatDateForDisplay(data.tgl_lahir);
+            $('#tgl_lahir').val(formattedDate);
+            console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
+            // Set dropdown tanggal lahir
+            setDropdownTanggalLahir(formattedDate);
+          }
+          // Set RT/RW if available
+          if (data.rt || data.rw) {
+            // Convert single digits to 3-digit padded format
+            const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
+            const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
+            setDropdownRTRW(rt, rw);
+            console.log('Set RT/RW:', rt, rw);
+          }
+          // Set foto if available
+          if (data.foto) {
+            $('#foto').val(data.foto);
+            $('#foto_preview_img').attr('src', data.foto);
+            $('#foto_preview').removeClass('hidden');
+            console.log('Set foto:', data.foto);
+          } else {
+            $('#foto_preview').addClass('hidden');
+          }
+          // Set dropdown wilayah secara asinkron
+          await setWilayahDropdowns(data);
+          console.log('Set wilayah:', {
+            propinsi: data.propinsi,
+            kota: data.kota,
+            kecamatan: data.kecamatan,
+            kelurahan: data.kelurahan
+          });
+          $('#formAction').val('update');
+          console.log('Set formAction to update');
+          console.log('=== SHOWING MODAL ===');
+          // Show modal using the same method as tambah button
+          console.log('Modal element exists:', $('#modal').length > 0);
+          console.log('Modal current display:', $('#modal').css('display'));
+          console.log('Modal current classes:', $('#modal').attr('class'));
+          console.log('Showing modal...');
+          $('#modal').removeClass('hidden');
+          $('#modal').addClass('modal-show');
+          $('#modal').show();
+          console.log('Modal should be visible now');
+          console.log('Modal display after show:', $('#modal').css('display'));
+          console.log('Modal classes after show:', $('#modal').attr('class'));
+          console.log('Modal visibility:', $('#modal').css('visibility'));
+          console.log('Modal opacity:', $('#modal').css('opacity'));
+          console.log('Modal z-index:', $('#modal').css('z-index'));
+          // Focus pada input pertama
+          setTimeout(() => {
+            $('#nama').focus();
+          }, 200);
+        } catch (error) {
+          console.error('Error in edit modal:', error);
+          alert('Terjadi kesalahan saat membuka modal edit: ' + error.message);
+        }
+      });
+
+      $(document).on('click', '.deleteBtn', function() {
+        if (confirm('Yakin ingin menghapus data ini?')) {
+          $.post('api/warga_action.php', { action: 'delete', id_warga: $(this).data('id') }, function(res) {
+            loadData();
+            if (res === 'deleted') {
+              alert('Data berhasil dihapus!');
+            } else {
+              alert('Response: ' + res);
+            }
+          }).fail(function(xhr, status, error) {
+            console.error('Delete Error:', status, error);
+            alert('Error deleting data: ' + error);
+          });
+        }
+      });
+
+      // Export ke Excel (semua field, dengan styling, tanpa id_warga dan tgl_warga)
+      $('#exportBtn').click(function() {
+        // Tampilkan loading untuk export
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang mempersiapkan data untuk export...');
+        $('#progressBar').css('width', '30%');
+        $('#progressText').text('30% selesai');
+        
+        $.post('api/warga_action.php', { action: 'read' }, function(data) {
+          $('#loadingText').text('Sedang memproses data...');
+          $('#progressBar').css('width', '60%');
+          $('#progressText').text('60% selesai');
+          
+          try {
+            const warga = JSON.parse(data);
+            if (!warga.length) {
+              $('#loadingModal').removeClass('modal-show').addClass('hidden');
+              alert('Tidak ada data untuk diexport!');
+              return;
+            }
+            
+            $('#loadingText').text('Sedang membuat file Excel...');
+            $('#progressBar').css('width', '80%');
+            $('#progressText').text('80% selesai');
+            
+            // Header hanya field wilayah tanpa _nama
+            const header = [
+              'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
+              'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
+            ];
+            const rows = [header];
+            warga.forEach(row => {
+              rows.push(header.map(h => row[h] || ''));
+            });
+            const ws = XLSX.utils.aoa_to_sheet(rows);
+            // Styling header: bold & background color
+            header.forEach((h, idx) => {
+              const cell = XLSX.utils.encode_cell({ r:0, c:idx });
+              if (!ws[cell]) return;
+              ws[cell].s = {
+                font: { bold: true },
+                fill: { patternType: 'solid', fgColor: { rgb: 'D1E7DD' } },
+                alignment: { horizontal: 'center' },
+                border: {
+                  top: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  bottom: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  left: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                  right: { style: 'thin', color: { rgb: 'AAAAAA' } }
+                }
+              };
+            });
+            // Styling border untuk semua cell data
+            for (let r = 1; r < rows.length; r++) {
+              for (let c = 0; c < header.length; c++) {
+                const cell = XLSX.utils.encode_cell({ r, c });
+                if (!ws[cell]) continue;
+                ws[cell].s = {
+                  border: {
+                    top: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    bottom: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    left: { style: 'thin', color: { rgb: 'AAAAAA' } },
+                    right: { style: 'thin', color: { rgb: 'AAAAAA' } }
+                  }
+                };
+              }
+            }
+            // Set auto width
+            const wscols = header.map(() => ({ wch: 18 }));
+            ws['!cols'] = wscols;
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'DataWarga');
+            
+            $('#loadingText').text('Sedang mengunduh file...');
+            $('#progressBar').css('width', '100%');
+            $('#progressText').text('100% selesai');
+            
+            // Tunggu sebentar sebelum download
+            setTimeout(() => {
+              XLSX.writeFile(wb, 'data_warga.xlsx');
+              $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            }, 500);
+            
+          } catch (e) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            alert('Gagal export: ' + e);
+          }
+        }).fail(function(xhr, status, error) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Error loading data: ' + error);
+        });
+      });
+
+      // Fungsi untuk memproses tanggal dari Excel
+      function processExcelDate(dateValue) {
+        if (!dateValue) return '';
+        
+        console.log(`Processing date: "${dateValue}" (type: ${typeof dateValue})`);
+        
+        // Jika sudah dalam format YYYY-MM-DD, return as is
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+          console.log(`Already in YYYY-MM-DD format: ${dateValue}`);
+          return dateValue;
+        }
+        
+        // Jika berupa number (Excel date serial number)
+        if (typeof dateValue === 'number') {
+          console.log(`Excel serial number: ${dateValue}`);
+          // Excel date serial number dimulai dari 1 Januari 1900
+          const excelEpoch = new Date(1900, 0, 1);
+          const date = new Date(excelEpoch.getTime() + (dateValue - 1) * 24 * 60 * 60 * 1000);
+          const result = date.toISOString().split('T')[0];
+          console.log(`Converted from serial number: ${result}`);
+          return result;
+        }
+        
+        // Jika berupa string dengan format lain, coba parse
+        if (typeof dateValue === 'string') {
+          // Prioritas untuk format DD-MM-YYYY (format yang diinginkan user)
+          if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateValue)) {
+            console.log(`DD-MM-YYYY format detected: ${dateValue}`);
+            const parts = dateValue.split('-');
+            const day = parseInt(parts[0]);
+            const month = parseInt(parts[1]);
+            const year = parseInt(parts[2]);
+            
+            // Validasi tanggal
+            if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
+              const result = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+              console.log(`Converted DD-MM-YYYY to YYYY-MM-DD: ${result}`);
+              return result;
+            } else {
+              console.log(`Invalid date parts: day=${day}, month=${month}, year=${year}`);
+            }
+          }
+          
+          // Coba parse dengan Date constructor untuk format lain
+          const date = new Date(dateValue);
+          if (!isNaN(date.getTime())) {
+            const result = date.toISOString().split('T')[0];
+            console.log(`Parsed with Date constructor: ${dateValue} -> ${result}`);
+            return result;
+          }
+          
+          // Format lain sebagai fallback
+          const dateFormats = [
+            /^\d{1,2}\/\d{1,2}\/\d{4}$/, // DD/MM/YYYY atau MM/DD/YYYY
+            /^\d{4}\/\d{1,2}\/\d{1,2}$/, // YYYY/MM/DD
+            /^\d{1,2}\/\d{1,2}\/\d{2}$/, // DD/MM/YY atau MM/DD/YY
+            /^\d{1,2}-\d{1,2}-\d{2}$/ // DD-MM-YY atau MM-DD-YY
+          ];
+          
+          for (let format of dateFormats) {
+            if (format.test(dateValue)) {
+              const date = new Date(dateValue);
+              if (!isNaN(date.getTime())) {
+                const result = date.toISOString().split('T')[0];
+                console.log(`Matched format ${format}: ${dateValue} -> ${result}`);
+                return result;
+              }
+            }
+          }
+        }
+        
+        // Jika tidak bisa diparse, return empty string
+        console.log(`Could not parse date: ${dateValue}`);
+        return '';
+      }
+
+      // Import dari Excel (tanpa id_warga dan tgl_warga)
+      $('#importInput').change(function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Tampilkan modal loading
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang membaca file Excel...');
+        $('#progressBar').css('width', '10%');
+        $('#progressText').text('10% selesai');
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          $('#loadingText').text('Sedang memproses data...');
+          $('#progressBar').css('width', '20%');
+          $('#progressText').text('20% selesai');
+          
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          
+          if (json.length < 2) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            alert('File kosong atau tidak ada data!');
+            return;
+          }
+          
+          $('#loadingText').text('Sedang memvalidasi data...');
+          $('#progressBar').css('width', '30%');
+          $('#progressText').text('30% selesai');
+          
+          const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
+          console.log('Header yang diproses:', header);
+          console.log('Posisi field tgl_lahir:', header.indexOf('tgl_lahir'));
+          
+          let dataValid = [];
+          let errorList = [];
+          let nikSet = new Set();
+          
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row.length) continue;
+            
+            // Debug: tampilkan data mentah dari Excel
+            console.log(`Baris ${i+1} data mentah:`, row);
+            
+            const dataWarga = { action: 'create' };
+            header.forEach((h, idx) => {
+              // Khusus untuk field tanggal lahir, gunakan fungsi processExcelDate
+              if (h === 'tgl_lahir') {
+                const originalValue = row[idx];
+                const processedValue = processExcelDate(row[idx]);
+                console.log(`Baris ${i+1}, Tanggal lahir: Original="${originalValue}" (${typeof originalValue}), Processed="${processedValue}"`);
+                dataWarga[h] = processedValue;
+              } else {
+                dataWarga[h] = row[idx] || '';
+              }
+            });
+            // Validasi format NIK
+            if (!/^\d{16}$/.test(dataWarga['nik'] || '')) {
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'NIK harus 16 digit angka' });
+              continue;
+            }
+            // Validasi duplikat NIK di file
+            if (nikSet.has(dataWarga['nik'])) {
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'NIK duplikat di file' });
+              continue;
+            }
+            // Validasi tanggal lahir
+            if (dataWarga['tgl_lahir'] && !/^\d{4}-\d{2}-\d{2}$/.test(dataWarga['tgl_lahir'])) {
+              console.log(`Error tanggal baris ${i+1}: "${dataWarga['tgl_lahir']}" tidak sesuai format YYYY-MM-DD`);
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'Format tanggal lahir tidak valid (harus DD-MM-YYYY di Excel)' });
+              continue;
+            }
+            console.log(`Baris ${i+1}: Tanggal lahir valid = "${dataWarga['tgl_lahir']}"`);
+            nikSet.add(dataWarga['nik']);
+            dataValid.push(dataWarga);
+          }
+          
+          // Update progress
+          $('#loadingText').text('Sedang mengecek database...');
+          $('#progressBar').css('width', '50%');
+          $('#progressText').text('50% selesai');
+          
+          // Tampilkan rekap error sebelum cek ke database
+          let info = 'Data valid: ' + dataValid.length + ', Data error: ' + errorList.length;
+          if (errorList.length) {
+            info += '\n\nDetail error:';
+            errorList.forEach(e => {
+              info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+            });
+          }
+          
+          // Cek NIK ke database jika tidak ada error di file
+          if (!errorList.length) {
+            // Ambil semua NIK yang valid
+            const nikList = dataValid.map(d => d.nik);
+            $.ajax({
+              url: 'api/warga_action.php',
+              type: 'POST',
+              data: { action: 'cek_nik', nik_list: JSON.stringify(nikList) },
+              dataType: 'json',
+              async: false,
+              success: function(res) {
+                if (res && res.length) {
+                  // Tandai baris yang NIK-nya sudah ada di database
+                  res.forEach(db => {
+                    dataValid.forEach((d, idx) => {
+                      if (d.nik === db.nik) {
+                        errorList.push({ baris: idx+2, nama: d.nama || '-', nik: d.nik || '-', error: 'NIK sudah terdaftar di database (' + (db.nama || '-') + ')' });
+                      }
+                    });
+                  });
+                }
+              }
+            });
+          }
+          
+          // Jika ada error (baik dari file atau database), tampilkan dan download report error, hentikan proses
+          if (errorList.length) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            let infoErr = 'Import dibatalkan! Data error: ' + errorList.length + '\n\nDetail error:';
+            errorList.forEach(e => {
+              infoErr += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+            });
+            alert(infoErr);
+            // Otomatis download report error
+            let txt = 'Report Error Import Data Warga\n';
+            txt += '==============================\n';
+            errorList.forEach(e => {
+              txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+            });
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'report_error_import_warga.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+          }
+          
+          // Jika tidak ada error, lanjut kirim ke backend
+          $('#loadingText').text('Sedang menyimpan data ke database...');
+          $('#progressBar').css('width', '70%').addClass('progress-bar-animated');
+          $('#progressText').text('70% selesai');
+          
+          let sukses = 0, gagal = 0;
+          let errorBackend = [];
+          const totalData = dataValid.length;
+          
+          for (let i = 0; i < dataValid.length; i++) {
+            // Update progress untuk setiap data yang diproses
+            const progress = 70 + Math.round((i / totalData) * 25);
+            $('#progressBar').css('width', progress + '%');
+            $('#progressText').text(progress + '% selesai');
+            $('#loadingText').text(`Menyimpan data ${i + 1} dari ${totalData}...`);
+            
+            $.ajax({
+              url: 'api/warga_action.php',
+              type: 'POST',
+              data: dataValid[i],
+              async: false,
+              success: function(res) { sukses++; },
+              error: function(xhr) {
+                gagal++;
+                let msg = 'Gagal import';
+                try {
+                  const res = JSON.parse(xhr.responseText);
+                  msg = res.error || xhr.responseText;
+                } catch (e) {
+                  msg = xhr.responseText;
+                }
+                errorBackend.push({
+                  baris: i+2, // +2 karena header dan index 0
+                  nama: dataValid[i]['nama'] || '-',
+                  nik: dataValid[i]['nik'] || '-',
+                  error: msg
+                });
+              }
+            });
+          }
+          
+          $('#loadingText').text('Menyelesaikan proses...');
+          $('#progressBar').css('width', '95%').removeClass('progress-bar-animated');
+          $('#progressText').text('95% selesai');
+          
+          loadData();
+          
+          $('#loadingText').text('Selesai!');
+          $('#progressBar').css('width', '100%');
+          $('#progressText').text('100% selesai');
+          
+          // Tunggu sebentar sebelum menutup modal
+          setTimeout(() => {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            
+            let info2 = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
+            if (errorBackend.length) {
+              info2 += '\n\nDetail error:';
+              errorBackend.forEach(e => {
+                info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+              });
+              alert(info2);
+              // Otomatis download report error backend
+              let txt = 'Report Error Import Data Warga (Backend)\n';
+              txt += '==============================\n';
+              errorBackend.forEach(e => {
+                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+              });
+              const blob = new Blob([txt], { type: 'text/plain' });
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'report_error_import_warga.txt';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            } else {
+              alert(info2);
+            }
+          }, 1000);
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      // Download template Excel
+      $('#downloadTemplateBtn').click(function() {
+        // Tampilkan loading untuk download template
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang membuat template Excel...');
+        $('#progressBar').css('width', '50%');
+        $('#progressText').text('50% selesai');
+        
+        // Header hanya field wilayah tanpa _nama
+        const header = [
+          'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
+          'kelurahan', 'kecamatan', 'kota', 'propinsi', 'negara', 'agama', 'status', 'pekerjaan', 'foto', 'hp'
+        ];
+        // Contoh data samaran
+        const contoh = [
+          'Siti Mawar', '3210987654321098', '3210123456789012', 'Istri', 'P', 'Salatiga', '12-05-1992', 'Jl. Kenanga No. 5', '03', '04',
+          'Kelurahan Melati', 'Kecamatan Sukajadi', 'Kota Salatiga', 'Jawa Tengah', 'Indonesia', 'Islam', 'Kawin', 'Ibu Rumah Tangga', '', '082112223333'
+        ];
+        const rows = [header, contoh];
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        // Styling header: bold & background color
+        header.forEach((h, idx) => {
+          const cell = XLSX.utils.encode_cell({ r:0, c:idx });
+          if (!ws[cell]) return;
+          ws[cell].s = {
+            font: { bold: true },
+            fill: { patternType: 'solid', fgColor: { rgb: 'D1E7DD' } },
+            alignment: { horizontal: 'center' }
+          };
+        });
+        // Set auto width
+        const wscols = header.map(() => ({ wch: 18 }));
+        ws['!cols'] = wscols;
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'TemplateWarga');
+        
+        $('#loadingText').text('Sedang mengunduh template...');
+        $('#progressBar').css('width', '100%');
+        $('#progressText').text('100% selesai');
+        
+        // Tunggu sebentar sebelum download
+        setTimeout(() => {
+          XLSX.writeFile(wb, 'template_warga.xlsx');
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+        }, 500);
+      });
+
+      // Validasi real-time untuk NIK
+      $('#nik, #nikk').on('input', function() {
+        const value = $(this).val();
+        const isValid = /^\d*$/.test(value);
+        
+        if (!isValid) {
+          $(this).val(value.replace(/\D/g, ''));
+        }
+        
+        // Validasi panjang NIK
+        if (value.length === 16) {
+          $(this).removeClass('border-red-500').addClass('border-green-500');
+        } else if (value.length > 0) {
+          $(this).removeClass('border-green-500').addClass('border-red-500');
+        } else {
+          $(this).removeClass('border-red-500 border-green-500');
+        }
+      });
+
+      // Photo preview functionality
+      $('#foto_file').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+          // Validate file size (2MB)
+          if (file.size > 2 * 1024 * 1024) {
+            alert('File terlalu besar. Maksimal 2MB.');
+            this.value = '';
+            return;
+          }
+          
+          // Validate file type
+          if (!file.type.match('image.*')) {
+            alert('File harus berupa gambar.');
+            this.value = '';
+            return;
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $('#foto_preview_img').attr('src', e.target.result);
+            $('#foto_preview').removeClass('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          $('#foto_preview').addClass('hidden');
+        }
+      });
+
+      // --- Dropdown tanggal lahir ---
+      function isiDropdownTanggalLahir(selected) {
+        // Hari
+        let hari = '';
+        for (let i = 1; i <= 31; i++) hari += `<option value="${i.toString().padStart(2,'0')}"${selected && selected.hari==i.toString().padStart(2,'0')?' selected':''}>${i}</option>`;
+        $('#tgl_hari').html('<option value="">Hari</option>'+hari);
+        // Bulan
+        const bulanArr = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        let bulan = '';
+        for (let i = 1; i <= 12; i++) bulan += `<option value="${i.toString().padStart(2,'0')}"${selected && selected.bulan==i.toString().padStart(2,'0')?' selected':''}>${bulanArr[i-1]}</option>`;
+        $('#tgl_bulan').html('<option value="">Bulan</option>'+bulan);
+        // Tahun
+        let tahun = '';
+        const now = new Date().getFullYear();
+        for (let i = now; i >= 1900; i--) tahun += `<option value="${i}"${selected && selected.tahun==i?' selected':''}>${i}</option>`;
+        $('#tgl_tahun').html('<option value="">Tahun</option>'+tahun);
+      }
+      // Gabungkan ke hidden field
+      function updateTglLahirHidden() {
+        const h = $('#tgl_hari').val(), b = $('#tgl_bulan').val(), t = $('#tgl_tahun').val();
+        if(h && b && t) $('#tgl_lahir').val(`${h}-${b}-${t}`);
+        else $('#tgl_lahir').val('');
+      }
+      // Inisialisasi saat load
+      isiDropdownTanggalLahir();
+      $('#tgl_hari,#tgl_bulan,#tgl_tahun').on('change', updateTglLahirHidden);
+      // Saat buka modal tambah/reset
+      $('#btnTambah, #btnReset').on('click', function(){
+        isiDropdownTanggalLahir();
+        $('#tgl_lahir').val('');
+      });
+      // Saat edit data, isi dropdown sesuai tanggal
+      function setDropdownTanggalLahir(tgl) {
+        if(!tgl) { isiDropdownTanggalLahir(); return; }
+        const [h,b,t] = tgl.split('-');
+        isiDropdownTanggalLahir({hari:h, bulan:b, tahun:t});
+        $('#tgl_lahir').val(tgl);
+      }
+
+      // --- Dropdown RT dan RW ---
+      function isiDropdownRTRW(selectedRT, selectedRW) {
+        let opsi = '<option value="">Pilih</option>';
+        for (let i = 1; i <= 999; i++) {
+          const val = i.toString().padStart(3, '0');
+          opsi += `<option value="${val}"${selectedRT==val?' selected':''}>${val}</option>`;
+        }
+        $('#rt').html(opsi);
+        opsi = '<option value="">Pilih</option>';
+        for (let i = 1; i <= 999; i++) {
+          const val = i.toString().padStart(3, '0');
+          opsi += `<option value="${val}"${selectedRW==val?' selected':''}>${val}</option>`;
+        }
+        $('#rw').html(opsi);
+      }
+      // Inisialisasi saat load
+      isiDropdownRTRW();
+      // Saat tambah/reset
+      $('#btnTambah, #btnReset').on('click', function(){
+        isiDropdownRTRW();
+      });
+      // Saat edit data, isi RT/RW
+      function setDropdownRTRW(rt, rw) {
+        isiDropdownRTRW(rt, rw);
+        if (rt) $('#rt').val(rt);
+        if (rw) $('#rw').val(rw);
+      }
+
+      // Panggil setDropdownRTRW(data.rt, data.rw) di bagian edit data
+      
+      // Event handler untuk modal biodata dan KK
+      $('#modalBiodata, #modalKK').click(function(e) {
+        if (e.target === this) {
+          $(this).removeClass('modal-show').addClass('hidden');
+        }
+      });
+      
+      // Tutup modal dengan tombol ESC
+      $(document).keydown(function(e) {
+        if (e.key === 'Escape') {
+          if (!$('#modalBiodata').hasClass('hidden')) {
+            closeModalBiodata();
+          }
+          if (!$('#modalKK').hasClass('hidden')) {
+            closeModalKK();
+          }
+        }
+      });
+    });
+
     // Test function untuk debug modal
     window.testModal = function() {
       console.log('Testing modal display...');
