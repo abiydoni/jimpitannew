@@ -18,7 +18,7 @@ include 'header.php';
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
-            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="py-2 px-6 w-10">No</th>
@@ -231,10 +231,6 @@ include 'header.php';
 <!-- Modal Biodata Warga -->
 <div id="modalBiodata" class="modal-overlay hidden">
   <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-screen overflow-y-auto">
-    <div class="flex justify-between items-center px-4 py-3 border-b">
-      <button onclick="closeModalBiodata()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
-    </div>
-    
     <div id="biodataContent" class="px-4 py-3">
       <!-- Content akan diisi oleh JavaScript -->
     </div>
@@ -244,10 +240,6 @@ include 'header.php';
 <!-- Modal Biodata KK -->
 <div id="modalKK" class="modal-overlay hidden">
   <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-5xl max-h-screen overflow-y-auto">
-    <div class="flex justify-between items-center px-4 py-3 border-b">
-      <button onclick="closeModalKK()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
-    </div>
-    
     <div id="kkContent" class="px-4 py-3">
       <!-- Content akan diisi oleh JavaScript -->
     </div>
@@ -507,6 +499,7 @@ include 'header.php';
             <button onclick="printBiodata()" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
+            <button onclick="closeModalBiodata()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
           </div>
           
           <div id="biodataPrintArea">
@@ -639,6 +632,7 @@ include 'header.php';
             <button onclick="printKK()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
+            <button onclick="closeModalKK()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
           </div>
           
           <div id="kkPrintArea">
@@ -695,8 +689,8 @@ include 'header.php';
               <!-- Daftar Anggota KK -->
               <div>
                 <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
-                <div class="overflow-x-auto">
-                  <table id="example" class="w-full border-collapse border border-gray-300">
+                <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
+                  <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                     <thead>
                       <tr class="bg-gray-100">
                         <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
