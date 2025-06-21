@@ -19,6 +19,7 @@ include 'header.php';
                 <button id="testEditBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit</button>
                 <button id="testEditModalBtn" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit Modal</button>
                 <button id="verifyDataBtn" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-2">Verify Data</button>
+                <button id="checkDropdownBtn" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded ml-2">Check Dropdown</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -1153,11 +1154,46 @@ include 'header.php';
 
       // Fungsi untuk set nilai dropdown berdasarkan nama
       function setDropdownValue(selector, name) {
-        const option = $(`${selector} option[data-name="${name}"]`);
+        if (!name) return false;
+        
+        const dropdown = $(selector);
+        console.log(`Setting dropdown ${selector} to value: ${name}`);
+        
+        // Method 1: Try to find by data-name attribute
+        let option = dropdown.find(`option[data-name="${name}"]`);
         if (option.length > 0) {
-          $(selector).val(option.val());
+          dropdown.val(option.val());
+          console.log(`Found by data-name: ${name}`);
           return true;
         }
+        
+        // Method 2: Try to find by exact text match
+        option = dropdown.find(`option:contains("${name}")`).filter(function() {
+          return $(this).text().trim() === name;
+        });
+        if (option.length > 0) {
+          dropdown.val(option.val());
+          console.log(`Found by exact text: ${name}`);
+          return true;
+        }
+        
+        // Method 3: Try to find by partial text match
+        option = dropdown.find(`option:contains("${name}")`);
+        if (option.length > 0) {
+          dropdown.val(option.val());
+          console.log(`Found by partial text: ${name}`);
+          return true;
+        }
+        
+        // Method 4: Try to find by value (if name is actually a value)
+        option = dropdown.find(`option[value="${name}"]`);
+        if (option.length > 0) {
+          dropdown.val(name);
+          console.log(`Found by value: ${name}`);
+          return true;
+        }
+        
+        console.log(`Could not find option for: ${name}`);
         return false;
       }
 
@@ -1231,17 +1267,18 @@ include 'header.php';
             const formattedDate = formatDateForDisplay(data.tgl_lahir);
             $('#tgl_lahir').val(formattedDate);
             console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
+            
+            // Set dropdown tanggal lahir
+            setDropdownTanggalLahir(formattedDate);
           }
           
           // Set RT/RW if available
-          if (data.rt) {
-            $('#rt').val(data.rt);
-            console.log('Set rt:', data.rt);
-          }
-          
-          if (data.rw) {
-            $('#rw').val(data.rw);
-            console.log('Set rw:', data.rw);
+          if (data.rt || data.rw) {
+            // Convert single digits to 3-digit padded format
+            const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
+            const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
+            setDropdownRTRW(rt, rw);
+            console.log('Set RT/RW:', rt, rw);
           }
           
           // Set nama wilayah ke hidden input
@@ -1264,6 +1301,65 @@ include 'header.php';
           
           $('#formAction').val('update');
           console.log('Set formAction to update');
+          
+          // Load and set wilayah dropdowns
+          console.log('Loading wilayah dropdowns...');
+          if (data.propinsi) {
+            try {
+              console.log('Setting provinsi:', data.propinsi);
+              // Pastikan provinsi sudah ter-load
+              await waitForDropdown('#propinsi');
+              
+              // Set provinsi berdasarkan nama
+              const provinsiSet = setDropdownValue('#propinsi', data.propinsi);
+              console.log('Provinsi set result:', provinsiSet);
+              
+              if (provinsiSet && data.kota) {
+                console.log('Loading kota for provinsi:', $('#propinsi').val());
+                // Load kota
+                loadKota($('#propinsi').val());
+                
+                // Tunggu kota ter-load
+                await waitForDropdown('#kota');
+                
+                console.log('Setting kota:', data.kota);
+                // Set kota berdasarkan nama
+                const kotaSet = setDropdownValue('#kota', data.kota);
+                console.log('Kota set result:', kotaSet);
+                
+                if (kotaSet && data.kecamatan) {
+                  console.log('Loading kecamatan for kota:', $('#kota').val());
+                  // Load kecamatan
+                  loadKecamatan($('#kota').val());
+                  
+                  // Tunggu kecamatan ter-load
+                  await waitForDropdown('#kecamatan');
+                  
+                  console.log('Setting kecamatan:', data.kecamatan);
+                  // Set kecamatan berdasarkan nama
+                  const kecamatanSet = setDropdownValue('#kecamatan', data.kecamatan);
+                  console.log('Kecamatan set result:', kecamatanSet);
+                  
+                  if (kecamatanSet && data.kelurahan) {
+                    console.log('Loading kelurahan for kecamatan:', $('#kecamatan').val());
+                    // Load kelurahan
+                    loadKelurahan($('#kecamatan').val());
+                    
+                    // Tunggu kelurahan ter-load
+                    await waitForDropdown('#kelurahan');
+                    
+                    console.log('Setting kelurahan:', data.kelurahan);
+                    // Set kelurahan berdasarkan nama
+                    const kelurahanSet = setDropdownValue('#kelurahan', data.kelurahan);
+                    console.log('Kelurahan set result:', kelurahanSet);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Error loading dropdown:', error);
+              // Continue even if dropdown loading fails
+            }
+          }
           
           console.log('=== SHOWING MODAL ===');
           // Show modal using the same method as test modal
@@ -2037,5 +2133,36 @@ include 'header.php';
     $('#verifyDataBtn').click(() => {
       console.log('Verify data button clicked');
       verifyEditData();
+    });
+
+    // Function to check dropdown options
+    window.checkDropdownOptions = function() {
+      console.log('=== CHECKING DROPDOWN OPTIONS ===');
+      
+      const dropdowns = ['#propinsi', '#kota', '#kecamatan', '#kelurahan', '#hubungan', '#jenkel', '#agama', '#status', '#pekerjaan', '#rt', '#rw'];
+      
+      dropdowns.forEach(selector => {
+        const dropdown = $(selector);
+        const options = dropdown.find('option');
+        
+        console.log(`\n${selector}:`);
+        console.log('  Total options:', options.length);
+        console.log('  Current value:', dropdown.val());
+        console.log('  Disabled:', dropdown.prop('disabled'));
+        
+        if (options.length > 0) {
+          console.log('  First few options:');
+          options.slice(0, 5).each(function() {
+            const option = $(this);
+            console.log(`    Value: "${option.val()}", Text: "${option.text()}", data-name: "${option.data('name')}"`);
+          });
+        }
+      });
+    };
+
+    // Check dropdown button
+    $('#checkDropdownBtn').click(() => {
+      console.log('Check dropdown button clicked');
+      checkDropdownOptions();
     });
   </script>
