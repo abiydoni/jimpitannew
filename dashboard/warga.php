@@ -230,13 +230,13 @@ include 'header.php';
 
 <!-- Modal Biodata Warga -->
 <div id="modalBiodata" class="modal-overlay hidden">
-  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-screen overflow-y-auto">
-    <div class="flex justify-between items-center px-6 py-4 border-b">
-      <h2 class="text-xl font-semibold">Biodata Lengkap Warga</h2>
+  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center px-4 py-3 border-b">
+      <h2 class="text-lg font-semibold">Biodata Lengkap Warga</h2>
       <button onclick="closeModalBiodata()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
     
-    <div id="biodataContent" class="px-6 py-4">
+    <div id="biodataContent" class="px-4 py-3">
       <!-- Content akan diisi oleh JavaScript -->
     </div>
   </div>
@@ -244,13 +244,13 @@ include 'header.php';
 
 <!-- Modal Biodata KK -->
 <div id="modalKK" class="modal-overlay hidden">
-  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-screen overflow-y-auto">
-    <div class="flex justify-between items-center px-6 py-4 border-b">
-      <h2 class="text-xl font-semibold">Biodata Kartu Keluarga</h2>
+  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-5xl max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center px-4 py-3 border-b">
+      <h2 class="text-lg font-semibold">Biodata Kartu Keluarga</h2>
       <button onclick="closeModalKK()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
     
-    <div id="kkContent" class="px-6 py-4">
+    <div id="kkContent" class="px-4 py-3">
       <!-- Content akan diisi oleh JavaScript -->
     </div>
   </div>
@@ -348,23 +348,61 @@ include 'header.php';
             <title>Biodata Warga</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 20px; }
-              .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-              .space-y-4 > * + * { margin-top: 16px; }
-              .space-y-6 > * + * { margin-top: 24px; }
-              .border-b { border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; }
-              .text-lg { font-size: 18px; }
-              .font-semibold { font-weight: 600; }
+              .border-2 { border: 2px solid #d1d5db; }
+              .border-gray-300 { border-color: #d1d5db; }
+              .rounded-lg { border-radius: 8px; }
+              .p-4 { padding: 16px; }
+              .bg-white { background-color: white; }
+              .text-center { text-align: center; }
+              .border-b-2 { border-bottom: 2px solid #d1d5db; }
+              .pb-2 { padding-bottom: 8px; }
+              .mb-4 { margin-bottom: 16px; }
+              .text-base { font-size: 16px; }
+              .font-bold { font-weight: bold; }
+              .text-blue-800 { color: #1e40af; }
               .text-sm { font-size: 14px; }
+              .font-semibold { font-weight: 600; }
+              .text-gray-700 { color: #374151; }
               .flex { display: flex; }
-              .justify-between { justify-content: space-between; }
-              .gap-3 > * + * { margin-top: 12px; }
+              .gap-4 { gap: 16px; }
+              .w-32 { width: 128px; }
+              .h-40 { height: 160px; }
+              .bg-gray-100 { background-color: #f3f4f6; }
+              .flex-1 { flex: 1; }
+              .space-y-1 > * + * { margin-top: 4px; }
+              .text-xs { font-size: 12px; }
+              .grid { display: grid; }
+              .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+              .gap-2 { gap: 8px; }
+              .col-span-2 { grid-column: span 2; }
+              .font-semibold { font-weight: 600; }
+              .mt-4 { margin-top: 16px; }
+              .grid-cols-1 { grid-template-columns: 1fr; }
+              .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+              .space-y-2 > * + * { margin-top: 8px; }
+              .border-b { border-bottom: 1px solid #e5e7eb; }
+              .pb-1 { padding-bottom: 4px; }
+              .gap-1 > * + * { margin-top: 4px; }
+              .flex.justify-between { display: flex; justify-content: space-between; }
+              .py-0\\.5 { padding-top: 2px; padding-bottom: 2px; }
+              .w-full { width: 100%; }
+              .h-full { height: 100%; }
+              .object-cover { object-fit: cover; }
+              .text-gray-500 { color: #6b7280; }
+              .text-4xl { font-size: 36px; }
+              .mb-1 { margin-bottom: 4px; }
               @media print {
-                .grid { grid-template-columns: 1fr 1fr; }
+                body { margin: 10px; }
+                .border-2 { border: 1px solid #000; }
+                .border-b-2 { border-bottom: 1px solid #000; }
+                .text-xs { font-size: 10px; }
+                .w-32 { width: 100px; }
+                .h-40 { height: 120px; }
               }
             </style>
           </head>
           <body>
-            <h2 style="text-align: center; margin-bottom: 30px;">BIODATA LENGKAP WARGA</h2>
+            <h2 style="text-align: center; margin-bottom: 20px; font-size: 18px; font-weight: bold;">BIODATA LENGKAP WARGA</h2>
             ${printContent}
           </body>
         </html>
@@ -432,47 +470,109 @@ include 'header.php';
       const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
       
       const html = `
-        <div class="space-y-6">
+        <div class="space-y-4">
           <!-- Header dengan tombol print -->
-          <div class="flex justify-between items-center border-b pb-4">
-            <h3 class="text-xl font-semibold">Biodata Lengkap Warga</h3>
-            <button onclick="printBiodata()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+          <div class="flex justify-between items-center border-b pb-2">
+            <h3 class="text-lg font-semibold">Biodata Lengkap Warga</h3>
+            <button onclick="printBiodata()" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="biodataPrintArea">
-            <!-- Data Pribadi -->
-            <div class="space-y-4">
-              <h4 class="text-lg font-semibold border-b pb-2">Data Pribadi</h4>
+          <div id="biodataPrintArea">
+            <!-- Layout KTP Style -->
+            <div class="border-2 border-gray-300 rounded-lg p-4 bg-white">
+              <!-- Header KTP -->
+              <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
+                <h4 class="text-base font-bold text-blue-800">PROVINSI ${warga.propinsi || 'JAWA BARAT'}</h4>
+                <h4 class="text-base font-bold text-blue-800">KABUPATEN/KOTA ${warga.kota || 'BANDUNG'}</h4>
+                <h4 class="text-sm font-semibold text-gray-700">NIK : ${warga.nik || '-'}</h4>
+              </div>
               
-              <div class="grid grid-cols-1 gap-3 text-sm">
-                <div class="flex justify-between"><strong>NIK:</strong> <span>${warga.nik || '-'}</span></div>
-                <div class="flex justify-between"><strong>NIK KK:</strong> <span>${warga.nikk || '-'}</span></div>
-                <div class="flex justify-between"><strong>Nama Lengkap:</strong> <span>${warga.nama || '-'}</span></div>
-                <div class="flex justify-between"><strong>Jenis Kelamin:</strong> <span>${warga.jenkel === 'L' ? 'Laki-laki' : warga.jenkel === 'P' ? 'Perempuan' : '-'}</span></div>
-                <div class="flex justify-between"><strong>Tempat Lahir:</strong> <span>${warga.tpt_lahir || '-'}</span></div>
-                <div class="flex justify-between"><strong>Tanggal Lahir:</strong> <span>${tanggalLahir}</span></div>
-                <div class="flex justify-between"><strong>Agama:</strong> <span>${warga.agama || '-'}</span></div>
-                <div class="flex justify-between"><strong>Status Perkawinan:</strong> <span>${warga.status || '-'}</span></div>
-                <div class="flex justify-between"><strong>Pekerjaan:</strong> <span>${warga.pekerjaan || '-'}</span></div>
-                <div class="flex justify-between"><strong>Hubungan dalam KK:</strong> <span>${warga.hubungan || '-'}</span></div>
-                <div class="flex justify-between"><strong>No. HP:</strong> <span>${warga.hp || '-'}</span></div>
+              <!-- Content KTP -->
+              <div class="flex gap-4">
+                <!-- Foto -->
+                <div class="w-32 h-40 border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
+                  ${warga.foto ? 
+                    `<img src="${warga.foto}" alt="Foto" class="w-full h-full object-cover">` : 
+                    `<div class="text-center text-gray-500 text-xs">
+                      <i class='bx bx-user text-4xl mb-1'></i>
+                      <div>FOTO</div>
+                    </div>`
+                  }
+                </div>
+                
+                <!-- Data KTP -->
+                <div class="flex-1 space-y-1 text-xs">
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Nama</div>
+                    <div class="col-span-2">: ${warga.nama || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Tempat/Tgl Lahir</div>
+                    <div class="col-span-2">: ${warga.tpt_lahir || '-'}, ${tanggalLahir}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Jenis Kelamin</div>
+                    <div class="col-span-2">: ${warga.jenkel === 'L' ? 'LAKI-LAKI' : warga.jenkel === 'P' ? 'PEREMPUAN' : '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Alamat</div>
+                    <div class="col-span-2">: ${warga.alamat || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">RT/RW</div>
+                    <div class="col-span-2">: ${warga.rt || '-'}/${warga.rw || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Kel/Desa</div>
+                    <div class="col-span-2">: ${warga.kelurahan || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Kecamatan</div>
+                    <div class="col-span-2">: ${warga.kecamatan || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Agama</div>
+                    <div class="col-span-2">: ${warga.agama || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Status Perkawinan</div>
+                    <div class="col-span-2">: ${warga.status || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Pekerjaan</div>
+                    <div class="col-span-2">: ${warga.pekerjaan || '-'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Kewarganegaraan</div>
+                    <div class="col-span-2">: ${warga.negara || 'WNI'}</div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Berlaku Hingga</div>
+                    <div class="col-span-2">: SEUMUR HIDUP</div>
+                  </div>
+                </div>
               </div>
             </div>
             
-            <!-- Data Alamat -->
-            <div class="space-y-4">
-              <h4 class="text-lg font-semibold border-b pb-2">Data Alamat</h4>
+            <!-- Data Tambahan -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <h4 class="text-base font-semibold border-b pb-1">Data Tambahan</h4>
+                <div class="grid grid-cols-1 gap-1 text-xs">
+                  <div class="flex justify-between py-0.5"><strong>NIK KK:</strong> <span>${warga.nikk || '-'}</span></div>
+                  <div class="flex justify-between py-0.5"><strong>Hubungan dalam KK:</strong> <span>${warga.hubungan || '-'}</span></div>
+                  <div class="flex justify-between py-0.5"><strong>No. HP:</strong> <span>${warga.hp || '-'}</span></div>
+                </div>
+              </div>
               
-              <div class="grid grid-cols-1 gap-3 text-sm">
-                <div class="flex justify-between"><strong>Alamat:</strong> <span>${warga.alamat || '-'}</span></div>
-                <div class="flex justify-between"><strong>RT/RW:</strong> <span>${warga.rt || '-'}/${warga.rw || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kelurahan:</strong> <span>${warga.kelurahan || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kecamatan:</strong> <span>${warga.kecamatan || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kota/Kabupaten:</strong> <span>${warga.kota || '-'}</span></div>
-                <div class="flex justify-between"><strong>Provinsi:</strong> <span>${warga.propinsi || '-'}</span></div>
-                <div class="flex justify-between"><strong>Negara:</strong> <span>${warga.negara || '-'}</span></div>
+              <div class="space-y-2">
+                <h4 class="text-base font-semibold border-b pb-1">Data Wilayah</h4>
+                <div class="grid grid-cols-1 gap-1 text-xs">
+                  <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${warga.kota || '-'}</span></div>
+                  <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${warga.propinsi || '-'}</span></div>
+                </div>
               </div>
             </div>
           </div>
@@ -492,64 +592,64 @@ include 'header.php';
         const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
         anggotaHTML += `
           <tr class="border-b hover:bg-gray-50">
-            <td class="px-4 py-2 text-center">${index + 1}</td>
-            <td class="px-4 py-2">${anggota.nik || '-'}</td>
-            <td class="px-4 py-2">${anggota.nama || '-'}</td>
-            <td class="px-4 py-2 text-center">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
-            <td class="px-4 py-2">${anggota.tpt_lahir || '-'}</td>
-            <td class="px-4 py-2 text-center">${tanggalLahirAnggota}</td>
-            <td class="px-4 py-2">${anggota.agama || '-'}</td>
-            <td class="px-4 py-2">${anggota.status || '-'}</td>
-            <td class="px-4 py-2">${anggota.pekerjaan || '-'}</td>
-            <td class="px-4 py-2">${anggota.hubungan || '-'}</td>
+            <td class="px-2 py-1 text-center text-xs">${index + 1}</td>
+            <td class="px-2 py-1 text-xs">${anggota.nik || '-'}</td>
+            <td class="px-2 py-1 text-xs">${anggota.nama || '-'}</td>
+            <td class="px-2 py-1 text-center text-xs">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+            <td class="px-2 py-1 text-xs">${anggota.tpt_lahir || '-'}</td>
+            <td class="px-2 py-1 text-center text-xs">${tanggalLahirAnggota}</td>
+            <td class="px-2 py-1 text-xs">${anggota.agama || '-'}</td>
+            <td class="px-2 py-1 text-xs">${anggota.status || '-'}</td>
+            <td class="px-2 py-1 text-xs">${anggota.pekerjaan || '-'}</td>
+            <td class="px-2 py-1 text-xs">${anggota.hubungan || '-'}</td>
           </tr>
         `;
       });
       
       const html = `
-        <div class="space-y-6">
+        <div class="space-y-4">
           <!-- Header dengan tombol print -->
-          <div class="flex justify-between items-center border-b pb-4">
-            <h3 class="text-xl font-semibold">Biodata Kartu Keluarga</h3>
-            <button onclick="printKK()" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm">
+          <div class="flex justify-between items-center border-b pb-2">
+            <h3 class="text-lg font-semibold">Biodata Kartu Keluarga</h3>
+            <button onclick="printKK()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
           </div>
           
           <div id="kkPrintArea">
             <!-- Info KK -->
-            <div class="bg-gray-50 p-4 rounded-lg mb-6">
-              <h4 class="text-lg font-semibold mb-4">Informasi Kartu Keluarga</h4>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div class="flex justify-between"><strong>NIK KK:</strong> <span>${kepalaKK.nikk || '-'}</span></div>
-                <div class="flex justify-between"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
-                <div class="flex justify-between"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
-                <div class="flex justify-between"><strong>RT/RW:</strong> <span>${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
-                <div class="flex justify-between"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
-                <div class="flex justify-between"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
-                <div class="flex justify-between"><strong>Total Anggota:</strong> <span>${kk.total_anggota} orang</span></div>
+            <div class="bg-gray-50 p-3 rounded-lg mb-4">
+              <h4 class="text-base font-semibold mb-2">Informasi Kartu Keluarga</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                <div class="flex justify-between py-0.5"><strong>NIK KK:</strong> <span>${kepalaKK.nikk || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>RT/RW:</strong> <span>${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
+                <div class="flex justify-between py-0.5"><strong>Total Anggota:</strong> <span>${kk.total_anggota} orang</span></div>
               </div>
             </div>
             
             <!-- Daftar Anggota KK -->
             <div>
-              <h4 class="text-lg font-semibold mb-4">Daftar Anggota Keluarga</h4>
+              <h4 class="text-base font-semibold mb-2">Daftar Anggota Keluarga</h4>
               <div class="overflow-x-auto">
                 <table class="w-full border-collapse border border-gray-300">
                   <thead>
                     <tr class="bg-gray-100">
-                      <th class="border border-gray-300 px-4 py-2 text-center">No</th>
-                      <th class="border border-gray-300 px-4 py-2">NIK</th>
-                      <th class="border border-gray-300 px-4 py-2">Nama</th>
-                      <th class="border border-gray-300 px-4 py-2 text-center">Jenis Kelamin</th>
-                      <th class="border border-gray-300 px-4 py-2">Tempat Lahir</th>
-                      <th class="border border-gray-300 px-4 py-2 text-center">Tanggal Lahir</th>
-                      <th class="border border-gray-300 px-4 py-2">Agama</th>
-                      <th class="border border-gray-300 px-4 py-2">Status</th>
-                      <th class="border border-gray-300 px-4 py-2">Pekerjaan</th>
-                      <th class="border border-gray-300 px-4 py-2">Hubungan</th>
+                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">NIK</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Nama</th>
+                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">Jenis Kelamin</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Tempat Lahir</th>
+                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">Tanggal Lahir</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Agama</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Status</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Pekerjaan</th>
+                      <th class="border border-gray-300 px-2 py-1 text-xs">Hubungan</th>
                     </tr>
                   </thead>
                   <tbody>
