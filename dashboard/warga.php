@@ -271,6 +271,7 @@ include 'header.php';
 </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <?php include 'footer.php'; ?>
 
   <script>
     // Utility functions harus di paling atas!
@@ -2259,5 +2260,3 @@ include 'header.php';
         }
     });
   </script>
-  
-  <?php include 'footer.php'; ?>
