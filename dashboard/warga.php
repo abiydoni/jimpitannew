@@ -107,8 +107,8 @@ include 'header.php';
             
             <div>
                 <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required max="<?php echo date('Y-m-d'); ?>">
-                <small class="text-gray-500 text-xs">Tidak boleh di masa depan</small>
+                <input type="text" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required placeholder="DD-MM-YYYY" pattern="\d{1,2}-\d{1,2}-\d{4}" title="Format: DD-MM-YYYY (contoh: 12-05-1992)">
+                <small class="text-gray-500 text-xs">Format: DD-MM-YYYY (contoh: 12-05-1992)</small>
             </div>
             
             <div>
@@ -343,7 +343,7 @@ include 'header.php';
               <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
               <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
               <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
-              <td class="px-6 py-2 w-36 text-center">${row.tgl_lahir || '-'}</td>
+              <td class="px-6 py-2 w-36 text-center">${formatDateForDisplay(row.tgl_lahir) || '-'}</td>
               <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
               <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
               <td class="px-6 py-2 w-32 text-center">
@@ -469,6 +469,36 @@ include 'header.php';
         }
       });
 
+      // Validasi real-time untuk tanggal lahir
+      $('#tgl_lahir').on('input', function() {
+        const value = $(this).val();
+        
+        // Hanya izinkan angka dan tanda strip
+        const cleanValue = value.replace(/[^\d-]/g, '');
+        if (cleanValue !== value) {
+          $(this).val(cleanValue);
+        }
+        
+        // Validasi format DD-MM-YYYY
+        if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(value)) {
+          const parts = value.split('-');
+          const day = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          const year = parseInt(parts[2]);
+          
+          // Validasi tanggal
+          if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
+            $(this).removeClass('border-red-500').addClass('border-green-500');
+          } else {
+            $(this).removeClass('border-green-500').addClass('border-red-500');
+          }
+        } else if (value.length > 0) {
+          $(this).removeClass('border-green-500').addClass('border-red-500');
+        } else {
+          $(this).removeClass('border-red-500 border-green-500');
+        }
+      });
+
       // Submit form dengan Enter pada input terakhir
       $('#negara').keydown(function(e) {
         if (e.key === 'Enter') {
@@ -513,6 +543,11 @@ include 'header.php';
         formDataObj.kota = kota_nama;
         formDataObj.kecamatan = kecamatan_nama;
         formDataObj.kelurahan = kelurahan_nama;
+        
+        // Konversi tanggal lahir dari DD-MM-YYYY ke YYYY-MM-DD
+        if (formDataObj.tgl_lahir) {
+          formDataObj.tgl_lahir = processExcelDate(formDataObj.tgl_lahir);
+        }
         
         $.post('api/warga_action.php', formDataObj, function(res) {
           $('#modal').removeClass('modal-show').addClass('hidden');
@@ -585,7 +620,12 @@ include 'header.php';
           if (['propinsi', 'kota', 'kecamatan', 'kelurahan'].includes(key)) {
             continue;
           }
-          $(`#${key}`).val(data[key]);
+          // Khusus untuk tanggal lahir, konversi ke format DD-MM-YYYY untuk input
+          if (key === 'tgl_lahir') {
+            $(`#${key}`).val(formatDateForDisplay(data[key]));
+          } else {
+            $(`#${key}`).val(data[key]);
+          }
         }
         
         // Set nama wilayah ke hidden input
@@ -750,6 +790,74 @@ include 'header.php';
         });
       });
 
+      // Fungsi untuk memproses tanggal dari Excel
+      function processExcelDate(dateValue) {
+        if (!dateValue) return '';
+        
+        // Jika sudah dalam format YYYY-MM-DD, return as is
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+          return dateValue;
+        }
+        
+        // Jika berupa number (Excel date serial number)
+        if (typeof dateValue === 'number') {
+          // Excel date serial number dimulai dari 1 Januari 1900
+          const excelEpoch = new Date(1900, 0, 1);
+          const date = new Date(excelEpoch.getTime() + (dateValue - 1) * 24 * 60 * 60 * 1000);
+          return date.toISOString().split('T')[0];
+        }
+        
+        // Jika berupa string dengan format lain, coba parse
+        if (typeof dateValue === 'string') {
+          // Prioritas untuk format DD-MM-YYYY (format yang diinginkan user)
+          if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateValue)) {
+            const parts = dateValue.split('-');
+            const day = parseInt(parts[0]);
+            const month = parseInt(parts[1]);
+            const year = parseInt(parts[2]);
+            
+            // Validasi tanggal
+            if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
+              return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            }
+          }
+          
+          // Format lain sebagai fallback
+          const dateFormats = [
+            /^\d{1,2}\/\d{1,2}\/\d{4}$/, // DD/MM/YYYY atau MM/DD/YYYY
+            /^\d{4}\/\d{1,2}\/\d{1,2}$/, // YYYY/MM/DD
+            /^\d{1,2}\/\d{1,2}\/\d{2}$/, // DD/MM/YY atau MM/DD/YY
+            /^\d{1,2}-\d{1,2}-\d{2}$/ // DD-MM-YY atau MM-DD-YY
+          ];
+          
+          for (let format of dateFormats) {
+            if (format.test(dateValue)) {
+              const date = new Date(dateValue);
+              if (!isNaN(date.getTime())) {
+                return date.toISOString().split('T')[0];
+              }
+            }
+          }
+        }
+        
+        // Jika tidak bisa diparse, return empty string
+        return '';
+      }
+
+      // Fungsi untuk mengkonversi format tanggal dari YYYY-MM-DD ke DD-MM-YYYY untuk display
+      function formatDateForDisplay(dateString) {
+        if (!dateString || dateString === '0000-00-00') return '';
+        
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return '';
+        
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        
+        return `${day}-${month}-${year}`;
+      }
+
       // Import dari Excel (tanpa id_warga dan tgl_warga)
       $('#importInput').change(function(e) {
         const file = e.target.files[0];
@@ -793,7 +901,15 @@ include 'header.php';
             if (!row.length) continue;
             const dataWarga = { action: 'create' };
             header.forEach((h, idx) => {
-              dataWarga[h] = row[idx] || '';
+              // Khusus untuk field tanggal lahir, gunakan fungsi processExcelDate
+              if (h === 'tgl_lahir') {
+                const originalValue = row[idx];
+                const processedValue = processExcelDate(row[idx]);
+                console.log(`Baris ${i+1}, Tanggal lahir: Original="${originalValue}" (${typeof originalValue}), Processed="${processedValue}"`);
+                dataWarga[h] = processedValue;
+              } else {
+                dataWarga[h] = row[idx] || '';
+              }
             });
             // Validasi format NIK
             if (!/^\d{16}$/.test(dataWarga['nik'] || '')) {
@@ -803,6 +919,11 @@ include 'header.php';
             // Validasi duplikat NIK di file
             if (nikSet.has(dataWarga['nik'])) {
               errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'NIK duplikat di file' });
+              continue;
+            }
+            // Validasi tanggal lahir
+            if (dataWarga['tgl_lahir'] && !/^\d{1,2}-\d{1,2}-\d{4}$/.test(dataWarga['tgl_lahir'])) {
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'Format tanggal lahir tidak valid (harus DD-MM-YYYY)' });
               continue;
             }
             nikSet.add(dataWarga['nik']);
@@ -970,7 +1091,7 @@ include 'header.php';
         ];
         // Contoh data samaran
         const contoh = [
-          'Siti Mawar', '3210987654321098', '3210123456789012', 'Istri', 'P', 'Salatiga', '1992-05-12', 'Jl. Kenanga No. 5', '03', '04',
+          'Siti Mawar', '3210987654321098', '3210123456789012', 'Istri', 'P', 'Salatiga', '12-05-1992', 'Jl. Kenanga No. 5', '03', '04',
           'Kelurahan Melati', 'Kecamatan Sukajadi', 'Kota Salatiga', 'Jawa Tengah', 'Indonesia', 'Islam', 'Kawin', 'Ibu Rumah Tangga', '', '082112223333'
         ];
         const rows = [header, contoh];

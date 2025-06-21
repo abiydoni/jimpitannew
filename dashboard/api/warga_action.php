@@ -3,6 +3,52 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Fungsi untuk memproses tanggal dari berbagai format
+function processDate($dateString) {
+    if (empty($dateString)) {
+        return null;
+    }
+    
+    // Jika sudah dalam format YYYY-MM-DD, return as is
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateString)) {
+        return $dateString;
+    }
+    
+    // Prioritas untuk format DD-MM-YYYY (format yang diinginkan user)
+    if (preg_match('/^\d{1,2}-\d{1,2}-\d{4}$/', $dateString)) {
+        $parts = explode('-', $dateString);
+        $day = intval($parts[0]);
+        $month = intval($parts[1]);
+        $year = intval($parts[2]);
+        
+        // Validasi tanggal
+        if ($day >= 1 && $day <= 31 && $month >= 1 && $month <= 12 && $year >= 1900 && $year <= 2100) {
+            return sprintf('%04d-%02d-%02d', $year, $month, $day);
+        }
+    }
+    
+    // Format lain sebagai fallback
+    $formats = [
+        'd/m/Y',     // 31/12/2023
+        'm/d/Y',     // 12/31/2023
+        'Y/m/d',     // 2023/12/31
+        'd/m/y',     // 31/12/23
+        'm/d/y',     // 12/31/23
+        'd-m-y',     // 31-12-23
+        'm-d-y'      // 12-31-23
+    ];
+    
+    foreach ($formats as $format) {
+        $date = DateTime::createFromFormat($format, $dateString);
+        if ($date !== false) {
+            return $date->format('Y-m-d');
+        }
+    }
+    
+    // Jika tidak bisa diparse, return null
+    return null;
+}
+
 try {
     include 'db.php';
     
@@ -27,9 +73,17 @@ try {
         }
         
         // Validasi tanggal lahir
-        $tgl_lahir = $_POST['tgl_lahir'] ?? '';
+        $original_tgl_lahir = $_POST['tgl_lahir'] ?? '';
+        $tgl_lahir = processDate($original_tgl_lahir);
+        
+        // Debug logging
+        error_log("Tanggal lahir - Original: '$original_tgl_lahir', Processed: '$tgl_lahir'");
+        
         if ($tgl_lahir && strtotime($tgl_lahir) > time()) {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
+        }
+        if ($_POST['tgl_lahir'] && !$tgl_lahir) {
+            throw new Exception('Format tanggal lahir tidak valid. Gunakan format DD-MM-YYYY (contoh: 12-05-1992)');
         }
 
         // Validasi wilayah (nama wilayah)
@@ -45,7 +99,7 @@ try {
 
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
-            $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
+            $_POST['tpt_lahir'] ?? '', $tgl_lahir, $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
             $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? ''
         ]);
@@ -75,9 +129,17 @@ try {
         }
         
         // Validasi tanggal lahir
-        $tgl_lahir = $_POST['tgl_lahir'] ?? '';
+        $original_tgl_lahir = $_POST['tgl_lahir'] ?? '';
+        $tgl_lahir = processDate($original_tgl_lahir);
+        
+        // Debug logging
+        error_log("Tanggal lahir - Original: '$original_tgl_lahir', Processed: '$tgl_lahir'");
+        
         if ($tgl_lahir && strtotime($tgl_lahir) > time()) {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
+        }
+        if ($_POST['tgl_lahir'] && !$tgl_lahir) {
+            throw new Exception('Format tanggal lahir tidak valid. Gunakan format DD-MM-YYYY (contoh: 12-05-1992)');
         }
 
         // Validasi wilayah (nama wilayah)
@@ -93,7 +155,7 @@ try {
 
         $stmt->execute([
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
-            $_POST['tpt_lahir'] ?? '', $_POST['tgl_lahir'] ?? '', $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
+            $_POST['tpt_lahir'] ?? '', $tgl_lahir, $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
             $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? '', $_POST['id_warga'] ?? ''
         ]);
