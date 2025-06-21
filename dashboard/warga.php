@@ -763,13 +763,10 @@ include 'header.php';
               </div>
               
               <!-- Daftar Anggota KK -->
-            <div class="table-data">
               <div class="order">
-                <div class="head">
                   <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
-                </div>
-                <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
-                  <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                <div>
+                  <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                     <thead>
                       <tr class="bg-gray-100">
                         <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
@@ -784,13 +781,12 @@ include 'header.php';
                         <th class="border border-gray-300 px-2 py-1 text-xs">Hubungan</th>
                       </tr>
                     </thead>
-                    <tbody id="dataBody">
+                    <tbody>
                       ${anggotaHTML}
                     </tbody>
                   </table>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
@@ -949,27 +945,6 @@ include 'header.php';
           });
           $('#dataBody').html(html);
           console.log('Data loaded successfully');
-          // Inisialisasi DataTables ulang untuk data dinamis (AJAX)
-          if ($.fn.DataTable.isDataTable('#example')) {
-              $('#example').DataTable().destroy();
-          }
-          $('#example').DataTable({
-              responsive: true,
-              language: {
-                  search: "Cari:",
-                  lengthMenu: "Tampilkan _MENU_ entri",
-                  info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                  paginate: {
-                      first: "Pertama",
-                      last: "Terakhir",
-                      next: "Berikutnya",
-                      previous: "Sebelumnya"
-                  },
-                  zeroRecords: "Tidak ditemukan data yang cocok",
-                  infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-                  infoFiltered: "(disaring dari total _MAX_ entri)"
-              }
-          });
         } catch (e) {
           console.error('Error parsing data:', e);
           console.error('Raw data that caused error:', data);
