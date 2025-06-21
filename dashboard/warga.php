@@ -702,7 +702,7 @@ include 'header.php';
               <div>
                 <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
                 <div class="overflow-x-auto">
-                  <table class="w-full border-collapse border border-gray-300">
+                  <table id="example" class="w-full border-collapse border border-gray-300">
                     <thead>
                       <tr class="bg-gray-100">
                         <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
