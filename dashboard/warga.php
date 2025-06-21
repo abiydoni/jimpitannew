@@ -228,6 +228,34 @@ include 'header.php';
     </div>
 </div>
 
+<!-- Modal Biodata Warga -->
+<div id="modalBiodata" class="modal-overlay hidden">
+  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h2 class="text-xl font-semibold">Biodata Lengkap Warga</h2>
+      <button onclick="closeModalBiodata()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
+    </div>
+    
+    <div id="biodataContent" class="px-6 py-4">
+      <!-- Content akan diisi oleh JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal Biodata KK -->
+<div id="modalKK" class="modal-overlay hidden">
+  <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h2 class="text-xl font-semibold">Biodata Kartu Keluarga</h2>
+      <button onclick="closeModalKK()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
+    </div>
+    
+    <div id="kkContent" class="px-6 py-4">
+      <!-- Content akan diisi oleh JavaScript -->
+    </div>
+  </div>
+</div>
+
 <!-- Modal Loading untuk Import -->
 <div id="loadingModal" class="modal-overlay hidden">
     <div class="modal-container bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
@@ -366,8 +394,12 @@ include 'header.php';
               
               html += `<tr class="border-b hover:bg-gray-50">
                 <td class="px-6 py-2 w-10">${idx + 1}</td>
-                <td class="px-6 py-2 w-40 text-left">${row.nik || '-'}</td>
-                <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
+                <td class="px-6 py-2 w-40 text-left">
+                  <span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>
+                </td>
+                <td class="px-6 py-2 w-40 text-left">
+                  <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
+                </td>
                 <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
                 <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
                 <td class="px-6 py-2 w-36 text-left">${tanggalLahir}</td>
@@ -1257,5 +1289,194 @@ include 'header.php';
       function setDropdownRTRW(rt, rw) {
         isiDropdownRTRW(rt, rw);
       }
+
+      // --- Fungsi Modal Biodata dan KK ---
+      function showBiodata(nik) {
+        if (!nik || nik === '-') {
+          alert('NIK tidak valid');
+          return;
+        }
+        
+        // Tampilkan loading
+        $('#biodataContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-blue-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat biodata...</p></div>');
+        $('#modalBiodata').removeClass('hidden').addClass('modal-show');
+        
+        $.post('api/warga_action.php', { action: 'get_warga_by_nik', nik: nik }, function(data) {
+          try {
+            const warga = JSON.parse(data);
+            displayBiodata(warga);
+          } catch (e) {
+            $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
+          }
+        }).fail(function(xhr, status, error) {
+          $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
+        });
+      }
+      
+      function showKK(nikk) {
+        if (!nikk || nikk === '-') {
+          alert('NIKK tidak valid');
+          return;
+        }
+        
+        // Tampilkan loading
+        $('#kkContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat data KK...</p></div>');
+        $('#modalKK').removeClass('hidden').addClass('modal-show');
+        
+        $.post('api/warga_action.php', { action: 'get_kk_by_nikk', nikk: nikk }, function(data) {
+          try {
+            const kk = JSON.parse(data);
+            displayKK(kk);
+          } catch (e) {
+            $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
+          }
+        }).fail(function(xhr, status, error) {
+          $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
+        });
+      }
+      
+      function displayBiodata(warga) {
+        const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
+        
+        const html = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Data Pribadi -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold border-b pb-2">Data Pribadi</h3>
+              
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div><strong>NIK:</strong> ${warga.nik || '-'}</div>
+                <div><strong>NIK KK:</strong> ${warga.nikk || '-'}</div>
+                <div><strong>Nama Lengkap:</strong> ${warga.nama || '-'}</div>
+                <div><strong>Jenis Kelamin:</strong> ${warga.jenkel === 'L' ? 'Laki-laki' : warga.jenkel === 'P' ? 'Perempuan' : '-'}</div>
+                <div><strong>Tempat Lahir:</strong> ${warga.tpt_lahir || '-'}</div>
+                <div><strong>Tanggal Lahir:</strong> ${tanggalLahir}</div>
+                <div><strong>Agama:</strong> ${warga.agama || '-'}</div>
+                <div><strong>Status Perkawinan:</strong> ${warga.status || '-'}</div>
+                <div><strong>Pekerjaan:</strong> ${warga.pekerjaan || '-'}</div>
+                <div><strong>Hubungan dalam KK:</strong> ${warga.hubungan || '-'}</div>
+                <div><strong>No. HP:</strong> ${warga.hp || '-'}</div>
+              </div>
+            </div>
+            
+            <!-- Data Alamat -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold border-b pb-2">Data Alamat</h3>
+              
+              <div class="grid grid-cols-1 gap-4 text-sm">
+                <div><strong>Alamat:</strong> ${warga.alamat || '-'}</div>
+                <div><strong>RT/RW:</strong> ${warga.rt || '-'}/${warga.rw || '-'}</div>
+                <div><strong>Kelurahan:</strong> ${warga.kelurahan || '-'}</div>
+                <div><strong>Kecamatan:</strong> ${warga.kecamatan || '-'}</div>
+                <div><strong>Kota/Kabupaten:</strong> ${warga.kota || '-'}</div>
+                <div><strong>Provinsi:</strong> ${warga.propinsi || '-'}</div>
+                <div><strong>Negara:</strong> ${warga.negara || '-'}</div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('#biodataContent').html(html);
+      }
+      
+      function displayKK(kk) {
+        const kepalaKK = kk.kepala_keluarga;
+        const anggotaKK = kk.anggota_keluarga;
+        const tanggalLahirKK = kepalaKK.tgl_lahir && kepalaKK.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(kepalaKK.tgl_lahir) : '-';
+        
+        let anggotaHTML = '';
+        anggotaKK.forEach((anggota, index) => {
+          const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
+          anggotaHTML += `
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-4 py-2 text-center">${index + 1}</td>
+              <td class="px-4 py-2">${anggota.nik || '-'}</td>
+              <td class="px-4 py-2">${anggota.nama || '-'}</td>
+              <td class="px-4 py-2 text-center">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+              <td class="px-4 py-2">${anggota.tpt_lahir || '-'}</td>
+              <td class="px-4 py-2 text-center">${tanggalLahirAnggota}</td>
+              <td class="px-4 py-2">${anggota.agama || '-'}</td>
+              <td class="px-4 py-2">${anggota.status || '-'}</td>
+              <td class="px-4 py-2">${anggota.pekerjaan || '-'}</td>
+              <td class="px-4 py-2">${anggota.hubungan || '-'}</td>
+            </tr>
+          `;
+        });
+        
+        const html = `
+          <div class="space-y-6">
+            <!-- Info KK -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold mb-4">Informasi Kartu Keluarga</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div><strong>NIK KK:</strong> ${kepalaKK.nikk || '-'}</div>
+                <div><strong>Nama Kepala Keluarga:</strong> ${kepalaKK.nama || '-'}</div>
+                <div><strong>Alamat:</strong> ${kepalaKK.alamat || '-'}</div>
+                <div><strong>RT/RW:</strong> ${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</div>
+                <div><strong>Kelurahan:</strong> ${kepalaKK.kelurahan || '-'}</div>
+                <div><strong>Kecamatan:</strong> ${kepalaKK.kecamatan || '-'}</div>
+                <div><strong>Kota/Kabupaten:</strong> ${kepalaKK.kota || '-'}</div>
+                <div><strong>Provinsi:</strong> ${kepalaKK.propinsi || '-'}</div>
+                <div><strong>Total Anggota:</strong> ${kk.total_anggota} orang</div>
+              </div>
+            </div>
+            
+            <!-- Daftar Anggota KK -->
+            <div>
+              <h3 class="text-lg font-semibold mb-4">Daftar Anggota Keluarga</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-300 px-4 py-2 text-center">No</th>
+                      <th class="border border-gray-300 px-4 py-2">NIK</th>
+                      <th class="border border-gray-300 px-4 py-2">Nama</th>
+                      <th class="border border-gray-300 px-4 py-2 text-center">Jenis Kelamin</th>
+                      <th class="border border-gray-300 px-4 py-2">Tempat Lahir</th>
+                      <th class="border border-gray-300 px-4 py-2 text-center">Tanggal Lahir</th>
+                      <th class="border border-gray-300 px-4 py-2">Agama</th>
+                      <th class="border border-gray-300 px-4 py-2">Status</th>
+                      <th class="border border-gray-300 px-4 py-2">Pekerjaan</th>
+                      <th class="border border-gray-300 px-4 py-2">Hubungan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${anggotaHTML}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('#kkContent').html(html);
+      }
+      
+      function closeModalBiodata() {
+        $('#modalBiodata').removeClass('modal-show').addClass('hidden');
+      }
+      
+      function closeModalKK() {
+        $('#modalKK').removeClass('modal-show').addClass('hidden');
+      }
+      
+      // Tutup modal ketika klik di luar modal
+      $('#modalBiodata, #modalKK').click(function(e) {
+        if (e.target === this) {
+          $(this).removeClass('modal-show').addClass('hidden');
+        }
+      });
+      
+      // Tutup modal dengan tombol ESC
+      $(document).keydown(function(e) {
+        if (e.key === 'Escape') {
+          if (!$('#modalBiodata').hasClass('hidden')) {
+            closeModalBiodata();
+          }
+          if (!$('#modalKK').hasClass('hidden')) {
+            closeModalKK();
+          }
+        }
+      });
     });
   </script>

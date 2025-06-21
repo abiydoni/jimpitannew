@@ -179,13 +179,77 @@ try {
         echo 'updated';
 
     } elseif ($action == 'delete') {
-        if (empty($_POST['id_warga'])) {
+        $id_warga = $_POST['id_warga'] ?? '';
+        if (empty($id_warga)) {
             throw new Exception('ID warga tidak boleh kosong');
         }
         
-        $stmt = $pdo->prepare("DELETE FROM tb_warga WHERE id_warga = ?");
-        $stmt->execute([$_POST['id_warga'] ?? '']);
+        $stmt = $pdo->prepare('DELETE FROM tb_warga WHERE id_warga = ?');
+        $stmt->execute([$id_warga]);
+        
         echo 'deleted';
+        
+    } elseif ($action == 'get_warga_by_nik') {
+        $nik = $_POST['nik'] ?? '';
+        if (empty($nik)) {
+            throw new Exception('NIK tidak boleh kosong');
+        }
+        
+        $stmt = $pdo->prepare('SELECT * FROM tb_warga WHERE nik = ?');
+        $stmt->execute([$nik]);
+        $warga = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$warga) {
+            throw new Exception('Data warga tidak ditemukan');
+        }
+        
+        echo json_encode($warga);
+        
+    } elseif ($action == 'get_kk_by_nikk') {
+        $nikk = $_POST['nikk'] ?? '';
+        if (empty($nikk)) {
+            throw new Exception('NIKK tidak boleh kosong');
+        }
+        
+        // Ambil data kepala keluarga (yang pertama dengan NIKK tersebut)
+        $stmt = $pdo->prepare('SELECT * FROM tb_warga WHERE nikk = ? AND hubungan = "Kepala Keluarga" LIMIT 1');
+        $stmt->execute([$nikk]);
+        $kepala_keluarga = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$kepala_keluarga) {
+            // Jika tidak ada kepala keluarga, ambil data pertama dengan NIKK tersebut
+            $stmt = $pdo->prepare('SELECT * FROM tb_warga WHERE nikk = ? LIMIT 1');
+            $stmt->execute([$nikk]);
+            $kepala_keluarga = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        if (!$kepala_keluarga) {
+            throw new Exception('Data KK tidak ditemukan');
+        }
+        
+        // Ambil semua anggota keluarga dengan NIKK yang sama
+        $stmt = $pdo->prepare('SELECT * FROM tb_warga WHERE nikk = ? ORDER BY 
+            CASE hubungan 
+                WHEN "Kepala Keluarga" THEN 1
+                WHEN "Istri" THEN 2
+                WHEN "Anak" THEN 3
+                WHEN "Orang Tua" THEN 4
+                WHEN "Mertua" THEN 5
+                WHEN "Famili Lain" THEN 6
+                WHEN "Pembantu" THEN 7
+                WHEN "Lainnya" THEN 8
+                ELSE 9
+            END, nama');
+        $stmt->execute([$nikk]);
+        $anggota_keluarga = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $result = [
+            'kepala_keluarga' => $kepala_keluarga,
+            'anggota_keluarga' => $anggota_keluarga,
+            'total_anggota' => count($anggota_keluarga)
+        ];
+        
+        echo json_encode($result);
 
     } elseif ($action == 'cek_nik') {
         // Cek daftar NIK yang sudah ada di database
