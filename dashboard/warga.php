@@ -1908,20 +1908,8 @@ include 'header.php';
       // Saat edit data, isi RT/RW
       function setDropdownRTRW(rt, rw) {
         isiDropdownRTRW(rt, rw);
-        
-        // Show existing photo if available
-        if (data.foto) {
-          $('#foto_preview_img').attr('src', data.foto);
-          $('#foto_preview').removeClass('hidden');
-        } else {
-          $('#foto_preview').addClass('hidden');
-        }
-        
-        // Set nama wilayah ke hidden input
-        $('#propinsi_nama').val(data.propinsi || '');
-        $('#kota_nama').val(data.kota || '');
-        $('#kecamatan_nama').val(data.kecamatan || '');
-        $('#kelurahan_nama').val(data.kelurahan || '');
+        if (rt) $('#rt').val(rt);
+        if (rw) $('#rw').val(rw);
       }
 
       // Panggil setDropdownRTRW(data.rt, data.rw) di bagian edit data
