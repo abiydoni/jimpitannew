@@ -15,12 +15,6 @@ include 'header.php';
                 <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer">Import Excel
                   <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
                 </label>
-                <button id="testModalBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-2">Test Modal</button>
-                <button id="testEditBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit</button>
-                <button id="testEditModalBtn" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit Modal</button>
-                <button id="verifyDataBtn" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-2">Verify Data</button>
-                <button id="checkDropdownBtn" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded ml-2">Check Dropdown</button>
-                <button id="debugModalBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">Debug Modal</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -1281,17 +1275,18 @@ include 'header.php';
             const formattedDate = formatDateForDisplay(data.tgl_lahir);
             $('#tgl_lahir').val(formattedDate);
             console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
+            
+            // Set dropdown tanggal lahir
+            setDropdownTanggalLahir(formattedDate);
           }
           
           // Set RT/RW if available
-          if (data.rt) {
-            $('#rt').val(data.rt);
-            console.log('Set rt:', data.rt);
-          }
-          
-          if (data.rw) {
-            $('#rw').val(data.rw);
-            console.log('Set rw:', data.rw);
+          if (data.rt || data.rw) {
+            // Convert single digits to 3-digit padded format
+            const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
+            const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
+            setDropdownRTRW(rt, rw);
+            console.log('Set RT/RW:', rt, rw);
           }
           
           // Set nama wilayah ke hidden input
@@ -2157,4 +2152,38 @@ include 'header.php';
       console.log('Modal z-index:', $('#modal').css('z-index'));
       console.log('Modal classes:', $('#modal').attr('class'));
     });
+
+    // Fungsi untuk mengatur dropdown tanggal lahir
+    function setDropdownTanggalLahir(formattedDate) {
+      if (!formattedDate) return;
+      
+      try {
+        const parts = formattedDate.split('-');
+        if (parts.length === 3) {
+          const day = parseInt(parts[2]);
+          const month = parseInt(parts[1]);
+          const year = parseInt(parts[0]);
+          
+          $('#tgl_hari').val(day);
+          $('#tgl_bulan').val(month);
+          $('#tgl_tahun').val(year);
+          
+          console.log(`Set tanggal lahir dropdown: ${day}/${month}/${year}`);
+        }
+      } catch (error) {
+        console.error('Error setting tanggal lahir dropdown:', error);
+      }
+    }
+
+    // Fungsi untuk mengatur dropdown RT/RW
+    function setDropdownRTRW(rt, rw) {
+      if (rt) {
+        $('#rt').val(rt);
+        console.log(`Set RT dropdown: ${rt}`);
+      }
+      if (rw) {
+        $('#rw').val(rw);
+        console.log(`Set RW dropdown: ${rw}`);
+      }
+    }
   </script>
