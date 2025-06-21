@@ -11,6 +11,12 @@ $sessionId = get_konfigurasi('session_id');
 include $filePesan;
 $message = $pesan;
 
+// Jika pesan kosong atau mengandung pesan tidak ada ultah sesuai ambil_data_ultah.php, hentikan proses
+if (empty(trim($message)) || stripos($message, 'Tidak ada warga yang berulang tahun hari ini') !== false) {
+    // Tidak ada yang ulang tahun, proses dihentikan
+    exit;
+}
+
 $data = http_build_query([
     'groupId[]' => $groupId,
     'message' => $message
