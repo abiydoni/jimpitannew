@@ -17,24 +17,31 @@ include 'header.php';
                 </label>
             </div>
         </div>
+        <!-- Search dan Reset -->
+        <div class="mb-2 flex justify-between items-center">
+          <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-64" placeholder="Cari nama/NIK/Alamat ...">
+          <button id="resetSearch" class="bg-gray-400 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs">Reset</button>
+        </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
-            <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+            <table id="wargaTable" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-6 w-10">No</th>
-                        <th class="py-2 px-6 w-40 text-left">NIK</th>
-                        <th class="py-2 px-6 w-40 text-left">NIK KK</th>
-                        <th class="py-2 px-6 w-56 text-left">Nama</th>
-                        <th class="py-2 px-6 w-32 text-center">Jenis Kelamin</th>
-                        <th class="py-2 px-6 w-36 text-left">Tanggal Lahir</th>
-                        <th class="py-2 px-6 w-32 text-center">RT/RW</th>
-                        <th class="py-2 px-6 w-44 text-left">No HP</th>
-                        <th class="py-2 px-6 w-32 text-center">Aksi</th>
+                        <th class="py-2 px-3 w-10">No</th>
+                        <th class="py-2 px-3 w-40 text-left">NIK</th>
+                        <th class="py-2 px-3 w-40 text-left">NIK KK</th>
+                        <th class="py-2 px-3 w-56 text-left">Nama</th>
+                        <th class="py-2 px-3 w-32 text-center">Jenis Kelamin</th>
+                        <th class="py-2 px-3 w-36 text-left">Tanggal Lahir</th>
+                        <th class="py-2 px-3 w-32 text-center">RT/RW</th>
+                        <th class="py-2 px-3 w-44 text-left">No HP</th>
+                        <th class="py-2 px-3 w-32 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="dataBody"></tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center gap-1 mt-2 text-xs"></div>
     </div>
 </div>
 
@@ -882,80 +889,115 @@ include 'header.php';
       return selectedOption.data('name') || selectedOption.val();
     }
 
+    let allWarga = [];
+    let filteredWarga = [];
+    let currentPage = 1;
+    const pageSize = 10;
+
+    function renderTable(data, page = 1) {
+      const start = (page - 1) * pageSize;
+      const end = start + pageSize;
+      let html = '';
+      if (!data.length) {
+        html = '<tr><td colspan="9" class="text-center text-gray-500">Tidak ditemukan data yang cocok</td></tr>';
+      } else {
+        data.slice(start, end).forEach((row, idx) => {
+          let tanggalLahir = '-';
+          if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
+            tanggalLahir = formatDateForDisplay(row.tgl_lahir);
+          }
+          const jsonData = JSON.stringify(row);
+          const encodedData = encodeURIComponent(jsonData);
+          html += `<tr class="border-b hover:bg-gray-50">
+            <td class="px-3 py-1 w-10 text-center">${start + idx + 1}</td>
+            <td class="px-3 py-1 w-40 text-left">
+              <span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>
+            </td>
+            <td class="px-3 py-1 w-40 text-left">
+              <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
+            </td>
+            <td class="px-3 py-1 w-56 text-left">${row.nama || '-'}</td>
+            <td class="px-3 py-1 w-32 text-center">${row.jenkel || '-'}</td>
+            <td class="px-3 py-1 w-36 text-left">${tanggalLahir}</td>
+            <td class="px-3 py-1 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
+            <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
+            <td class="px-3 py-1 w-32 text-center">
+              <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id="${encodedData}"><i class='bx bx-edit'></i></button>
+              <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
+            </td>
+          </tr>`;
+        });
+      }
+      $('#dataBody').html(html);
+    }
+
+    function renderPagination(data, page = 1) {
+      const totalPages = Math.ceil(data.length / pageSize);
+      let html = '';
+      if (totalPages > 1) {
+        html += `<button class="px-2 py-1 rounded ${page === 1 ? 'bg-gray-300' : 'bg-gray-500 text-white'}" ${page === 1 ? 'disabled' : ''} onclick="goToPage(1)">&laquo;</button>`;
+        html += `<button class="px-2 py-1 rounded ${page === 1 ? 'bg-gray-300' : 'bg-gray-500 text-white'}" ${page === 1 ? 'disabled' : ''} onclick="goToPage(${page - 1})">&lsaquo;</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === page || (i <= 2 || i > totalPages - 2 || Math.abs(i - page) <= 1)) {
+            html += `<button class="px-2 py-1 rounded ${i === page ? 'bg-blue-500 text-white' : 'bg-gray-200'}" onclick="goToPage(${i})">${i}</button>`;
+          } else if (i === 3 && page > 4) {
+            html += '<span class="px-2">...</span>';
+          } else if (i === totalPages - 2 && page < totalPages - 3) {
+            html += '<span class="px-2">...</span>';
+          }
+        }
+        html += `<button class="px-2 py-1 rounded ${page === totalPages ? 'bg-gray-300' : 'bg-gray-500 text-white'}" ${page === totalPages ? 'disabled' : ''} onclick="goToPage(${page + 1})">&rsaquo;</button>`;
+        html += `<button class="px-2 py-1 rounded ${page === totalPages ? 'bg-gray-300' : 'bg-gray-500 text-white'}" ${page === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">&raquo;</button>`;
+      }
+      $('#pagination').html(html);
+    }
+
+    window.goToPage = function(page) {
+      currentPage = page;
+      renderTable(filteredWarga, currentPage);
+      renderPagination(filteredWarga, currentPage);
+    }
+
+    function filterWarga(keyword) {
+      keyword = keyword.toLowerCase();
+      return allWarga.filter(row =>
+        (row.nama && row.nama.toLowerCase().includes(keyword)) ||
+        (row.nik && row.nik.toLowerCase().includes(keyword)) ||
+        (row.alamat && row.alamat.toLowerCase().includes(keyword))
+      );
+    }
+
+    // Ganti loadData agar simpan data ke allWarga dan render manual
     function loadData() {
-      console.log('Loading data...');
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
-        console.log('Raw response from server:', data);
         try {
           const warga = JSON.parse(data);
-          console.log('Parsed data:', warga);
-          
-          if (!Array.isArray(warga)) {
-            console.error('Data is not an array:', warga);
-            $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error: Data format tidak valid</td></tr>');
-            return;
-          }
-          
-          let html = '';
-          warga.forEach((row, idx) => {
-            try {
-              // Safe handling untuk tanggal lahir
-              let tanggalLahir = '-';
-              if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
-                try {
-                  tanggalLahir = formatDateForDisplay(row.tgl_lahir);
-                } catch (dateError) {
-                  console.warn(`Error formatting date for row ${idx}:`, dateError);
-                  tanggalLahir = row.tgl_lahir || '-';
-                }
-              }
-              
-              // Debug: Log data untuk setiap baris
-              console.log(`Row ${idx + 1} data:`, row);
-              
-              // Test JSON stringify untuk memastikan data valid
-              const jsonData = JSON.stringify(row);
-              console.log(`Row ${idx + 1} JSON:`, jsonData);
-              
-              const encodedData = encodeURIComponent(jsonData);
-              console.log(`Row ${idx + 1} encoded:`, encodedData);
-              
-              html += `<tr class="border-b hover:bg-gray-50">
-                <td class="px-6 py-2 w-10">${idx + 1}</td>
-                <td class="px-6 py-2 w-40 text-left">
-                  <span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>
-                </td>
-                <td class="px-6 py-2 w-40 text-left">
-                  <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
-                </td>
-                <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
-                <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
-                <td class="px-6 py-2 w-36 text-left">${tanggalLahir}</td>
-                <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
-                <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
-                <td class="px-6 py-2 w-32 text-center">
-                  <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id="${encodedData}"><i class='bx bx-edit'></i></button>
-                  <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
-                </td>
-              </tr>`;
-            } catch (rowError) {
-              console.error(`Error processing row ${idx}:`, rowError, row);
-            }
-          });
-          $('#dataBody').html(html);
-          console.log('Data loaded successfully');
+          allWarga = Array.isArray(warga) ? warga : [];
+          filteredWarga = allWarga;
+          currentPage = 1;
+          renderTable(filteredWarga, currentPage);
+          renderPagination(filteredWarga, currentPage);
         } catch (e) {
-          console.error('Error parsing data:', e);
-          console.error('Raw data that caused error:', data);
           $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + e.message + '</td></tr>');
+          $('#pagination').html('');
         }
-      }).fail(function(xhr, status, error) {
-        console.error('AJAX Error:', status, error);
-        console.error('Response text:', xhr.responseText);
-        console.error('Status code:', xhr.status);
-        $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + error + ' (Status: ' + xhr.status + ')</td></tr>');
       });
     }
+
+    $('#searchInput').on('input', function() {
+      const keyword = $(this).val();
+      filteredWarga = filterWarga(keyword);
+      currentPage = 1;
+      renderTable(filteredWarga, currentPage);
+      renderPagination(filteredWarga, currentPage);
+    });
+    $('#resetSearch').click(function() {
+      $('#searchInput').val('');
+      filteredWarga = allWarga;
+      currentPage = 1;
+      renderTable(filteredWarga, currentPage);
+      renderPagination(filteredWarga, currentPage);
+    });
 
     $(document).ready(function() {
       loadData();
