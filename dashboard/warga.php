@@ -18,7 +18,7 @@ include 'header.php';
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
-            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+            <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="py-2 px-6 w-10">No</th>
@@ -2237,26 +2237,4 @@ include 'header.php';
       setDropdownValue('#kelurahan', data.kelurahan);
       $('#kelurahan_nama').val(data.kelurahan || '');
     }
-
-    $('#dataBody').html(html); // render data
-    if ($.fn.DataTable.isDataTable('#example')) {
-        $('#example').DataTable().destroy();
-    }
-    $('#example').DataTable({
-        responsive: true,
-        language: {
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ entri",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-            paginate: {
-                first: "Pertama",
-                last: "Terakhir",
-                next: "Berikutnya",
-                previous: "Sebelumnya"
-            },
-            zeroRecords: "Tidak ditemukan data yang cocok",
-            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-            infoFiltered: "(disaring dari total _MAX_ entri)"
-        }
-    });
   </script>
