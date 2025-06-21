@@ -270,8 +270,6 @@ include 'header.php';
     </div>
 </div>
 
-  <?php include 'footer.php'; ?>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
@@ -2239,3 +2237,5 @@ include 'header.php';
       $('#kelurahan_nama').val(data.kelurahan || '');
     }
   </script>
+  
+  <?php include 'footer.php'; ?>
