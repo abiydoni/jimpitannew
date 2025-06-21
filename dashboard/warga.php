@@ -15,6 +15,7 @@ include 'header.php';
                 <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer">Import Excel
                   <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
                 </label>
+                <button id="testModalBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-2">Test Modal</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -950,6 +951,41 @@ include 'header.php';
         }, 200);
       });
 
+      // Test modal button
+      $('#testModalBtn').click(() => {
+        console.log('Test modal button clicked');
+        $('#modalTitle').text('Test Modal');
+        $('#wargaForm')[0].reset();
+        $('#formAction').val('create');
+        
+        // Force show modal with multiple methods
+        $('#modal').removeClass('hidden').addClass('modal-show');
+        $('#modal').css({
+          'display': 'flex',
+          'opacity': '1',
+          'visibility': 'visible',
+          'z-index': '999999',
+          'position': 'fixed',
+          'top': '0',
+          'left': '0',
+          'right': '0',
+          'bottom': '0',
+          'background-color': 'rgba(0, 0, 0, 0.5)',
+          'align-items': 'center',
+          'justify-content': 'center'
+        });
+        
+        console.log('Modal should be visible now');
+        console.log('Modal display:', $('#modal').css('display'));
+        console.log('Modal z-index:', $('#modal').css('z-index'));
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          $('#modal').removeClass('modal-show').addClass('hidden');
+          console.log('Test modal hidden');
+        }, 5000);
+      });
+
       $('#cancelBtn').click(() => {
         console.log('Closing modal via cancel button');
         $('#modal').removeClass('modal-show').addClass('hidden');
@@ -1113,82 +1149,140 @@ include 'header.php';
       }
 
       $(document).on('click', '.editBtn', async function() {
+        console.log('=== EDIT BUTTON CLICKED ===');
+        console.log('Edit button clicked');
         const data = $(this).data('id');
+        console.log('Edit data:', data);
+        
+        if (!data) {
+          console.error('No data found for edit');
+          alert('Data tidak ditemukan untuk diedit');
+          return;
+        }
+        
         $('#modalTitle').text('Edit Warga');
         
-        // Set nilai form (kecuali field wilayah)
-        for (const key in data) {
-          // Skip field wilayah karena akan dihandle secara terpisah
-          if (["propinsi", "kota", "kecamatan", "kelurahan"].includes(key)) {
-            continue;
+        try {
+          console.log('Setting form values...');
+          // Set nilai form (kecuali field wilayah)
+          for (const key in data) {
+            // Skip field wilayah karena akan dihandle secara terpisah
+            if (["propinsi", "kota", "kecamatan", "kelurahan"].includes(key)) {
+              continue;
+            }
+            // Khusus untuk tanggal lahir, konversi ke format DD-MM-YYYY untuk input
+            if (key === "tgl_lahir") {
+              $(`#${key}`).val(formatDateForDisplay(data[key]));
+            } else {
+              $(`#${key}`).val(data[key]);
+            }
           }
-          // Khusus untuk tanggal lahir, konversi ke format DD-MM-YYYY untuk input
-          if (key === "tgl_lahir") {
-            $(`#${key}`).val(formatDateForDisplay(data[key]));
-          } else {
-            $(`#${key}`).val(data[key]);
-          }
-        }
-        // Set dropdown tanggal lahir
-        setDropdownTanggalLahir(formatDateForDisplay(data.tgl_lahir));
-        // Set dropdown RT/RW - convert single digits to 3-digit padded format
-        const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
-        const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
-        setDropdownRTRW(rt, rw);
-        
-        // Set nama wilayah ke hidden input
-        $('#propinsi_nama').val(data.propinsi || '');
-        $('#kota_nama').val(data.kota || '');
-        $('#kecamatan_nama').val(data.kecamatan || '');
-        $('#kelurahan_nama').val(data.kelurahan || '');
-        
-        // Load dropdown wilayah berdasarkan data yang ada
-        if (data.propinsi) {
-          try {
-            // Pastikan provinsi sudah ter-load
-            await waitForDropdown('#propinsi');
-            
-            // Set provinsi berdasarkan nama
-            if (setDropdownValue('#propinsi', data.propinsi) && data.kota) {
-              // Load kota
-              loadKota($('#propinsi').val());
+          
+          console.log('Setting dropdowns...');
+          // Set dropdown tanggal lahir
+          setDropdownTanggalLahir(formatDateForDisplay(data.tgl_lahir));
+          
+          // Set dropdown RT/RW - convert single digits to 3-digit padded format
+          const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
+          const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
+          setDropdownRTRW(rt, rw);
+          
+          // Set nama wilayah ke hidden input
+          $('#propinsi_nama').val(data.propinsi || '');
+          $('#kota_nama').val(data.kota || '');
+          $('#kecamatan_nama').val(data.kecamatan || '');
+          $('#kelurahan_nama').val(data.kelurahan || '');
+          
+          console.log('Loading wilayah dropdowns...');
+          // Load dropdown wilayah berdasarkan data yang ada
+          if (data.propinsi) {
+            try {
+              // Pastikan provinsi sudah ter-load
+              await waitForDropdown('#propinsi');
               
-              // Tunggu kota ter-load
-              await waitForDropdown('#kota');
-              
-              // Set kota berdasarkan nama
-              if (setDropdownValue('#kota', data.kota) && data.kecamatan) {
-                // Load kecamatan
-                loadKecamatan($('#kota').val());
+              // Set provinsi berdasarkan nama
+              if (setDropdownValue('#propinsi', data.propinsi) && data.kota) {
+                // Load kota
+                loadKota($('#propinsi').val());
                 
-                // Tunggu kecamatan ter-load
-                await waitForDropdown('#kecamatan');
+                // Tunggu kota ter-load
+                await waitForDropdown('#kota');
                 
-                // Set kecamatan berdasarkan nama
-                if (setDropdownValue('#kecamatan', data.kecamatan) && data.kelurahan) {
-                  // Load kelurahan
-                  loadKelurahan($('#kecamatan').val());
+                // Set kota berdasarkan nama
+                if (setDropdownValue('#kota', data.kota) && data.kecamatan) {
+                  // Load kecamatan
+                  loadKecamatan($('#kota').val());
                   
-                  // Tunggu kelurahan ter-load
-                  await waitForDropdown('#kelurahan');
+                  // Tunggu kecamatan ter-load
+                  await waitForDropdown('#kecamatan');
                   
-                  // Set kelurahan berdasarkan nama
-                  setDropdownValue('#kelurahan', data.kelurahan);
+                  // Set kecamatan berdasarkan nama
+                  if (setDropdownValue('#kecamatan', data.kecamatan) && data.kelurahan) {
+                    // Load kelurahan
+                    loadKelurahan($('#kecamatan').val());
+                    
+                    // Tunggu kelurahan ter-load
+                    await waitForDropdown('#kelurahan');
+                    
+                    // Set kelurahan berdasarkan nama
+                    setDropdownValue('#kelurahan', data.kelurahan);
+                  }
                 }
               }
+            } catch (error) {
+              console.error('Error loading dropdown:', error);
+              // Continue even if dropdown loading fails
             }
-          } catch (error) {
-            console.error('Error loading dropdown:', error);
           }
+          
+          $('#formAction').val('update');
+          
+          console.log('=== SHOWING MODAL ===');
+          // Debug modal display
+          console.log('Before showing modal - Modal element:', $('#modal')[0]);
+          console.log('Before showing modal - Modal classes:', $('#modal').attr('class'));
+          console.log('Before showing modal - Modal display:', $('#modal').css('display'));
+          console.log('Before showing modal - Modal z-index:', $('#modal').css('z-index'));
+          
+          // Force modal to show with multiple approaches
+          $('#modal').removeClass('hidden').addClass('modal-show');
+          $('#modal').css({
+            'display': 'flex',
+            'opacity': '1',
+            'visibility': 'visible',
+            'z-index': '999999',
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'right': '0',
+            'bottom': '0',
+            'background-color': 'rgba(0, 0, 0, 0.5)',
+            'align-items': 'center',
+            'justify-content': 'center'
+          });
+          
+          // Debug: Log setelah menampilkan modal
+          setTimeout(() => {
+            console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
+            console.log('After showing modal - Modal z-index:', $('#modal').css('z-index'));
+            console.log('After showing modal - Modal container z-index:', $('.modal-container').css('z-index'));
+            console.log('After showing modal - Modal display:', $('#modal').css('display'));
+            console.log('After showing modal - Modal visibility:', $('#modal').css('visibility'));
+            console.log('After showing modal - Modal opacity:', $('#modal').css('opacity'));
+            console.log('Modal container display:', $('.modal-container').css('display'));
+            console.log('Modal container visibility:', $('.modal-container').css('visibility'));
+            console.log('=== MODAL SHOWN ===');
+          }, 100);
+          
+          // Focus pada input pertama
+          setTimeout(() => {
+            $('#nama').focus();
+          }, 200);
+          
+        } catch (error) {
+          console.error('Error in edit modal:', error);
+          alert('Terjadi kesalahan saat membuka modal edit: ' + error.message);
         }
-        
-        $('#formAction').val('update');
-        $('#modal').removeClass('hidden').addClass('modal-show');
-        
-        // Focus pada input pertama
-        setTimeout(() => {
-          $('#nama').focus();
-        }, 100);
       });
 
       $(document).on('click', '.deleteBtn', function() {
@@ -1796,5 +1890,53 @@ include 'header.php';
           }
         }
       });
+    });
+
+    // Test function untuk debug modal
+    window.testModal = function() {
+      console.log('Testing modal display...');
+      console.log('Modal element:', $('#modal')[0]);
+      console.log('Modal classes:', $('#modal').attr('class'));
+      console.log('Modal display:', $('#modal').css('display'));
+      console.log('Modal z-index:', $('#modal').css('z-index'));
+      
+      // Try to show modal
+      $('#modal').removeClass('hidden').addClass('modal-show');
+      $('#modal').css({
+        'display': 'flex',
+        'opacity': '1',
+        'visibility': 'visible',
+        'z-index': '999999'
+      });
+      
+      console.log('After showing - Modal classes:', $('#modal').attr('class'));
+      console.log('After showing - Modal display:', $('#modal').css('display'));
+      
+      // Auto hide after 3 seconds
+      setTimeout(() => {
+        $('#modal').removeClass('modal-show').addClass('hidden');
+        console.log('Modal hidden after test');
+      }, 3000);
+    };
+    
+    // Test function untuk debug edit button
+    window.testEditButton = function() {
+      console.log('Testing edit button...');
+      const editButtons = $('.editBtn');
+      console.log('Found edit buttons:', editButtons.length);
+      
+      if (editButtons.length > 0) {
+        console.log('First edit button data:', editButtons.first().data('id'));
+        editButtons.first().click();
+      } else {
+        console.log('No edit buttons found');
+      }
+    };
+    
+    // Log when page is ready
+    $(document).ready(function() {
+      console.log('Warga page loaded');
+      console.log('Modal element exists:', $('#modal').length > 0);
+      console.log('Edit buttons found:', $('.editBtn').length);
     });
   </script>
