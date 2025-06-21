@@ -275,30 +275,6 @@ include 'header.php';
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
-      // Fungsi untuk menunggu dropdown ter-load
-      function waitForDropdown(selector, maxWait = 5000) {
-        return new Promise((resolve, reject) => {
-          const startTime = Date.now();
-          const checkInterval = setInterval(() => {
-            const element = $(selector);
-            const options = element.find('option');
-            
-            // Cek apakah dropdown sudah ter-load (bukan loading state)
-            if (options.length > 1 && !element.prop('disabled') && 
-                !options.first().text().includes('Loading') && 
-                !options.first().text().includes('Error')) {
-              clearInterval(checkInterval);
-              resolve(element);
-            }
-            
-            // Timeout setelah maxWait ms
-            if (Date.now() - startTime > maxWait) {
-              clearInterval(checkInterval);
-              reject(new Error('Timeout waiting for dropdown'));
-            }
-          }, 100);
-        });
-      }
     // Fungsi global untuk modal dan print
     function showBiodata(nik) {
       if (!nik || nik === '-') {
@@ -1159,6 +1135,30 @@ include 'header.php';
         });
       });
 
+      // Fungsi untuk menunggu dropdown ter-load
+      function waitForDropdown(selector, maxWait = 5000) {
+        return new Promise((resolve, reject) => {
+          const startTime = Date.now();
+          const checkInterval = setInterval(() => {
+            const element = $(selector);
+            const options = element.find('option');
+            
+            // Cek apakah dropdown sudah ter-load (bukan loading state)
+            if (options.length > 1 && !element.prop('disabled') && 
+                !options.first().text().includes('Loading') && 
+                !options.first().text().includes('Error')) {
+              clearInterval(checkInterval);
+              resolve(element);
+            }
+            
+            // Timeout setelah maxWait ms
+            if (Date.now() - startTime > maxWait) {
+              clearInterval(checkInterval);
+              reject(new Error('Timeout waiting for dropdown'));
+            }
+          }, 100);
+        });
+      }
 
       // Fungsi untuk set nilai dropdown berdasarkan nama
       function setDropdownValue(selector, name) {
