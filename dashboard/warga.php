@@ -763,8 +763,11 @@ include 'header.php';
               </div>
               
               <!-- Daftar Anggota KK -->
-              <div>
-                <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
+            <div class="table-data">
+              <div class="order">
+                <div class="head">
+                  <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
+                </div>
                 <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
                   <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                     <thead>
@@ -787,6 +790,7 @@ include 'header.php';
                   </table>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
