@@ -413,7 +413,21 @@ include 'header.php';
       printWindow.document.close();
       printWindow.print();
     }
-
+    
+    // Fungsi untuk mengkonversi format tanggal dari YYYY-MM-DD ke DD-MM-YYYY untuk display
+    function formatDateForDisplay(dateString) {
+      if (!dateString || dateString === '0000-00-00') return '';
+      
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return '';
+      
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      
+      return `${day}-${month}-${year}`;
+    }
+    
     function displayBiodata(warga) {
       const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
       
@@ -1191,20 +1205,6 @@ include 'header.php';
         // Jika tidak bisa diparse, return empty string
         console.log(`Could not parse date: ${dateValue}`);
         return '';
-      }
-
-      // Fungsi untuk mengkonversi format tanggal dari YYYY-MM-DD ke DD-MM-YYYY untuk display
-      function formatDateForDisplay(dateString) {
-        if (!dateString || dateString === '0000-00-00') return '';
-        
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return '';
-        
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        
-        return `${day}-${month}-${year}`;
       }
 
       // Import dari Excel (tanpa id_warga dan tgl_warga)
