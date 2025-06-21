@@ -16,6 +16,7 @@ include 'header.php';
                   <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
                 </label>
                 <button id="testModalBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-2">Test Modal</button>
+                <button id="testEditBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -845,6 +846,16 @@ include 'header.php';
                 }
               }
               
+              // Debug: Log data untuk setiap baris
+              console.log(`Row ${idx + 1} data:`, row);
+              
+              // Test JSON stringify untuk memastikan data valid
+              const jsonData = JSON.stringify(row);
+              console.log(`Row ${idx + 1} JSON:`, jsonData);
+              
+              const encodedData = encodeURIComponent(jsonData);
+              console.log(`Row ${idx + 1} encoded:`, encodedData);
+              
               html += `<tr class="border-b hover:bg-gray-50">
                 <td class="px-6 py-2 w-10">${idx + 1}</td>
                 <td class="px-6 py-2 w-40 text-left">
@@ -859,7 +870,7 @@ include 'header.php';
                 <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
                 <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
                 <td class="px-6 py-2 w-32 text-center">
-                  <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
+                  <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id="${encodedData}"><i class='bx bx-edit'></i></button>
                   <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
                 </td>
               </tr>`;
@@ -1151,18 +1162,25 @@ include 'header.php';
       $(document).on('click', '.editBtn', async function() {
         console.log('=== EDIT BUTTON CLICKED ===');
         console.log('Edit button clicked');
-        const data = $(this).data('id');
-        console.log('Edit data:', data);
-        
-        if (!data) {
-          console.error('No data found for edit');
-          alert('Data tidak ditemukan untuk diedit');
-          return;
-        }
-        
-        $('#modalTitle').text('Edit Warga');
         
         try {
+          // Decode the encoded JSON data
+          const encodedData = $(this).data('id');
+          console.log('Encoded data:', encodedData);
+          
+          if (!encodedData) {
+            throw new Error('Data tidak ditemukan untuk diedit');
+          }
+          
+          const data = JSON.parse(decodeURIComponent(encodedData));
+          console.log('Decoded edit data:', data);
+          
+          if (!data || typeof data !== 'object') {
+            throw new Error('Data tidak valid untuk diedit');
+          }
+          
+          $('#modalTitle').text('Edit Warga');
+          
           console.log('Setting form values...');
           // Set nilai form (kecuali field wilayah)
           for (const key in data) {
@@ -1926,11 +1944,68 @@ include 'header.php';
       console.log('Found edit buttons:', editButtons.length);
       
       if (editButtons.length > 0) {
-        console.log('First edit button data:', editButtons.first().data('id'));
-        editButtons.first().click();
+        const firstButton = editButtons.first();
+        const encodedData = firstButton.data('id');
+        console.log('First edit button encoded data:', encodedData);
+        
+        if (encodedData) {
+          try {
+            const decodedData = JSON.parse(decodeURIComponent(encodedData));
+            console.log('First edit button decoded data:', decodedData);
+            firstButton.click();
+          } catch (error) {
+            console.error('Error decoding data:', error);
+            alert('Error decoding data: ' + error.message);
+          }
+        } else {
+          console.log('No data found in edit button');
+        }
       } else {
         console.log('No edit buttons found');
       }
+    };
+    
+    // Test function untuk membuat edit button dengan data test
+    window.createTestEditButton = function() {
+      const testData = {
+        id_warga: 999,
+        nama: 'Test User',
+        nik: '1234567890123456',
+        nikk: '1234567890123456',
+        hubungan: 'Kepala Keluarga',
+        jenkel: 'L',
+        tpt_lahir: 'Test City',
+        tgl_lahir: '1990-01-01',
+        alamat: 'Test Address',
+        rt: '001',
+        rw: '001',
+        propinsi: 'Test Province',
+        kota: 'Test City',
+        kecamatan: 'Test District',
+        kelurahan: 'Test Village',
+        negara: 'Indonesia',
+        agama: 'Islam',
+        status: 'Kawin',
+        pekerjaan: 'Test Job',
+        foto: '',
+        hp: '08123456789'
+      };
+      
+      const jsonData = JSON.stringify(testData);
+      const encodedData = encodeURIComponent(jsonData);
+      
+      console.log('Test data:', testData);
+      console.log('Test JSON:', jsonData);
+      console.log('Test encoded:', encodedData);
+      
+      // Create test button
+      const testButton = $(`<button class="editBtn px-2 py-1 bg-purple-400 text-white rounded hover:bg-purple-500" data-id="${encodedData}">Test Edit</button>`);
+      
+      // Add to page
+      $('body').append(testButton);
+      
+      console.log('Test edit button created');
+      return testButton;
     };
     
     // Log when page is ready
@@ -1938,5 +2013,11 @@ include 'header.php';
       console.log('Warga page loaded');
       console.log('Modal element exists:', $('#modal').length > 0);
       console.log('Edit buttons found:', $('.editBtn').length);
+    });
+
+    // Test edit button
+    $('#testEditBtn').click(() => {
+      console.log('Test edit button clicked');
+      testEditButton();
     });
   </script>
