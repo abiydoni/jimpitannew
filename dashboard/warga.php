@@ -794,23 +794,30 @@ include 'header.php';
       function processExcelDate(dateValue) {
         if (!dateValue) return '';
         
+        console.log(`Processing date: "${dateValue}" (type: ${typeof dateValue})`);
+        
         // Jika sudah dalam format YYYY-MM-DD, return as is
         if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+          console.log(`Already in YYYY-MM-DD format: ${dateValue}`);
           return dateValue;
         }
         
         // Jika berupa number (Excel date serial number)
         if (typeof dateValue === 'number') {
+          console.log(`Excel serial number: ${dateValue}`);
           // Excel date serial number dimulai dari 1 Januari 1900
           const excelEpoch = new Date(1900, 0, 1);
           const date = new Date(excelEpoch.getTime() + (dateValue - 1) * 24 * 60 * 60 * 1000);
-          return date.toISOString().split('T')[0];
+          const result = date.toISOString().split('T')[0];
+          console.log(`Converted from serial number: ${result}`);
+          return result;
         }
         
         // Jika berupa string dengan format lain, coba parse
         if (typeof dateValue === 'string') {
           // Prioritas untuk format DD-MM-YYYY (format yang diinginkan user)
           if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateValue)) {
+            console.log(`DD-MM-YYYY format detected: ${dateValue}`);
             const parts = dateValue.split('-');
             const day = parseInt(parts[0]);
             const month = parseInt(parts[1]);
@@ -818,8 +825,20 @@ include 'header.php';
             
             // Validasi tanggal
             if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
-              return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+              const result = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+              console.log(`Converted DD-MM-YYYY to YYYY-MM-DD: ${result}`);
+              return result;
+            } else {
+              console.log(`Invalid date parts: day=${day}, month=${month}, year=${year}`);
             }
+          }
+          
+          // Coba parse dengan Date constructor untuk format lain
+          const date = new Date(dateValue);
+          if (!isNaN(date.getTime())) {
+            const result = date.toISOString().split('T')[0];
+            console.log(`Parsed with Date constructor: ${dateValue} -> ${result}`);
+            return result;
           }
           
           // Format lain sebagai fallback
@@ -834,13 +853,16 @@ include 'header.php';
             if (format.test(dateValue)) {
               const date = new Date(dateValue);
               if (!isNaN(date.getTime())) {
-                return date.toISOString().split('T')[0];
+                const result = date.toISOString().split('T')[0];
+                console.log(`Matched format ${format}: ${dateValue} -> ${result}`);
+                return result;
               }
             }
           }
         }
         
         // Jika tidak bisa diparse, return empty string
+        console.log(`Could not parse date: ${dateValue}`);
         return '';
       }
 
@@ -892,6 +914,9 @@ include 'header.php';
           $('#progressText').text('30% selesai');
           
           const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
+          console.log('Header yang diproses:', header);
+          console.log('Posisi field tgl_lahir:', header.indexOf('tgl_lahir'));
+          
           let dataValid = [];
           let errorList = [];
           let nikSet = new Set();
@@ -899,6 +924,10 @@ include 'header.php';
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row.length) continue;
+            
+            // Debug: tampilkan data mentah dari Excel
+            console.log(`Baris ${i+1} data mentah:`, row);
+            
             const dataWarga = { action: 'create' };
             header.forEach((h, idx) => {
               // Khusus untuk field tanggal lahir, gunakan fungsi processExcelDate
@@ -922,10 +951,12 @@ include 'header.php';
               continue;
             }
             // Validasi tanggal lahir
-            if (dataWarga['tgl_lahir'] && !/^\d{1,2}-\d{1,2}-\d{4}$/.test(dataWarga['tgl_lahir'])) {
-              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'Format tanggal lahir tidak valid (harus DD-MM-YYYY)' });
+            if (dataWarga['tgl_lahir'] && !/^\d{4}-\d{2}-\d{2}$/.test(dataWarga['tgl_lahir'])) {
+              console.log(`Error tanggal baris ${i+1}: "${dataWarga['tgl_lahir']}" tidak sesuai format YYYY-MM-DD`);
+              errorList.push({ baris: i+1, nama: dataWarga['nama'] || '-', nik: dataWarga['nik'] || '-', error: 'Format tanggal lahir tidak valid (harus DD-MM-YYYY di Excel)' });
               continue;
             }
+            console.log(`Baris ${i+1}: Tanggal lahir valid = "${dataWarga['tgl_lahir']}"`);
             nikSet.add(dataWarga['nik']);
             dataValid.push(dataWarga);
           }
