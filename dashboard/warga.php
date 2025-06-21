@@ -367,6 +367,8 @@ include 'header.php';
               .gap-4 { gap: 16px; }
               .w-32 { width: 128px; }
               .h-40 { height: 160px; }
+              .w-40 { width: 160px; }
+              .h-48 { height: 192px; }
               .bg-gray-100 { background-color: #f3f4f6; }
               .flex-1 { flex: 1; }
               .space-y-1 > * + * { margin-top: 4px; }
@@ -396,8 +398,8 @@ include 'header.php';
                 .border-2 { border: 1px solid #000; }
                 .border-b-2 { border-bottom: 1px solid #000; }
                 .text-xs { font-size: 10px; }
-                .w-32 { width: 100px; }
-                .h-40 { height: 120px; }
+                .w-40 { width: 120px; }
+                .h-48 { height: 144px; }
               }
             </style>
           </head>
@@ -504,7 +506,6 @@ include 'header.php';
         <div class="space-y-4">
           <!-- Header dengan tombol print -->
           <div class="flex justify-between items-center border-b pb-2">
-            <h3 class="text-lg font-semibold">Biodata Lengkap Warga</h3>
             <button onclick="printBiodata()" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
@@ -523,7 +524,7 @@ include 'header.php';
               <!-- Content KTP -->
               <div class="flex gap-4">
                 <!-- Foto -->
-                <div class="w-32 h-40 border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
+                <div class="w-40 h-48 border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
                   ${warga.foto ? 
                     `<img src="${warga.foto}" alt="Foto" class="w-full h-full object-cover">` : 
                     `<div class="text-center text-gray-500 text-xs">
@@ -641,7 +642,6 @@ include 'header.php';
         <div class="space-y-4">
           <!-- Header dengan tombol print -->
           <div class="flex justify-between items-center border-b pb-2">
-            <h3 class="text-lg font-semibold">Biodata Kartu Keluarga</h3>
             <button onclick="printKK()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs">
               <i class='bx bx-printer'></i> Print
             </button>
