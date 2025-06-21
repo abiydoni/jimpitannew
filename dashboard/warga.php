@@ -2236,6 +2236,28 @@ include 'header.php';
       setDropdownValue('#kelurahan', data.kelurahan);
       $('#kelurahan_nama').val(data.kelurahan || '');
     }
+
+    $('#dataBody').html(html); // render data
+    if ($.fn.DataTable.isDataTable('#example')) {
+        $('#example').DataTable().destroy();
+    }
+    $('#example').DataTable({
+        responsive: true,
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ entri",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya",
+                previous: "Sebelumnya"
+            },
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+            infoFiltered: "(disaring dari total _MAX_ entri)"
+        }
+    });
   </script>
   
   <?php include 'footer.php'; ?>
