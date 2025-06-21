@@ -275,6 +275,73 @@ include 'header.php';
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
+    // Utility functions harus di paling atas!
+    function waitForDropdown(selector, maxWait = 5000) {
+      return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+          const element = $(selector);
+          const options = element.find('option');
+          if (options.length > 1 && !element.prop('disabled') &&
+              !options.first().text().includes('Loading') &&
+              !options.first().text().includes('Error')) {
+            clearInterval(checkInterval);
+            resolve(element);
+          }
+          if (Date.now() - startTime > maxWait) {
+            clearInterval(checkInterval);
+            reject(new Error('Timeout waiting for dropdown'));
+          }
+        }, 100);
+      });
+    }
+
+    function setDropdownValue(selector, name) {
+      if (!name) return false;
+      const dropdown = $(selector);
+      let option = dropdown.find(`option[data-name="${name}"]`);
+      if (option.length > 0) {
+        dropdown.val(option.val());
+        return true;
+      }
+      option = dropdown.find(`option:contains("${name}")`).filter(function() {
+        return $(this).text().trim() === name;
+      });
+      if (option.length > 0) {
+        dropdown.val(option.val());
+        return true;
+      }
+      option = dropdown.find(`option:contains("${name}")`);
+      if (option.length > 0) {
+        dropdown.val(option.val());
+        return true;
+      }
+      option = dropdown.find(`option[value="${name}"]`);
+      if (option.length > 0) {
+        dropdown.val(name);
+        return true;
+      }
+      return false;
+    }
+
+    async function setWilayahDropdowns(data) {
+      await waitForDropdown('#propinsi');
+      setDropdownValue('#propinsi', data.propinsi);
+      $('#propinsi_nama').val(data.propinsi || '');
+      loadKota($('#propinsi').val());
+      await waitForDropdown('#kota');
+      setDropdownValue('#kota', data.kota);
+      $('#kota_nama').val(data.kota || '');
+      loadKecamatan($('#kota').val());
+      await waitForDropdown('#kecamatan');
+      setDropdownValue('#kecamatan', data.kecamatan);
+      $('#kecamatan_nama').val(data.kecamatan || '');
+      loadKelurahan($('#kecamatan').val());
+      await waitForDropdown('#kelurahan');
+      setDropdownValue('#kelurahan', data.kelurahan);
+      $('#kelurahan_nama').val(data.kelurahan || '');
+    }
+
     // Fungsi global untuk modal dan print
     function showBiodata(nik) {
       if (!nik || nik === '-') {
