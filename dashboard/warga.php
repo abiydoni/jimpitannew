@@ -1205,59 +1205,81 @@ include 'header.php';
         return false;
       }
 
-      $(document).on('click', '.editBtn', async function() {
+      $(document).on('click', '.editBtn', function() {
         console.log('=== EDIT BUTTON CLICKED ===');
         console.log('Edit button clicked');
+        
         try {
           // Decode the encoded JSON data
           const encodedData = $(this).data('id');
           console.log('Encoded data:', encodedData);
+          
           if (!encodedData) {
             throw new Error('Data tidak ditemukan untuk diedit');
           }
+          
           const data = JSON.parse(decodeURIComponent(encodedData));
           console.log('Decoded edit data:', data);
+          
           if (!data || typeof data !== 'object') {
             throw new Error('Data tidak valid untuk diedit');
           }
+          
           $('#modalTitle').text('Edit Warga');
+          
           // Set id_warga for update
           $('#id_warga').val(data.id_warga || '');
+          
           // Populate all form fields with detailed logging
           console.log('Setting form fields...');
+          
           // Data Pribadi
           $('#nama').val(data.nama || '');
           console.log('Set nama:', data.nama);
+          
           $('#nik').val(data.nik || '');
           console.log('Set nik:', data.nik);
+          
           $('#nikk').val(data.nikk || '');
           console.log('Set nikk:', data.nikk);
+          
           $('#hubungan').val(data.hubungan || '');
           console.log('Set hubungan:', data.hubungan);
+          
           $('#jenkel').val(data.jenkel || '');
           console.log('Set jenkel:', data.jenkel);
+          
           $('#tpt_lahir').val(data.tpt_lahir || '');
           console.log('Set tpt_lahir:', data.tpt_lahir);
+          
           $('#alamat').val(data.alamat || '');
           console.log('Set alamat:', data.alamat);
+          
           $('#negara').val(data.negara || 'Indonesia');
           console.log('Set negara:', data.negara);
+          
           $('#agama').val(data.agama || '');
           console.log('Set agama:', data.agama);
+          
           $('#status').val(data.status || '');
           console.log('Set status:', data.status);
+          
           $('#pekerjaan').val(data.pekerjaan || '');
           console.log('Set pekerjaan:', data.pekerjaan);
+          
           $('#hp').val(data.hp || '');
           console.log('Set hp:', data.hp);
+          
           // Set tanggal lahir if available
           if (data.tgl_lahir) {
             const formattedDate = formatDateForDisplay(data.tgl_lahir);
             $('#tgl_lahir').val(formattedDate);
             console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
+            
             // Set dropdown tanggal lahir
             setDropdownTanggalLahir(formattedDate);
           }
+          
           // Set RT/RW if available
           if (data.rt || data.rw) {
             // Convert single digits to 3-digit padded format
@@ -1266,44 +1288,51 @@ include 'header.php';
             setDropdownRTRW(rt, rw);
             console.log('Set RT/RW:', rt, rw);
           }
-          // Set foto if available
-          if (data.foto) {
-            $('#foto').val(data.foto);
-            $('#foto_preview_img').attr('src', data.foto);
-            $('#foto_preview').removeClass('hidden');
-            console.log('Set foto:', data.foto);
-          } else {
-            $('#foto_preview').addClass('hidden');
-          }
-          // Set dropdown wilayah secara asinkron
-          await setWilayahDropdowns(data);
+          
+          // Set nama wilayah ke hidden input
+          $('#propinsi_nama').val(data.propinsi || '');
+          $('#kota_nama').val(data.kota || '');
+          $('#kecamatan_nama').val(data.kecamatan || '');
+          $('#kelurahan_nama').val(data.kelurahan || '');
           console.log('Set wilayah:', {
             propinsi: data.propinsi,
             kota: data.kota,
             kecamatan: data.kecamatan,
             kelurahan: data.kelurahan
           });
+          
+          // Set foto if available
+          if (data.foto) {
+            $('#foto').val(data.foto);
+            console.log('Set foto:', data.foto);
+          }
+          
           $('#formAction').val('update');
           console.log('Set formAction to update');
+          
           console.log('=== SHOWING MODAL ===');
           // Show modal using the same method as tambah button
           console.log('Modal element exists:', $('#modal').length > 0);
           console.log('Modal current display:', $('#modal').css('display'));
           console.log('Modal current classes:', $('#modal').attr('class'));
+          
           console.log('Showing modal...');
           $('#modal').removeClass('hidden');
           $('#modal').addClass('modal-show');
           $('#modal').show();
+          
           console.log('Modal should be visible now');
           console.log('Modal display after show:', $('#modal').css('display'));
           console.log('Modal classes after show:', $('#modal').attr('class'));
           console.log('Modal visibility:', $('#modal').css('visibility'));
           console.log('Modal opacity:', $('#modal').css('opacity'));
           console.log('Modal z-index:', $('#modal').css('z-index'));
+          
           // Focus pada input pertama
           setTimeout(() => {
             $('#nama').focus();
           }, 200);
+          
         } catch (error) {
           console.error('Error in edit modal:', error);
           alert('Terjadi kesalahan saat membuka modal edit: ' + error.message);
@@ -1879,8 +1908,20 @@ include 'header.php';
       // Saat edit data, isi RT/RW
       function setDropdownRTRW(rt, rw) {
         isiDropdownRTRW(rt, rw);
-        if (rt) $('#rt').val(rt);
-        if (rw) $('#rw').val(rw);
+        
+        // Show existing photo if available
+        if (data.foto) {
+          $('#foto_preview_img').attr('src', data.foto);
+          $('#foto_preview').removeClass('hidden');
+        } else {
+          $('#foto_preview').addClass('hidden');
+        }
+        
+        // Set nama wilayah ke hidden input
+        $('#propinsi_nama').val(data.propinsi || '');
+        $('#kota_nama').val(data.kota || '');
+        $('#kecamatan_nama').val(data.kecamatan || '');
+        $('#kelurahan_nama').val(data.kelurahan || '');
       }
 
       // Panggil setDropdownRTRW(data.rt, data.rw) di bagian edit data
@@ -2144,31 +2185,5 @@ include 'header.php';
         $('#rw').val(rw);
         console.log(`Set RW dropdown: ${rw}`);
       }
-    }
-
-    // Fungsi untuk set nilai dropdown wilayah secara berurutan dan asinkron
-    async function setWilayahDropdowns(data) {
-      // Set Provinsi
-      await waitForDropdown('#propinsi');
-      setDropdownValue('#propinsi', data.propinsi);
-      $('#propinsi_nama').val(data.propinsi || '');
-
-      // Load Kota
-      loadKota($('#propinsi').val());
-      await waitForDropdown('#kota');
-      setDropdownValue('#kota', data.kota);
-      $('#kota_nama').val(data.kota || '');
-
-      // Load Kecamatan
-      loadKecamatan($('#kota').val());
-      await waitForDropdown('#kecamatan');
-      setDropdownValue('#kecamatan', data.kecamatan);
-      $('#kecamatan_nama').val(data.kecamatan || '');
-
-      // Load Kelurahan
-      loadKelurahan($('#kecamatan').val());
-      await waitForDropdown('#kelurahan');
-      setDropdownValue('#kelurahan', data.kelurahan);
-      $('#kelurahan_nama').val(data.kelurahan || '');
     }
   </script>
