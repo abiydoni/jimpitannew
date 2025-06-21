@@ -17,6 +17,7 @@ include 'header.php';
                 </label>
                 <button id="testModalBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-2">Test Modal</button>
                 <button id="testEditBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit</button>
+                <button id="testEditModalBtn" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit Modal</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -1181,29 +1182,24 @@ include 'header.php';
           
           $('#modalTitle').text('Edit Warga');
           
-          console.log('Setting form values...');
-          // Set nilai form (kecuali field wilayah)
-          for (const key in data) {
-            // Skip field wilayah karena akan dihandle secara terpisah
-            if (["propinsi", "kota", "kecamatan", "kelurahan"].includes(key)) {
-              continue;
-            }
-            // Khusus untuk tanggal lahir, konversi ke format DD-MM-YYYY untuk input
-            if (key === "tgl_lahir") {
-              $(`#${key}`).val(formatDateForDisplay(data[key]));
-            } else {
-              $(`#${key}`).val(data[key]);
-            }
+          // Simple form population - just set basic fields first
+          $('#nama').val(data.nama || '');
+          $('#nik').val(data.nik || '');
+          $('#nikk').val(data.nikk || '');
+          $('#hubungan').val(data.hubungan || '');
+          $('#jenkel').val(data.jenkel || '');
+          $('#tpt_lahir').val(data.tpt_lahir || '');
+          $('#alamat').val(data.alamat || '');
+          $('#negara').val(data.negara || 'Indonesia');
+          $('#agama').val(data.agama || '');
+          $('#status').val(data.status || '');
+          $('#pekerjaan').val(data.pekerjaan || '');
+          $('#hp').val(data.hp || '');
+          
+          // Set tanggal lahir if available
+          if (data.tgl_lahir) {
+            $('#tgl_lahir').val(formatDateForDisplay(data.tgl_lahir));
           }
-          
-          console.log('Setting dropdowns...');
-          // Set dropdown tanggal lahir
-          setDropdownTanggalLahir(formatDateForDisplay(data.tgl_lahir));
-          
-          // Set dropdown RT/RW - convert single digits to 3-digit padded format
-          const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
-          const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
-          setDropdownRTRW(rt, rw);
           
           // Set nama wilayah ke hidden input
           $('#propinsi_nama').val(data.propinsi || '');
@@ -1211,58 +1207,10 @@ include 'header.php';
           $('#kecamatan_nama').val(data.kecamatan || '');
           $('#kelurahan_nama').val(data.kelurahan || '');
           
-          console.log('Loading wilayah dropdowns...');
-          // Load dropdown wilayah berdasarkan data yang ada
-          if (data.propinsi) {
-            try {
-              // Pastikan provinsi sudah ter-load
-              await waitForDropdown('#propinsi');
-              
-              // Set provinsi berdasarkan nama
-              if (setDropdownValue('#propinsi', data.propinsi) && data.kota) {
-                // Load kota
-                loadKota($('#propinsi').val());
-                
-                // Tunggu kota ter-load
-                await waitForDropdown('#kota');
-                
-                // Set kota berdasarkan nama
-                if (setDropdownValue('#kota', data.kota) && data.kecamatan) {
-                  // Load kecamatan
-                  loadKecamatan($('#kota').val());
-                  
-                  // Tunggu kecamatan ter-load
-                  await waitForDropdown('#kecamatan');
-                  
-                  // Set kecamatan berdasarkan nama
-                  if (setDropdownValue('#kecamatan', data.kecamatan) && data.kelurahan) {
-                    // Load kelurahan
-                    loadKelurahan($('#kecamatan').val());
-                    
-                    // Tunggu kelurahan ter-load
-                    await waitForDropdown('#kelurahan');
-                    
-                    // Set kelurahan berdasarkan nama
-                    setDropdownValue('#kelurahan', data.kelurahan);
-                  }
-                }
-              }
-            } catch (error) {
-              console.error('Error loading dropdown:', error);
-              // Continue even if dropdown loading fails
-            }
-          }
-          
           $('#formAction').val('update');
           
           console.log('=== SHOWING MODAL ===');
-          // Debug modal display
-          console.log('Before showing modal - Modal element:', $('#modal')[0]);
-          console.log('Before showing modal - Modal classes:', $('#modal').attr('class'));
-          console.log('Before showing modal - Modal display:', $('#modal').css('display'));
-          console.log('Before showing modal - Modal z-index:', $('#modal').css('z-index'));
-          
-          // Force modal to show with multiple approaches
+          // Show modal using the same method as test modal
           $('#modal').removeClass('hidden').addClass('modal-show');
           $('#modal').css({
             'display': 'flex',
@@ -1279,18 +1227,9 @@ include 'header.php';
             'justify-content': 'center'
           });
           
-          // Debug: Log setelah menampilkan modal
-          setTimeout(() => {
-            console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
-            console.log('After showing modal - Modal z-index:', $('#modal').css('z-index'));
-            console.log('After showing modal - Modal container z-index:', $('.modal-container').css('z-index'));
-            console.log('After showing modal - Modal display:', $('#modal').css('display'));
-            console.log('After showing modal - Modal visibility:', $('#modal').css('visibility'));
-            console.log('After showing modal - Modal opacity:', $('#modal').css('opacity'));
-            console.log('Modal container display:', $('.modal-container').css('display'));
-            console.log('Modal container visibility:', $('.modal-container').css('visibility'));
-            console.log('=== MODAL SHOWN ===');
-          }, 100);
+          console.log('Modal should be visible now');
+          console.log('Modal display:', $('#modal').css('display'));
+          console.log('Modal z-index:', $('#modal').css('z-index'));
           
           // Focus pada input pertama
           setTimeout(() => {
@@ -2019,5 +1958,110 @@ include 'header.php';
     $('#testEditBtn').click(() => {
       console.log('Test edit button clicked');
       testEditButton();
+    });
+
+    // Test function untuk debug edit button
+    window.testEditButton = function() {
+      console.log('Testing edit button...');
+      const editButtons = $('.editBtn');
+      console.log('Found edit buttons:', editButtons.length);
+      
+      if (editButtons.length > 0) {
+        const firstButton = editButtons.first();
+        const encodedData = firstButton.data('id');
+        console.log('First edit button encoded data:', encodedData);
+        
+        if (encodedData) {
+          try {
+            const decodedData = JSON.parse(decodeURIComponent(encodedData));
+            console.log('First edit button decoded data:', decodedData);
+            firstButton.click();
+          } catch (error) {
+            console.error('Error decoding data:', error);
+            alert('Error decoding data: ' + error.message);
+          }
+        } else {
+          console.log('No data found in edit button');
+        }
+      } else {
+        console.log('No edit buttons found');
+      }
+    };
+    
+    // Simple test function to manually trigger edit modal
+    window.testEditModal = function() {
+      console.log('Testing edit modal manually...');
+      
+      const testData = {
+        id_warga: 999,
+        nama: 'Test User',
+        nik: '1234567890123456',
+        nikk: '1234567890123456',
+        hubungan: 'Kepala Keluarga',
+        jenkel: 'L',
+        tpt_lahir: 'Test City',
+        tgl_lahir: '1990-01-01',
+        alamat: 'Test Address',
+        rt: '001',
+        rw: '001',
+        propinsi: 'Test Province',
+        kota: 'Test City',
+        kecamatan: 'Test District',
+        kelurahan: 'Test Village',
+        negara: 'Indonesia',
+        agama: 'Islam',
+        status: 'Kawin',
+        pekerjaan: 'Test Job',
+        foto: '',
+        hp: '08123456789'
+      };
+      
+      console.log('Test data:', testData);
+      
+      // Set form values
+      $('#modalTitle').text('Edit Warga');
+      $('#nama').val(testData.nama);
+      $('#nik').val(testData.nik);
+      $('#nikk').val(testData.nikk);
+      $('#hubungan').val(testData.hubungan);
+      $('#jenkel').val(testData.jenkel);
+      $('#tpt_lahir').val(testData.tpt_lahir);
+      $('#alamat').val(testData.alamat);
+      $('#negara').val(testData.negara);
+      $('#agama').val(testData.agama);
+      $('#status').val(testData.status);
+      $('#pekerjaan').val(testData.pekerjaan);
+      $('#hp').val(testData.hp);
+      
+      if (testData.tgl_lahir) {
+        $('#tgl_lahir').val(formatDateForDisplay(testData.tgl_lahir));
+      }
+      
+      $('#formAction').val('update');
+      
+      // Show modal
+      $('#modal').removeClass('hidden').addClass('modal-show');
+      $('#modal').css({
+        'display': 'flex',
+        'opacity': '1',
+        'visibility': 'visible',
+        'z-index': '999999',
+        'position': 'fixed',
+        'top': '0',
+        'left': '0',
+        'right': '0',
+        'bottom': '0',
+        'background-color': 'rgba(0, 0, 0, 0.5)',
+        'align-items': 'center',
+        'justify-content': 'center'
+      });
+      
+      console.log('Edit modal should be visible now');
+    };
+
+    // Test edit modal button
+    $('#testEditModalBtn').click(() => {
+      console.log('Test edit modal button clicked');
+      testEditModal();
     });
   </script>
