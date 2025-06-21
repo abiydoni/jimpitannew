@@ -223,6 +223,21 @@ include 'header.php';
     </div>
 </div>
 
+<!-- Modal Loading untuk Import -->
+<div id="loadingModal" class="modal-overlay hidden">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <h3 class="text-lg font-semibold mb-2">Memproses Import Data</h3>
+            <p id="loadingText" class="text-gray-600 mb-4">Sedang memvalidasi file...</p>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progressText" class="text-sm text-gray-500">0% selesai</p>
+        </div>
+    </div>
+</div>
+
   <?php include 'footer.php'; ?>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -487,9 +502,19 @@ include 'header.php';
         const originalText = submitBtn.text();
         submitBtn.prop('disabled', true).text('Menyimpan...');
         
-        const formData = $(this).serialize();
+        // Buat object data dengan nama wilayah, bukan ID
+        const formDataObj = {};
+        $(this).serializeArray().forEach(item => {
+          formDataObj[item.name] = item.value;
+        });
         
-        $.post('api/warga_action.php', formData, function(res) {
+        // Ganti nilai ID wilayah dengan nama wilayah
+        formDataObj.propinsi = propinsi_nama;
+        formDataObj.kota = kota_nama;
+        formDataObj.kecamatan = kecamatan_nama;
+        formDataObj.kelurahan = kelurahan_nama;
+        
+        $.post('api/warga_action.php', formDataObj, function(res) {
           $('#modal').removeClass('modal-show').addClass('hidden');
           loadData();
           if (res === 'success' || res === 'updated') {
@@ -554,8 +579,12 @@ include 'header.php';
         const data = $(this).data('id');
         $('#modalTitle').text('Edit Warga');
         
-        // Set nilai form
+        // Set nilai form (kecuali field wilayah)
         for (const key in data) {
+          // Skip field wilayah karena akan dihandle secara terpisah
+          if (['propinsi', 'kota', 'kecamatan', 'kelurahan'].includes(key)) {
+            continue;
+          }
           $(`#${key}`).val(data[key]);
         }
         
@@ -571,7 +600,7 @@ include 'header.php';
             // Pastikan provinsi sudah ter-load
             await waitForDropdown('#propinsi');
             
-            // Set provinsi
+            // Set provinsi berdasarkan nama
             if (setDropdownValue('#propinsi', data.propinsi) && data.kota) {
               // Load kota
               loadKota($('#propinsi').val());
@@ -579,7 +608,7 @@ include 'header.php';
               // Tunggu kota ter-load
               await waitForDropdown('#kota');
               
-              // Set kota
+              // Set kota berdasarkan nama
               if (setDropdownValue('#kota', data.kota) && data.kecamatan) {
                 // Load kecamatan
                 loadKecamatan($('#kota').val());
@@ -587,7 +616,7 @@ include 'header.php';
                 // Tunggu kecamatan ter-load
                 await waitForDropdown('#kecamatan');
                 
-                // Set kecamatan
+                // Set kecamatan berdasarkan nama
                 if (setDropdownValue('#kecamatan', data.kecamatan) && data.kelurahan) {
                   // Load kelurahan
                   loadKelurahan($('#kecamatan').val());
@@ -595,7 +624,7 @@ include 'header.php';
                   // Tunggu kelurahan ter-load
                   await waitForDropdown('#kelurahan');
                   
-                  // Set kelurahan
+                  // Set kelurahan berdasarkan nama
                   setDropdownValue('#kelurahan', data.kelurahan);
                 }
               }
@@ -631,13 +660,29 @@ include 'header.php';
 
       // Export ke Excel (semua field, dengan styling, tanpa id_warga dan tgl_warga)
       $('#exportBtn').click(function() {
+        // Tampilkan loading untuk export
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang mempersiapkan data untuk export...');
+        $('#progressBar').css('width', '30%');
+        $('#progressText').text('30% selesai');
+        
         $.post('api/warga_action.php', { action: 'read' }, function(data) {
+          $('#loadingText').text('Sedang memproses data...');
+          $('#progressBar').css('width', '60%');
+          $('#progressText').text('60% selesai');
+          
           try {
             const warga = JSON.parse(data);
             if (!warga.length) {
+              $('#loadingModal').removeClass('modal-show').addClass('hidden');
               alert('Tidak ada data untuk diexport!');
               return;
             }
+            
+            $('#loadingText').text('Sedang membuat file Excel...');
+            $('#progressBar').css('width', '80%');
+            $('#progressText').text('80% selesai');
+            
             // Header hanya field wilayah tanpa _nama
             const header = [
               'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
@@ -684,10 +729,24 @@ include 'header.php';
             ws['!cols'] = wscols;
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'DataWarga');
-            XLSX.writeFile(wb, 'data_warga.xlsx');
+            
+            $('#loadingText').text('Sedang mengunduh file...');
+            $('#progressBar').css('width', '100%');
+            $('#progressText').text('100% selesai');
+            
+            // Tunggu sebentar sebelum download
+            setTimeout(() => {
+              XLSX.writeFile(wb, 'data_warga.xlsx');
+              $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            }, 500);
+            
           } catch (e) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
             alert('Gagal export: ' + e);
           }
+        }).fail(function(xhr, status, error) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Error loading data: ' + error);
         });
       });
 
@@ -695,21 +754,40 @@ include 'header.php';
       $('#importInput').change(function(e) {
         const file = e.target.files[0];
         if (!file) return;
+        
+        // Tampilkan modal loading
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang membaca file Excel...');
+        $('#progressBar').css('width', '10%');
+        $('#progressText').text('10% selesai');
+        
         const reader = new FileReader();
         reader.onload = function(e) {
+          $('#loadingText').text('Sedang memproses data...');
+          $('#progressBar').css('width', '20%');
+          $('#progressText').text('20% selesai');
+          
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          
           if (json.length < 2) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
             alert('File kosong atau tidak ada data!');
             return;
           }
+          
+          $('#loadingText').text('Sedang memvalidasi data...');
+          $('#progressBar').css('width', '30%');
+          $('#progressText').text('30% selesai');
+          
           const header = json[0].filter(h => h !== 'id_warga' && h !== 'tgl_warga');
           let dataValid = [];
           let errorList = [];
           let nikSet = new Set();
+          
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row.length) continue;
@@ -730,6 +808,12 @@ include 'header.php';
             nikSet.add(dataWarga['nik']);
             dataValid.push(dataWarga);
           }
+          
+          // Update progress
+          $('#loadingText').text('Sedang mengecek database...');
+          $('#progressBar').css('width', '50%');
+          $('#progressText').text('50% selesai');
+          
           // Tampilkan rekap error sebelum cek ke database
           let info = 'Data valid: ' + dataValid.length + ', Data error: ' + errorList.length;
           if (errorList.length) {
@@ -738,6 +822,7 @@ include 'header.php';
               info += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
             });
           }
+          
           // Cek NIK ke database jika tidak ada error di file
           if (!errorList.length) {
             // Ambil semua NIK yang valid
@@ -762,8 +847,10 @@ include 'header.php';
               }
             });
           }
+          
           // Jika ada error (baik dari file atau database), tampilkan dan download report error, hentikan proses
           if (errorList.length) {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
             let infoErr = 'Import dibatalkan! Data error: ' + errorList.length + '\n\nDetail error:';
             errorList.forEach(e => {
               infoErr += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
@@ -784,10 +871,23 @@ include 'header.php';
             document.body.removeChild(link);
             return;
           }
+          
           // Jika tidak ada error, lanjut kirim ke backend
+          $('#loadingText').text('Sedang menyimpan data ke database...');
+          $('#progressBar').css('width', '70%').addClass('progress-bar-animated');
+          $('#progressText').text('70% selesai');
+          
           let sukses = 0, gagal = 0;
           let errorBackend = [];
+          const totalData = dataValid.length;
+          
           for (let i = 0; i < dataValid.length; i++) {
+            // Update progress untuk setiap data yang diproses
+            const progress = 70 + Math.round((i / totalData) * 25);
+            $('#progressBar').css('width', progress + '%');
+            $('#progressText').text(progress + '% selesai');
+            $('#loadingText').text(`Menyimpan data ${i + 1} dari ${totalData}...`);
+            
             $.ajax({
               url: 'api/warga_action.php',
               type: 'POST',
@@ -812,36 +912,57 @@ include 'header.php';
               }
             });
           }
+          
+          $('#loadingText').text('Menyelesaikan proses...');
+          $('#progressBar').css('width', '95%').removeClass('progress-bar-animated');
+          $('#progressText').text('95% selesai');
+          
           loadData();
-          let info2 = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
-          if (errorBackend.length) {
-            info2 += '\n\nDetail error:';
-            errorBackend.forEach(e => {
-              info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
-            });
-            alert(info2);
-            // Otomatis download report error backend
-            let txt = 'Report Error Import Data Warga (Backend)\n';
-            txt += '==============================\n';
-            errorBackend.forEach(e => {
-              txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
-            });
-            const blob = new Blob([txt], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'report_error_import_warga.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } else {
-            alert(info2);
-          }
+          
+          $('#loadingText').text('Selesai!');
+          $('#progressBar').css('width', '100%');
+          $('#progressText').text('100% selesai');
+          
+          // Tunggu sebentar sebelum menutup modal
+          setTimeout(() => {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            
+            let info2 = 'Import selesai! Sukses: ' + sukses + ', Gagal: ' + gagal;
+            if (errorBackend.length) {
+              info2 += '\n\nDetail error:';
+              errorBackend.forEach(e => {
+                info2 += `\nBaris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}`;
+              });
+              alert(info2);
+              // Otomatis download report error backend
+              let txt = 'Report Error Import Data Warga (Backend)\n';
+              txt += '==============================\n';
+              errorBackend.forEach(e => {
+                txt += `Baris ${e.baris}: NIK ${e.nik}, Nama ${e.nama} => ${e.error}\n`;
+              });
+              const blob = new Blob([txt], { type: 'text/plain' });
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'report_error_import_warga.txt';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            } else {
+              alert(info2);
+            }
+          }, 1000);
         };
         reader.readAsArrayBuffer(file);
       });
 
       // Download template Excel
       $('#downloadTemplateBtn').click(function() {
+        // Tampilkan loading untuk download template
+        $('#loadingModal').removeClass('hidden').addClass('modal-show');
+        $('#loadingText').text('Sedang membuat template Excel...');
+        $('#progressBar').css('width', '50%');
+        $('#progressText').text('50% selesai');
+        
         // Header hanya field wilayah tanpa _nama
         const header = [
           'nama', 'nik', 'nikk', 'hubungan', 'jenkel', 'tpt_lahir', 'tgl_lahir', 'alamat', 'rt', 'rw',
@@ -869,7 +990,16 @@ include 'header.php';
         ws['!cols'] = wscols;
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'TemplateWarga');
-        XLSX.writeFile(wb, 'template_warga.xlsx');
+        
+        $('#loadingText').text('Sedang mengunduh template...');
+        $('#progressBar').css('width', '100%');
+        $('#progressText').text('100% selesai');
+        
+        // Tunggu sebentar sebelum download
+        setTimeout(() => {
+          XLSX.writeFile(wb, 'template_warga.xlsx');
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+        }, 500);
       });
     });
   </script>

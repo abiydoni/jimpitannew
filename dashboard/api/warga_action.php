@@ -32,7 +32,7 @@ try {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
         }
 
-        // Validasi wilayah (tanpa _nama)
+        // Validasi wilayah (nama wilayah)
         if (empty($_POST['propinsi']) || empty($_POST['kota']) || 
             empty($_POST['kecamatan']) || empty($_POST['kelurahan'])) {
             throw new Exception('Data wilayah tidak lengkap');
@@ -80,7 +80,7 @@ try {
             throw new Exception('Tanggal lahir tidak boleh di masa depan');
         }
 
-        // Validasi wilayah (tanpa _nama)
+        // Validasi wilayah (nama wilayah)
         if (empty($_POST['propinsi']) || empty($_POST['kota']) || 
             empty($_POST['kecamatan']) || empty($_POST['kelurahan'])) {
             throw new Exception('Data wilayah tidak lengkap');
