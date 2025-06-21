@@ -420,30 +420,61 @@ include 'header.php';
             <title>Biodata Kartu Keluarga</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 20px; }
-              .space-y-6 > * + * { margin-top: 24px; }
-              .bg-gray-50 { background-color: #f9fafb; padding: 16px; border-radius: 8px; }
-              .mb-6 { margin-bottom: 24px; }
-              .text-lg { font-size: 18px; }
-              .font-semibold { font-weight: 600; }
-              .text-sm { font-size: 14px; }
-              .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-              .flex { display: flex; }
-              .justify-between { justify-content: space-between; }
-              .gap-4 > * + * { margin-top: 16px; }
+              .border-2 { border: 2px solid #d1d5db; }
+              .border-gray-300 { border-color: #d1d5db; }
+              .rounded-lg { border-radius: 8px; }
+              .p-4 { padding: 16px; }
+              .bg-white { background-color: white; }
+              .text-center { text-align: center; }
+              .border-b-2 { border-bottom: 2px solid #d1d5db; }
+              .pb-2 { padding-bottom: 8px; }
               .mb-4 { margin-bottom: 16px; }
+              .text-base { font-size: 16px; }
+              .font-bold { font-weight: bold; }
+              .text-blue-800 { color: #1e40af; }
+              .text-sm { font-size: 14px; }
+              .font-semibold { font-weight: 600; }
+              .text-gray-700 { color: #374151; }
+              .space-y-1 > * + * { margin-top: 4px; }
+              .text-xs { font-size: 12px; }
+              .grid { display: grid; }
+              .grid-cols-1 { grid-template-columns: 1fr; }
+              .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+              .gap-4 { gap: 16px; }
+              .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+              .gap-2 { gap: 8px; }
+              .col-span-2 { grid-column: span 2; }
+              .font-semibold { font-weight: 600; }
+              .border-b { border-bottom: 1px solid #e5e7eb; }
+              .pb-1 { padding-bottom: 4px; }
+              .mb-2 { margin-bottom: 8px; }
               table { width: 100%; border-collapse: collapse; margin-top: 16px; }
               th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
               th { background-color: #f3f4f6; font-weight: 600; }
               .text-center { text-align: center; }
+              .overflow-x-auto { overflow-x: auto; }
+              .w-full { width: 100%; }
+              .border-collapse { border-collapse: collapse; }
+              .border { border: 1px solid #d1d5db; }
+              .border-gray-300 { border-color: #d1d5db; }
+              .bg-gray-100 { background-color: #f3f4f6; }
+              .border-b.hover\\:bg-gray-50:hover { background-color: #f9fafb; }
+              .px-2 { padding-left: 8px; padding-right: 8px; }
+              .py-1 { padding-top: 4px; padding-bottom: 4px; }
               @media print {
-                .grid { grid-template-columns: 1fr 1fr; }
-                table { font-size: 12px; }
+                body { margin: 10px; }
+                .border-2 { border: 1px solid #000; }
+                .border-b-2 { border-bottom: 1px solid #000; }
+                .text-xs { font-size: 10px; }
+                .px-2 { padding-left: 4px; padding-right: 4px; }
+                .py-1 { padding-top: 2px; padding-bottom: 2px; }
                 th, td { padding: 4px; }
+                table { font-size: 10px; }
               }
             </style>
           </head>
           <body>
-            <h2 style="text-align: center; margin-bottom: 30px;">BIODATA KARTU KELUARGA</h2>
+            <h2 style="text-align: center; margin-bottom: 20px; font-size: 18px; font-weight: bold;">BIODATA KARTU KELUARGA</h2>
             ${printContent}
           </body>
         </html>
@@ -617,45 +648,80 @@ include 'header.php';
           </div>
           
           <div id="kkPrintArea">
-            <!-- Info KK -->
-            <div class="bg-gray-50 p-3 rounded-lg mb-4">
-              <h4 class="text-base font-semibold mb-2">Informasi Kartu Keluarga</h4>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                <div class="flex justify-between py-0.5"><strong>NIK KK:</strong> <span>${kepalaKK.nikk || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>RT/RW:</strong> <span>${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
-                <div class="flex justify-between py-0.5"><strong>Total Anggota:</strong> <span>${kk.total_anggota} orang</span></div>
+            <!-- Layout KK Dukcapil Style -->
+            <div class="border-2 border-gray-300 rounded-lg p-4 bg-white">
+              <!-- Header KK -->
+              <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
+                <h4 class="text-base font-bold text-blue-800">KARTU KELUARGA</h4>
+                <h4 class="text-sm font-semibold text-gray-700">No. ${kepalaKK.nikk || '-'}</h4>
               </div>
-            </div>
-            
-            <!-- Daftar Anggota KK -->
-            <div>
-              <h4 class="text-base font-semibold mb-2">Daftar Anggota Keluarga</h4>
-              <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                  <thead>
-                    <tr class="bg-gray-100">
-                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">NIK</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Nama</th>
-                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">Jenis Kelamin</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Tempat Lahir</th>
-                      <th class="border border-gray-300 px-2 py-1 text-center text-xs">Tanggal Lahir</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Agama</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Status</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Pekerjaan</th>
-                      <th class="border border-gray-300 px-2 py-1 text-xs">Hubungan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${anggotaHTML}
-                  </tbody>
-                </table>
+              
+              <!-- Info KK -->
+              <div class="mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div class="space-y-1">
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Nama Kepala Keluarga</div>
+                      <div class="col-span-2">: ${kepalaKK.nama || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Alamat</div>
+                      <div class="col-span-2">: ${kepalaKK.alamat || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">RT/RW</div>
+                      <div class="col-span-2">: ${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Desa/Kelurahan</div>
+                      <div class="col-span-2">: ${kepalaKK.kelurahan || '-'}</div>
+                    </div>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Kecamatan</div>
+                      <div class="col-span-2">: ${kepalaKK.kecamatan || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Kabupaten/Kota</div>
+                      <div class="col-span-2">: ${kepalaKK.kota || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Provinsi</div>
+                      <div class="col-span-2">: ${kepalaKK.propinsi || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      <div class="font-semibold">Kode Pos</div>
+                      <div class="col-span-2">: -</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Daftar Anggota KK -->
+              <div>
+                <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
+                <div class="overflow-x-auto">
+                  <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                      <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-2 py-1 text-center text-xs">No</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">NIK</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Nama</th>
+                        <th class="border border-gray-300 px-2 py-1 text-center text-xs">Jenis Kelamin</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Tempat Lahir</th>
+                        <th class="border border-gray-300 px-2 py-1 text-center text-xs">Tanggal Lahir</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Agama</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Status</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Pekerjaan</th>
+                        <th class="border border-gray-300 px-2 py-1 text-xs">Hubungan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${anggotaHTML}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
