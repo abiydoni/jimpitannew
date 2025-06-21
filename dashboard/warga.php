@@ -20,6 +20,7 @@ include 'header.php';
                 <button id="testEditModalBtn" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit Modal</button>
                 <button id="verifyDataBtn" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-2">Verify Data</button>
                 <button id="checkDropdownBtn" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded ml-2">Check Dropdown</button>
+                <button id="debugModalBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">Debug Modal</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -928,6 +929,11 @@ include 'header.php';
       });
 
       $('#tambahBtn').click(() => {
+        console.log('=== TAMBAH BUTTON CLICKED ===');
+        console.log('Modal element exists:', $('#modal').length > 0);
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
         $('#modalTitle').text('Tambah Warga');
         $('#wargaForm')[0].reset();
         $('#formAction').val('create');
@@ -940,24 +946,18 @@ include 'header.php';
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
         
-        // Debug: Log sebelum menampilkan modal
-        console.log('=== MODAL DEBUG START ===');
-        console.log('Before showing modal - Modal element:', $('#modal')[0]);
-        console.log('Before showing modal - Modal classes:', $('#modal').attr('class'));
+        // Show modal dengan cara yang sederhana
+        console.log('Showing modal...');
+        $('#modal').removeClass('hidden');
+        $('#modal').addClass('modal-show');
+        $('#modal').show();
         
-        // Tampilkan modal dengan cara yang sederhana
-        $('#modal').removeClass('hidden').addClass('modal-show');
-        
-        // Debug: Log setelah menampilkan modal
-        setTimeout(() => {
-          console.log('After showing modal - Modal classes:', $('#modal').attr('class'));
-          console.log('After showing modal - Modal z-index:', $('#modal').css('z-index'));
-          console.log('After showing modal - Modal container z-index:', $('.modal-container').css('z-index'));
-          console.log('After showing modal - Modal display:', $('#modal').css('display'));
-          console.log('After showing modal - Modal visibility:', $('#modal').css('visibility'));
-          console.log('After showing modal - Modal opacity:', $('#modal').css('opacity'));
-          console.log('=== MODAL DEBUG END ===');
-        }, 100);
+        console.log('Modal should be visible now');
+        console.log('Modal display after show:', $('#modal').css('display'));
+        console.log('Modal classes after show:', $('#modal').attr('class'));
+        console.log('Modal visibility:', $('#modal').css('visibility'));
+        console.log('Modal opacity:', $('#modal').css('opacity'));
+        console.log('Modal z-index:', $('#modal').css('z-index'));
         
         // Focus pada input pertama
         setTimeout(() => {
@@ -967,57 +967,71 @@ include 'header.php';
 
       // Test modal button
       $('#testModalBtn').click(() => {
-        console.log('Test modal button clicked');
+        console.log('=== TEST MODAL BUTTON CLICKED ===');
+        console.log('Modal element exists:', $('#modal').length > 0);
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
         $('#modalTitle').text('Test Modal');
         $('#wargaForm')[0].reset();
         $('#formAction').val('create');
         
-        // Force show modal with multiple methods
-        $('#modal').removeClass('hidden').addClass('modal-show');
-        $('#modal').css({
-          'display': 'flex',
-          'opacity': '1',
-          'visibility': 'visible',
-          'z-index': '999999',
-          'position': 'fixed',
-          'top': '0',
-          'left': '0',
-          'right': '0',
-          'bottom': '0',
-          'background-color': 'rgba(0, 0, 0, 0.5)',
-          'align-items': 'center',
-          'justify-content': 'center'
-        });
+        // Show modal dengan cara yang sederhana
+        console.log('Showing modal...');
+        $('#modal').removeClass('hidden');
+        $('#modal').addClass('modal-show');
+        $('#modal').show();
         
         console.log('Modal should be visible now');
-        console.log('Modal display:', $('#modal').css('display'));
+        console.log('Modal display after show:', $('#modal').css('display'));
+        console.log('Modal classes after show:', $('#modal').attr('class'));
+        console.log('Modal visibility:', $('#modal').css('visibility'));
+        console.log('Modal opacity:', $('#modal').css('opacity'));
         console.log('Modal z-index:', $('#modal').css('z-index'));
         
         // Auto hide after 5 seconds
         setTimeout(() => {
-          $('#modal').removeClass('modal-show').addClass('hidden');
+          console.log('Auto hiding test modal...');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
           console.log('Test modal hidden');
         }, 5000);
       });
 
       $('#cancelBtn').click(() => {
-        console.log('Closing modal via cancel button');
-        $('#modal').removeClass('modal-show').addClass('hidden');
+        console.log('=== CLOSING MODAL VIA CANCEL BUTTON ===');
+        console.log('Modal current display:', $('#modal').css('display'));
+        console.log('Modal current classes:', $('#modal').attr('class'));
+        
+        $('#modal').hide();
+        $('#modal').removeClass('modal-show');
+        $('#modal').addClass('hidden');
+        
+        console.log('Modal hidden via cancel button');
+        console.log('Modal display after hide:', $('#modal').css('display'));
+        console.log('Modal classes after hide:', $('#modal').attr('class'));
       });
 
       // Tutup modal ketika klik di luar modal
       $('#modal').click(function(e) {
         if (e.target === this) {
-          console.log('Closing modal via overlay click');
-          $(this).removeClass('modal-show').addClass('hidden');
+          console.log('=== CLOSING MODAL VIA OVERLAY CLICK ===');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
+          console.log('Modal hidden via overlay click');
         }
       });
 
       // Tutup modal dengan tombol ESC
       $(document).keydown(function(e) {
-        if (e.key === 'Escape' && !$('#modal').hasClass('hidden')) {
-          console.log('Closing modal via ESC key');
-          $('#modal').removeClass('modal-show').addClass('hidden');
+        if (e.key === 'Escape' && $('#modal').is(':visible')) {
+          console.log('=== CLOSING MODAL VIA ESC KEY ===');
+          $('#modal').hide();
+          $('#modal').removeClass('modal-show');
+          $('#modal').addClass('hidden');
+          console.log('Modal hidden via ESC key');
         }
       });
 
@@ -1197,7 +1211,7 @@ include 'header.php';
         return false;
       }
 
-      $(document).on('click', '.editBtn', async function() {
+      $(document).on('click', '.editBtn', function() {
         console.log('=== EDIT BUTTON CLICKED ===');
         console.log('Edit button clicked');
         
@@ -1267,18 +1281,17 @@ include 'header.php';
             const formattedDate = formatDateForDisplay(data.tgl_lahir);
             $('#tgl_lahir').val(formattedDate);
             console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
-            
-            // Set dropdown tanggal lahir
-            setDropdownTanggalLahir(formattedDate);
           }
           
           // Set RT/RW if available
-          if (data.rt || data.rw) {
-            // Convert single digits to 3-digit padded format
-            const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
-            const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
-            setDropdownRTRW(rt, rw);
-            console.log('Set RT/RW:', rt, rw);
+          if (data.rt) {
+            $('#rt').val(data.rt);
+            console.log('Set rt:', data.rt);
+          }
+          
+          if (data.rw) {
+            $('#rw').val(data.rw);
+            console.log('Set rw:', data.rw);
           }
           
           // Set nama wilayah ke hidden input
@@ -1302,85 +1315,22 @@ include 'header.php';
           $('#formAction').val('update');
           console.log('Set formAction to update');
           
-          // Load and set wilayah dropdowns
-          console.log('Loading wilayah dropdowns...');
-          if (data.propinsi) {
-            try {
-              console.log('Setting provinsi:', data.propinsi);
-              // Pastikan provinsi sudah ter-load
-              await waitForDropdown('#propinsi');
-              
-              // Set provinsi berdasarkan nama
-              const provinsiSet = setDropdownValue('#propinsi', data.propinsi);
-              console.log('Provinsi set result:', provinsiSet);
-              
-              if (provinsiSet && data.kota) {
-                console.log('Loading kota for provinsi:', $('#propinsi').val());
-                // Load kota
-                loadKota($('#propinsi').val());
-                
-                // Tunggu kota ter-load
-                await waitForDropdown('#kota');
-                
-                console.log('Setting kota:', data.kota);
-                // Set kota berdasarkan nama
-                const kotaSet = setDropdownValue('#kota', data.kota);
-                console.log('Kota set result:', kotaSet);
-                
-                if (kotaSet && data.kecamatan) {
-                  console.log('Loading kecamatan for kota:', $('#kota').val());
-                  // Load kecamatan
-                  loadKecamatan($('#kota').val());
-                  
-                  // Tunggu kecamatan ter-load
-                  await waitForDropdown('#kecamatan');
-                  
-                  console.log('Setting kecamatan:', data.kecamatan);
-                  // Set kecamatan berdasarkan nama
-                  const kecamatanSet = setDropdownValue('#kecamatan', data.kecamatan);
-                  console.log('Kecamatan set result:', kecamatanSet);
-                  
-                  if (kecamatanSet && data.kelurahan) {
-                    console.log('Loading kelurahan for kecamatan:', $('#kecamatan').val());
-                    // Load kelurahan
-                    loadKelurahan($('#kecamatan').val());
-                    
-                    // Tunggu kelurahan ter-load
-                    await waitForDropdown('#kelurahan');
-                    
-                    console.log('Setting kelurahan:', data.kelurahan);
-                    // Set kelurahan berdasarkan nama
-                    const kelurahanSet = setDropdownValue('#kelurahan', data.kelurahan);
-                    console.log('Kelurahan set result:', kelurahanSet);
-                  }
-                }
-              }
-            } catch (error) {
-              console.error('Error loading dropdown:', error);
-              // Continue even if dropdown loading fails
-            }
-          }
-          
           console.log('=== SHOWING MODAL ===');
-          // Show modal using the same method as test modal
-          $('#modal').removeClass('hidden').addClass('modal-show');
-          $('#modal').css({
-            'display': 'flex',
-            'opacity': '1',
-            'visibility': 'visible',
-            'z-index': '999999',
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'right': '0',
-            'bottom': '0',
-            'background-color': 'rgba(0, 0, 0, 0.5)',
-            'align-items': 'center',
-            'justify-content': 'center'
-          });
+          // Show modal using the same method as tambah button
+          console.log('Modal element exists:', $('#modal').length > 0);
+          console.log('Modal current display:', $('#modal').css('display'));
+          console.log('Modal current classes:', $('#modal').attr('class'));
+          
+          console.log('Showing modal...');
+          $('#modal').removeClass('hidden');
+          $('#modal').addClass('modal-show');
+          $('#modal').show();
           
           console.log('Modal should be visible now');
-          console.log('Modal display:', $('#modal').css('display'));
+          console.log('Modal display after show:', $('#modal').css('display'));
+          console.log('Modal classes after show:', $('#modal').attr('class'));
+          console.log('Modal visibility:', $('#modal').css('visibility'));
+          console.log('Modal opacity:', $('#modal').css('opacity'));
           console.log('Modal z-index:', $('#modal').css('z-index'));
           
           // Focus pada input pertama
@@ -2164,5 +2114,47 @@ include 'header.php';
     $('#checkDropdownBtn').click(() => {
       console.log('Check dropdown button clicked');
       checkDropdownOptions();
+    });
+
+    // Debug modal button
+    $('#debugModalBtn').click(() => {
+      console.log('=== DEBUG MODAL STATUS ===');
+      console.log('Modal element exists:', $('#modal').length > 0);
+      console.log('Modal element:', $('#modal')[0]);
+      console.log('Modal display:', $('#modal').css('display'));
+      console.log('Modal visibility:', $('#modal').css('visibility'));
+      console.log('Modal opacity:', $('#modal').css('opacity'));
+      console.log('Modal z-index:', $('#modal').css('z-index'));
+      console.log('Modal classes:', $('#modal').attr('class'));
+      console.log('Modal is visible:', $('#modal').is(':visible'));
+      console.log('Modal has hidden class:', $('#modal').hasClass('hidden'));
+      console.log('Modal has modal-show class:', $('#modal').hasClass('modal-show'));
+      
+      // Check modal container
+      console.log('Modal container exists:', $('.modal-container').length > 0);
+      console.log('Modal container z-index:', $('.modal-container').css('z-index'));
+      console.log('Modal container display:', $('.modal-container').css('display'));
+      
+      // Check if there are any CSS conflicts
+      console.log('Body overflow:', $('body').css('overflow'));
+      console.log('HTML overflow:', $('html').css('overflow'));
+      
+      // Try to force show modal
+      console.log('=== FORCING MODAL SHOW ===');
+      $('#modal').css({
+        'display': 'flex',
+        'visibility': 'visible',
+        'opacity': '1',
+        'z-index': '999999'
+      });
+      $('#modal').removeClass('hidden');
+      $('#modal').addClass('modal-show');
+      
+      console.log('Modal after force show:');
+      console.log('Modal display:', $('#modal').css('display'));
+      console.log('Modal visibility:', $('#modal').css('visibility'));
+      console.log('Modal opacity:', $('#modal').css('opacity'));
+      console.log('Modal z-index:', $('#modal').css('z-index'));
+      console.log('Modal classes:', $('#modal').attr('class'));
     });
   </script>
