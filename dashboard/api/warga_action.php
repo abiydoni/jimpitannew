@@ -106,9 +106,26 @@ try {
         echo 'success';
 
     } elseif ($action == 'read') {
-        // Perbaikan query - menggunakan id_warga sebagai pengurut
-        $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");
-        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        try {
+            // Cek apakah tabel tb_warga ada
+            $checkTable = $pdo->query("SHOW TABLES LIKE 'tb_warga'");
+            if ($checkTable->rowCount() == 0) {
+                throw new Exception('Tabel tb_warga tidak ditemukan');
+            }
+            
+            // Perbaikan query - menggunakan id_warga sebagai pengurut
+            $stmt = $pdo->query("SELECT * FROM tb_warga ORDER BY id_warga DESC");
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Debug logging
+            error_log("Read action - Found " . count($result) . " records");
+            
+            echo json_encode($result);
+        } catch (Exception $e) {
+            error_log("Error in read action: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
 
     } elseif ($action == 'update') {
         // Validasi input

@@ -332,34 +332,63 @@ include 'header.php';
     }
 
     function loadData() {
+      console.log('Loading data...');
       $.post('api/warga_action.php', { action: 'read' }, function(data) {
+        console.log('Raw response from server:', data);
         try {
           const warga = JSON.parse(data);
+          console.log('Parsed data:', warga);
+          
+          if (!Array.isArray(warga)) {
+            console.error('Data is not an array:', warga);
+            $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error: Data format tidak valid</td></tr>');
+            return;
+          }
+          
           let html = '';
           warga.forEach((row, idx) => {
-            html += `<tr class="border-b hover:bg-gray-50">
-              <td class="px-6 py-2 w-10">${idx + 1}</td>
-              <td class="px-6 py-2 w-40 text-left">${row.nik || '-'}</td>
-              <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
-              <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
-              <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
-              <td class="px-6 py-2 w-36 text-center">${formatDateForDisplay(row.tgl_lahir) || '-'}</td>
-              <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
-              <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
-              <td class="px-6 py-2 w-32 text-center">
-                <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
-                <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
-              </td>
-            </tr>`;
+            try {
+              // Safe handling untuk tanggal lahir
+              let tanggalLahir = '-';
+              if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
+                try {
+                  tanggalLahir = formatDateForDisplay(row.tgl_lahir);
+                } catch (dateError) {
+                  console.warn(`Error formatting date for row ${idx}:`, dateError);
+                  tanggalLahir = row.tgl_lahir || '-';
+                }
+              }
+              
+              html += `<tr class="border-b hover:bg-gray-50">
+                <td class="px-6 py-2 w-10">${idx + 1}</td>
+                <td class="px-6 py-2 w-40 text-left">${row.nik || '-'}</td>
+                <td class="px-6 py-2 w-40 text-left">${row.nikk || '-'}</td>
+                <td class="px-6 py-2 w-56 text-left">${row.nama || '-'}</td>
+                <td class="px-6 py-2 w-32 text-center">${row.jenkel || '-'}</td>
+                <td class="px-6 py-2 w-36 text-center">${tanggalLahir}</td>
+                <td class="px-6 py-2 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
+                <td class="px-6 py-2 w-44 text-left">${row.hp || '-'}</td>
+                <td class="px-6 py-2 w-32 text-center">
+                  <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id='${JSON.stringify(row)}'><i class='bx bx-edit'></i></button>
+                  <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
+                </td>
+              </tr>`;
+            } catch (rowError) {
+              console.error(`Error processing row ${idx}:`, rowError, row);
+            }
           });
           $('#dataBody').html(html);
+          console.log('Data loaded successfully');
         } catch (e) {
           console.error('Error parsing data:', e);
-          $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data</td></tr>');
+          console.error('Raw data that caused error:', data);
+          $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + e.message + '</td></tr>');
         }
       }).fail(function(xhr, status, error) {
         console.error('AJAX Error:', status, error);
-        $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + error + '</td></tr>');
+        console.error('Response text:', xhr.responseText);
+        console.error('Status code:', xhr.status);
+        $('#dataBody').html('<tr><td colspan="9" class="text-center text-red-500">Error loading data: ' + error + ' (Status: ' + xhr.status + ')</td></tr>');
       });
     }
 
