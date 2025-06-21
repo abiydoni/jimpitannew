@@ -949,6 +949,27 @@ include 'header.php';
           });
           $('#dataBody').html(html);
           console.log('Data loaded successfully');
+          // Inisialisasi DataTables ulang untuk data dinamis (AJAX)
+          if ($.fn.DataTable.isDataTable('#example')) {
+              $('#example').DataTable().destroy();
+          }
+          $('#example').DataTable({
+              responsive: true,
+              language: {
+                  search: "Cari:",
+                  lengthMenu: "Tampilkan _MENU_ entri",
+                  info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                  paginate: {
+                      first: "Pertama",
+                      last: "Terakhir",
+                      next: "Berikutnya",
+                      previous: "Sebelumnya"
+                  },
+                  zeroRecords: "Tidak ditemukan data yang cocok",
+                  infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+                  infoFiltered: "(disaring dari total _MAX_ entri)"
+              }
+          });
         } catch (e) {
           console.error('Error parsing data:', e);
           console.error('Raw data that caused error:', data);
