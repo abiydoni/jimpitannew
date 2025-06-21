@@ -107,8 +107,8 @@ include 'header.php';
             
             <div>
                 <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                <input type="text" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required placeholder="DD-MM-YYYY" pattern="\d{1,2}-\d{1,2}-\d{4}" title="Format: DD-MM-YYYY (contoh: 12-05-1992)">
-                <small class="text-gray-500 text-xs">Format: DD-MM-YYYY (contoh: 12-05-1992)</small>
+                <input type="text" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input datepicker" required placeholder="DD-MM-YYYY" readonly>
+                <small class="text-gray-500 text-xs">Klik untuk memilih tanggal</small>
             </div>
             
             <div>
@@ -241,6 +241,8 @@ include 'header.php';
   <?php include 'footer.php'; ?>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
 
   <script>
     // Fungsi untuk memuat data provinsi
@@ -396,6 +398,34 @@ include 'header.php';
       loadData();
       loadProvinsi(); // Load provinsi saat halaman dimuat
 
+      // Inisialisasi datepicker untuk tanggal lahir
+      window.tglLahirPicker = flatpickr("#tgl_lahir", {
+        dateFormat: "d-m-Y",
+        allowInput: false,
+        clickOpens: true,
+        maxDate: "today",
+        yearDropdown: true,
+        locale: {
+          firstDayOfWeek: 1,
+          weekdays: {
+            shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+            longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+          },
+          months: {
+            shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+            longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+          }
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+          // Validasi tanggal tidak boleh di masa depan
+          if (selectedDates[0] > new Date()) {
+            alert('Tanggal lahir tidak boleh di masa depan');
+            instance.clear();
+            return;
+          }
+        }
+      });
+
       // Event handler untuk dropdown wilayah
       $('#propinsi').change(function() {
         const provinsi_id = $(this).val();
@@ -432,6 +462,11 @@ include 'header.php';
         $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
         $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+        
+        // Reset datepicker
+        if (window.tglLahirPicker) {
+          window.tglLahirPicker.clear();
+        }
         
         // Debug: Log sebelum menampilkan modal
         console.log('=== MODAL DEBUG START ===');
@@ -491,36 +526,6 @@ include 'header.php';
         // Validasi panjang NIK
         if (value.length === 16) {
           $(this).removeClass('border-red-500').addClass('border-green-500');
-        } else if (value.length > 0) {
-          $(this).removeClass('border-green-500').addClass('border-red-500');
-        } else {
-          $(this).removeClass('border-red-500 border-green-500');
-        }
-      });
-
-      // Validasi real-time untuk tanggal lahir
-      $('#tgl_lahir').on('input', function() {
-        const value = $(this).val();
-        
-        // Hanya izinkan angka dan tanda strip
-        const cleanValue = value.replace(/[^\d-]/g, '');
-        if (cleanValue !== value) {
-          $(this).val(cleanValue);
-        }
-        
-        // Validasi format DD-MM-YYYY
-        if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(value)) {
-          const parts = value.split('-');
-          const day = parseInt(parts[0]);
-          const month = parseInt(parts[1]);
-          const year = parseInt(parts[2]);
-          
-          // Validasi tanggal
-          if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
-            $(this).removeClass('border-red-500').addClass('border-green-500');
-          } else {
-            $(this).removeClass('border-green-500').addClass('border-red-500');
-          }
         } else if (value.length > 0) {
           $(this).removeClass('border-green-500').addClass('border-red-500');
         } else {
@@ -705,6 +710,38 @@ include 'header.php';
         
         $('#formAction').val('update');
         $('#modal').removeClass('hidden').addClass('modal-show');
+        
+        // Reinisialisasi datepicker untuk edit
+        if (window.tglLahirPicker) {
+          window.tglLahirPicker.destroy();
+        }
+        window.tglLahirPicker = flatpickr("#tgl_lahir", {
+          dateFormat: "d-m-Y",
+          allowInput: false,
+          clickOpens: true,
+          maxDate: "today",
+          yearDropdown: true,
+          locale: {
+            firstDayOfWeek: 1,
+            weekdays: {
+              shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+              longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+            },
+            months: {
+              shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+              longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+            }
+          },
+          onChange: function(selectedDates, dateStr, instance) {
+            // Validasi tanggal tidak boleh di masa depan
+            if (selectedDates[0] > new Date()) {
+              alert('Tanggal lahir tidak boleh di masa depan');
+              instance.clear();
+              return;
+            }
+          }
+        });
+        
         // Focus pada input pertama
         setTimeout(() => {
           $('#nama').focus();

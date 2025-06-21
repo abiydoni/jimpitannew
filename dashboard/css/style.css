@@ -939,3 +939,85 @@ body {
   background-size: 1rem 1rem;
   animation: progress-bar-stripes 1s linear infinite;
 }
+
+/* Datepicker Styling */
+.flatpickr-calendar {
+  font-family: var(--lato);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+}
+
+.flatpickr-day {
+  border-radius: 4px;
+  margin: 1px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 13px;
+}
+
+.flatpickr-day.selected {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.flatpickr-day:hover {
+  background: var(--light-blue);
+}
+
+.flatpickr-day.today {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.flatpickr-day.disabled {
+  color: #ccc;
+  background: transparent;
+}
+
+.flatpickr-months {
+  background: var(--blue);
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.flatpickr-month {
+  color: white;
+}
+
+.flatpickr-current-month {
+  color: white;
+  font-weight: 600;
+}
+
+.flatpickr-monthDropdown-months {
+  color: white;
+  background: transparent;
+}
+
+.flatpickr-weekday {
+  color: var(--dark);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.flatpickr-calendar.arrowTop:before,
+.flatpickr-calendar.arrowTop:after {
+  border-bottom-color: var(--blue);
+}
+
+.flatpickr-calendar.arrowBottom:before,
+.flatpickr-calendar.arrowBottom:after {
+  border-top-color: var(--blue);
+}
+
+/* Input datepicker styling */
+.datepicker {
+  cursor: pointer;
+  background-color: white;
+}
+
+.datepicker:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px rgba(60, 145, 230, 0.2);
+}
