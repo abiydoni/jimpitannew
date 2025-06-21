@@ -18,6 +18,7 @@ include 'header.php';
                 <button id="testModalBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-2">Test Modal</button>
                 <button id="testEditBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit</button>
                 <button id="testEditModalBtn" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded ml-2">Test Edit Modal</button>
+                <button id="verifyDataBtn" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-2">Verify Data</button>
             </div>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
@@ -1182,23 +1183,65 @@ include 'header.php';
           
           $('#modalTitle').text('Edit Warga');
           
-          // Simple form population - just set basic fields first
+          // Set id_warga for update
+          $('#id_warga').val(data.id_warga || '');
+          
+          // Populate all form fields with detailed logging
+          console.log('Setting form fields...');
+          
+          // Data Pribadi
           $('#nama').val(data.nama || '');
+          console.log('Set nama:', data.nama);
+          
           $('#nik').val(data.nik || '');
+          console.log('Set nik:', data.nik);
+          
           $('#nikk').val(data.nikk || '');
+          console.log('Set nikk:', data.nikk);
+          
           $('#hubungan').val(data.hubungan || '');
+          console.log('Set hubungan:', data.hubungan);
+          
           $('#jenkel').val(data.jenkel || '');
+          console.log('Set jenkel:', data.jenkel);
+          
           $('#tpt_lahir').val(data.tpt_lahir || '');
+          console.log('Set tpt_lahir:', data.tpt_lahir);
+          
           $('#alamat').val(data.alamat || '');
+          console.log('Set alamat:', data.alamat);
+          
           $('#negara').val(data.negara || 'Indonesia');
+          console.log('Set negara:', data.negara);
+          
           $('#agama').val(data.agama || '');
+          console.log('Set agama:', data.agama);
+          
           $('#status').val(data.status || '');
+          console.log('Set status:', data.status);
+          
           $('#pekerjaan').val(data.pekerjaan || '');
+          console.log('Set pekerjaan:', data.pekerjaan);
+          
           $('#hp').val(data.hp || '');
+          console.log('Set hp:', data.hp);
           
           // Set tanggal lahir if available
           if (data.tgl_lahir) {
-            $('#tgl_lahir').val(formatDateForDisplay(data.tgl_lahir));
+            const formattedDate = formatDateForDisplay(data.tgl_lahir);
+            $('#tgl_lahir').val(formattedDate);
+            console.log('Set tgl_lahir:', data.tgl_lahir, '-> formatted:', formattedDate);
+          }
+          
+          // Set RT/RW if available
+          if (data.rt) {
+            $('#rt').val(data.rt);
+            console.log('Set rt:', data.rt);
+          }
+          
+          if (data.rw) {
+            $('#rw').val(data.rw);
+            console.log('Set rw:', data.rw);
           }
           
           // Set nama wilayah ke hidden input
@@ -1206,8 +1249,21 @@ include 'header.php';
           $('#kota_nama').val(data.kota || '');
           $('#kecamatan_nama').val(data.kecamatan || '');
           $('#kelurahan_nama').val(data.kelurahan || '');
+          console.log('Set wilayah:', {
+            propinsi: data.propinsi,
+            kota: data.kota,
+            kecamatan: data.kecamatan,
+            kelurahan: data.kelurahan
+          });
+          
+          // Set foto if available
+          if (data.foto) {
+            $('#foto').val(data.foto);
+            console.log('Set foto:', data.foto);
+          }
           
           $('#formAction').val('update');
+          console.log('Set formAction to update');
           
           console.log('=== SHOWING MODAL ===');
           // Show modal using the same method as test modal
@@ -1876,84 +1932,6 @@ include 'header.php';
       }, 3000);
     };
     
-    // Test function untuk debug edit button
-    window.testEditButton = function() {
-      console.log('Testing edit button...');
-      const editButtons = $('.editBtn');
-      console.log('Found edit buttons:', editButtons.length);
-      
-      if (editButtons.length > 0) {
-        const firstButton = editButtons.first();
-        const encodedData = firstButton.data('id');
-        console.log('First edit button encoded data:', encodedData);
-        
-        if (encodedData) {
-          try {
-            const decodedData = JSON.parse(decodeURIComponent(encodedData));
-            console.log('First edit button decoded data:', decodedData);
-            firstButton.click();
-          } catch (error) {
-            console.error('Error decoding data:', error);
-            alert('Error decoding data: ' + error.message);
-          }
-        } else {
-          console.log('No data found in edit button');
-        }
-      } else {
-        console.log('No edit buttons found');
-      }
-    };
-    
-    // Test function untuk membuat edit button dengan data test
-    window.createTestEditButton = function() {
-      const testData = {
-        id_warga: 999,
-        nama: 'Test User',
-        nik: '1234567890123456',
-        nikk: '1234567890123456',
-        hubungan: 'Kepala Keluarga',
-        jenkel: 'L',
-        tpt_lahir: 'Test City',
-        tgl_lahir: '1990-01-01',
-        alamat: 'Test Address',
-        rt: '001',
-        rw: '001',
-        propinsi: 'Test Province',
-        kota: 'Test City',
-        kecamatan: 'Test District',
-        kelurahan: 'Test Village',
-        negara: 'Indonesia',
-        agama: 'Islam',
-        status: 'Kawin',
-        pekerjaan: 'Test Job',
-        foto: '',
-        hp: '08123456789'
-      };
-      
-      const jsonData = JSON.stringify(testData);
-      const encodedData = encodeURIComponent(jsonData);
-      
-      console.log('Test data:', testData);
-      console.log('Test JSON:', jsonData);
-      console.log('Test encoded:', encodedData);
-      
-      // Create test button
-      const testButton = $(`<button class="editBtn px-2 py-1 bg-purple-400 text-white rounded hover:bg-purple-500" data-id="${encodedData}">Test Edit</button>`);
-      
-      // Add to page
-      $('body').append(testButton);
-      
-      console.log('Test edit button created');
-      return testButton;
-    };
-    
-    // Log when page is ready
-    $(document).ready(function() {
-      console.log('Warga page loaded');
-      console.log('Modal element exists:', $('#modal').length > 0);
-      console.log('Edit buttons found:', $('.editBtn').length);
-    });
-
     // Test edit button
     $('#testEditBtn').click(() => {
       console.log('Test edit button clicked');
@@ -1975,6 +1953,19 @@ include 'header.php';
           try {
             const decodedData = JSON.parse(decodeURIComponent(encodedData));
             console.log('First edit button decoded data:', decodedData);
+            
+            // Compare with table data
+            const tableRow = firstButton.closest('tr');
+            const tableCells = tableRow.find('td');
+            console.log('Table row data:');
+            console.log('NIK:', tableCells.eq(1).text().trim());
+            console.log('NIK KK:', tableCells.eq(2).text().trim());
+            console.log('Nama:', tableCells.eq(3).text().trim());
+            console.log('Jenis Kelamin:', tableCells.eq(4).text().trim());
+            console.log('Tanggal Lahir:', tableCells.eq(5).text().trim());
+            console.log('RT/RW:', tableCells.eq(6).text().trim());
+            console.log('No HP:', tableCells.eq(7).text().trim());
+            
             firstButton.click();
           } catch (error) {
             console.error('Error decoding data:', error);
@@ -1988,80 +1979,63 @@ include 'header.php';
       }
     };
     
-    // Simple test function to manually trigger edit modal
-    window.testEditModal = function() {
-      console.log('Testing edit modal manually...');
+    // Function to verify data consistency
+    window.verifyEditData = function() {
+      console.log('=== VERIFYING EDIT DATA ===');
+      const editButtons = $('.editBtn');
       
-      const testData = {
-        id_warga: 999,
-        nama: 'Test User',
-        nik: '1234567890123456',
-        nikk: '1234567890123456',
-        hubungan: 'Kepala Keluarga',
-        jenkel: 'L',
-        tpt_lahir: 'Test City',
-        tgl_lahir: '1990-01-01',
-        alamat: 'Test Address',
-        rt: '001',
-        rw: '001',
-        propinsi: 'Test Province',
-        kota: 'Test City',
-        kecamatan: 'Test District',
-        kelurahan: 'Test Village',
-        negara: 'Indonesia',
-        agama: 'Islam',
-        status: 'Kawin',
-        pekerjaan: 'Test Job',
-        foto: '',
-        hp: '08123456789'
-      };
-      
-      console.log('Test data:', testData);
-      
-      // Set form values
-      $('#modalTitle').text('Edit Warga');
-      $('#nama').val(testData.nama);
-      $('#nik').val(testData.nik);
-      $('#nikk').val(testData.nikk);
-      $('#hubungan').val(testData.hubungan);
-      $('#jenkel').val(testData.jenkel);
-      $('#tpt_lahir').val(testData.tpt_lahir);
-      $('#alamat').val(testData.alamat);
-      $('#negara').val(testData.negara);
-      $('#agama').val(testData.agama);
-      $('#status').val(testData.status);
-      $('#pekerjaan').val(testData.pekerjaan);
-      $('#hp').val(testData.hp);
-      
-      if (testData.tgl_lahir) {
-        $('#tgl_lahir').val(formatDateForDisplay(testData.tgl_lahir));
+      if (editButtons.length === 0) {
+        console.log('No edit buttons found');
+        return;
       }
       
-      $('#formAction').val('update');
-      
-      // Show modal
-      $('#modal').removeClass('hidden').addClass('modal-show');
-      $('#modal').css({
-        'display': 'flex',
-        'opacity': '1',
-        'visibility': 'visible',
-        'z-index': '999999',
-        'position': 'fixed',
-        'top': '0',
-        'left': '0',
-        'right': '0',
-        'bottom': '0',
-        'background-color': 'rgba(0, 0, 0, 0.5)',
-        'align-items': 'center',
-        'justify-content': 'center'
+      editButtons.each(function(index) {
+        const button = $(this);
+        const encodedData = button.data('id');
+        const tableRow = button.closest('tr');
+        const tableCells = tableRow.find('td');
+        
+        console.log(`\n--- Button ${index + 1} ---`);
+        console.log('Table data:');
+        console.log('  NIK:', tableCells.eq(1).text().trim());
+        console.log('  Nama:', tableCells.eq(3).text().trim());
+        
+        if (encodedData) {
+          try {
+            const decodedData = JSON.parse(decodeURIComponent(encodedData));
+            console.log('Decoded data:');
+            console.log('  NIK:', decodedData.nik);
+            console.log('  Nama:', decodedData.nama);
+            
+            // Check if data matches
+            const tableNik = tableCells.eq(1).text().trim();
+            const tableNama = tableCells.eq(3).text().trim();
+            
+            if (tableNik === decodedData.nik && tableNama === decodedData.nama) {
+              console.log('  ✓ Data matches');
+            } else {
+              console.log('  ✗ Data mismatch!');
+              console.log('    Table NIK:', tableNik, 'vs Decoded NIK:', decodedData.nik);
+              console.log('    Table Nama:', tableNama, 'vs Decoded Nama:', decodedData.nama);
+            }
+          } catch (error) {
+            console.error('  Error decoding data:', error);
+          }
+        } else {
+          console.log('  No encoded data found');
+        }
       });
-      
-      console.log('Edit modal should be visible now');
     };
 
     // Test edit modal button
     $('#testEditModalBtn').click(() => {
       console.log('Test edit modal button clicked');
       testEditModal();
+    });
+
+    // Verify data button
+    $('#verifyDataBtn').click(() => {
+      console.log('Verify data button clicked');
+      verifyEditData();
     });
   </script>
