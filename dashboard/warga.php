@@ -217,6 +217,15 @@ include 'header.php';
                 <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input" maxlength="15" pattern="\d{9,15}" title="Nomor HP harus 9-15 digit angka">
                 <small class="text-gray-500 text-xs">Format: 9-15 digit angka</small>
             </div>
+            
+            <div>
+                <label class="block text-xs font-medium mb-0.5">Foto</label>
+                <input type="file" name="foto_file" id="foto_file" accept="image/*" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                <small class="text-gray-500 text-xs">Format: JPG, PNG, GIF (Max 2MB)</small>
+                <div id="foto_preview" class="mt-2 hidden">
+                    <img id="foto_preview_img" class="w-20 h-24 border border-gray-300 rounded object-cover" alt="Preview">
+                </div>
+            </div>
             </div>
         </div>
 
@@ -908,6 +917,9 @@ include 'header.php';
         $('#wargaForm')[0].reset();
         $('#formAction').val('create');
         $('#negara').val('Indonesia');
+        // Clear photo preview
+        $('#foto_preview').addClass('hidden');
+        $('#foto_file').val('');
         // Reset dropdown wilayah
         $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
         $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
@@ -1119,8 +1131,10 @@ include 'header.php';
         }
         // Set dropdown tanggal lahir
         setDropdownTanggalLahir(formatDateForDisplay(data.tgl_lahir));
-        // Set dropdown RT/RW
-        setDropdownRTRW(data.rt, data.rw);
+        // Set dropdown RT/RW - convert single digits to 3-digit padded format
+        const rt = data.rt ? data.rt.toString().padStart(3, '0') : '';
+        const rw = data.rw ? data.rw.toString().padStart(3, '0') : '';
+        setDropdownRTRW(rt, rw);
         
         // Set nama wilayah ke hidden input
         $('#propinsi_nama').val(data.propinsi || '');
@@ -1654,6 +1668,35 @@ include 'header.php';
         }
       });
 
+      // Photo preview functionality
+      $('#foto_file').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+          // Validate file size (2MB)
+          if (file.size > 2 * 1024 * 1024) {
+            alert('File terlalu besar. Maksimal 2MB.');
+            this.value = '';
+            return;
+          }
+          
+          // Validate file type
+          if (!file.type.match('image.*')) {
+            alert('File harus berupa gambar.');
+            this.value = '';
+            return;
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $('#foto_preview_img').attr('src', e.target.result);
+            $('#foto_preview').removeClass('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          $('#foto_preview').addClass('hidden');
+        }
+      });
+
       // --- Dropdown tanggal lahir ---
       function isiDropdownTanggalLahir(selected) {
         // Hari
@@ -1717,6 +1760,20 @@ include 'header.php';
       // Saat edit data, isi RT/RW
       function setDropdownRTRW(rt, rw) {
         isiDropdownRTRW(rt, rw);
+        
+        // Show existing photo if available
+        if (data.foto) {
+          $('#foto_preview_img').attr('src', data.foto);
+          $('#foto_preview').removeClass('hidden');
+        } else {
+          $('#foto_preview').addClass('hidden');
+        }
+        
+        // Set nama wilayah ke hidden input
+        $('#propinsi_nama').val(data.propinsi || '');
+        $('#kota_nama').val(data.kota || '');
+        $('#kecamatan_nama').val(data.kecamatan || '');
+        $('#kelurahan_nama').val(data.kelurahan || '');
       }
 
       // Panggil setDropdownRTRW(data.rt, data.rw) di bagian edit data
