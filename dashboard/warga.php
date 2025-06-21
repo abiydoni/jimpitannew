@@ -232,7 +232,6 @@ include 'header.php';
 <div id="modalBiodata" class="modal-overlay hidden">
   <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-screen overflow-y-auto">
     <div class="flex justify-between items-center px-4 py-3 border-b">
-      <h2 class="text-lg font-semibold">Biodata Lengkap Warga</h2>
       <button onclick="closeModalBiodata()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
     
@@ -246,7 +245,6 @@ include 'header.php';
 <div id="modalKK" class="modal-overlay hidden">
   <div class="modal-container bg-white rounded-lg shadow-lg w-full max-w-5xl max-h-screen overflow-y-auto">
     <div class="flex justify-between items-center px-4 py-3 border-b">
-      <h2 class="text-lg font-semibold">Biodata Kartu Keluarga</h2>
       <button onclick="closeModalKK()" class="text-gray-600 hover:text-red-600 text-xl">&times;</button>
     </div>
     
@@ -523,17 +521,6 @@ include 'header.php';
               
               <!-- Content KTP -->
               <div class="flex gap-4">
-                <!-- Foto -->
-                <div class="w-40 h-48 border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
-                  ${warga.foto ? 
-                    `<img src="${warga.foto}" alt="Foto" class="w-full h-full object-cover">` : 
-                    `<div class="text-center text-gray-500 text-xs">
-                      <i class='bx bx-user text-4xl mb-1'></i>
-                      <div>FOTO</div>
-                    </div>`
-                  }
-                </div>
-                
                 <!-- Data KTP -->
                 <div class="flex-1 space-y-1 text-xs">
                   <div class="grid grid-cols-3 gap-2">
@@ -580,10 +567,17 @@ include 'header.php';
                     <div class="font-semibold">Kewarganegaraan</div>
                     <div class="col-span-2">: ${warga.negara || 'WNI'}</div>
                   </div>
-                  <div class="grid grid-cols-3 gap-2">
-                    <div class="font-semibold">Berlaku Hingga</div>
-                    <div class="col-span-2">: SEUMUR HIDUP</div>
-                  </div>
+                </div>
+                
+                <!-- Foto -->
+                <div class="w-40 h-48 border-2 border-gray-300 bg-gray-100 flex items-center justify-center">
+                  ${warga.foto ? 
+                    `<img src="${warga.foto}" alt="Foto" class="w-full h-full object-cover">` : 
+                    `<div class="text-center text-gray-500 text-xs">
+                      <i class='bx bx-user text-4xl mb-1'></i>
+                      <div>FOTO</div>
+                    </div>`
+                  }
                 </div>
               </div>
             </div>
