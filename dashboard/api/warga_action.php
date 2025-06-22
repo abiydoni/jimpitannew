@@ -61,9 +61,9 @@ function uploadFoto($file, $oldFoto = '') {
         throw new Exception('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
     }
     
-    // Validasi ukuran (max 500KB)
-    if ($file['size'] > 500 * 1024) {
-        throw new Exception('Ukuran file terlalu besar. Maksimal 500KB');
+    // Validasi ukuran (max 2MB)
+    if ($file['size'] > 2 * 1024 * 1024) {
+        throw new Exception('Ukuran file terlalu besar. Maksimal 2MB');
     }
     
     // Validasi ukuran minimum (min 10KB)

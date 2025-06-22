@@ -278,7 +278,7 @@ include 'header.php';
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Foto</label>
                         <input type="file" name="foto_file" id="foto_file" accept="image/*" class="w-full border px-2 py-0.5 rounded text-sm form-input">
-                        <div class="text-xs text-gray-500 mt-1">Maksimal 500KB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
+                        <div class="text-xs text-gray-500 mt-1">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
                         <div id="fotoPreview" class="mt-2"></div>
                     </div>
                 </div>
@@ -1230,9 +1230,9 @@ $('#foto_file').change(function() {
       return;
     }
     
-    // Validasi ukuran (max 500KB)
-    if (file.size > 500 * 1024) {
-      alert('Ukuran file terlalu besar. Maksimal 500KB');
+    // Validasi ukuran (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Ukuran file terlalu besar. Maksimal 2MB');
       this.value = '';
       $('#fotoPreview').html('');
       return;

@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
         }
         
-        // Validasi ukuran (max 500KB)
-        if ($kk_foto['size'] > 500 * 1024) {
-            die('Ukuran file terlalu besar. Maksimal 500KB');
+        // Validasi ukuran (max 2MB)
+        if ($kk_foto['size'] > 2 * 1024 * 1024) {
+            die('Ukuran file terlalu besar. Maksimal 2MB');
         }
         
         // Validasi ukuran minimum (min 10KB)
