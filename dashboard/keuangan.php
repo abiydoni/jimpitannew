@@ -1,19 +1,5 @@
 <?php
 session_start();
-include 'header.php';
-
-// Check if user is logged in
-if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-
-// Include the database connection
 include 'api/db.php';
 
 // Prepare and execute the SQL statement
@@ -31,6 +17,20 @@ date_default_timezone_set('Asia/Jakarta');
 
 // Mendapatkan tanggal saat ini dengan format: Tahun-Bulan-Hari (format untuk input date)
 $tanggalSekarang = date("Y-m-d");
+
+include 'header.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+    header('Location: ../login.php'); // Redirect to login page
+    exit;
+}
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+    exit;
+}
+
 ?>
 
             <div class="table-data">

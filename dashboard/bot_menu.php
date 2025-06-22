@@ -1,9 +1,5 @@
 <?php
-include 'header.php'; // Sudah termasuk koneksi dan session
-
-// Ambil semua menu
-$stmt = $pdo->query("SELECT * FROM tb_botmenu ORDER BY parent_id, id");
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+include 'api/db.php';
 
 // Handle Create / Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,6 +28,13 @@ if (isset($_GET['delete'])) {
     header("Location: bot_menu.php#menu-table");
     exit;
 }
+
+include 'header.php'; // Sudah termasuk koneksi dan session
+
+// Ambil semua menu
+$stmt = $pdo->query("SELECT * FROM tb_botmenu ORDER BY parent_id, id");
+$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
   <script>

@@ -1,17 +1,5 @@
 <?php
 session_start();
-include 'header.php';
-
-// Cek login dan hak akses
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php');
-    exit;
-}
-if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php');
-    exit;
-}
-
 include 'api/db.php';
 
 // Ambil dan kelompokkan data berdasarkan `group`
@@ -33,6 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<div class='bg-green-100 text-green-800 p-2 mb-3 rounded text-sm'>✅ Konfigurasi berhasil diperbarui.</div>";
     header("Refresh:1");
 }
+
+include 'header.php';
+
+// Cek login dan hak akses
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php');
+    exit;
+}
+if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php');
+    exit;
+}
+
+
 ?>
 
 <div class="table-data px-2">

@@ -1,16 +1,5 @@
 <?php
 session_start();
-include 'header.php';
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
 // Include the database connection
 include 'api/db.php';
 
@@ -36,6 +25,18 @@ $displayDate = '';
 if (strtotime($filterDate)) {
     $displayDate = date('d F Y', strtotime($filterDate));
 }
+include 'header.php';
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php'); // Redirect to login page
+    exit;
+}
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+    exit;
+}
+
 ?>
 
 <style>

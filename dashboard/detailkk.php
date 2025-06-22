@@ -1,17 +1,5 @@
 <?php
     session_start();
-include 'header.php'; // Sudah termasuk koneksi dan session
-
-    // Check if user is logged in
-    if (!isset($_SESSION['user'])) {
-        header('Location: ../login.php'); // Redirect to login page
-        exit;
-    }
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-        header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-        exit;
-    }
     // Include the database connection
     include 'api/db.php';
 
@@ -42,7 +30,18 @@ include 'header.php'; // Sudah termasuk koneksi dan session
     // Menutup statement (tidak perlu menutup koneksi PDO secara manual)
     $stmt = null;
 
-// ... existing code ...
+    include 'header.php'; // Sudah termasuk koneksi dan session
+
+    // Check if user is logged in
+    if (!isset($_SESSION['user'])) {
+        header('Location: ../login.php'); // Redirect to login page
+        exit;
+    }
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+        header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+        exit;
+    }
 ?>
 
             

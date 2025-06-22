@@ -1,17 +1,5 @@
 <?php
 session_start();
-include 'header.php';
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-// Include the database connection
 include 'api/db.php';
 // Fungsi untuk menghapus data
 if (isset($_GET['delete'])) {
@@ -28,6 +16,19 @@ if (isset($_GET['delete'])) {
 $sql = "SELECT * FROM master_kk";
 $stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+include 'header.php';
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php'); // Redirect to login page
+    exit;
+}
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+    exit;
+}
+// Include the database connection
+
 ?>
 
             <div class="table-data">

@@ -1,17 +1,5 @@
 <?php
 session_start();
-include 'header.php'; // Sudah termasuk koneksi dan session
-
-// Periksa apakah pengguna sudah masuk
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman login
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
 // Sertakan koneksi database
 include 'api/db.php';
 
@@ -36,6 +24,20 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $sql_kk = "SELECT kk_name FROM master_kk";
 $stmt_kk = $pdo->query($sql_kk);
 $kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
+
+include 'header.php'; // Sudah termasuk koneksi dan session
+
+// Periksa apakah pengguna sudah masuk
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman login
+    exit;
+}
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+    exit;
+}
+
 ?>
 
             <div class="table-data">

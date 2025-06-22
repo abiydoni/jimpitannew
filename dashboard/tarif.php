@@ -1,18 +1,5 @@
 <?php
 session_start();
-include 'header.php';
-
-// Periksa apakah pengguna sudah masuk
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman login
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-// Sertakan koneksi database
 include 'api/db.php';
 
 // Fungsi untuk menghapus data
@@ -26,6 +13,19 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
+include 'header.php';
+
+// Periksa apakah pengguna sudah masuk
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman login
+    exit;
+}
+
+    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
+    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
+    exit;
+}
+// Sertakan koneksi database
 
 // Ambil data dari tabel users
 $sql = "SELECT * FROM tb_tarif";

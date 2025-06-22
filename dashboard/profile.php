@@ -1,7 +1,8 @@
 <?php
-include 'header.php';
+   error_reporting(E_ALL);
+   ini_set('display_errors', 1);
 
-$profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+   include 'api/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("UPDATE tb_profil SET 
@@ -32,6 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<script>alert('Profil diperbarui!');location.href='profil.php';</script>";
     exit;
 }
+
+include 'header.php';
+
+$profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!-- <div class="max-w-4xl mx-auto bg-white shadow-md rounded p-4 mt-6 text-sm"> -->
