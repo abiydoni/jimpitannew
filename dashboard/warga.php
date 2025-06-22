@@ -671,6 +671,13 @@ function closeModalKK() {
 function displayBiodata(warga) {
   const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
   
+  // Foto warga
+  const fotoHTML = warga.foto && warga.foto !== '' 
+    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-24 h-32 object-cover border-2 border-gray-300 rounded">`
+    : `<div class="w-24 h-32 border-2 border-gray-300 rounded flex items-center justify-center bg-gray-100">
+         <i class='bx bx-user text-4xl text-gray-400'></i>
+       </div>`;
+  
   const html = `
     <div class="flex justify-between items-center mb-4 border-b pb-2">
       <h3 class="text-lg font-bold">Biodata Warga</h3>
@@ -716,7 +723,7 @@ function displayBiodata(warga) {
             </div>
             <div class="grid grid-cols-3 gap-2">
               <div class="font-semibold">RT/RW</div>
-              <div class="col-span-2">: ${warga.rt || '-'}/${warga.rw || '-'}</div>
+              <div class="col-span-2">: ${warga.rt ? warga.rt.toString().padStart(3, '0') : '-'}/${warga.rw ? warga.rw.toString().padStart(3, '0') : '-'}</div>
             </div>
             <div class="grid grid-cols-3 gap-2">
               <div class="font-semibold">Kelurahan</div>
@@ -742,6 +749,12 @@ function displayBiodata(warga) {
               <div class="font-semibold">Kewarganegaraan</div>
               <div class="col-span-2">: ${warga.negara || 'WNI'}</div>
             </div>
+          </div>
+          
+          <!-- Foto KTP -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-semibold mb-1 text-center">FOTO</div>
+            ${fotoHTML}
           </div>
         </div>
       </div>
