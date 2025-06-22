@@ -75,7 +75,10 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
                                         </tr>   
                                     <?php endforeach; 
                                 } else {    
-                                    echo '<tr><td colspan="6" style="text-align:center;">No data available</td></tr>';
+                                    echo '<tr>
+                                        <td style="text-align:center;">No data available</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>';
                                 }
                             ?>
                         </tbody>
