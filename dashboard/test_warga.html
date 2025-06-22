@@ -106,6 +106,17 @@
         </div>
         <div id="detailResult" class="mt-2 text-sm"></div>
       </div>
+
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-2">Test Form Submit</h2>
+        <button
+          id="testFormSubmit"
+          class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+        >
+          Test Form Submit
+        </button>
+        <div id="formSubmitResult" class="mt-2 text-sm"></div>
+      </div>
     </div>
 
     <script>
@@ -280,6 +291,52 @@
             }
           ).fail(function (xhr, status, error) {
             $("#kotaResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test Form Submit
+        $("#testFormSubmit").click(function () {
+          $("#formSubmitResult").html("Testing form submit...");
+
+          // Simulasi form submit
+          const formData = new FormData();
+          formData.append("action", "create");
+          formData.append("nama", "Test Warga");
+          formData.append("nik", "1234567890123456");
+          formData.append("hubungan", "Kepala Keluarga");
+          formData.append("jenkel", "L");
+          formData.append("tpt_lahir", "Jakarta");
+          formData.append("tgl_lahir", "1990-01-01");
+          formData.append("agama", "Islam");
+          formData.append("status", "Menikah");
+          formData.append("pekerjaan", "Karyawan");
+          formData.append("alamat", "Jl. Test No. 1");
+          formData.append("rt", "001");
+          formData.append("rw", "001");
+          formData.append("propinsi", "DKI Jakarta");
+          formData.append("kota", "Jakarta Selatan");
+          formData.append("kecamatan", "Kebayoran Baru");
+          formData.append("kelurahan", "Senayan");
+          formData.append("negara", "Indonesia");
+          formData.append("hp", "08123456789");
+          formData.append("foto", "");
+
+          $.ajax({
+            url: "api/warga_action.php",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              $("#formSubmitResult").html(
+                `✅ Form submit berhasil<br>Response: ${data}`
+              );
+            },
+            error: function (xhr, status, error) {
+              $("#formSubmitResult").html(
+                `❌ Form submit error: ${error}<br>Response: ${xhr.responseText}`
+              );
+            },
           });
         });
       });

@@ -1147,6 +1147,10 @@ function loadRWDropdown() {
 loadRTDropdown();
 loadRWDropdown();
 
+// Debug: Cek apakah form dan event handler terpasang
+console.log('Form exists:', $('#wargaForm').length > 0);
+console.log('Submit button exists:', $('#wargaForm button[type="submit"]').length > 0);
+
 // Event handler untuk preview foto
 $('#foto_file').change(function() {
   const file = this.files[0];
@@ -1159,6 +1163,13 @@ $('#foto_file').change(function() {
   } else {
     $('#fotoPreview').html('');
   }
+});
+
+// Event handler alternatif untuk tombol simpan (jika form submit tidak berfungsi)
+$(document).on('click', '#wargaForm button[type="submit"]', function(e) {
+  console.log('Submit button clicked'); // Debug
+  e.preventDefault();
+  $('#wargaForm').submit();
 });
 
 // Event handlers
@@ -1458,13 +1469,17 @@ $(document).ready(function() {
   
   // Form submit
   $('#wargaForm').submit(function(e) {
+    console.log('Form submit triggered'); // Debug
     e.preventDefault();
     
     // Validasi form
     if (!this.checkValidity()) {
+      console.log('Form validation failed'); // Debug
       this.reportValidity();
       return;
     }
+    
+    console.log('Form validation passed, processing...'); // Debug
     
     // Ambil nama wilayah dari hidden input
     const propinsiNama = $('#propinsi_nama').val() || $('#propinsi option:selected').text();
@@ -1475,6 +1490,9 @@ $(document).ready(function() {
     // Format RT dan RW ke 3 digit
     const rt = $('#rt').val() ? $('#rt').val().toString().padStart(3, '0') : '';
     const rw = $('#rw').val() ? $('#rw').val().toString().padStart(3, '0') : '';
+    
+    console.log('Action:', $('#formAction').val()); // Debug
+    console.log('ID Warga:', $('#id_warga').val()); // Debug
     
     // Buat FormData untuk menangani file upload
     const formData = new FormData();
@@ -1514,6 +1532,8 @@ $(document).ready(function() {
     const originalText = submitBtn.text();
     submitBtn.prop('disabled', true).text('Menyimpan...');
     
+    console.log('Sending AJAX request...'); // Debug
+    
     $.ajax({
       url: 'api/warga_action.php',
       type: 'POST',
@@ -1521,6 +1541,7 @@ $(document).ready(function() {
       processData: false,
       contentType: false,
       success: function(res) {
+        console.log('AJAX Success:', res); // Debug
         submitBtn.prop('disabled', false).text(originalText);
         $('#modal').removeClass('modal-show').addClass('hidden');
         loadData();
@@ -1541,6 +1562,8 @@ $(document).ready(function() {
         }
       },
       error: function(xhr, status, error) {
+        console.log('AJAX Error:', error); // Debug
+        console.log('Response Text:', xhr.responseText); // Debug
         submitBtn.prop('disabled', false).text(originalText);
         alert('Error: ' + error);
         console.error('AJAX Error:', xhr.responseText);
