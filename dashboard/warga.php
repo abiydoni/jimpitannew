@@ -28,8 +28,16 @@ include 'header.php';
         </div>
         
         <!-- Search dan Reset -->
-        <div class="mb-2 flex justify-between items-center">
-          <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-64" placeholder="Cari nama/NIK/Alamat/Tgl Lahir (DD-MM-YYYY)...">
+        <div class="mb-2 flex flex-wrap gap-2 items-center">
+          <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-48" placeholder="Cari nama/NIK/Alamat/Tgl Lahir (DD-MM-YYYY)...">
+          <input type="text" id="nikkInput" class="border px-2 py-1 rounded text-xs w-32" placeholder="NIKK">
+          <select id="jenkelInput" class="border px-2 py-1 rounded text-xs w-24">
+            <option value="">Jenkel</option>
+            <option value="L">Laki-laki</option>
+            <option value="P">Perempuan</option>
+          </select>
+          <input type="text" id="rtInput" class="border px-2 py-1 rounded text-xs w-16" placeholder="RT">
+          <input type="text" id="rwInput" class="border px-2 py-1 rounded text-xs w-16" placeholder="RW">
           <button id="resetSearch" class="bg-gray-400 hover:bg-gray-600 text-white p-1 rounded text-xs" title="Reset Pencarian">
             <i class='bx bx-refresh text-sm'></i>
           </button>
@@ -403,40 +411,38 @@ window.goToPage = function(page) {
 }
 
 // Fungsi untuk filter data
-function filterWarga(keyword) {
-  keyword = keyword.toLowerCase();
-  
+function filterWarga() {
+  const keyword = $('#searchInput').val().toLowerCase();
+  const nikk = $('#nikkInput').val().toLowerCase();
+  const jenkel = $('#jenkelInput').val();
+  const rt = $('#rtInput').val();
+  const rw = $('#rwInput').val();
+
   const namaBulan = [
     'januari', 'februari', 'maret', 'april', 'mei', 'juni',
     'juli', 'agustus', 'september', 'oktober', 'november', 'desember'
   ];
-  
+
   return allWarga.filter(row => {
     const namaMatch = row.nama && row.nama.toLowerCase().includes(keyword);
     const nikMatch = row.nik && row.nik.toLowerCase().includes(keyword);
     const alamatMatch = row.alamat && row.alamat.toLowerCase().includes(keyword);
-    
     let tglLahirMatch = false;
     if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
       const formattedDate = formatDateForDisplay(row.tgl_lahir);
       const dateParts = formattedDate.split('-');
-      
       tglLahirMatch = formattedDate.toLowerCase().includes(keyword);
-      
       if (!tglLahirMatch && dateParts.length === 3) {
         const [day, month, year] = dateParts;
         tglLahirMatch = day.includes(keyword) || month.includes(keyword) || year.includes(keyword);
-        
         if (!tglLahirMatch && namaBulan.includes(keyword)) {
           const bulanIndex = namaBulan.indexOf(keyword) + 1;
           const bulanString = bulanIndex.toString().padStart(2, '0');
           tglLahirMatch = month === bulanString;
         }
-        
         if (!tglLahirMatch && keyword.length === 4 && /^\d{4}$/.test(keyword)) {
           tglLahirMatch = year === keyword;
         }
-        
         if (!tglLahirMatch && keyword.includes('an') && keyword.length >= 3) {
           const tahunPattern = keyword.replace('an', '');
           if (/^\d{2}$/.test(tahunPattern)) {
@@ -445,8 +451,13 @@ function filterWarga(keyword) {
         }
       }
     }
-    
-    return namaMatch || nikMatch || alamatMatch || tglLahirMatch;
+    // Filter tambahan
+    const nikkMatch = nikk ? (row.nikk && row.nikk.toLowerCase().includes(nikk)) : true;
+    const jenkelMatch = jenkel ? (row.jenkel === jenkel) : true;
+    const rtMatch = rt ? (row.rt && row.rt.toString().padStart(3, '0') === rt.padStart(3, '0')) : true;
+    const rwMatch = rw ? (row.rw && row.rw.toString().padStart(3, '0') === rw.padStart(3, '0')) : true;
+    return (namaMatch || nikMatch || alamatMatch || tglLahirMatch)
+      && nikkMatch && jenkelMatch && rtMatch && rwMatch;
   });
 }
 
@@ -1306,10 +1317,9 @@ $(document).on('click', '#wargaForm button[type="submit"]', function(e) {
 $(document).ready(function() {
   loadData();
   
-  // Search input dengan pencarian tanggal lahir yang diperbaiki
-  $('#searchInput').on('input', function() {
-    const keyword = $(this).val();
-    filteredWarga = filterWarga(keyword);
+  // Search input dan filter tambahan
+  $('#searchInput, #nikkInput, #jenkelInput, #rtInput, #rwInput').on('input change', function() {
+    filteredWarga = filterWarga();
     currentPage = 1;
     renderTable(filteredWarga, currentPage);
     renderPagination(filteredWarga, currentPage);
@@ -1318,6 +1328,10 @@ $(document).ready(function() {
   // Reset search
   $('#resetSearch').click(function() {
     $('#searchInput').val('');
+    $('#nikkInput').val('');
+    $('#jenkelInput').val('');
+    $('#rtInput').val('');
+    $('#rwInput').val('');
     filteredWarga = allWarga;
     currentPage = 1;
     renderTable(filteredWarga, currentPage);
