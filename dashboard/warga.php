@@ -673,9 +673,9 @@ function displayBiodata(warga) {
   
   // Foto warga
   const fotoHTML = warga.foto && warga.foto !== '' 
-    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-24 h-32 object-cover border-2 border-gray-300 rounded">`
-    : `<div class="w-24 h-32 border-2 border-gray-300 rounded flex items-center justify-center bg-gray-100">
-         <i class='bx bx-user text-4xl text-gray-400'></i>
+    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-36 h-44 object-cover border-2 border-gray-300 rounded-sm">`
+    : `<div class="w-36 h-44 border-2 border-gray-300 rounded-sm flex items-center justify-center bg-gray-100">
+         <i class='bx bx-user text-6xl text-gray-400'></i>
        </div>`;
   
   const html = `
@@ -790,6 +790,13 @@ function displayKK(kk) {
   const anggotaKK = kk.anggota_keluarga;
   const tanggalLahirKK = kepalaKK.tgl_lahir && kepalaKK.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(kepalaKK.tgl_lahir) : '-';
   
+  // Foto kepala keluarga
+  const fotoKepalaKK = kepalaKK.foto && kepalaKK.foto !== '' 
+    ? `<img src="${kepalaKK.foto}" alt="Foto ${kepalaKK.nama}" class="w-24 h-32 object-cover border-2 border-gray-300 rounded-sm">`
+    : `<div class="w-24 h-32 border-2 border-gray-300 rounded-sm flex items-center justify-center bg-gray-100">
+         <i class='bx bx-user text-4xl text-gray-400'></i>
+       </div>`;
+  
   let anggotaHTML = '';
   anggotaKK.forEach((anggota, index) => {
     const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
@@ -830,18 +837,27 @@ function displayKK(kk) {
           <h4 class="text-sm font-semibold text-gray-700">NIK KK : ${kepalaKK.nikk || '-'}</h4>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div>
-            <div class="flex justify-between py-0.5"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>NIK:</strong> <span>${kepalaKK.nik || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>RT/RW:</strong> <span>${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</span></div>
+        <div class="flex gap-4">
+          <!-- Data KK -->
+          <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div>
+              <div class="flex justify-between py-0.5"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>NIK:</strong> <span>${kepalaKK.nik || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>RT/RW:</strong> <span>${kepalaKK.rt ? kepalaKK.rt.toString().padStart(3, '0') : '-'}/${kepalaKK.rw ? kepalaKK.rw.toString().padStart(3, '0') : '-'}</span></div>
+            </div>
+            <div>
+              <div class="flex justify-between py-0.5"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
+              <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
+            </div>
           </div>
-          <div>
-            <div class="flex justify-between py-0.5"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
+          
+          <!-- Foto Kepala Keluarga -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-semibold mb-1 text-center">FOTO KEPALA KK</div>
+            ${fotoKepalaKK}
           </div>
         </div>
       </div>
