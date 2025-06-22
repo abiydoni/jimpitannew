@@ -1,5 +1,8 @@
 <?php
-include 'header.php'; // Sudah termasuk koneksi dan session
+   error_reporting(E_ALL);
+   ini_set('display_errors', 1);
+
+   include 'header.php'; // Sudah termasuk koneksi dan session
 
 // Ambil semua menu
 $stmt = $pdo->query("SELECT * FROM tb_barang ORDER BY kode_brg");
@@ -20,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$kode_brg, $nama, $jumlah]);
     }
 
-    header("Location: inventaris.php#menu-table");
+    header("Location: inventaris.php");
     exit;
 }
 
@@ -28,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_barang WHERE kode = ?");
     $stmt->execute([$_GET['delete']]);
-    header("Location: inventaris.php#menu-table");
+    header("Location: inventaris.php");
     exit;
 }
 
