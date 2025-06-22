@@ -161,8 +161,7 @@ include 'header.php';
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                        <input type="text" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" placeholder="DD-MM-YYYY" required>
-                        <small class="text-gray-500 text-xs">Format: DD-MM-YYYY (contoh: 15-08-1990)</small>
+                        <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                     </div>
                     
                     <div>
@@ -292,6 +291,18 @@ const pageSize = 10;
 function formatDateForDisplay(dateString) {
   if (!dateString || dateString === '0000-00-00') return '';
   
+  // Jika sudah dalam format DD-MM-YYYY, return as is
+  if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+    return dateString;
+  }
+  
+  // Jika dalam format YYYY-MM-DD, convert ke DD-MM-YYYY
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    const parts = dateString.split('-');
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+  
+  // Coba parse sebagai Date object
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return '';
   
@@ -972,102 +983,127 @@ $(document).keydown(function(e) {
 
 // Fungsi untuk memuat data provinsi
 function loadProvinsi() {
-  $('#propinsi').html('<option value="">Loading provinsi...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'provinsi' }, function(data) {
-    let html = '<option value="">Pilih Provinsi</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+  return new Promise((resolve, reject) => {
+    $('#propinsi').html('<option value="">Loading provinsi...</option>');
+    $.get('api/wilayah.php', { action: 'provinsi' }, function(data) {
+      let html = '<option value="">Pilih Provinsi</option>';
+      data.forEach(item => {
+        html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+      });
+      $('#propinsi').html(html);
+      resolve();
+    }).fail(function(xhr, status, error) {
+      console.error('Error loading provinsi:', error);
+      $('#propinsi').html('<option value="">Error loading provinsi</option>');
+      reject(error);
     });
-    $('#propinsi').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading provinsi:', error);
-    $('#propinsi').html('<option value="">Error loading provinsi</option>').prop('disabled', true);
   });
 }
 
 // Fungsi untuk memuat data kota berdasarkan provinsi
 function loadKota(provinsi_id) {
-  if (!provinsi_id) {
-    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kota').html('<option value="">Loading kota...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi_id }, function(data) {
-    let html = '<option value="">Pilih Kota/Kabupaten</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+  return new Promise((resolve, reject) => {
+    if (!provinsi_id) {
+      $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+      $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+      $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      resolve();
+      return;
+    }
+    
+    $('#kota').html('<option value="">Loading kota...</option>').prop('disabled', true);
+    $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi_id }, function(data) {
+      let html = '<option value="">Pilih Kota/Kabupaten</option>';
+      data.forEach(item => {
+        html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+      });
+      $('#kota').html(html).prop('disabled', false);
+      $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+      $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      resolve();
+    }).fail(function(xhr, status, error) {
+      console.error('Error loading kota:', error);
+      $('#kota').html('<option value="">Error loading kota</option>').prop('disabled', true);
+      reject(error);
     });
-    $('#kota').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kota:', error);
-    $('#kota').html('<option value="">Error loading kota</option>').prop('disabled', true);
   });
 }
 
 // Fungsi untuk memuat data kecamatan berdasarkan kota
 function loadKecamatan(kota_id) {
-  if (!kota_id) {
-    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kecamatan').html('<option value="">Loading kecamatan...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota_id }, function(data) {
-    let html = '<option value="">Pilih Kecamatan</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+  return new Promise((resolve, reject) => {
+    if (!kota_id) {
+      $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+      $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      resolve();
+      return;
+    }
+    
+    $('#kecamatan').html('<option value="">Loading kecamatan...</option>').prop('disabled', true);
+    $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota_id }, function(data) {
+      let html = '<option value="">Pilih Kecamatan</option>';
+      data.forEach(item => {
+        html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+      });
+      $('#kecamatan').html(html).prop('disabled', false);
+      $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      resolve();
+    }).fail(function(xhr, status, error) {
+      console.error('Error loading kecamatan:', error);
+      $('#kecamatan').html('<option value="">Error loading kecamatan</option>').prop('disabled', true);
+      reject(error);
     });
-    $('#kecamatan').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kecamatan:', error);
-    $('#kecamatan').html('<option value="">Error loading kecamatan</option>').prop('disabled', true);
   });
 }
 
 // Fungsi untuk memuat data kelurahan berdasarkan kecamatan
 function loadKelurahan(kecamatan_id) {
-  if (!kecamatan_id) {
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kelurahan').html('<option value="">Loading kelurahan...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan_id }, function(data) {
-    let html = '<option value="">Pilih Kelurahan</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+  return new Promise((resolve, reject) => {
+    if (!kecamatan_id) {
+      $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+      resolve();
+      return;
+    }
+    
+    $('#kelurahan').html('<option value="">Loading kelurahan...</option>').prop('disabled', true);
+    $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan_id }, function(data) {
+      let html = '<option value="">Pilih Kelurahan</option>';
+      data.forEach(item => {
+        html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+      });
+      $('#kelurahan').html(html).prop('disabled', false);
+      resolve();
+    }).fail(function(xhr, status, error) {
+      console.error('Error loading kelurahan:', error);
+      $('#kelurahan').html('<option value="">Error loading kelurahan</option>').prop('disabled', true);
+      reject(error);
     });
-    $('#kelurahan').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kelurahan:', error);
-    $('#kelurahan').html('<option value="">Error loading kelurahan</option>').prop('disabled', true);
   });
 }
 
 // Event handler untuk dropdown wilayah
-$('#propinsi').change(function() {
+$('#propinsi').change(async function() {
   const provinsiId = $(this).val();
   const provinsiName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
   $('#propinsi_nama').val(provinsiName);
-  loadKota(provinsiId);
+  await loadKota(provinsiId);
   $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
   $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
 });
 
-$('#kota').change(function() {
+$('#kota').change(async function() {
   const kotaId = $(this).val();
   const kotaName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
   $('#kota_nama').val(kotaName);
-  loadKecamatan(kotaId);
+  await loadKecamatan(kotaId);
   $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
 });
 
-$('#kecamatan').change(function() {
+$('#kecamatan').change(async function() {
   const kecamatanId = $(this).val();
   const kecamatanName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
   $('#kecamatan_nama').val(kecamatanName);
-  loadKelurahan(kecamatanId);
+  await loadKelurahan(kecamatanId);
 });
 
 $('#kelurahan').change(function() {
@@ -1406,7 +1442,32 @@ $(document).ready(function() {
       $('#hubungan').val(data.hubungan);
       $('#jenkel').val(data.jenkel);
       $('#tpt_lahir').val(data.tpt_lahir);
-      $('#tgl_lahir').val(formatDateForDisplay(data.tgl_lahir));
+      
+      // Format tanggal untuk date input (YYYY-MM-DD)
+      if (data.tgl_lahir && data.tgl_lahir !== '0000-00-00') {
+        // Jika sudah dalam format YYYY-MM-DD, gunakan langsung
+        if (/^\d{4}-\d{2}-\d{2}$/.test(data.tgl_lahir)) {
+          $('#tgl_lahir').val(data.tgl_lahir);
+        } else {
+          // Jika dalam format DD-MM-YYYY, convert ke YYYY-MM-DD
+          if (/^\d{2}-\d{2}-\d{4}$/.test(data.tgl_lahir)) {
+            const parts = data.tgl_lahir.split('-');
+            $('#tgl_lahir').val(`${parts[2]}-${parts[1]}-${parts[0]}`);
+          } else {
+            // Coba parse sebagai Date object
+            const date = new Date(data.tgl_lahir);
+            if (!isNaN(date.getTime())) {
+              const year = date.getFullYear();
+              const month = (date.getMonth() + 1).toString().padStart(2, '0');
+              const day = date.getDate().toString().padStart(2, '0');
+              $('#tgl_lahir').val(`${year}-${month}-${day}`);
+            }
+          }
+        }
+      } else {
+        $('#tgl_lahir').val('');
+      }
+      
       $('#agama').val(data.agama);
       $('#status').val(data.status);
       $('#pekerjaan').val(data.pekerjaan);
@@ -1414,15 +1475,8 @@ $(document).ready(function() {
       $('#rt').val(data.rt);
       $('#rw').val(data.rw);
       
-      // Set wilayah - gunakan nama untuk dropdown
-      $('#propinsi').val(data.propinsi);
-      $('#propinsi_nama').val(data.propinsi);
-      $('#kota').val(data.kota);
-      $('#kota_nama').val(data.kota);
-      $('#kecamatan').val(data.kecamatan);
-      $('#kecamatan_nama').val(data.kecamatan);
-      $('#kelurahan').val(data.kelurahan);
-      $('#kelurahan_nama').val(data.kelurahan);
+      // Set wilayah - perlu memuat data wilayah terlebih dahulu
+      setWilayahForEdit(data);
       
       $('#negara').val(data.negara);
       $('#hp').val(data.hp);
@@ -1432,6 +1486,102 @@ $(document).ready(function() {
       alert('Error parsing data: ' + e.message);
     }
   });
+  
+  // Fungsi untuk set wilayah saat edit
+  async function setWilayahForEdit(data) {
+    try {
+      // Load provinsi terlebih dahulu
+      await loadProvinsi();
+      
+      // Cari dan set provinsi
+      let provinsiFound = false;
+      $('#propinsi option').each(function() {
+        if ($(this).text().toLowerCase() === data.propinsi.toLowerCase()) {
+          $('#propinsi').val($(this).val());
+          $('#propinsi_nama').val(data.propinsi);
+          provinsiFound = true;
+          return false; // break loop
+        }
+      });
+      
+      if (provinsiFound && $('#propinsi').val()) {
+        // Load kota
+        await loadKota($('#propinsi').val());
+        
+        // Cari dan set kota
+        let kotaFound = false;
+        $('#kota option').each(function() {
+          if ($(this).text().toLowerCase() === data.kota.toLowerCase()) {
+            $('#kota').val($(this).val());
+            $('#kota_nama').val(data.kota);
+            kotaFound = true;
+            return false; // break loop
+          }
+        });
+        
+        if (kotaFound && $('#kota').val()) {
+          // Load kecamatan
+          await loadKecamatan($('#kota').val());
+          
+          // Cari dan set kecamatan
+          let kecamatanFound = false;
+          $('#kecamatan option').each(function() {
+            if ($(this).text().toLowerCase() === data.kecamatan.toLowerCase()) {
+              $('#kecamatan').val($(this).val());
+              $('#kecamatan_nama').val(data.kecamatan);
+              kecamatanFound = true;
+              return false; // break loop
+            }
+          });
+          
+          if (kecamatanFound && $('#kecamatan').val()) {
+            // Load kelurahan
+            await loadKelurahan($('#kecamatan').val());
+            
+            // Cari dan set kelurahan
+            let kelurahanFound = false;
+            $('#kelurahan option').each(function() {
+              if ($(this).text().toLowerCase() === data.kelurahan.toLowerCase()) {
+                $('#kelurahan').val($(this).val());
+                $('#kelurahan_nama').val(data.kelurahan);
+                kelurahanFound = true;
+                return false; // break loop
+              }
+            });
+            
+            if (!kelurahanFound) {
+              // Jika tidak ditemukan, set nama saja
+              $('#kelurahan').val(data.kelurahan);
+              $('#kelurahan_nama').val(data.kelurahan);
+            }
+          } else {
+            // Jika tidak ditemukan, set nama saja
+            $('#kecamatan').val(data.kecamatan);
+            $('#kecamatan_nama').val(data.kecamatan);
+          }
+        } else {
+          // Jika tidak ditemukan, set nama saja
+          $('#kota').val(data.kota);
+          $('#kota_nama').val(data.kota);
+        }
+      } else {
+        // Jika tidak ditemukan, set nama saja
+        $('#propinsi').val(data.propinsi);
+        $('#propinsi_nama').val(data.propinsi);
+      }
+    } catch (error) {
+      console.error('Error setting wilayah for edit:', error);
+      // Fallback: set nama saja
+      $('#propinsi').val(data.propinsi);
+      $('#propinsi_nama').val(data.propinsi);
+      $('#kota').val(data.kota);
+      $('#kota_nama').val(data.kota);
+      $('#kecamatan').val(data.kecamatan);
+      $('#kecamatan_nama').val(data.kecamatan);
+      $('#kelurahan').val(data.kelurahan);
+      $('#kelurahan_nama').val(data.kelurahan);
+    }
+  }
   
   // Delete button
   $(document).on('click', '.deleteBtn', function() {

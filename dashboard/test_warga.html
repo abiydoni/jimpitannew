@@ -37,9 +37,16 @@
             id="testWilayah"
             class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
           >
-            Test Wilayah API
+            Test Provinsi
+          </button>
+          <button
+            id="testKota"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
+          >
+            Test Kota
           </button>
           <div id="wilayahResult" class="mt-2 text-sm"></div>
+          <div id="kotaResult" class="mt-2 text-sm"></div>
         </div>
       </div>
 
@@ -127,7 +134,8 @@
             try {
               const result = JSON.parse(data);
               $("#wilayahResult").html(
-                `✅ Berhasil membaca ${result.length} provinsi`
+                `✅ Berhasil membaca ${result.length} provinsi<br>
+                 Contoh: ${result[0]?.name || "Tidak ada data"}`
               );
             } catch (e) {
               $("#wilayahResult").html(`❌ Error: ${e.message}`);
@@ -250,6 +258,28 @@
             }
           ).fail(function (xhr, status, error) {
             $("#detailResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test Kota
+        $("#testKota").click(function () {
+          $("#kotaResult").html("Loading...");
+          $.get(
+            "api/wilayah.php",
+            { action: "kota", provinsi_id: "32" },
+            function (data) {
+              try {
+                const result = JSON.parse(data);
+                $("#kotaResult").html(
+                  `✅ Berhasil membaca ${result.length} kota di Jawa Barat<br>
+                 Contoh: ${result[0]?.name || "Tidak ada data"}`
+                );
+              } catch (e) {
+                $("#kotaResult").html(`❌ Error: ${e.message}`);
+              }
+            }
+          ).fail(function (xhr, status, error) {
+            $("#kotaResult").html(`❌ AJAX Error: ${error}`);
           });
         });
       });
