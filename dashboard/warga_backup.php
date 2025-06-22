@@ -1079,7 +1079,6 @@ include 'header.php';
     });
 
     $(document).ready(function() {
-      alert('Document ready - JavaScript is working!');
       loadData();
       loadProvinsi(); // Load provinsi saat halaman dimuat
 

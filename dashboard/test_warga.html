@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Warga</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Test Warga</h1>
+    <button id="testBtn">Test Load Data</button>
+    <div id="result"></div>
+
+    <script>
+      $(document).ready(function () {
+        console.log("Document ready");
+
+        $("#testBtn").click(function () {
+          console.log("Test button clicked");
+          $.post("api/warga_action.php", { action: "read" }, function (data) {
+            console.log("Data received:", data);
+            $("#result").html("<pre>" + data + "</pre>");
+          }).fail(function (xhr, status, error) {
+            console.error("Error:", error);
+            $("#result").html(
+              '<p style="color: red;">Error: ' + error + "</p>"
+            );
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

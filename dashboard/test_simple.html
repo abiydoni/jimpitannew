@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Simple</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Test Simple</h1>
+    <button id="testBtn">Test Button</button>
+    <div id="result"></div>
+
+    <script>
+      $(document).ready(function () {
+        console.log("Document ready");
+
+        $("#testBtn").click(function () {
+          console.log("Button clicked");
+          $("#result").html("<p>Button works!</p>");
+        });
+      });
+    </script>
+  </body>
+</html>
