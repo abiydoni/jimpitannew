@@ -32,7 +32,7 @@ include 'header.php';
           <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-48" placeholder="Cari nama/NIK/Alamat/Tgl Lahir (DD-MM-YYYY)...">
           <input type="text" id="nikkInput" class="border px-2 py-1 rounded text-xs w-32" placeholder="NIKK">
           <select id="jenkelInput" class="border px-2 py-1 rounded text-xs w-24">
-            <option value="">Jenkel</option>
+            <option value="">Semua</option>
             <option value="L">Laki-laki</option>
             <option value="P">Perempuan</option>
           </select>
