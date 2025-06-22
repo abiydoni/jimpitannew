@@ -61,9 +61,33 @@ function uploadFoto($file, $oldFoto = '') {
         throw new Exception('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
     }
     
-    // Validasi ukuran (max 2MB)
-    if ($file['size'] > 2 * 1024 * 1024) {
-        throw new Exception('Ukuran file terlalu besar. Maksimal 2MB');
+    // Validasi ukuran (max 500KB)
+    if ($file['size'] > 500 * 1024) {
+        throw new Exception('Ukuran file terlalu besar. Maksimal 500KB');
+    }
+    
+    // Validasi ukuran minimum (min 10KB)
+    if ($file['size'] < 10 * 1024) {
+        throw new Exception('Ukuran file terlalu kecil. Minimal 10KB');
+    }
+    
+    // Validasi dimensi gambar
+    $imageInfo = getimagesize($file['tmp_name']);
+    if ($imageInfo === false) {
+        throw new Exception('File bukan gambar yang valid');
+    }
+    
+    $width = $imageInfo[0];
+    $height = $imageInfo[1];
+    
+    // Batasi dimensi maksimal (1920x1080)
+    if ($width > 1920 || $height > 1080) {
+        throw new Exception('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
+    }
+    
+    // Batasi dimensi minimal (100x100)
+    if ($width < 100 || $height < 100) {
+        throw new Exception('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
     }
     
     // Buat direktori upload jika belum ada

@@ -46,6 +46,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Proses upload foto jika ada
     $foto_path = '';
     if ($kk_foto['error'] === UPLOAD_ERR_OK) {
+        // Validasi tipe file
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!in_array($kk_foto['type'], $allowedTypes)) {
+            die('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
+        }
+        
+        // Validasi ukuran (max 500KB)
+        if ($kk_foto['size'] > 500 * 1024) {
+            die('Ukuran file terlalu besar. Maksimal 500KB');
+        }
+        
+        // Validasi ukuran minimum (min 10KB)
+        if ($kk_foto['size'] < 10 * 1024) {
+            die('Ukuran file terlalu kecil. Minimal 10KB');
+        }
+        
+        // Validasi dimensi gambar
+        $imageInfo = getimagesize($kk_foto['tmp_name']);
+        if ($imageInfo === false) {
+            die('File bukan gambar yang valid');
+        }
+        
+        $width = $imageInfo[0];
+        $height = $imageInfo[1];
+        
+        // Batasi dimensi maksimal (1920x1080)
+        if ($width > 1920 || $height > 1080) {
+            die('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
+        }
+        
+        // Batasi dimensi minimal (100x100)
+        if ($width < 100 || $height < 100) {
+            die('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
+        }
+        
         $upload_dir = '../images/warga/';
         $foto_path = $upload_dir . basename($kk_foto['name']);
         move_uploaded_file($kk_foto['tmp_name'], $foto_path);
