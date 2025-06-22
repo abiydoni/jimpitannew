@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$kode_brg, $nama, $jumlah]);
     }
 
-    header("Location: inventaris.php");
+    header("Location: inventaris.php#menu-table");
     exit;
 }
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_barang WHERE kode = ?");
     $stmt->execute([$_GET['delete']]);
-    header("Location: inventaris.php");
+    header("Location: inventaris.php#menu-table");
     exit;
 }
 
