@@ -49,6 +49,46 @@ function processDate($dateString) {
     return null;
 }
 
+// Fungsi untuk upload foto
+function uploadFoto($file, $oldFoto = '') {
+    if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+        return $oldFoto; // Return foto lama jika tidak ada upload
+    }
+    
+    // Validasi file
+    $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!in_array($file['type'], $allowedTypes)) {
+        throw new Exception('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
+    }
+    
+    // Validasi ukuran (max 2MB)
+    if ($file['size'] > 2 * 1024 * 1024) {
+        throw new Exception('Ukuran file terlalu besar. Maksimal 2MB');
+    }
+    
+    // Buat direktori upload jika belum ada
+    $uploadDir = '../uploads/foto_warga/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    
+    // Generate nama file unik
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = 'warga_' . time() . '_' . uniqid() . '.' . $extension;
+    $filepath = $uploadDir . $filename;
+    
+    // Upload file
+    if (move_uploaded_file($file['tmp_name'], $filepath)) {
+        // Hapus foto lama jika ada
+        if ($oldFoto && file_exists('../' . $oldFoto)) {
+            unlink('../' . $oldFoto);
+        }
+        return 'uploads/foto_warga/' . $filename;
+    } else {
+        throw new Exception('Gagal mengupload file');
+    }
+}
+
 try {
     include 'db.php';
     
@@ -92,6 +132,14 @@ try {
             throw new Exception('Data wilayah tidak lengkap');
         }
 
+        // Upload foto jika ada
+        $foto = '';
+        if (isset($_FILES['foto_file']) && $_FILES['foto_file']['error'] === UPLOAD_ERR_OK) {
+            $foto = uploadFoto($_FILES['foto_file']);
+        } else {
+            $foto = $_POST['foto'] ?? '';
+        }
+
         $stmt = $pdo->prepare("INSERT INTO tb_warga (
             nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw,
             kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto, hp
@@ -101,7 +149,7 @@ try {
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $tgl_lahir, $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
-            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? ''
+            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $foto, $_POST['hp'] ?? ''
         ]);
         echo 'success';
 
@@ -165,6 +213,19 @@ try {
             throw new Exception('Data wilayah tidak lengkap');
         }
 
+        // Ambil foto lama untuk dihapus jika ada upload baru
+        $stmt = $pdo->prepare('SELECT foto FROM tb_warga WHERE id_warga = ?');
+        $stmt->execute([$_POST['id_warga']]);
+        $oldFoto = $stmt->fetchColumn();
+
+        // Upload foto jika ada
+        $foto = $oldFoto;
+        if (isset($_FILES['foto_file']) && $_FILES['foto_file']['error'] === UPLOAD_ERR_OK) {
+            $foto = uploadFoto($_FILES['foto_file'], $oldFoto);
+        } else {
+            $foto = $_POST['foto'] ?? $oldFoto;
+        }
+
         $stmt = $pdo->prepare("UPDATE tb_warga SET
             nama=?, nik=?, hubungan=?, nikk=?, jenkel=?, tpt_lahir=?, tgl_lahir=?, alamat=?, rt=?, rw=?,
             kelurahan=?, kecamatan=?, kota=?, propinsi=?, negara=?, agama=?, status=?, pekerjaan=?, foto=?, hp=?
@@ -174,7 +235,7 @@ try {
             $_POST['nama'] ?? '', $_POST['nik'] ?? '', $_POST['hubungan'] ?? '', $_POST['nikk'] ?? '', $_POST['jenkel'] ?? '',
             $_POST['tpt_lahir'] ?? '', $tgl_lahir, $_POST['alamat'] ?? '', $_POST['rt'] ?? '', $_POST['rw'] ?? '',
             $_POST['kelurahan'] ?? '', $_POST['kecamatan'] ?? '', $_POST['kota'] ?? '', $_POST['propinsi'] ?? '', $_POST['negara'] ?? '',
-            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $_POST['foto'] ?? '', $_POST['hp'] ?? '', $_POST['id_warga'] ?? ''
+            $_POST['agama'] ?? '', $_POST['status'] ?? '', $_POST['pekerjaan'] ?? '', $foto, $_POST['hp'] ?? '', $_POST['id_warga'] ?? ''
         ]);
         echo 'updated';
 
@@ -184,8 +245,19 @@ try {
             throw new Exception('ID warga tidak boleh kosong');
         }
         
+        // Ambil foto untuk dihapus
+        $stmt = $pdo->prepare('SELECT foto FROM tb_warga WHERE id_warga = ?');
+        $stmt->execute([$id_warga]);
+        $foto = $stmt->fetchColumn();
+        
+        // Hapus data warga
         $stmt = $pdo->prepare('DELETE FROM tb_warga WHERE id_warga = ?');
         $stmt->execute([$id_warga]);
+        
+        // Hapus file foto jika ada
+        if ($foto && file_exists('../' . $foto)) {
+            unlink('../' . $foto);
+        }
         
         echo 'deleted';
         

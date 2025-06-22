@@ -1460,6 +1460,12 @@ $(document).ready(function() {
   $('#wargaForm').submit(function(e) {
     e.preventDefault();
     
+    // Validasi form
+    if (!this.checkValidity()) {
+      this.reportValidity();
+      return;
+    }
+    
     // Ambil nama wilayah dari hidden input
     const propinsiNama = $('#propinsi_nama').val() || $('#propinsi option:selected').text();
     const kotaNama = $('#kota_nama').val() || $('#kota option:selected').text();
@@ -1470,30 +1476,75 @@ $(document).ready(function() {
     const rt = $('#rt').val() ? $('#rt').val().toString().padStart(3, '0') : '';
     const rw = $('#rw').val() ? $('#rw').val().toString().padStart(3, '0') : '';
     
-    const formData = new FormData(this);
-    const formDataObj = {};
-    formData.forEach((value, key) => {
-      formDataObj[key] = value;
-    });
+    // Buat FormData untuk menangani file upload
+    const formData = new FormData();
     
-    // Override dengan nama wilayah dan format 3 digit
-    formDataObj.propinsi = propinsiNama;
-    formDataObj.kota = kotaNama;
-    formDataObj.kecamatan = kecamatanNama;
-    formDataObj.kelurahan = kelurahanNama;
-    formDataObj.rt = rt;
-    formDataObj.rw = rw;
+    // Tambahkan semua field ke FormData
+    formData.append('action', $('#formAction').val());
+    formData.append('id_warga', $('#id_warga').val());
+    formData.append('nama', $('#nama').val());
+    formData.append('nik', $('#nik').val());
+    formData.append('nikk', $('#nikk').val());
+    formData.append('hubungan', $('#hubungan').val());
+    formData.append('jenkel', $('#jenkel').val());
+    formData.append('tpt_lahir', $('#tpt_lahir').val());
+    formData.append('tgl_lahir', $('#tgl_lahir').val());
+    formData.append('agama', $('#agama').val());
+    formData.append('status', $('#status').val());
+    formData.append('pekerjaan', $('#pekerjaan').val());
+    formData.append('alamat', $('#alamat').val());
+    formData.append('rt', rt);
+    formData.append('rw', rw);
+    formData.append('propinsi', propinsiNama);
+    formData.append('kota', kotaNama);
+    formData.append('kecamatan', kecamatanNama);
+    formData.append('kelurahan', kelurahanNama);
+    formData.append('negara', $('#negara').val());
+    formData.append('hp', $('#hp').val());
+    formData.append('foto', $('#foto').val());
     
-    $.post('api/warga_action.php', formDataObj, function(res) {
-      $('#modal').removeClass('modal-show').addClass('hidden');
-      loadData();
-      if (res === 'success' || res === 'updated') {
-        alert('Data berhasil disimpan!');
-      } else {
-        alert('Response: ' + res);
+    // Tambahkan file foto jika ada
+    const fotoFile = $('#foto_file')[0].files[0];
+    if (fotoFile) {
+      formData.append('foto_file', fotoFile);
+    }
+    
+    // Disable tombol submit dan tampilkan loading
+    const submitBtn = $(this).find('button[type="submit"]');
+    const originalText = submitBtn.text();
+    submitBtn.prop('disabled', true).text('Menyimpan...');
+    
+    $.ajax({
+      url: 'api/warga_action.php',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(res) {
+        submitBtn.prop('disabled', false).text(originalText);
+        $('#modal').removeClass('modal-show').addClass('hidden');
+        loadData();
+        
+        try {
+          const result = JSON.parse(res);
+          if (result.success) {
+            alert('Data berhasil disimpan!');
+          } else {
+            alert('Error: ' + (result.message || 'Terjadi kesalahan'));
+          }
+        } catch (e) {
+          if (res === 'success' || res === 'updated') {
+            alert('Data berhasil disimpan!');
+          } else {
+            alert('Response: ' + res);
+          }
+        }
+      },
+      error: function(xhr, status, error) {
+        submitBtn.prop('disabled', false).text(originalText);
+        alert('Error: ' + error);
+        console.error('AJAX Error:', xhr.responseText);
       }
-    }).fail(function(xhr, status, error) {
-      alert('Error: ' + error);
     });
   });
   
