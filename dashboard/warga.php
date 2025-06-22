@@ -221,11 +221,15 @@ include 'header.php';
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">RT *</label>
-                            <input type="text" name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RT</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">RW *</label>
-                            <input type="text" name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RW</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -1114,6 +1118,29 @@ $('#kelurahan').change(function() {
 // Load provinsi saat halaman dimuat
 loadProvinsi();
 
+// Fungsi untuk mengisi dropdown RT dan RW
+function loadRTDropdown() {
+  let html = '<option value="">Pilih RT</option>';
+  for (let i = 1; i <= 999; i++) {
+    const rt = i.toString().padStart(3, '0');
+    html += `<option value="${rt}">${rt}</option>`;
+  }
+  $('#rt').html(html);
+}
+
+function loadRWDropdown() {
+  let html = '<option value="">Pilih RW</option>';
+  for (let i = 1; i <= 999; i++) {
+    const rw = i.toString().padStart(3, '0');
+    html += `<option value="${rw}">${rw}</option>`;
+  }
+  $('#rw').html(html);
+}
+
+// Load RT dan RW dropdown
+loadRTDropdown();
+loadRWDropdown();
+
 // Event handlers
 $(document).ready(function() {
   console.log('Document ready - Loading data...');
@@ -1377,6 +1404,21 @@ $(document).ready(function() {
     $('#wargaForm')[0].reset();
     $('#formAction').val('create');
     $('#negara').val('Indonesia');
+    
+    // Reset dan disable dropdown wilayah
+    $('#propinsi').val('').prop('disabled', false);
+    $('#propinsi_nama').val('');
+    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+    $('#kota_nama').val('');
+    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+    $('#kecamatan_nama').val('');
+    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+    $('#kelurahan_nama').val('');
+    
+    // Reload RT dan RW dropdown
+    loadRTDropdown();
+    loadRWDropdown();
+    
     $('#modal').removeClass('hidden').addClass('modal-show');
   });
   
