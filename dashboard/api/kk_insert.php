@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Proses upload foto jika ada
     $foto_path = '';
     if ($kk_foto['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../uploads/';
+        $upload_dir = '../images/warga/';
         $foto_path = $upload_dir . basename($kk_foto['name']);
         move_uploaded_file($kk_foto['tmp_name'], $foto_path);
     }

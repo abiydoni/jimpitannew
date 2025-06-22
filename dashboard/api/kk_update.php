@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Update data
     if ($kk_foto) {
-        move_uploaded_file($_FILES['kk_foto']['tmp_name'], "uploads/" . $kk_foto);
+        move_uploaded_file($_FILES['kk_foto']['tmp_name'], "images/warga/" . $kk_foto);
         $stmt = $pdo->prepare("UPDATE master_kk SET kk_name = ?, kk_alamat = ?, kk_hp = ?, kk_foto = ? WHERE code_id = ?");
         $stmt->execute([$kk_name, $kk_alamat, $kk_hp, $kk_foto, $id]);
     } else {

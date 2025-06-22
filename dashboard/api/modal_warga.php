@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $foto = '';
     if (!empty($_FILES['foto']['name'])) {
-        $targetDir = 'uploads/';
+        $targetDir = 'images/warga/';
         $foto = $targetDir . basename($_FILES['foto']['name']);
         move_uploaded_file($_FILES['foto']['tmp_name'], $foto);
     } else {

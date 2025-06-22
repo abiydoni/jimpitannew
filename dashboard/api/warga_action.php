@@ -67,7 +67,7 @@ function uploadFoto($file, $oldFoto = '') {
     }
     
     // Buat direktori upload jika belum ada
-    $uploadDir = '../uploads/foto_warga/';
+    $uploadDir = '../images/warga/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
@@ -83,7 +83,7 @@ function uploadFoto($file, $oldFoto = '') {
         if ($oldFoto && file_exists('../' . $oldFoto)) {
             unlink('../' . $oldFoto);
         }
-        return 'uploads/foto_warga/' . $filename;
+        return 'images/warga/' . $filename;
     } else {
         throw new Exception('Gagal mengupload file');
     }
