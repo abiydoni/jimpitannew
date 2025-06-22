@@ -753,7 +753,6 @@ function displayBiodata(warga) {
           
           <!-- Foto KTP -->
           <div class="flex flex-col items-center">
-            <div class="text-xs font-semibold mb-1 text-center">FOTO</div>
             ${fotoHTML}
           </div>
         </div>
@@ -856,7 +855,6 @@ function displayKK(kk) {
           
           <!-- Foto Kepala Keluarga -->
           <div class="flex flex-col items-center">
-            <div class="text-xs font-semibold mb-1 text-center">FOTO KEPALA KK</div>
             ${fotoKepalaKK}
           </div>
         </div>
