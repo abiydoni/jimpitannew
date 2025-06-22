@@ -128,6 +128,10 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
 <?php include 'footer.php'; ?>
     <script>
     $(document).ready(function() {
+        // Destroy DataTable jika sudah ada
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
         // Initialize DataTable
         var table = new DataTable('#example', {
             pageLength: 10,
