@@ -274,6 +274,12 @@ include 'header.php';
                         <label class="block text-xs font-medium mb-0.5">No HP</label>
                         <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
                     </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium mb-0.5">Foto</label>
+                        <input type="file" name="foto_file" id="foto_file" accept="image/*" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                        <div id="fotoPreview" class="mt-2"></div>
+                    </div>
                 </div>
             </div>
             
@@ -345,7 +351,7 @@ function renderTable(data, page = 1) {
         <td class="px-3 py-1 w-56 text-left">${row.nama || '-'}</td>
         <td class="px-3 py-1 w-32 text-center">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td class="px-3 py-1 w-36 text-left">${tanggalLahir}</td>
-        <td class="px-3 py-1 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
+        <td class="px-3 py-1 w-32 text-center">${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
         <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
         <td class="px-3 py-1 w-32 text-center">
           <button class="editBtn p-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-xs" data-id="${encodedData}" title="Edit">
@@ -565,7 +571,7 @@ function printWargaData() {
         <td>${row.nama || '-'}</td>
         <td>${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td>${tanggalLahir}</td>
-        <td>${row.rt || '-'}/${row.rw || '-'}</td>
+        <td>${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
         <td>${row.hp || '-'}</td>
         <td>${row.alamat || '-'}</td>
         <td>${row.agama || '-'}</td>
@@ -1141,6 +1147,20 @@ function loadRWDropdown() {
 loadRTDropdown();
 loadRWDropdown();
 
+// Event handler untuk preview foto
+$('#foto_file').change(function() {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      $('#fotoPreview').html(`<img src="${e.target.result}" alt="Preview Foto" class="w-20 h-20 object-cover rounded border">`);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    $('#fotoPreview').html('');
+  }
+});
+
 // Event handlers
 $(document).ready(function() {
   console.log('Document ready - Loading data...');
@@ -1203,6 +1223,8 @@ $(document).ready(function() {
         const rows = [header];
         warga.forEach(row => {
           const tanggalLahir = row.tgl_lahir && row.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(row.tgl_lahir) : '';
+          const rtFormatted = row.rt ? row.rt.toString().padStart(3, '0') : '';
+          const rwFormatted = row.rw ? row.rw.toString().padStart(3, '0') : '';
           rows.push([
             row.nama || '',
             row.nik || '',
@@ -1212,8 +1234,8 @@ $(document).ready(function() {
             row.tpt_lahir || '',
             tanggalLahir,
             row.alamat || '',
-            row.rt || '',
-            row.rw || '',
+            rtFormatted,
+            rwFormatted,
             row.kelurahan || '',
             row.kecamatan || '',
             row.kota || '',
@@ -1444,17 +1466,23 @@ $(document).ready(function() {
     const kecamatanNama = $('#kecamatan_nama').val() || $('#kecamatan option:selected').text();
     const kelurahanNama = $('#kelurahan_nama').val() || $('#kelurahan option:selected').text();
     
+    // Format RT dan RW ke 3 digit
+    const rt = $('#rt').val() ? $('#rt').val().toString().padStart(3, '0') : '';
+    const rw = $('#rw').val() ? $('#rw').val().toString().padStart(3, '0') : '';
+    
     const formData = new FormData(this);
     const formDataObj = {};
     formData.forEach((value, key) => {
       formDataObj[key] = value;
     });
     
-    // Override dengan nama wilayah
+    // Override dengan nama wilayah dan format 3 digit
     formDataObj.propinsi = propinsiNama;
     formDataObj.kota = kotaNama;
     formDataObj.kecamatan = kecamatanNama;
     formDataObj.kelurahan = kelurahanNama;
+    formDataObj.rt = rt;
+    formDataObj.rw = rw;
     
     $.post('api/warga_action.php', formDataObj, function(res) {
       $('#modal').removeClass('modal-show').addClass('hidden');
@@ -1514,8 +1542,35 @@ $(document).ready(function() {
       $('#status').val(data.status);
       $('#pekerjaan').val(data.pekerjaan);
       $('#alamat').val(data.alamat);
-      $('#rt').val(data.rt);
-      $('#rw').val(data.rw);
+      
+      // Set RT dan RW dengan format 3 digit
+      if (data.rt) {
+        const rtFormatted = data.rt.toString().padStart(3, '0');
+        $('#rt').val(rtFormatted);
+      } else {
+        $('#rt').val('');
+      }
+      
+      if (data.rw) {
+        const rwFormatted = data.rw.toString().padStart(3, '0');
+        $('#rw').val(rwFormatted);
+      } else {
+        $('#rw').val('');
+      }
+      
+      // Set foto jika ada
+      if (data.foto) {
+        $('#foto').val(data.foto);
+        // Tampilkan preview foto jika ada
+        if (data.foto && data.foto !== '') {
+          $('#fotoPreview').html(`<img src="${data.foto}" alt="Foto Warga" class="w-20 h-20 object-cover rounded border">`);
+        } else {
+          $('#fotoPreview').html('');
+        }
+      } else {
+        $('#foto').val('');
+        $('#fotoPreview').html('');
+      }
       
       // Set wilayah - perlu memuat data wilayah terlebih dahulu
       setWilayahForEdit(data);
