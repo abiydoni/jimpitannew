@@ -2357,7 +2357,7 @@ include 'header.php';
 
     // Fungsi untuk print data warga dengan format landscape
     function printWargaData() {
-      const currentData = filteredWarga.length > 0 ? filteredWarga : allWarga;
+      const currentData = typeof filteredWarga !== 'undefined' && filteredWarga.length > 0 ? filteredWarga : allWarga;
       const searchKeyword = $('#searchInput').val();
       
       // Buat konten untuk print
@@ -2519,7 +2519,7 @@ include 'header.php';
     }
 
     // Event handler untuk tombol print
-    $('#printBtn').click(function() {
+    $(document).on('click', '#printBtn', function() {
       printWargaData();
     });
   </script>
