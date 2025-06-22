@@ -1,13 +1,8 @@
 <?php
    error_reporting(E_ALL);
    ini_set('display_errors', 1);
-
-   include 'header.php'; // Sudah termasuk koneksi dan session
-
-// Ambil semua menu
-$stmt = $pdo->query("SELECT * FROM tb_barang ORDER BY kode_brg");
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+   
+   include 'api/db.php';
 // Handle Create / Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode = $_POST['kode'] ?? '';
@@ -34,6 +29,12 @@ if (isset($_GET['delete'])) {
     header("Location: inventaris.php");
     exit;
 }
+
+include 'header.php'; // Sudah termasuk koneksi dan session
+
+// Ambil semua menu
+$stmt = $pdo->query("SELECT * FROM tb_barang ORDER BY kode_brg");
+$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
