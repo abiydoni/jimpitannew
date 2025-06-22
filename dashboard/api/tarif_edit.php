@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi input
     if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif)) {
         // Tangani kesalahan input
-        echo "<script>alert('Input tidak boleh kosong!'); window.location.href='../setting.php';</script>"; // Ganti dengan messagebox
+        echo "<script>alert('Input tidak boleh kosong!'); window.location.href='../tarif.php';</script>"; // Ganti dengan messagebox
         exit();
     }
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$nama_tarif, $tarif, $kode_tarif]); // Menambahkan id_code ke parameter
     // Menambahkan pengalihan setelah pesan berhasil
-    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../setting.php';</script>";
+    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../tarif.php';</script>";
     exit();
 }
 ?>

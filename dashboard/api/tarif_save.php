@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':tarif', $tarif);
 
     if ($stmt->execute()) {
-        header("Location: ../setting.php"); // Mengarahkan ke jadwal.php setelah berhasil
+        header("Location: ../tarif.php"); // Mengarahkan ke jadwal.php setelah berhasil
         exit(); // Menghentikan eksekusi script setelah pengalihan
     } else {
         echo "Gagal menyimpan data.";

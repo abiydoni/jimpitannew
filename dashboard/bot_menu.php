@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$parent_id, $keyword, $description, $url]);
     }
 
-    header("Location: manage_menu.php#menu-table");
+    header("Location: bot_menu.php#menu-table");
     exit;
 }
 
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE id = ?");
     $stmt->execute([$_GET['delete']]);
-    header("Location: manage_menu.php#menu-table");
+    header("Location: bot_menu.php#menu-table");
     exit;
 }
 ?>
