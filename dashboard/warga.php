@@ -199,22 +199,34 @@ include 'header.php';
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
-                        <input type="text" name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        <select name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                            <option value="">Pilih Provinsi</option>
+                        </select>
+                        <input type="hidden" name="propinsi_nama" id="propinsi_nama">
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Kota/Kabupaten *</label>
-                        <input type="text" name="kota" id="kota" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        <select name="kota" id="kota" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                            <option value="">Pilih Kota/Kabupaten</option>
+                        </select>
+                        <input type="hidden" name="kota_nama" id="kota_nama">
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Kecamatan *</label>
-                        <input type="text" name="kecamatan" id="kecamatan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        <select name="kecamatan" id="kecamatan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                            <option value="">Pilih Kecamatan</option>
+                        </select>
+                        <input type="hidden" name="kecamatan_nama" id="kecamatan_nama">
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Kelurahan *</label>
-                        <input type="text" name="kelurahan" id="kelurahan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        <select name="kelurahan" id="kelurahan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                            <option value="">Pilih Kelurahan</option>
+                        </select>
+                        <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
                     </div>
                     
                     <div>
@@ -561,12 +573,231 @@ $(document).ready(function() {
   
   // Export button
   $('#exportBtn').click(function() {
-    alert('Export Excel - Fitur ini akan diimplementasikan');
+    // Tampilkan loading untuk export
+    $('#loadingModal').removeClass('hidden').addClass('modal-show');
+    $('#loadingText').text('Sedang mempersiapkan data untuk export...');
+    $('#progressBar').css('width', '30%');
+    $('#progressText').text('30% selesai');
+    
+    $.post('api/warga_action.php', { action: 'read' }, function(data) {
+      $('#loadingText').text('Sedang memproses data...');
+      $('#progressBar').css('width', '60%');
+      $('#progressText').text('60% selesai');
+      
+      try {
+        const warga = JSON.parse(data);
+        if (!warga.length) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Tidak ada data untuk diexport!');
+          return;
+        }
+        
+        $('#loadingText').text('Sedang membuat file Excel...');
+        $('#progressBar').css('width', '80%');
+        $('#progressText').text('80% selesai');
+        
+        // Header untuk export
+        const header = [
+          'Nama', 'NIK', 'NIK KK', 'Hubungan', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 
+          'Alamat', 'RT', 'RW', 'Kelurahan', 'Kecamatan', 'Kota', 'Provinsi', 'Negara', 
+          'Agama', 'Status', 'Pekerjaan', 'No HP'
+        ];
+        const rows = [header];
+        warga.forEach(row => {
+          const tanggalLahir = row.tgl_lahir && row.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(row.tgl_lahir) : '';
+          rows.push([
+            row.nama || '',
+            row.nik || '',
+            row.nikk || '',
+            row.hubungan || '',
+            row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '',
+            row.tpt_lahir || '',
+            tanggalLahir,
+            row.alamat || '',
+            row.rt || '',
+            row.rw || '',
+            row.kelurahan || '',
+            row.kecamatan || '',
+            row.kota || '',
+            row.propinsi || '',
+            row.negara || '',
+            row.agama || '',
+            row.status || '',
+            row.pekerjaan || '',
+            row.hp || ''
+          ]);
+        });
+        
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Data Warga');
+        
+        $('#loadingText').text('Sedang mengunduh file...');
+        $('#progressBar').css('width', '100%');
+        $('#progressText').text('100% selesai');
+        
+        // Download file
+        XLSX.writeFile(wb, `Data_Warga_${new Date().toISOString().split('T')[0]}.xlsx`);
+        
+        setTimeout(() => {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Export berhasil!');
+        }, 1000);
+        
+      } catch (e) {
+        $('#loadingModal').removeClass('modal-show').addClass('hidden');
+        alert('Error saat export: ' + e.message);
+      }
+    }).fail(function(xhr, status, error) {
+      $('#loadingModal').removeClass('modal-show').addClass('hidden');
+      alert('Error: ' + error);
+    });
   });
   
   // Download template button
   $('#downloadTemplateBtn').click(function() {
-    alert('Download Template - Fitur ini akan diimplementasikan');
+    const header = [
+      'Nama', 'NIK', 'NIK KK', 'Hubungan', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 
+      'Alamat', 'RT', 'RW', 'Kelurahan', 'Kecamatan', 'Kota', 'Provinsi', 'Negara', 
+      'Agama', 'Status', 'Pekerjaan', 'No HP'
+    ];
+    
+    const templateData = [
+      header,
+      ['Contoh Nama', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'L', 'Jakarta', '15-08-1990', 
+       'Jl. Contoh No. 123', '001', '001', 'Contoh Kelurahan', 'Contoh Kecamatan', 'Contoh Kota', 'Contoh Provinsi', 'Indonesia', 
+       'Islam', 'Kawin', 'PNS', '081234567890']
+    ];
+    
+    const ws = XLSX.utils.aoa_to_sheet(templateData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template');
+    
+    XLSX.writeFile(wb, 'Template_Data_Warga.xlsx');
+  });
+  
+  // Import Excel
+  $('#importInput').change(function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (!file.name.match(/\.(xlsx|xls)$/)) {
+      alert('File harus berformat Excel (.xlsx atau .xls)');
+      return;
+    }
+    
+    // Tampilkan loading modal
+    $('#loadingModal').removeClass('hidden').addClass('modal-show');
+    $('#loadingText').text('Sedang membaca file Excel...');
+    $('#progressBar').css('width', '20%');
+    $('#progressText').text('20% selesai');
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        
+        if (jsonData.length < 2) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('File Excel kosong atau tidak memiliki data!');
+          return;
+        }
+        
+        const headers = jsonData[0];
+        const rows = jsonData.slice(1);
+        
+        $('#loadingText').text('Sedang memvalidasi data...');
+        $('#progressBar').css('width', '40%');
+        $('#progressText').text('40% selesai');
+        
+        // Validasi data
+        let validData = [];
+        let errors = [];
+        
+        rows.forEach((row, index) => {
+          if (row.length < headers.length) {
+            errors.push(`Baris ${index + 2}: Data tidak lengkap`);
+            return;
+          }
+          
+          const rowData = {};
+          headers.forEach((header, colIndex) => {
+            rowData[header.toLowerCase().replace(/\s+/g, '_')] = row[colIndex] || '';
+          });
+          
+          // Validasi NIK
+          if (!rowData.nik || !/^\d{16}$/.test(rowData.nik)) {
+            errors.push(`Baris ${index + 2}: NIK harus 16 digit angka`);
+            return;
+          }
+          
+          // Validasi NIK KK
+          if (!rowData.nik_kk || !/^\d{16}$/.test(rowData.nik_kk)) {
+            errors.push(`Baris ${index + 2}: NIK KK harus 16 digit angka`);
+            return;
+          }
+          
+          validData.push(rowData);
+        });
+        
+        if (errors.length > 0) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Error validasi:\n' + errors.join('\n'));
+          return;
+        }
+        
+        $('#loadingText').text('Sedang menyimpan data...');
+        $('#progressBar').css('width', '60%');
+        $('#progressText').text('60% selesai');
+        
+        // Kirim data ke server
+        $.post('api/warga_action.php', { 
+          action: 'import_excel', 
+          data: JSON.stringify(validData) 
+        }, function(response) {
+          $('#loadingText').text('Import selesai!');
+          $('#progressBar').css('width', '100%');
+          $('#progressText').text('100% selesai');
+          
+          setTimeout(() => {
+            $('#loadingModal').removeClass('modal-show').addClass('hidden');
+            
+            try {
+              const result = JSON.parse(response);
+              let message = `Import selesai!\nBerhasil: ${result.success_count} data\nGagal: ${result.error_count} data`;
+              
+              if (result.errors && result.errors.length > 0) {
+                message += '\n\nError:\n' + result.errors.slice(0, 5).join('\n');
+                if (result.errors.length > 5) {
+                  message += `\n...dan ${result.errors.length - 5} error lainnya`;
+                }
+              }
+              
+              alert(message);
+            } catch (e) {
+              alert('Import berhasil! ' + response);
+            }
+            
+            loadData(); // Reload data
+            $('#importInput').val(''); // Reset input file
+          }, 1000);
+          
+        }).fail(function(xhr, status, error) {
+          $('#loadingModal').removeClass('modal-show').addClass('hidden');
+          alert('Error saat import: ' + error);
+        });
+        
+      } catch (e) {
+        $('#loadingModal').removeClass('modal-show').addClass('hidden');
+        alert('Error membaca file: ' + e.message);
+      }
+    };
+    
+    reader.readAsArrayBuffer(file);
   });
   
   // Tambah button
@@ -594,11 +825,23 @@ $(document).ready(function() {
   $('#wargaForm').submit(function(e) {
     e.preventDefault();
     
+    // Ambil nama wilayah dari hidden input
+    const propinsiNama = $('#propinsi_nama').val() || $('#propinsi option:selected').text();
+    const kotaNama = $('#kota_nama').val() || $('#kota option:selected').text();
+    const kecamatanNama = $('#kecamatan_nama').val() || $('#kecamatan option:selected').text();
+    const kelurahanNama = $('#kelurahan_nama').val() || $('#kelurahan option:selected').text();
+    
     const formData = new FormData(this);
     const formDataObj = {};
     formData.forEach((value, key) => {
       formDataObj[key] = value;
     });
+    
+    // Override dengan nama wilayah
+    formDataObj.propinsi = propinsiNama;
+    formDataObj.kota = kotaNama;
+    formDataObj.kecamatan = kecamatanNama;
+    formDataObj.kelurahan = kelurahanNama;
     
     $.post('api/warga_action.php', formDataObj, function(res) {
       $('#modal').removeClass('modal-show').addClass('hidden');
@@ -635,10 +878,17 @@ $(document).ready(function() {
       $('#alamat').val(data.alamat);
       $('#rt').val(data.rt);
       $('#rw').val(data.rw);
+      
+      // Set wilayah - gunakan nama untuk dropdown
       $('#propinsi').val(data.propinsi);
+      $('#propinsi_nama').val(data.propinsi);
       $('#kota').val(data.kota);
+      $('#kota_nama').val(data.kota);
       $('#kecamatan').val(data.kecamatan);
+      $('#kecamatan_nama').val(data.kecamatan);
       $('#kelurahan').val(data.kelurahan);
+      $('#kelurahan_nama').val(data.kelurahan);
+      
       $('#negara').val(data.negara);
       $('#hp').val(data.hp);
       
@@ -679,7 +929,7 @@ function showBiodata(nik) {
   $('#biodataContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-blue-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat biodata...</p></div>');
   $('#modalBiodata').removeClass('hidden').addClass('modal-show');
   
-  $.post('api/warga_action.php', { action: 'get_by_nik', nik: nik }, function(data) {
+  $.post('api/warga_action.php', { action: 'get_warga_by_nik', nik: nik }, function(data) {
     console.log('Biodata response:', data);
     try {
       const warga = JSON.parse(data);

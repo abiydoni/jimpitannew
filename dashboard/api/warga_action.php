@@ -265,6 +265,97 @@ try {
         echo json_encode($result);
         exit;
 
+    } elseif ($action == 'import_excel') {
+        // Import data dari Excel
+        $data = isset($_POST['data']) ? json_decode($_POST['data'], true) : [];
+        if (!is_array($data) || empty($data)) {
+            throw new Exception('Data tidak valid');
+        }
+        
+        $successCount = 0;
+        $errorCount = 0;
+        $errors = [];
+        
+        foreach ($data as $index => $row) {
+            try {
+                // Validasi data wajib
+                if (empty($row['nama']) || empty($row['nik']) || empty($row['hubungan'])) {
+                    $errors[] = "Baris " . ($index + 2) . ": Data wajib tidak lengkap";
+                    $errorCount++;
+                    continue;
+                }
+                
+                // Validasi NIK (16 digit)
+                if (!preg_match('/^\d{16}$/', $row['nik'])) {
+                    $errors[] = "Baris " . ($index + 2) . ": NIK harus 16 digit angka";
+                    $errorCount++;
+                    continue;
+                }
+                
+                // Validasi NIK KK (16 digit)
+                if (!preg_match('/^\d{16}$/', $row['nik_kk'])) {
+                    $errors[] = "Baris " . ($index + 2) . ": NIK KK harus 16 digit angka";
+                    $errorCount++;
+                    continue;
+                }
+                
+                // Cek apakah NIK sudah ada
+                $cekNIK = $pdo->prepare('SELECT COUNT(*) FROM tb_warga WHERE nik = ?');
+                $cekNIK->execute([$row['nik']]);
+                if ($cekNIK->fetchColumn() > 0) {
+                    $errors[] = "Baris " . ($index + 2) . ": NIK sudah terdaftar";
+                    $errorCount++;
+                    continue;
+                }
+                
+                // Proses tanggal lahir
+                $tgl_lahir = '';
+                if (!empty($row['tanggal_lahir'])) {
+                    $tgl_lahir = processDate($row['tanggal_lahir']);
+                    if (!$tgl_lahir) {
+                        $errors[] = "Baris " . ($index + 2) . ": Format tanggal lahir tidak valid";
+                        $errorCount++;
+                        continue;
+                    }
+                }
+                
+                // Proses jenis kelamin
+                $jenkel = '';
+                if (!empty($row['jenis_kelamin'])) {
+                    $jenkel = strtoupper(substr($row['jenis_kelamin'], 0, 1));
+                    if (!in_array($jenkel, ['L', 'P'])) {
+                        $jenkel = '';
+                    }
+                }
+                
+                $stmt = $pdo->prepare("INSERT INTO tb_warga (
+                    nama, nik, hubungan, nikk, jenkel, tpt_lahir, tgl_lahir, alamat, rt, rw,
+                    kelurahan, kecamatan, kota, propinsi, negara, agama, status, pekerjaan, foto, hp
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                $stmt->execute([
+                    $row['nama'] ?? '', $row['nik'] ?? '', $row['hubungan'] ?? '', $row['nik_kk'] ?? '', $jenkel,
+                    $row['tempat_lahir'] ?? '', $tgl_lahir, $row['alamat'] ?? '', $row['rt'] ?? '', $row['rw'] ?? '',
+                    $row['kelurahan'] ?? '', $row['kecamatan'] ?? '', $row['kota'] ?? '', $row['provinsi'] ?? '', $row['negara'] ?? 'Indonesia',
+                    $row['agama'] ?? '', $row['status'] ?? '', $row['pekerjaan'] ?? '', '', $row['no_hp'] ?? ''
+                ]);
+                
+                $successCount++;
+                
+            } catch (Exception $e) {
+                $errors[] = "Baris " . ($index + 2) . ": " . $e->getMessage();
+                $errorCount++;
+            }
+        }
+        
+        $result = [
+            'success_count' => $successCount,
+            'error_count' => $errorCount,
+            'errors' => $errors
+        ];
+        
+        echo json_encode($result);
+
     } else {
         echo 'invalid action';
     }
