@@ -9,18 +9,33 @@ include 'header.php';
         <div class="head">
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
-                <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Tambah Warga</button>
-                <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Export Excel</button>
-                <button id="downloadTemplateBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">Download Template</button>
-                <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer">Import Excel
-                  <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
+                <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded text-sm" title="Tambah Warga">
+                    <i class='bx bx-plus text-lg'></i>
+                </button>
+                <button id="printBtn" class="bg-purple-500 hover:bg-purple-700 text-white p-2 rounded text-sm ml-1" title="Print Data">
+                    <i class='bx bx-printer text-lg'></i>
+                </button>
+                <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white p-2 rounded text-sm ml-1" title="Export Excel">
+                    <i class='bx bx-export text-lg'></i>
+                </button>
+                <button id="downloadTemplateBtn" class="bg-gray-500 hover:bg-gray-700 text-white p-2 rounded text-sm ml-1" title="Download Template">
+                    <i class='bx bx-download text-lg'></i>
+                </button>
+                <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white p-2 rounded text-sm ml-1 cursor-pointer" title="Import Excel">
+                    <i class='bx bx-import text-lg'></i>
+                    <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
                 </label>
             </div>
         </div>
         <!-- Search dan Reset -->
         <div class="mb-2 flex justify-between items-center">
-          <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-64" placeholder="Cari nama/NIK/Alamat ...">
-          <button id="resetSearch" class="bg-gray-400 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs">Reset</button>
+          <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-64" placeholder="Cari nama/NIK/Alamat/Tgl Lahir (DD-MM-YYYY)...">
+          <button id="resetSearch" class="bg-gray-400 hover:bg-gray-600 text-white p-1 rounded text-xs" title="Reset Pencarian">
+            <i class='bx bx-refresh text-sm'></i>
+          </button>
+        </div>
+        <div class="mb-2 text-xs text-gray-600">
+          <small>💡 Tips pencarian: Cari berdasarkan nama, NIK, alamat, atau tanggal lahir. Contoh: "Ahmad", "1234567890123456", "Jl. Sudirman", "15-08-1990", "15", "08", "1990", "agustus", "90an"</small>
         </div>
         <div id="table-container"> <!-- Tambahkan div untuk menampung tabel -->
             <table id="wargaTable" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
@@ -922,8 +937,12 @@ include 'header.php';
             <td class="px-3 py-1 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
             <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
             <td class="px-3 py-1 w-32 text-center">
-              <button class="editBtn px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500" data-id="${encodedData}"><i class='bx bx-edit'></i></button>
-              <button class="deleteBtn px-2 py-1 bg-red-500 text-white rounded ml-2 hover:bg-red-600" data-id="${row.id_warga}"><i class='bx bx-trash'></i></button>
+              <button class="editBtn p-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-xs" data-id="${encodedData}" title="Edit">
+                <i class='bx bx-edit'></i>
+              </button>
+              <button class="deleteBtn p-1 bg-red-500 text-white rounded ml-1 hover:bg-red-600 text-xs" data-id="${row.id_warga}" title="Hapus">
+                <i class='bx bx-trash'></i>
+              </button>
             </td>
           </tr>`;
         });
@@ -960,11 +979,61 @@ include 'header.php';
 
     function filterWarga(keyword) {
       keyword = keyword.toLowerCase();
-      return allWarga.filter(row =>
-        (row.nama && row.nama.toLowerCase().includes(keyword)) ||
-        (row.nik && row.nik.toLowerCase().includes(keyword)) ||
-        (row.alamat && row.alamat.toLowerCase().includes(keyword))
-      );
+      
+      // Array nama bulan untuk pencarian
+      const namaBulan = [
+        'januari', 'februari', 'maret', 'april', 'mei', 'juni',
+        'juli', 'agustus', 'september', 'oktober', 'november', 'desember'
+      ];
+      
+      return allWarga.filter(row => {
+        // Pencarian berdasarkan nama
+        const namaMatch = row.nama && row.nama.toLowerCase().includes(keyword);
+        
+        // Pencarian berdasarkan NIK
+        const nikMatch = row.nik && row.nik.toLowerCase().includes(keyword);
+        
+        // Pencarian berdasarkan alamat
+        const alamatMatch = row.alamat && row.alamat.toLowerCase().includes(keyword);
+        
+        // Pencarian berdasarkan tanggal lahir
+        let tglLahirMatch = false;
+        if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
+          const formattedDate = formatDateForDisplay(row.tgl_lahir);
+          const dateParts = formattedDate.split('-');
+          
+          // Cek format lengkap DD-MM-YYYY
+          tglLahirMatch = formattedDate.toLowerCase().includes(keyword);
+          
+          // Cek bagian tanggal (hari, bulan, tahun)
+          if (!tglLahirMatch && dateParts.length === 3) {
+            const [day, month, year] = dateParts;
+            tglLahirMatch = day.includes(keyword) || month.includes(keyword) || year.includes(keyword);
+            
+            // Cek pencarian berdasarkan nama bulan
+            if (!tglLahirMatch && namaBulan.includes(keyword)) {
+              const bulanIndex = namaBulan.indexOf(keyword) + 1;
+              const bulanString = bulanIndex.toString().padStart(2, '0');
+              tglLahirMatch = month === bulanString;
+            }
+            
+            // Cek pencarian berdasarkan tahun (untuk mencari orang yang lahir di tahun tertentu)
+            if (!tglLahirMatch && keyword.length === 4 && /^\d{4}$/.test(keyword)) {
+              tglLahirMatch = year === keyword;
+            }
+            
+            // Cek pencarian berdasarkan tahun 90-an, 80-an, dll
+            if (!tglLahirMatch && keyword.includes('an') && keyword.length >= 3) {
+              const tahunPattern = keyword.replace('an', '');
+              if (/^\d{2}$/.test(tahunPattern)) {
+                tglLahirMatch = year.startsWith(tahunPattern);
+              }
+            }
+          }
+        }
+        
+        return namaMatch || nikMatch || alamatMatch || tglLahirMatch;
+      });
     }
 
     // Ganti loadData agar simpan data ke allWarga dan render manual
@@ -2279,4 +2348,178 @@ include 'header.php';
       setDropdownValue('#kelurahan', data.kelurahan);
       $('#kelurahan_nama').val(data.kelurahan || '');
     }
+
+    // Load Kelurahan
+    loadKelurahan($('#kecamatan').val());
+    await waitForDropdown('#kelurahan');
+    setDropdownValue('#kelurahan', data.kelurahan);
+    $('#kelurahan_nama').val(data.kelurahan || '');
+
+    // Fungsi untuk print data warga dengan format landscape
+    function printWargaData() {
+      const currentData = filteredWarga.length > 0 ? filteredWarga : allWarga;
+      const searchKeyword = $('#searchInput').val();
+      
+      // Buat konten untuk print
+      let printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Data Warga</title>
+          <style>
+            @media print {
+              @page {
+                size: landscape;
+                margin: 1cm;
+              }
+            }
+            body {
+              font-family: Arial, sans-serif;
+              font-size: 10px;
+              margin: 0;
+              padding: 0;
+            }
+            .header {
+              text-align: center;
+              margin-bottom: 20px;
+              border-bottom: 2px solid #000;
+              padding-bottom: 10px;
+            }
+            .header h1 {
+              margin: 0;
+              font-size: 18px;
+              font-weight: bold;
+            }
+            .header p {
+              margin: 5px 0 0 0;
+              font-size: 12px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 10px;
+            }
+            th, td {
+              border: 1px solid #000;
+              padding: 4px 6px;
+              text-align: left;
+              font-size: 9px;
+            }
+            th {
+              background-color: #f0f0f0;
+              font-weight: bold;
+              text-align: center;
+            }
+            .no {
+              width: 30px;
+              text-align: center;
+            }
+            .nik {
+              width: 120px;
+            }
+            .nikk {
+              width: 120px;
+            }
+            .nama {
+              width: 150px;
+            }
+            .jenkel {
+              width: 80px;
+              text-align: center;
+            }
+            .tgl_lahir {
+              width: 80px;
+              text-align: center;
+            }
+            .rt_rw {
+              width: 60px;
+              text-align: center;
+            }
+            .hp {
+              width: 100px;
+            }
+            .footer {
+              margin-top: 20px;
+              text-align: right;
+              font-size: 10px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>DATA WARGA</h1>
+            <p>Tanggal Cetak: ${new Date().toLocaleDateString('id-ID')}</p>
+            ${searchKeyword ? `<p>Hasil Pencarian: "${searchKeyword}"</p>` : ''}
+            <p>Total Data: ${currentData.length} warga</p>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th class="no">No</th>
+                <th class="nik">NIK</th>
+                <th class="nikk">NIK KK</th>
+                <th class="nama">Nama</th>
+                <th class="jenkel">Jenis Kelamin</th>
+                <th class="tgl_lahir">Tanggal Lahir</th>
+                <th class="rt_rw">RT/RW</th>
+                <th class="hp">No HP</th>
+                <th>Alamat</th>
+                <th>Agama</th>
+                <th>Pekerjaan</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      currentData.forEach((row, index) => {
+        let tanggalLahir = '-';
+        if (row.tgl_lahir && row.tgl_lahir !== '0000-00-00') {
+          tanggalLahir = formatDateForDisplay(row.tgl_lahir);
+        }
+        
+        printContent += `
+          <tr>
+            <td class="no">${index + 1}</td>
+            <td class="nik">${row.nik || '-'}</td>
+            <td class="nikk">${row.nikk || '-'}</td>
+            <td class="nama">${row.nama || '-'}</td>
+            <td class="jenkel">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+            <td class="tgl_lahir">${tanggalLahir}</td>
+            <td class="rt_rw">${row.rt || '-'}/${row.rw || '-'}</td>
+            <td class="hp">${row.hp || '-'}</td>
+            <td>${row.alamat || '-'}</td>
+            <td>${row.agama || '-'}</td>
+            <td>${row.pekerjaan || '-'}</td>
+          </tr>
+        `;
+      });
+      
+      printContent += `
+            </tbody>
+          </table>
+          
+          <div class="footer">
+            <p>Dicetak pada: ${new Date().toLocaleString('id-ID')}</p>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      // Buka window print
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      
+      // Tunggu sebentar lalu print
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
+    }
+
+    // Event handler untuk tombol print
+    $('#printBtn').click(function() {
+      printWargaData();
+    });
   </script>
