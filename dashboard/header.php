@@ -52,6 +52,8 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.6/dist/datepicker.min.js"></script>
+    <!-- XLSX Library untuk Export/Import Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <!-- SIDEBAR -->

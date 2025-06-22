@@ -1,28 +1,255 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test Warga</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   </head>
-  <body>
-    <h1>Test Warga</h1>
-    <button id="testBtn">Test Load Data</button>
-    <div id="result"></div>
+  <body class="bg-gray-100 p-4">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-2xl font-bold mb-4">Test Fitur Warga</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold mb-2">Test API</h2>
+          <button
+            id="testRead"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Test Read Data
+          </button>
+          <div id="readResult" class="mt-2 text-sm"></div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold mb-2">Test Wilayah</h2>
+          <button
+            id="testWilayah"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Test Wilayah API
+          </button>
+          <div id="wilayahResult" class="mt-2 text-sm"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold mb-2">Test Export</h2>
+          <button
+            id="testExport"
+            class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+          >
+            Test Export Excel
+          </button>
+          <div id="exportResult" class="mt-2 text-sm"></div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold mb-2">Test Import</h2>
+          <input
+            type="file"
+            id="testImport"
+            accept=".xlsx,.xls"
+            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          <div id="importResult" class="mt-2 text-sm"></div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-2">Test Detail NIK/NIKK</h2>
+        <div class="flex gap-2 mb-2">
+          <input
+            type="text"
+            id="testNIK"
+            placeholder="Masukkan NIK"
+            class="border px-2 py-1 rounded text-sm"
+          />
+          <button
+            id="testBiodata"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
+          >
+            Test Biodata
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="testNIKK"
+            placeholder="Masukkan NIKK"
+            class="border px-2 py-1 rounded text-sm"
+          />
+          <button
+            id="testKK"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm"
+          >
+            Test KK
+          </button>
+        </div>
+        <div id="detailResult" class="mt-2 text-sm"></div>
+      </div>
+    </div>
 
     <script>
       $(document).ready(function () {
-        console.log("Document ready");
-
-        $("#testBtn").click(function () {
-          console.log("Test button clicked");
+        // Test Read Data
+        $("#testRead").click(function () {
+          $("#readResult").html("Loading...");
           $.post("api/warga_action.php", { action: "read" }, function (data) {
-            console.log("Data received:", data);
-            $("#result").html("<pre>" + data + "</pre>");
+            try {
+              const result = JSON.parse(data);
+              $("#readResult").html(
+                `✅ Berhasil membaca ${result.length} data warga`
+              );
+            } catch (e) {
+              $("#readResult").html(`❌ Error: ${e.message}`);
+            }
           }).fail(function (xhr, status, error) {
-            console.error("Error:", error);
-            $("#result").html(
-              '<p style="color: red;">Error: ' + error + "</p>"
-            );
+            $("#readResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test Wilayah
+        $("#testWilayah").click(function () {
+          $("#wilayahResult").html("Loading...");
+          $.get("api/wilayah.php", { action: "provinsi" }, function (data) {
+            try {
+              const result = JSON.parse(data);
+              $("#wilayahResult").html(
+                `✅ Berhasil membaca ${result.length} provinsi`
+              );
+            } catch (e) {
+              $("#wilayahResult").html(`❌ Error: ${e.message}`);
+            }
+          }).fail(function (xhr, status, error) {
+            $("#wilayahResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test Export
+        $("#testExport").click(function () {
+          $("#exportResult").html("Loading...");
+          $.post("api/warga_action.php", { action: "read" }, function (data) {
+            try {
+              const warga = JSON.parse(data);
+              if (warga.length === 0) {
+                $("#exportResult").html("❌ Tidak ada data untuk diexport");
+                return;
+              }
+
+              // Test XLSX
+              const header = ["Nama", "NIK", "NIK KK"];
+              const rows = [header];
+              warga.slice(0, 3).forEach((row) => {
+                rows.push([row.nama || "", row.nik || "", row.nikk || ""]);
+              });
+
+              const ws = XLSX.utils.aoa_to_sheet(rows);
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "Test");
+
+              XLSX.writeFile(wb, "test_export.xlsx");
+              $("#exportResult").html(
+                "✅ Export berhasil! File test_export.xlsx telah dibuat"
+              );
+            } catch (e) {
+              $("#exportResult").html(`❌ Error: ${e.message}`);
+            }
+          }).fail(function (xhr, status, error) {
+            $("#exportResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test Import
+        $("#testImport").change(function (e) {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          $("#importResult").html("Loading...");
+
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: "array" });
+              const sheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[sheetName];
+              const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                header: 1,
+              });
+
+              $("#importResult").html(
+                `✅ Berhasil membaca file dengan ${jsonData.length} baris data`
+              );
+            } catch (e) {
+              $("#importResult").html(`❌ Error: ${e.message}`);
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        });
+
+        // Test Biodata
+        $("#testBiodata").click(function () {
+          const nik = $("#testNIK").val();
+          if (!nik) {
+            $("#detailResult").html("❌ Masukkan NIK terlebih dahulu");
+            return;
+          }
+
+          $("#detailResult").html("Loading...");
+          $.post(
+            "api/warga_action.php",
+            { action: "get_warga_by_nik", nik: nik },
+            function (data) {
+              try {
+                const result = JSON.parse(data);
+                $("#detailResult").html(
+                  `✅ Biodata ditemukan: ${result.nama} (${result.nik})`
+                );
+              } catch (e) {
+                $("#detailResult").html(`❌ Error: ${e.message}`);
+              }
+            }
+          ).fail(function (xhr, status, error) {
+            $("#detailResult").html(`❌ AJAX Error: ${error}`);
+          });
+        });
+
+        // Test KK
+        $("#testKK").click(function () {
+          const nikk = $("#testNIKK").val();
+          if (!nikk) {
+            $("#detailResult").html("❌ Masukkan NIKK terlebih dahulu");
+            return;
+          }
+
+          $("#detailResult").html("Loading...");
+          $.post(
+            "api/warga_action.php",
+            { action: "get_kk_by_nikk", nikk: nikk },
+            function (data) {
+              try {
+                const result = JSON.parse(data);
+                $("#detailResult").html(
+                  `✅ KK ditemukan: ${result.total_anggota} anggota keluarga`
+                );
+              } catch (e) {
+                $("#detailResult").html(`❌ Error: ${e.message}`);
+              }
+            }
+          ).fail(function (xhr, status, error) {
+            $("#detailResult").html(`❌ AJAX Error: ${error}`);
           });
         });
       });

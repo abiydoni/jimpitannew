@@ -65,7 +65,39 @@ include 'header.php';
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Biodata -->
+<div id="modalBiodata" class="modal-overlay hidden">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div id="biodataContent">
+            <!-- Content akan diisi oleh JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal KK -->
+<div id="modalKK" class="modal-overlay hidden">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+        <div id="kkContent">
+            <!-- Content akan diisi oleh JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div id="loadingModal" class="modal-overlay hidden">
+    <div class="modal-container bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div class="text-center">
+            <div class="animate-spin border-4 border-blue-500 border-t-transparent rounded-full w-12 h-12 mx-auto mb-4"></div>
+            <h3 id="loadingText" class="text-lg font-semibold mb-2">Loading...</h3>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progressText" class="text-sm text-gray-600">0% selesai</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Form -->
 <div id="modal" class="modal-overlay hidden">
     <div class="modal-container bg-white rounded-lg shadow-xl p-4 w-full max-w-xs max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 bg-white border-b pb-2 mb-4">
@@ -172,6 +204,7 @@ include 'header.php';
                             <option value="Pedagang">Pedagang</option>
                             <option value="Pelajar">Pelajar</option>
                             <option value="Tidak Bekerja">Tidak Bekerja</option>
+                            <option value="IRT">Ibu Rumah Tangga</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
@@ -288,10 +321,14 @@ function renderTable(data, page = 1) {
       
       html += `<tr class="border-b hover:bg-gray-50">
         <td class="px-3 py-1 w-10 text-center">${start + idx + 1}</td>
-        <td class="px-3 py-1 w-40 text-left">${row.nik || '-'}</td>
-        <td class="px-3 py-1 w-40 text-left">${row.nikk || '-'}</td>
+        <td class="px-3 py-1 w-40 text-left">
+          <span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>
+        </td>
+        <td class="px-3 py-1 w-40 text-left">
+          <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
+        </td>
         <td class="px-3 py-1 w-56 text-left">${row.nama || '-'}</td>
-        <td class="px-3 py-1 w-32 text-center">${row.jenkel || '-'}</td>
+        <td class="px-3 py-1 w-32 text-center">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td class="px-3 py-1 w-36 text-left">${tanggalLahir}</td>
         <td class="px-3 py-1 w-32 text-center">${row.rt || '-'}/${row.rw || '-'}</td>
         <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
@@ -542,6 +579,504 @@ function printWargaData() {
     printWindow.close();
   }, 500);
 }
+
+// Fungsi untuk menampilkan biodata warga
+function showBiodata(nik) {
+  if (!nik || nik === '-') {
+    alert('NIK tidak valid');
+    return;
+  }
+  
+  console.log('Showing biodata for NIK:', nik);
+  
+  // Tampilkan loading
+  $('#biodataContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-blue-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat biodata...</p></div>');
+  $('#modalBiodata').removeClass('hidden').addClass('modal-show');
+  
+  $.post('api/warga_action.php', { action: 'get_warga_by_nik', nik: nik }, function(data) {
+    console.log('Biodata response:', data);
+    try {
+      const warga = JSON.parse(data);
+      displayBiodata(warga);
+    } catch (e) {
+      console.error('Error parsing biodata:', e);
+      $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
+    }
+  }).fail(function(xhr, status, error) {
+    console.error('Biodata AJAX error:', error);
+    $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
+  });
+}
+
+// Fungsi untuk menampilkan data KK
+function showKK(nikk) {
+  if (!nikk || nikk === '-') {
+    alert('NIKK tidak valid');
+    return;
+  }
+  
+  console.log('Showing KK for NIKK:', nikk);
+  
+  // Tampilkan loading
+  $('#kkContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat data KK...</p></div>');
+  $('#modalKK').removeClass('hidden').addClass('modal-show');
+  
+  $.post('api/warga_action.php', { action: 'get_kk_by_nikk', nikk: nikk }, function(data) {
+    console.log('KK response:', data);
+    try {
+      const kk = JSON.parse(data);
+      displayKK(kk);
+    } catch (e) {
+      console.error('Error parsing KK:', e);
+      $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
+    }
+  }).fail(function(xhr, status, error) {
+    console.error('KK AJAX error:', error);
+    $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
+  });
+}
+
+// Fungsi untuk menutup modal biodata
+function closeModalBiodata() {
+  $('#modalBiodata').removeClass('modal-show').addClass('hidden');
+}
+
+// Fungsi untuk menutup modal KK
+function closeModalKK() {
+  $('#modalKK').removeClass('modal-show').addClass('hidden');
+}
+
+// Fungsi untuk menampilkan biodata
+function displayBiodata(warga) {
+  const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
+  
+  const html = `
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="text-lg font-bold">Biodata Warga</h3>
+      <div class="flex gap-2">
+        <button onclick="printBiodata()" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+          <i class='bx bx-printer'></i> Print
+        </button>
+        <button onclick="closeModalBiodata()" class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm">
+          <i class='bx bx-x'></i> Tutup
+        </button>
+      </div>
+    </div>
+    
+    <div id="biodataPrintArea">
+      <!-- Layout KTP Style -->
+      <div class="border-2 border-gray-300 rounded-lg p-4 bg-white">
+        <!-- Header KTP -->
+        <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
+          <h4 class="text-base font-bold text-blue-800">PROVINSI ${warga.propinsi || 'JAWA BARAT'}</h4>
+          <h4 class="text-base font-bold text-blue-800">KABUPATEN/KOTA ${warga.kota || 'BANDUNG'}</h4>
+          <h4 class="text-sm font-semibold text-gray-700">NIK : ${warga.nik || '-'}</h4>
+        </div>
+        
+        <!-- Content KTP -->
+        <div class="flex gap-4">
+          <!-- Data KTP -->
+          <div class="flex-1 space-y-1 text-xs">
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Nama</div>
+              <div class="col-span-2">: ${warga.nama || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Tempat/Tgl Lahir</div>
+              <div class="col-span-2">: ${warga.tpt_lahir || '-'}, ${tanggalLahir}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Jenis Kelamin</div>
+              <div class="col-span-2">: ${warga.jenkel === 'L' ? 'LAKI-LAKI' : warga.jenkel === 'P' ? 'PEREMPUAN' : '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Alamat</div>
+              <div class="col-span-2">: ${warga.alamat || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">RT/RW</div>
+              <div class="col-span-2">: ${warga.rt || '-'}/${warga.rw || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Kelurahan</div>
+              <div class="col-span-2">: ${warga.kelurahan || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Kecamatan</div>
+              <div class="col-span-2">: ${warga.kecamatan || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Agama</div>
+              <div class="col-span-2">: ${warga.agama || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Status Perkawinan</div>
+              <div class="col-span-2">: ${warga.status || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Pekerjaan</div>
+              <div class="col-span-2">: ${warga.pekerjaan || '-'}</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="font-semibold">Kewarganegaraan</div>
+              <div class="col-span-2">: ${warga.negara || 'WNI'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data Tambahan -->
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <h4 class="text-base font-semibold border-b pb-1">Data Tambahan</h4>
+          <div class="grid grid-cols-1 gap-1 text-xs">
+            <div class="flex justify-between py-0.5"><strong>NIK KK:</strong> <span>${warga.nikk || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Hubungan dalam KK:</strong> <span>${warga.hubungan || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>No. HP:</strong> <span>${warga.hp || '-'}</span></div>
+          </div>
+        </div>
+        
+        <div class="space-y-2">
+          <h4 class="text-base font-semibold border-b pb-1">Data Wilayah</h4>
+          <div class="grid grid-cols-1 gap-1 text-xs">
+            <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${warga.kota || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${warga.propinsi || '-'}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  $('#biodataContent').html(html);
+}
+
+// Fungsi untuk menampilkan data KK
+function displayKK(kk) {
+  const kepalaKK = kk.kepala_keluarga;
+  const anggotaKK = kk.anggota_keluarga;
+  const tanggalLahirKK = kepalaKK.tgl_lahir && kepalaKK.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(kepalaKK.tgl_lahir) : '-';
+  
+  let anggotaHTML = '';
+  anggotaKK.forEach((anggota, index) => {
+    const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
+    anggotaHTML += `
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-2 py-1 text-center text-xs">${index + 1}</td>
+        <td class="px-2 py-1 text-xs">${anggota.nik || '-'}</td>
+        <td class="px-2 py-1 text-xs">${anggota.nama || '-'}</td>
+        <td class="px-2 py-1 text-center text-xs">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+        <td class="px-2 py-1 text-xs">${anggota.tpt_lahir || '-'}</td>
+        <td class="px-2 py-1 text-center text-xs">${tanggalLahirAnggota}</td>
+        <td class="px-2 py-1 text-xs">${anggota.agama || '-'}</td>
+        <td class="px-2 py-1 text-xs">${anggota.status || '-'}</td>
+        <td class="px-2 py-1 text-xs">${anggota.pekerjaan || '-'}</td>
+        <td class="px-2 py-1 text-xs">${anggota.hubungan || '-'}</td>
+      </tr>
+    `;
+  });
+  
+  const html = `
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <h3 class="text-lg font-bold">Data Kartu Keluarga</h3>
+      <div class="flex gap-2">
+        <button onclick="printKK()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm">
+          <i class='bx bx-printer'></i> Print
+        </button>
+        <button onclick="closeModalKK()" class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm">
+          <i class='bx bx-x'></i> Tutup
+        </button>
+      </div>
+    </div>
+    
+    <div id="kkPrintArea">
+      <!-- Header KK -->
+      <div class="border-2 border-gray-300 rounded-lg p-4 bg-white mb-4">
+        <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
+          <h4 class="text-base font-bold text-green-800">KARTU KELUARGA</h4>
+          <h4 class="text-sm font-semibold text-gray-700">NIK KK : ${kepalaKK.nikk || '-'}</h4>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <div class="flex justify-between py-0.5"><strong>Nama Kepala Keluarga:</strong> <span>${kepalaKK.nama || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>NIK:</strong> <span>${kepalaKK.nik || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Alamat:</strong> <span>${kepalaKK.alamat || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>RT/RW:</strong> <span>${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</span></div>
+          </div>
+          <div>
+            <div class="flex justify-between py-0.5"><strong>Kelurahan:</strong> <span>${kepalaKK.kelurahan || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Kecamatan:</strong> <span>${kepalaKK.kecamatan || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${kepalaKK.kota || '-'}</span></div>
+            <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${kepalaKK.propinsi || '-'}</span></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tabel Anggota KK -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300 text-xs">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-2 py-1 text-center">No</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">NIK</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Nama</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Jenis Kelamin</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Tempat Lahir</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Tanggal Lahir</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Agama</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Status</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Pekerjaan</th>
+              <th class="border border-gray-300 px-2 py-1 text-center">Hubungan</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${anggotaHTML}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-4 text-xs text-gray-600">
+        <p><strong>Total Anggota Keluarga:</strong> ${kk.total_anggota} orang</p>
+      </div>
+    </div>
+  `;
+  
+  $('#kkContent').html(html);
+}
+
+// Fungsi untuk print biodata
+function printBiodata() {
+  const printContent = document.getElementById('biodataPrintArea').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Biodata Warga</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .border-2 { border: 2px solid #d1d5db; }
+          .border-gray-300 { border-color: #d1d5db; }
+          .rounded-lg { border-radius: 8px; }
+          .p-4 { padding: 16px; }
+          .bg-white { background-color: white; }
+          .text-center { text-align: center; }
+          .border-b-2 { border-bottom: 2px solid #d1d5db; }
+          .pb-2 { padding-bottom: 8px; }
+          .mb-4 { margin-bottom: 16px; }
+          .text-base { font-size: 16px; }
+          .font-bold { font-weight: bold; }
+          .text-blue-800 { color: #1e40af; }
+          .text-sm { font-size: 14px; }
+          .font-semibold { font-weight: 600; }
+          .text-gray-700 { color: #374151; }
+          .space-y-1 > * + * { margin-top: 4px; }
+          .text-xs { font-size: 12px; }
+          .grid { display: grid; }
+          .grid-cols-1 { grid-template-columns: 1fr; }
+          .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+          .gap-4 { gap: 16px; }
+          .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+          .gap-2 { gap: 8px; }
+          .col-span-2 { grid-column: span 2; }
+          .font-semibold { font-weight: 600; }
+          .border-b { border-bottom: 1px solid #e5e7eb; }
+          .pb-1 { padding-bottom: 4px; }
+          .mb-2 { margin-bottom: 8px; }
+        </style>
+      </head>
+      <body>
+        ${printContent}
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 500);
+}
+
+// Fungsi untuk print KK
+function printKK() {
+  const printContent = document.getElementById('kkPrintArea').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Biodata Kartu Keluarga</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .border-2 { border: 2px solid #d1d5db; }
+          .border-gray-300 { border-color: #d1d5db; }
+          .rounded-lg { border-radius: 8px; }
+          .p-4 { padding: 16px; }
+          .bg-white { background-color: white; }
+          .text-center { text-align: center; }
+          .border-b-2 { border-bottom: 2px solid #d1d5db; }
+          .pb-2 { padding-bottom: 8px; }
+          .mb-4 { margin-bottom: 16px; }
+          .text-base { font-size: 16px; }
+          .font-bold { font-weight: bold; }
+          .text-green-800 { color: #166534; }
+          .text-sm { font-size: 14px; }
+          .font-semibold { font-weight: 600; }
+          .text-gray-700 { color: #374151; }
+          .space-y-1 > * + * { margin-top: 4px; }
+          .text-xs { font-size: 12px; }
+          .grid { display: grid; }
+          .grid-cols-1 { grid-template-columns: 1fr; }
+          .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+          .gap-4 { gap: 16px; }
+          .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+          .gap-2 { gap: 8px; }
+          .col-span-2 { grid-column: span 2; }
+          .font-semibold { font-weight: 600; }
+          .border-b { border-bottom: 1px solid #e5e7eb; }
+          .pb-1 { padding-bottom: 4px; }
+          .mb-2 { margin-bottom: 8px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+          th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
+          th { background-color: #f0f0f0; font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        ${printContent}
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 500);
+}
+
+// Event handler untuk modal biodata dan KK
+$('#modalBiodata, #modalKK').click(function(e) {
+  if (e.target === this) {
+    $(this).removeClass('modal-show').addClass('hidden');
+  }
+});
+
+// Tutup modal dengan tombol ESC
+$(document).keydown(function(e) {
+  if (e.key === 'Escape') {
+    if (!$('#modalBiodata').hasClass('hidden')) {
+      closeModalBiodata();
+    }
+    if (!$('#modalKK').hasClass('hidden')) {
+      closeModalKK();
+    }
+  }
+});
+
+// Fungsi untuk memuat data provinsi
+function loadProvinsi() {
+  $('#propinsi').html('<option value="">Loading provinsi...</option>').prop('disabled', true);
+  $.get('api/wilayah.php', { action: 'provinsi' }, function(data) {
+    let html = '<option value="">Pilih Provinsi</option>';
+    data.forEach(item => {
+      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+    });
+    $('#propinsi').html(html).prop('disabled', false);
+  }).fail(function(xhr, status, error) {
+    console.error('Error loading provinsi:', error);
+    $('#propinsi').html('<option value="">Error loading provinsi</option>').prop('disabled', true);
+  });
+}
+
+// Fungsi untuk memuat data kota berdasarkan provinsi
+function loadKota(provinsi_id) {
+  if (!provinsi_id) {
+    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
+    return;
+  }
+  
+  $('#kota').html('<option value="">Loading kota...</option>').prop('disabled', true);
+  $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi_id }, function(data) {
+    let html = '<option value="">Pilih Kota/Kabupaten</option>';
+    data.forEach(item => {
+      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+    });
+    $('#kota').html(html).prop('disabled', false);
+  }).fail(function(xhr, status, error) {
+    console.error('Error loading kota:', error);
+    $('#kota').html('<option value="">Error loading kota</option>').prop('disabled', true);
+  });
+}
+
+// Fungsi untuk memuat data kecamatan berdasarkan kota
+function loadKecamatan(kota_id) {
+  if (!kota_id) {
+    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+    return;
+  }
+  
+  $('#kecamatan').html('<option value="">Loading kecamatan...</option>').prop('disabled', true);
+  $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota_id }, function(data) {
+    let html = '<option value="">Pilih Kecamatan</option>';
+    data.forEach(item => {
+      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+    });
+    $('#kecamatan').html(html).prop('disabled', false);
+  }).fail(function(xhr, status, error) {
+    console.error('Error loading kecamatan:', error);
+    $('#kecamatan').html('<option value="">Error loading kecamatan</option>').prop('disabled', true);
+  });
+}
+
+// Fungsi untuk memuat data kelurahan berdasarkan kecamatan
+function loadKelurahan(kecamatan_id) {
+  if (!kecamatan_id) {
+    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+    return;
+  }
+  
+  $('#kelurahan').html('<option value="">Loading kelurahan...</option>').prop('disabled', true);
+  $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan_id }, function(data) {
+    let html = '<option value="">Pilih Kelurahan</option>';
+    data.forEach(item => {
+      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
+    });
+    $('#kelurahan').html(html).prop('disabled', false);
+  }).fail(function(xhr, status, error) {
+    console.error('Error loading kelurahan:', error);
+    $('#kelurahan').html('<option value="">Error loading kelurahan</option>').prop('disabled', true);
+  });
+}
+
+// Event handler untuk dropdown wilayah
+$('#propinsi').change(function() {
+  const provinsiId = $(this).val();
+  const provinsiName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
+  $('#propinsi_nama').val(provinsiName);
+  loadKota(provinsiId);
+  $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
+  $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+});
+
+$('#kota').change(function() {
+  const kotaId = $(this).val();
+  const kotaName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
+  $('#kota_nama').val(kotaName);
+  loadKecamatan(kotaId);
+  $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
+});
+
+$('#kecamatan').change(function() {
+  const kecamatanId = $(this).val();
+  const kecamatanName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
+  $('#kecamatan_nama').val(kecamatanName);
+  loadKelurahan(kecamatanId);
+});
+
+$('#kelurahan').change(function() {
+  const kelurahanName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
+  $('#kelurahan_nama').val(kelurahanName);
+});
+
+// Load provinsi saat halaman dimuat
+loadProvinsi();
 
 // Event handlers
 $(document).ready(function() {
@@ -915,529 +1450,6 @@ $(document).ready(function() {
     }
   });
 });
-
-// Fungsi untuk menampilkan biodata warga
-function showBiodata(nik) {
-  if (!nik || nik === '-') {
-    alert('NIK tidak valid');
-    return;
-  }
-  
-  console.log('Showing biodata for NIK:', nik);
-  
-  // Tampilkan loading
-  $('#biodataContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-blue-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat biodata...</p></div>');
-  $('#modalBiodata').removeClass('hidden').addClass('modal-show');
-  
-  $.post('api/warga_action.php', { action: 'get_warga_by_nik', nik: nik }, function(data) {
-    console.log('Biodata response:', data);
-    try {
-      const warga = JSON.parse(data);
-      displayBiodata(warga);
-    } catch (e) {
-      console.error('Error parsing biodata:', e);
-      $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
-    }
-  }).fail(function(xhr, status, error) {
-    console.error('Biodata AJAX error:', error);
-    $('#biodataContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
-  });
-}
-
-// Fungsi untuk menampilkan data KK
-function showKK(nikk) {
-  if (!nikk || nikk === '-') {
-    alert('NIKK tidak valid');
-    return;
-  }
-  
-  console.log('Showing KK for NIKK:', nikk);
-  
-  // Tampilkan loading
-  $('#kkContent').html('<div class="text-center py-8"><div class="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-8 h-8 mx-auto"></div><p class="mt-2">Memuat data KK...</p></div>');
-  $('#modalKK').removeClass('hidden').addClass('modal-show');
-  
-  $.post('api/warga_action.php', { action: 'get_kk_by_nikk', nikk: nikk }, function(data) {
-    console.log('KK response:', data);
-    try {
-      const kk = JSON.parse(data);
-      displayKK(kk);
-    } catch (e) {
-      console.error('Error parsing KK:', e);
-      $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + e.message + '</div>');
-    }
-  }).fail(function(xhr, status, error) {
-    console.error('KK AJAX error:', error);
-    $('#kkContent').html('<div class="text-center py-8 text-red-500">Error: ' + error + '</div>');
-  });
-}
-
-// Fungsi untuk menutup modal biodata
-function closeModalBiodata() {
-  $('#modalBiodata').removeClass('modal-show').addClass('hidden');
-}
-
-// Fungsi untuk menutup modal KK
-function closeModalKK() {
-  $('#modalKK').removeClass('modal-show').addClass('hidden');
-}
-
-// Fungsi untuk menampilkan biodata
-function displayBiodata(warga) {
-  const tanggalLahir = warga.tgl_lahir && warga.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(warga.tgl_lahir) : '-';
-  
-  const html = `
-    <div class="flex justify-between items-center mb-4 border-b pb-2">
-      <h3 class="text-lg font-bold">Biodata Warga</h3>
-      <div class="flex gap-2">
-        <button onclick="printBiodata()" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-          <i class='bx bx-printer'></i> Print
-        </button>
-        <button onclick="closeModalBiodata()" class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm">
-          <i class='bx bx-x'></i> Tutup
-        </button>
-      </div>
-    </div>
-    
-    <div id="biodataPrintArea">
-      <!-- Layout KTP Style -->
-      <div class="border-2 border-gray-300 rounded-lg p-4 bg-white">
-        <!-- Header KTP -->
-        <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
-          <h4 class="text-base font-bold text-blue-800">PROVINSI ${warga.propinsi || 'JAWA BARAT'}</h4>
-          <h4 class="text-base font-bold text-blue-800">KABUPATEN/KOTA ${warga.kota || 'BANDUNG'}</h4>
-          <h4 class="text-sm font-semibold text-gray-700">NIK : ${warga.nik || '-'}</h4>
-        </div>
-        
-        <!-- Content KTP -->
-        <div class="flex gap-4">
-          <!-- Data KTP -->
-          <div class="flex-1 space-y-1 text-xs">
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Nama</div>
-              <div class="col-span-2">: ${warga.nama || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Tempat/Tgl Lahir</div>
-              <div class="col-span-2">: ${warga.tpt_lahir || '-'}, ${tanggalLahir}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Jenis Kelamin</div>
-              <div class="col-span-2">: ${warga.jenkel === 'L' ? 'LAKI-LAKI' : warga.jenkel === 'P' ? 'PEREMPUAN' : '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Alamat</div>
-              <div class="col-span-2">: ${warga.alamat || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">RT/RW</div>
-              <div class="col-span-2">: ${warga.rt || '-'}/${warga.rw || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Kelurahan</div>
-              <div class="col-span-2">: ${warga.kelurahan || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Kecamatan</div>
-              <div class="col-span-2">: ${warga.kecamatan || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Agama</div>
-              <div class="col-span-2">: ${warga.agama || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Status Perkawinan</div>
-              <div class="col-span-2">: ${warga.status || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Pekerjaan</div>
-              <div class="col-span-2">: ${warga.pekerjaan || '-'}</div>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="font-semibold">Kewarganegaraan</div>
-              <div class="col-span-2">: ${warga.negara || 'WNI'}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Data Tambahan -->
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="space-y-2">
-          <h4 class="text-base font-semibold border-b pb-1">Data Tambahan</h4>
-          <div class="grid grid-cols-1 gap-1 text-xs">
-            <div class="flex justify-between py-0.5"><strong>NIK KK:</strong> <span>${warga.nikk || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Hubungan dalam KK:</strong> <span>${warga.hubungan || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>No. HP:</strong> <span>${warga.hp || '-'}</span></div>
-          </div>
-        </div>
-        
-        <div class="space-y-2">
-          <h4 class="text-base font-semibold border-b pb-1">Data Wilayah</h4>
-          <div class="grid grid-cols-1 gap-1 text-xs">
-            <div class="flex justify-between py-0.5"><strong>Kota/Kabupaten:</strong> <span>${warga.kota || '-'}</span></div>
-            <div class="flex justify-between py-0.5"><strong>Provinsi:</strong> <span>${warga.propinsi || '-'}</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  $('#biodataContent').html(html);
-}
-
-// Fungsi untuk menampilkan data KK
-function displayKK(kk) {
-  const kepalaKK = kk.kepala_keluarga;
-  const anggotaKK = kk.anggota_keluarga;
-  const tanggalLahirKK = kepalaKK.tgl_lahir && kepalaKK.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(kepalaKK.tgl_lahir) : '-';
-  
-  let anggotaHTML = '';
-  anggotaKK.forEach((anggota, index) => {
-    const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
-    anggotaHTML += `
-      <tr class="border-b hover:bg-gray-50">
-        <td class="px-2 py-1 text-center text-xs">${index + 1}</td>
-        <td class="px-2 py-1 text-xs">${anggota.nik || '-'}</td>
-        <td class="px-2 py-1 text-xs">${anggota.nama || '-'}</td>
-        <td class="px-2 py-1 text-center text-xs">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
-        <td class="px-2 py-1 text-xs">${anggota.tpt_lahir || '-'}</td>
-        <td class="px-2 py-1 text-center text-xs">${tanggalLahirAnggota}</td>
-        <td class="px-2 py-1 text-xs">${anggota.agama || '-'}</td>
-        <td class="px-2 py-1 text-xs">${anggota.status || '-'}</td>
-        <td class="px-2 py-1 text-xs">${anggota.pekerjaan || '-'}</td>
-        <td class="px-2 py-1 text-xs">${anggota.hubungan || '-'}</td>
-      </tr>
-    `;
-  });
-  
-  const html = `
-    <div class="flex justify-between items-center mb-4 border-b pb-2">
-      <h3 class="text-lg font-bold">Data Kartu Keluarga</h3>
-      <div class="flex gap-2">
-        <button onclick="printKK()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm">
-          <i class='bx bx-printer'></i> Print
-        </button>
-        <button onclick="closeModalKK()" class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm">
-          <i class='bx bx-x'></i> Tutup
-        </button>
-      </div>
-    </div>
-    
-    <div id="kkPrintArea">
-      <div class="border-2 border-gray-300 rounded-lg p-4 bg-white">
-        <div class="text-center border-b-2 border-gray-300 pb-2 mb-4">
-          <h4 class="text-base font-bold text-green-800">KARTU KELUARGA</h4>
-          <h4 class="text-sm font-semibold text-gray-700">NIK Kepala Keluarga : ${kepalaKK.nik || '-'}</h4>
-        </div>
-        
-        <div class="mb-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div class="space-y-1">
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Nama Kepala Keluarga</div>
-                <div class="col-span-2">: ${kepalaKK.nama || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Alamat</div>
-                <div class="col-span-2">: ${kepalaKK.alamat || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">RT/RW</div>
-                <div class="col-span-2">: ${kepalaKK.rt || '-'}/${kepalaKK.rw || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Desa/Kelurahan</div>
-                <div class="col-span-2">: ${kepalaKK.kelurahan || '-'}</div>
-              </div>
-            </div>
-            <div class="space-y-1">
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Kecamatan</div>
-                <div class="col-span-2">: ${kepalaKK.kecamatan || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Kabupaten/Kota</div>
-                <div class="col-span-2">: ${kepalaKK.kota || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Provinsi</div>
-                <div class="col-span-2">: ${kepalaKK.propinsi || '-'}</div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="font-semibold">Kode Pos</div>
-                <div class="col-span-2">: -</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Daftar Anggota KK -->
-        <div class="order">
-            <h4 class="text-base font-semibold mb-2 border-b pb-1">Daftar Anggota Keluarga</h4>
-            <table class="min-w-full border-collapse border border-gray-200 text-xs">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-2 py-1 text-center">No</th>
-                        <th class="border px-2 py-1 text-left">NIK</th>
-                        <th class="border px-2 py-1 text-left">Nama</th>
-                        <th class="border px-2 py-1 text-center">Jenis Kelamin</th>
-                        <th class="border px-2 py-1 text-left">Tempat Lahir</th>
-                        <th class="border px-2 py-1 text-center">Tanggal Lahir</th>
-                        <th class="border px-2 py-1 text-left">Agama</th>
-                        <th class="border px-2 py-1 text-left">Status</th>
-                        <th class="border px-2 py-1 text-left">Pekerjaan</th>
-                        <th class="border px-2 py-1 text-left">Hubungan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${anggotaHTML}
-                </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  $('#kkContent').html(html);
-}
-
-// Fungsi untuk print biodata
-function printBiodata() {
-  const printContent = document.getElementById('biodataPrintArea').innerHTML;
-  const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Biodata Warga</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          .border-2 { border: 2px solid #d1d5db; }
-          .border-gray-300 { border-color: #d1d5db; }
-          .rounded-lg { border-radius: 8px; }
-          .p-4 { padding: 16px; }
-          .bg-white { background-color: white; }
-          .text-center { text-align: center; }
-          .border-b-2 { border-bottom: 2px solid #d1d5db; }
-          .pb-2 { padding-bottom: 8px; }
-          .mb-4 { margin-bottom: 16px; }
-          .text-base { font-size: 16px; }
-          .font-bold { font-weight: bold; }
-          .text-blue-800 { color: #1e40af; }
-          .text-sm { font-size: 14px; }
-          .font-semibold { font-weight: 600; }
-          .text-gray-700 { color: #374151; }
-          .space-y-1 > * + * { margin-top: 4px; }
-          .text-xs { font-size: 12px; }
-          .grid { display: grid; }
-          .grid-cols-1 { grid-template-columns: 1fr; }
-          .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-          .gap-4 { gap: 16px; }
-          .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-          .gap-2 { gap: 8px; }
-          .col-span-2 { grid-column: span 2; }
-          .font-semibold { font-weight: 600; }
-          .border-b { border-bottom: 1px solid #e5e7eb; }
-          .pb-1 { padding-bottom: 4px; }
-          .mb-2 { margin-bottom: 8px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-          th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
-          th { background-color: #f0f0f0; font-weight: bold; }
-        </style>
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-  printWindow.document.close();
-  setTimeout(() => {
-    printWindow.print();
-    printWindow.close();
-  }, 500);
-}
-
-// Fungsi untuk print KK
-function printKK() {
-  const printContent = document.getElementById('kkPrintArea').innerHTML;
-  const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Biodata Kartu Keluarga</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          .border-2 { border: 2px solid #d1d5db; }
-          .border-gray-300 { border-color: #d1d5db; }
-          .rounded-lg { border-radius: 8px; }
-          .p-4 { padding: 16px; }
-          .bg-white { background-color: white; }
-          .text-center { text-align: center; }
-          .border-b-2 { border-bottom: 2px solid #d1d5db; }
-          .pb-2 { padding-bottom: 8px; }
-          .mb-4 { margin-bottom: 16px; }
-          .text-base { font-size: 16px; }
-          .font-bold { font-weight: bold; }
-          .text-green-800 { color: #166534; }
-          .text-sm { font-size: 14px; }
-          .font-semibold { font-weight: 600; }
-          .text-gray-700 { color: #374151; }
-          .space-y-1 > * + * { margin-top: 4px; }
-          .text-xs { font-size: 12px; }
-          .grid { display: grid; }
-          .grid-cols-1 { grid-template-columns: 1fr; }
-          .md\\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-          .gap-4 { gap: 16px; }
-          .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-          .gap-2 { gap: 8px; }
-          .col-span-2 { grid-column: span 2; }
-          .font-semibold { font-weight: 600; }
-          .border-b { border-bottom: 1px solid #e5e7eb; }
-          .pb-1 { padding-bottom: 4px; }
-          .mb-2 { margin-bottom: 8px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-          th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
-          th { background-color: #f0f0f0; font-weight: bold; }
-        </style>
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-  printWindow.document.close();
-  setTimeout(() => {
-    printWindow.print();
-    printWindow.close();
-  }, 500);
-}
-
-// Event handler untuk modal biodata dan KK
-$('#modalBiodata, #modalKK').click(function(e) {
-  if (e.target === this) {
-    $(this).removeClass('modal-show').addClass('hidden');
-  }
-});
-
-// Tutup modal dengan tombol ESC
-$(document).keydown(function(e) {
-  if (e.key === 'Escape') {
-    if (!$('#modalBiodata').hasClass('hidden')) {
-      closeModalBiodata();
-    }
-    if (!$('#modalKK').hasClass('hidden')) {
-      closeModalKK();
-    }
-  }
-});
-
-// Fungsi untuk memuat data provinsi
-function loadProvinsi() {
-  $('#propinsi').html('<option value="">Loading provinsi...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'provinsi' }, function(data) {
-    let html = '<option value="">Pilih Provinsi</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
-    });
-    $('#propinsi').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading provinsi:', error);
-    $('#propinsi').html('<option value="">Error loading provinsi</option>').prop('disabled', true);
-  });
-}
-
-// Fungsi untuk memuat data kota berdasarkan provinsi
-function loadKota(provinsi_id) {
-  if (!provinsi_id) {
-    $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kota').html('<option value="">Loading kota...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kota', provinsi_id: provinsi_id }, function(data) {
-    let html = '<option value="">Pilih Kota/Kabupaten</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
-    });
-    $('#kota').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kota:', error);
-    $('#kota').html('<option value="">Error loading kota</option>').prop('disabled', true);
-  });
-}
-
-// Fungsi untuk memuat data kecamatan berdasarkan kota
-function loadKecamatan(kota_id) {
-  if (!kota_id) {
-    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kecamatan').html('<option value="">Loading kecamatan...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kecamatan', kota_id: kota_id }, function(data) {
-    let html = '<option value="">Pilih Kecamatan</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
-    });
-    $('#kecamatan').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kecamatan:', error);
-    $('#kecamatan').html('<option value="">Error loading kecamatan</option>').prop('disabled', true);
-  });
-}
-
-// Fungsi untuk memuat data kelurahan berdasarkan kecamatan
-function loadKelurahan(kecamatan_id) {
-  if (!kecamatan_id) {
-    $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-    return;
-  }
-  
-  $('#kelurahan').html('<option value="">Loading kelurahan...</option>').prop('disabled', true);
-  $.get('api/wilayah.php', { action: 'kelurahan', kecamatan_id: kecamatan_id }, function(data) {
-    let html = '<option value="">Pilih Kelurahan</option>';
-    data.forEach(item => {
-      html += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`;
-    });
-    $('#kelurahan').html(html).prop('disabled', false);
-  }).fail(function(xhr, status, error) {
-    console.error('Error loading kelurahan:', error);
-    $('#kelurahan').html('<option value="">Error loading kelurahan</option>').prop('disabled', true);
-  });
-}
-
-// Event handler untuk dropdown wilayah
-$('#propinsi').change(function() {
-  const provinsiId = $(this).val();
-  const provinsiName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
-  $('#propinsi_nama').val(provinsiName);
-  loadKota(provinsiId);
-  $('#kecamatan').html('<option value="">Pilih Kecamatan</option>').prop('disabled', true);
-  $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-});
-
-$('#kota').change(function() {
-  const kotaId = $(this).val();
-  const kotaName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
-  $('#kota_nama').val(kotaName);
-  loadKecamatan(kotaId);
-  $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
-});
-
-$('#kecamatan').change(function() {
-  const kecamatanId = $(this).val();
-  const kecamatanName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
-  $('#kecamatan_nama').val(kecamatanName);
-  loadKelurahan(kecamatanId);
-});
-
-$('#kelurahan').change(function() {
-  const kelurahanName = $(this).find('option:selected').data('name') || $(this).find('option:selected').text();
-  $('#kelurahan_nama').val(kelurahanName);
-});
-
-// Load provinsi saat halaman dimuat
-loadProvinsi();
 </script>
 
 <?php include 'footer.php'; ?> 
