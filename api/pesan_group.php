@@ -150,8 +150,10 @@ $groupId = "6285729705810-1505093181@g.us";
         console.log('Radio changed:', val); // Debug log
         if (val === 'kosong') {
           textarea.value = '';
+          textarea.readOnly = false;
         } else {
           textarea.value = 'Memuat...';
+          textarea.readOnly = true;
           let url = '';
           if (val === 'jimpitan') url = 'ambil_data_jimpitan.php';
           if (val === 'jaga') url = 'ambil_data_jaga.php';
@@ -164,10 +166,12 @@ $groupId = "6285729705810-1505093181@g.us";
             })
             .then(txt => {
               textarea.value = txt;
+              textarea.readOnly = true;
               console.log('Isi textarea:', txt); // Debug log
             })
             .catch(err => {
               textarea.value = 'Gagal mengambil data: ' + err;
+              textarea.readOnly = true;
               console.error(err);
             });
         }
