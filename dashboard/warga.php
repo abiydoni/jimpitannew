@@ -208,7 +208,7 @@ include 'header.php';
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Alamat Lengkap *</label>
-                            <textarea name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
+                            <textarea placeholder="Alamat Lengkap Anda: Desa/Jalan/Gang/Nomor, dll" name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Negara *</label>
