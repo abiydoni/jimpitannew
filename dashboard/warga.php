@@ -119,7 +119,7 @@ include 'header.php';
             <div class="form-3col">
                 <div class="col-span-2">
                     <div class="form-section-title">Data Pribadi</div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Nama Lengkap *</label>
                             <input type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
