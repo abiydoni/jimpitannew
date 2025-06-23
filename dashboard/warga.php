@@ -122,15 +122,15 @@ include 'header.php';
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Nama Lengkap *</label>
-                            <input placeholder="Nama Lengkap Anda" type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <input placeholder:text-sm placeholder="Nama Lengkap Anda" type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">NIK *</label>
-                            <input placeholder="Format: 16 digit angka" type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
+                            <input placeholder:text-sm placeholder="Format: 16 digit angka" type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">NIK KK *</label>
-                            <input placeholder="Format: 16 digit angka" type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
+                            <input placeholder:text-sm placeholder="Format: 16 digit angka" type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Hubungan dalam KK *</label>
@@ -156,7 +156,7 @@ include 'header.php';
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
-                            <input placeholder="Tempat Lahir Anda"type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <input placeholder:text-sm placeholder="Tempat Lahir Anda"type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
@@ -208,7 +208,7 @@ include 'header.php';
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Alamat Lengkap *</label>
-                            <textarea placeholder="Alamat Lengkap Anda: Desa/Jalan/Gang/Nomor, dll" name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
+                            <textarea placeholder:text-sm placeholder="Alamat Lengkap Anda: Desa/Jalan/Gang/Nomor, dll" name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Negara *</label>
@@ -256,7 +256,7 @@ include 'header.php';
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">No HP</label>
-                            <input placeholder="085..." type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                            <input placeholder:text-sm placeholder="085..." type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
                         </div>
                     </div>
                 </div>
