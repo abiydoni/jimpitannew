@@ -213,6 +213,10 @@ include 'header.php';
                             <textarea name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
                         </div>
                         <div>
+                            <label class="block text-xs font-medium mb-0.5">Negara *</label>
+                            <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
+                        </div>
+                        <div>
                             <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
                             <select name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
                                 <option value="">Pilih Provinsi</option>
@@ -241,25 +245,21 @@ include 'header.php';
                             <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium mb-0.5">Negara *</label>
-                            <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
+                            <label class="block text-xs font-medium mb-0.5">RT *</label>
+                            <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RT</option>
+                            </select>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">RT *</label>
-                        <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                            <option value="">Pilih RT</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">RW *</label>
-                        <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                            <option value="">Pilih RW</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">No HP</label>
-                        <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">RW *</label>
+                            <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RW</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">No HP</label>
+                            <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-col items-center justify-start mt-2">
