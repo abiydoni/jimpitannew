@@ -82,9 +82,6 @@ $groupId = "6285729705810-1505093181@g.us";
 
       <div class="input-group mt-4">
         <label>Pesan:</label><br>
-        <button id="emoji-button" type="button" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 mb-2">
-          😃 Emoji
-        </button>
         <textarea name="message" rows="15" cols="50" id="message" class="w-full px-2 py-2 border rounded" placeholder="Tulis pesan..."></textarea>
       </div>
 
@@ -146,39 +143,11 @@ $groupId = "6285729705810-1505093181@g.us";
       container.appendChild(div);
     }
 
-    // === Emoji Picker Init ===
-    const button = document.querySelector('#emoji-button');
-    const picker = new EmojiButton({
-      position: 'bottom-start',
-      rootElement: document.body,
-      theme: 'light'
-    });
-
-    picker.on('picker:show', () => {
-      const pickerEl = document.querySelector('.emoji-picker, .EmojiPickerReact');
-      if (pickerEl) {
-        pickerEl.style.zIndex = '999999';
-        pickerEl.style.position = 'absolute';
-      }
-    });
-
-    picker.on('emoji', emoji => {
-      const textarea = document.querySelector('#message');
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
-      textarea.focus();
-      textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-    });
-
-    button.addEventListener('click', () => {
-      picker.togglePicker(button);
-    });
-
     document.querySelectorAll('input[name="templateRadio"]').forEach(function(radio) {
       radio.addEventListener('change', function() {
         const val = this.value;
         const textarea = document.getElementById('message');
+        console.log('Radio changed:', val); // Debug log
         if (val === 'kosong') {
           textarea.value = '';
         } else {
@@ -187,12 +156,16 @@ $groupId = "6285729705810-1505093181@g.us";
           if (val === 'jimpitan') url = 'ambil_data_jimpitan.php';
           if (val === 'jaga') url = 'ambil_data_jaga.php';
           if (val === 'ultah') url = 'ambil_data_ultah.php';
+          console.log('Fetch url:', url); // Debug log
           fetch(url)
             .then(res => {
               if (!res.ok) throw new Error('HTTP error ' + res.status);
               return res.text();
             })
-            .then(txt => textarea.value = txt)
+            .then(txt => {
+              textarea.value = txt;
+              console.log('Isi textarea:', txt); // Debug log
+            })
             .catch(err => {
               textarea.value = 'Gagal mengambil data: ' + err;
               console.error(err);
