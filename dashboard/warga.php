@@ -254,20 +254,22 @@ include 'header.php';
                     </label>
                     <div class="text-xs text-gray-500 mt-1 mb-4 text-center">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
                     <div>
-                        <label class="block text-xs font-medium mb-0.5">RT *</label>
-                        <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                            <option value="">Pilih RT</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">RW *</label>
-                        <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                            <option value="">Pilih RW</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">No HP</label>
-                        <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                      <div>
+                          <label class="block text-xs font-medium mb-0.5">RT *</label>
+                          <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                              <option value="">Pilih RT</option>
+                          </select>
+                      </div>
+                      <div>
+                          <label class="block text-xs font-medium mb-0.5">RW *</label>
+                          <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                              <option value="">Pilih RW</option>
+                          </select>
+                      </div>
+                      <div>
+                          <label class="block text-xs font-medium mb-0.5">No HP</label>
+                          <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                      </div>
                     </div>
                 </div>
             </div>
