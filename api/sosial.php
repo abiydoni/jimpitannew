@@ -47,14 +47,14 @@ include 'db.php';
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-    <div class="flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg" style="max-width: 60vh;">
+    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
             Iuran Sosial
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-width: 60vh; max-height: 80vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 80vh; font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT nama, jumlah, COUNT(*) AS jumlah_barang FROM tb_barang GROUP BY nama ORDER BY jumlah_barang ASC");

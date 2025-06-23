@@ -79,8 +79,8 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
     </style>
 </head>
 <body class="bg-gray-100 font-poppins text-gray-800">
-    <div class="flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg" style="max-width: 60vh;">
-                    <!-- Loader GIF loading -->
+    <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+<!-- Loader GIF loading -->
         <div id="loader" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
             <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
         </div>
@@ -91,7 +91,7 @@ setlocale(LC_TIME, 'id_ID.UTF-8', 'Indonesian'); // Pengaturan lokal
         <p class="text-sm text-gray-600">Bulan: <?= htmlspecialchars($bulan) ?> | Tahun: <?= htmlspecialchars($tahun) ?></p>
         
         <?php if (!empty($detail_transaksi)): ?>
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 75vh; font-size: 12px;">
             <table class="min-w-full border-collapse text-sm text-gray-700">
                 <thead class="sticky top-0 bg-gray-100 border-b">
                     <tr class="bg-gray-100 border-b">
