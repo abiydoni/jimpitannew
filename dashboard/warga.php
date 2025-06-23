@@ -116,117 +116,102 @@ include 'header.php';
             <input type="hidden" name="action" id="formAction" value="create">
             <input type="hidden" name="foto" id="foto" value="">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <!-- Data Pribadi -->
-                <div class="space-y-3">
-                    <h3 class="font-semibold text-base border-b pb-1">Data Pribadi</h3>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Nama Lengkap *</label>
-                        <input type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+            <div class="form-3col">
+                <div class="col-span-2">
+                    <div class="form-section-title">Data Pribadi</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Nama Lengkap *</label>
+                            <input type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">NIK *</label>
+                            <input type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
+                            <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">NIK KK *</label>
+                            <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
+                            <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Hubungan dalam KK *</label>
+                            <select name="hubungan" id="hubungan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                                <option value="">Pilih Hubungan</option>
+                                <option value="Kepala Keluarga">Kepala Keluarga</option>
+                                <option value="Istri">Istri</option>
+                                <option value="Anak">Anak</option>
+                                <option value="Orang Tua">Orang Tua</option>
+                                <option value="Mertua">Mertua</option>
+                                <option value="Famili Lain">Famili Lain</option>
+                                <option value="Pembantu">Pembantu</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Jenis Kelamin *</label>
+                            <select name="jenkel" id="jenkel" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                                <option value="">Pilih Jenis Kelamin</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
+                            <input type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
+                            <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Agama *</label>
+                            <select name="agama" id="agama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen">Kristen</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Konghucu">Konghucu</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Status Perkawinan *</label>
+                            <select name="status" id="status" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                                <option value="">Pilih Status</option>
+                                <option value="Belum Kawin">Belum Kawin</option>
+                                <option value="Kawin">Kawin</option>
+                                <option value="Cerai Hidup">Cerai Hidup</option>
+                                <option value="Cerai Mati">Cerai Mati</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Pekerjaan *</label>
+                            <select name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                                <option value="">Pilih Pekerjaan</option>
+                                <option value="PNS">PNS</option>
+                                <option value="TNI">TNI</option>
+                                <option value="Polri">Polri</option>
+                                <option value="Swasta">Swasta</option>
+                                <option value="Wiraswasta">Wiraswasta</option>
+                                <option value="Petani">Petani</option>
+                                <option value="Pedagang">Pedagang</option>
+                                <option value="Pelajar">Pelajar</option>
+                                <option value="Tidak Bekerja">Tidak Bekerja</option>
+                                <option value="IRT">Ibu Rumah Tangga</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">NIK *</label>
-                        <input type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
-                        <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">NIK KK *</label>
-                        <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
-                        <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Hubungan dalam KK *</label>
-                        <select name="hubungan" id="hubungan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            <option value="">Pilih Hubungan</option>
-                            <option value="Kepala Keluarga">Kepala Keluarga</option>
-                            <option value="Istri">Istri</option>
-                            <option value="Anak">Anak</option>
-                            <option value="Orang Tua">Orang Tua</option>
-                            <option value="Mertua">Mertua</option>
-                            <option value="Famili Lain">Famili Lain</option>
-                            <option value="Pembantu">Pembantu</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Jenis Kelamin *</label>
-                        <select name="jenkel" id="jenkel" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            <option value="">Pilih Jenis Kelamin</option>
-                            <option value="L">Laki-laki</option>
-                            <option value="P">Perempuan</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
-                        <input type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                        <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Agama *</label>
-                        <select name="agama" id="agama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            <option value="">Pilih Agama</option>
-                            <option value="Islam">Islam</option>
-                            <option value="Kristen">Kristen</option>
-                            <option value="Katolik">Katolik</option>
-                            <option value="Hindu">Hindu</option>
-                            <option value="Buddha">Buddha</option>
-                            <option value="Konghucu">Konghucu</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Status Perkawinan *</label>
-                        <select name="status" id="status" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            <option value="">Pilih Status</option>
-                            <option value="Belum Kawin">Belum Kawin</option>
-                            <option value="Kawin">Kawin</option>
-                            <option value="Cerai Hidup">Cerai Hidup</option>
-                            <option value="Cerai Mati">Cerai Mati</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Pekerjaan *</label>
-                        <select name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            <option value="">Pilih Pekerjaan</option>
-                            <option value="PNS">PNS</option>
-                            <option value="TNI">TNI</option>
-                            <option value="Polri">Polri</option>
-                            <option value="Swasta">Swasta</option>
-                            <option value="Wiraswasta">Wiraswasta</option>
-                            <option value="Petani">Petani</option>
-                            <option value="Pedagang">Pedagang</option>
-                            <option value="Pelajar">Pelajar</option>
-                            <option value="Tidak Bekerja">Tidak Bekerja</option>
-                            <option value="IRT">Ibu Rumah Tangga</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Data Alamat -->
-                <div class="space-y-3">
-                    <h3 class="font-semibold text-base border-b pb-1">Data Alamat</h3>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Alamat Lengkap *</label>
-                        <textarea name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="form-section-title mt-6">Data Alamat</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Alamat Lengkap *</label>
+                            <textarea name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
+                        </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">RT *</label>
                             <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
@@ -239,62 +224,53 @@ include 'header.php';
                                 <option value="">Pilih RW</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
-                        <select name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                            <option value="">Pilih Provinsi</option>
-                        </select>
-                        <input type="hidden" name="propinsi_nama" id="propinsi_nama">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Kota/Kabupaten *</label>
-                        <select name="kota" id="kota" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
-                            <option value="">Pilih Kota/Kabupaten</option>
-                        </select>
-                        <input type="hidden" name="kota_nama" id="kota_nama">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Kecamatan *</label>
-                        <select name="kecamatan" id="kecamatan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
-                            <option value="">Pilih Kecamatan</option>
-                        </select>
-                        <input type="hidden" name="kecamatan_nama" id="kecamatan_nama">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Kelurahan *</label>
-                        <select name="kelurahan" id="kelurahan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
-                            <option value="">Pilih Kelurahan</option>
-                        </select>
-                        <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Negara *</label>
-                        <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">No HP</label>
-                        <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Foto</label>
-                        <label class="foto-upload-label">
-                          <img src="assets/image/users.gif" id="fotoPreview" class="foto-preview" alt="Foto Profil">
-                          <span class="text-xs text-gray-500">Ganti Foto</span>
-                          <input type="file" name="foto_file" id="foto_file" accept="image/*" style="display:none">
-                        </label>
-                        <div class="text-xs text-gray-500 mt-1">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
+                            <select name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih Provinsi</option>
+                            </select>
+                            <input type="hidden" name="propinsi_nama" id="propinsi_nama">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Kota/Kabupaten *</label>
+                            <select name="kota" id="kota" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                                <option value="">Pilih Kota/Kabupaten</option>
+                            </select>
+                            <input type="hidden" name="kota_nama" id="kota_nama">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Kecamatan *</label>
+                            <select name="kecamatan" id="kecamatan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                                <option value="">Pilih Kecamatan</option>
+                            </select>
+                            <input type="hidden" name="kecamatan_nama" id="kecamatan_nama">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Kelurahan *</label>
+                            <select name="kelurahan" id="kelurahan" class="w-full border px-2 py-0.5 rounded text-sm form-select" required disabled>
+                                <option value="">Pilih Kelurahan</option>
+                            </select>
+                            <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Negara *</label>
+                            <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">No HP</label>
+                            <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                        </div>
                     </div>
                 </div>
+                <div class="flex flex-col items-center justify-start mt-2">
+                    <label class="foto-upload-label">
+                        <img src="assets/image/users.gif" id="fotoPreview" class="foto-preview" alt="Foto Profil">
+                        <span class="text-xs text-gray-500">Ganti Foto</span>
+                        <input type="file" name="foto_file" id="foto_file" accept="image/*" style="display:none">
+                    </label>
+                    <div class="text-xs text-gray-500 mt-1 mb-4 text-center">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
+                </div>
             </div>
-            
             <div class="flex justify-end gap-2 mt-4 pt-4 border-t">
                 <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Batal</button>
                 <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Simpan</button>
@@ -305,8 +281,8 @@ include 'header.php';
 
 <style>
 .foto-preview {
-  width: 160px;
-  height: 213px; /* 3x4 besar */
+  width: 140px;
+  height: 187px; /* 3x4 besar, agar muat di kolom */
   border-radius: 0.375rem;
   object-fit: cover;
   border: 2px solid #ccc;
@@ -326,16 +302,17 @@ include 'header.php';
   font-size: 12px;
 }
 
-/* Tata letak grid 2 kolom untuk field, responsive */
+/* Tata letak grid 3 kolom untuk form, responsive */
 @media (min-width: 640px) {
-  .form-grid {
+  .form-3col {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 160px;
     gap: 1rem 1.5rem;
+    align-items: start;
   }
 }
 @media (max-width: 639px) {
-  .form-grid {
+  .form-3col {
     display: block;
   }
 }
