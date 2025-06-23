@@ -1768,7 +1768,7 @@ $(document).ready(function() {
         $('#foto').val(data.foto);
         // Tampilkan preview foto jika ada
         if (data.foto && data.foto !== '') {
-          $('#fotoPreview').html(`<img src="${data.foto}" alt="Foto Warga" class="w-20 h-20 object-cover rounded border">`);
+          $('#fotoPreview').html(`<img src="${data.foto}" alt="Foto Warga" class="w-20 h-20 object-cover rounded-md border">`);
         } else {
           $('#fotoPreview').html('');
         }
