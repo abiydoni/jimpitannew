@@ -213,18 +213,6 @@ include 'header.php';
                             <textarea name="alamat" id="alamat" class="w-full border px-2 py-0.5 rounded text-sm form-input" rows="2" required></textarea>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium mb-0.5">RT *</label>
-                            <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                <option value="">Pilih RT</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">RW *</label>
-                            <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                <option value="">Pilih RW</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
                             <select name="propinsi" id="propinsi" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
                                 <option value="">Pilih Provinsi</option>
@@ -256,19 +244,31 @@ include 'header.php';
                             <label class="block text-xs font-medium mb-0.5">Negara *</label>
                             <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">No HP</label>
-                            <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
-                        </div>
                     </div>
                 </div>
                 <div class="flex flex-col items-center justify-start mt-2">
                     <label class="foto-upload-label">
-                        <img src="assets/image/users.gif" id="fotoPreview" class="foto-preview" alt="Foto Profil">
+                        <img src="images/users.gif" id="fotoPreview" class="foto-preview" alt="Foto Profil">
                         <span class="text-xs text-gray-500">Ganti Foto</span>
                         <input type="file" name="foto_file" id="foto_file" accept="image/*" style="display:none">
                     </label>
                     <div class="text-xs text-gray-500 mt-1 mb-4 text-center">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
+                    <div>
+                        <label class="block text-xs font-medium mb-0.5">RT *</label>
+                        <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                            <option value="">Pilih RT</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-0.5">RW *</label>
+                        <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                            <option value="">Pilih RW</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-0.5">No HP</label>
+                        <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                    </div>
                 </div>
             </div>
             <div class="flex justify-end gap-2 mt-4 pt-4 border-t">
