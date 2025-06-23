@@ -685,8 +685,8 @@ function displayBiodata(warga) {
   
   // Foto warga
   const fotoHTML = warga.foto && warga.foto !== '' 
-    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-36 h-44 object-cover border-2 border-gray-300 rounded">`
-    : `<div class="w-36 h-44 border-2 border-gray-300 rounded flex items-center justify-center bg-gray-100">
+    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-36 h-44 object-cover border-2 border-gray-300 rounded-md">`
+    : `<div class="w-36 h-44 border-2 border-gray-300 rounded-md flex items-center justify-center bg-gray-100">
          <i class='bx bx-user text-6xl text-gray-400'></i>
        </div>`;
   
@@ -803,8 +803,8 @@ function displayKK(kk) {
   
   // Foto kepala keluarga
   const fotoKepalaKK = kepalaKK.foto && kepalaKK.foto !== '' 
-    ? `<img src="${kepalaKK.foto}" alt="Foto ${kepalaKK.nama}" class="w-24 h-32 object-cover border-2 border-gray-300 rounded-sm">`
-    : `<div class="w-24 h-32 border-2 border-gray-300 rounded-sm flex items-center justify-center bg-gray-100">
+    ? `<img src="${kepalaKK.foto}" alt="Foto ${kepalaKK.nama}" class="w-24 h-32 object-cover border-2 border-gray-300 rounded-md">`
+    : `<div class="w-24 h-32 border-2 border-gray-300 rounded-md flex items-center justify-center bg-gray-100">
          <i class='bx bx-user text-4xl text-gray-400'></i>
        </div>`;
   
@@ -1284,7 +1284,7 @@ $('#foto_file').change(function() {
       reader.onload = function(e) {
         $('#fotoPreview').html(`
           <div class="mt-2">
-            <img src="${e.target.result}" alt="Preview Foto" class="w-20 h-20 object-cover rounded border">
+            <img src="${e.target.result}" alt="Preview Foto" class="w-20 h-20 object-cover rounded-md border">
             <div class="text-xs text-gray-600 mt-1">
               Ukuran: ${(file.size / 1024).toFixed(1)}KB | Dimensi: ${width}x${height}px
             </div>
