@@ -118,4 +118,6 @@ $pesan .= "==========================\n";
 $pesan .= "🌟 Terimakasih atas perhatiannya\n";
 $pesan .= "Info lebih lanjut bisa hubungi *ADMIN*\n\n";
 $pesan .= "_- Pesan Otomatis dari System -_";
-?>
+
+header('Content-Type: text/plain');
+echo $pesan;

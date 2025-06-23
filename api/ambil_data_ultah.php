@@ -49,4 +49,5 @@ if ($data && count($data) > 0) {
 $pesan .= "\nSalam hangat dari RT 07! 💐\n";
 $pesan .= "\n_- Pesan Otomatis dari System -_";
 
-echo nl2br($pesan); 
+header('Content-Type: text/plain');
+echo $pesan;
