@@ -285,9 +285,12 @@ include 'header.php';
                     
                     <div>
                         <label class="block text-xs font-medium mb-0.5">Foto</label>
-                        <input type="file" name="foto_file" id="foto_file" accept="image/*" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                        <label class="foto-upload-label">
+                          <img src="assets/image/users.gif" id="fotoPreview" class="foto-preview" alt="Foto Profil">
+                          <span class="text-xs text-gray-500">Ganti Foto</span>
+                          <input type="file" name="foto_file" id="foto_file" accept="image/*" style="display:none">
+                        </label>
                         <div class="text-xs text-gray-500 mt-1">Maksimal 2MB, minimal 10KB, JPG/PNG/GIF, dimensi 100x100 s/d 1920x1080 px</div>
-                        <div id="fotoPreview" class="mt-2"></div>
                     </div>
                 </div>
             </div>
@@ -299,6 +302,30 @@ include 'header.php';
         </form>
     </div>
 </div>
+
+<style>
+.foto-preview {
+  width: 120px;
+  height: 160px; /* 3x4 aspect ratio */
+  border-radius: 0.375rem; /* rounded-md */
+  object-fit: cover;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+.foto-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.foto-upload-label span {
+  margin-top: 8px;
+  color: #888;
+  font-size: 12px;
+}
+</style>
 
 <script>
 let allWarga = [];
@@ -1901,6 +1928,17 @@ $(document).ready(function() {
       });
     }
   });
+});
+
+// Upload foto modern
+$(document).on('click', '#fotoPreview', function() {
+  $('#foto_file').click();
+});
+$(document).on('change', '#foto_file', function(event) {
+  const [file] = event.target.files;
+  if (file) {
+    $('#fotoPreview').attr('src', URL.createObjectURL(file));
+  }
 });
 </script>
 
