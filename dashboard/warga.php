@@ -685,8 +685,8 @@ function displayBiodata(warga) {
   
   // Foto warga
   const fotoHTML = warga.foto && warga.foto !== '' 
-    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-36 h-44 object-cover border-2 border-gray-300 rounded-sm">`
-    : `<div class="w-36 h-44 border-2 border-gray-300 rounded-sm flex items-center justify-center bg-gray-100">
+    ? `<img src="${warga.foto}" alt="Foto ${warga.nama}" class="w-36 h-44 object-cover border-2 border-gray-300 rounded">`
+    : `<div class="w-36 h-44 border-2 border-gray-300 rounded flex items-center justify-center bg-gray-100">
          <i class='bx bx-user text-6xl text-gray-400'></i>
        </div>`;
   
