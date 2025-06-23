@@ -1034,5 +1034,5 @@ input::placeholder,
 textarea::placeholder {
   font-size: 0.875rem;
   color: #888;
-  font-style: italic;
+  font-style: 10px;
 }
