@@ -1032,7 +1032,7 @@ body {
 
 input::placeholder,
 textarea::placeholder {
-  font-size: 0.875rem;
+  font-size: 10px;
   color: #fc5858;
-  font-style: 10px;
+  font-style: italic;
 }
