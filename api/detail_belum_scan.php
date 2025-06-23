@@ -24,8 +24,7 @@ $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Hitung total scan
-$total_scans = count($data);
-$total_nominal = array_sum(array_column($data, 'nominal'));
+$jumlah_kk = count($data);
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +84,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         </div>
 
         <div class="mt-4 font-bold text-gray-700 text-left">
-            Jumlah KK: <span id="total-scans"><?= number_format($total_scans, 0, ',', '.') ?></span>
+            Jumlah KK: <span id="total-scans"><?= number_format($jumlah_kk, 0, ',', '.') ?></span>
         </div>
 
         <button class="fixed bottom-4 right-4 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
@@ -134,7 +133,7 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
         // Fungsi untuk memperbarui tabel setiap 60 detik
         function updateTable() {
             $.ajax({
-                url: 'get_data.php',
+                url: 'get_data_kosong.php',
                 method: 'GET',
                 success: function(response) {
                     console.log(response); // Periksa output ini di konsol browser
@@ -157,7 +156,6 @@ $total_nominal = array_sum(array_column($data, 'nominal'));
                         `);
                     });
                     $('#total-scans').text(data.data.length);
-                    $('#total-nominal').text(parseInt(data.total_nominal).toLocaleString());
                 },
                 error: function() {
                     $('#data-table').html("<tr><td colspan='3' style='text-align: center;'>Gagal memuat data.</td></tr>");
