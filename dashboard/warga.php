@@ -122,17 +122,15 @@ include 'header.php';
                     <div class="grid grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Nama Lengkap *</label>
-                            <input type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <input placeholder="Nama Lengkap Anda" type="text" name="nama" id="nama" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">NIK *</label>
-                            <input type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
-                            <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
+                            <input placeholder="Format: 16 digit angka" type="text" name="nik" id="nik" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK harus 16 digit angka">
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">NIK KK *</label>
-                            <input type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
-                            <small class="text-gray-500 text-xs">Format: 16 digit angka</small>
+                            <input placeholder="Format: 16 digit angka" type="text" name="nikk" id="nikk" class="w-full border px-2 py-0.5 rounded text-sm form-input" required maxlength="16" pattern="\d{16}" title="NIK KK harus 16 digit angka">
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Hubungan dalam KK *</label>
@@ -156,13 +154,15 @@ include 'header.php';
                                 <option value="P">Perempuan</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
-                            <input type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                            <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        <div class="col-span-2">
+                            <div>
+                                <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
+                                <input placeholder="Tempat Lahir Anda"type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
+                                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Agama *</label>
@@ -214,7 +214,7 @@ include 'header.php';
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Negara *</label>
-                            <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" required>
+                            <input type="text" name="negara" id="negara" class="w-full border px-2 py-0.5 rounded text-sm form-input" value="Indonesia" readonly>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Provinsi *</label>
@@ -244,21 +244,23 @@ include 'header.php';
                             </select>
                             <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">RT *</label>
-                            <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                <option value="">Pilih RT</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-0.5">RW *</label>
-                            <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                <option value="">Pilih RW</option>
-                            </select>
+                        <div class="col-span-2">
+                            <div>
+                                <label class="block text-xs font-medium mb-0.5">RT *</label>
+                                <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                    <option value="">Pilih RT</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-0.5">RW *</label>
+                                <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                    <option value="">Pilih RW</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">No HP</label>
-                            <input type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
+                            <input placeholder="085..." type="text" name="hp" id="hp" class="w-full border px-2 py-0.5 rounded text-sm form-input">
                         </div>
                     </div>
                 </div>
