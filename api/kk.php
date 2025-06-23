@@ -55,7 +55,7 @@ include 'db.php';
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         
         <!-- Kontainer tabel dengan scrollable dan tinggi dinamis -->
-        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-width: 60vh; max-height: 75vh; font-size: 12px;">
+        <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 75vh; font-size: 12px;">
             <?php
                 // Eksekusi query
                 $stmt = $pdo->prepare("SELECT code_id, kk_name FROM master_kk ORDER BY kk_name ASC");
