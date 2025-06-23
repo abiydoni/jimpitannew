@@ -876,8 +876,12 @@ body {
 
 /* Loading Animation Styles */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin {
@@ -901,8 +905,12 @@ body {
 }
 
 @keyframes progress-bar-stripes {
-  0% { background-position: 1rem 0; }
-  100% { background-position: 0 0; }
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 
 /* Loading Modal Specific Styles */
@@ -1020,4 +1028,11 @@ body {
 .datepicker:focus {
   border-color: var(--blue);
   box-shadow: 0 0 0 2px rgba(60, 145, 230, 0.2);
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-size: 0.875rem;
+  color: #888;
+  font-style: italic;
 }
