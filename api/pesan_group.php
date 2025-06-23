@@ -181,24 +181,22 @@ $groupId = "6285729705810-1505093181@g.us";
         const textarea = document.getElementById('message');
         if (val === 'kosong') {
           textarea.value = '';
-        } else if (val === 'jimpitan') {
+        } else {
           textarea.value = 'Memuat...';
-          fetch('ambil_data_jimpitan.php')
-            .then(res => res.text())
+          let url = '';
+          if (val === 'jimpitan') url = 'ambil_data_jimpitan.php';
+          if (val === 'jaga') url = 'ambil_data_jaga.php';
+          if (val === 'ultah') url = 'ambil_data_ultah.php';
+          fetch(url)
+            .then(res => {
+              if (!res.ok) throw new Error('HTTP error ' + res.status);
+              return res.text();
+            })
             .then(txt => textarea.value = txt)
-            .catch(() => textarea.value = 'Gagal mengambil data');
-        } else if (val === 'jaga') {
-          textarea.value = 'Memuat...';
-          fetch('ambil_data_jaga.php')
-            .then(res => res.text())
-            .then(txt => textarea.value = txt)
-            .catch(() => textarea.value = 'Gagal mengambil data');
-        } else if (val === 'ultah') {
-          textarea.value = 'Memuat...';
-          fetch('ambil_data_ultah.php')
-            .then(res => res.text())
-            .then(txt => textarea.value = txt)
-            .catch(() => textarea.value = 'Gagal mengambil data');
+            .catch(err => {
+              textarea.value = 'Gagal mengambil data: ' + err;
+              console.error(err);
+            });
         }
       });
     });
