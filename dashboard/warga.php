@@ -154,15 +154,13 @@ include 'header.php';
                                 <option value="P">Perempuan</option>
                             </select>
                         </div>
-                        <div class="col-span-2">
-                            <div>
-                                <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
-                                <input placeholder="Tempat Lahir Anda"type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
-                                <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Tempat Lahir *</label>
+                            <input placeholder="Tempat Lahir Anda"type="text" name="tpt_lahir" id="tpt_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">Tanggal Lahir *</label>
+                            <input type="date" name="tgl_lahir" id="tgl_lahir" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">Agama *</label>
@@ -244,19 +242,17 @@ include 'header.php';
                             </select>
                             <input type="hidden" name="kelurahan_nama" id="kelurahan_nama">
                         </div>
-                        <div class="col-span-2">
-                            <div>
-                                <label class="block text-xs font-medium mb-0.5">RT *</label>
-                                <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                    <option value="">Pilih RT</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium mb-0.5">RW *</label>
-                                <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
-                                    <option value="">Pilih RW</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">RT *</label>
+                            <select name="rt" id="rt" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RT</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-0.5">RW *</label>
+                            <select name="rw" id="rw" class="w-full border px-2 py-0.5 rounded text-sm form-select" required>
+                                <option value="">Pilih RW</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-0.5">No HP</label>
