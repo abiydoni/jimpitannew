@@ -59,6 +59,28 @@ $groupId = "6285729705810-1505093181@g.us";
       </div>
 
       <div class="input-group mt-4">
+        <label class="block mb-2">Pilih Template Pesan:</label>
+        <div class="flex flex-wrap gap-4 mb-2">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="templateRadio" value="kosong" class="form-radio text-blue-500 rounded-full" checked>
+            <span class="ml-2">Kosong</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="templateRadio" value="jimpitan" class="form-radio text-blue-500 rounded-full">
+            <span class="ml-2">Laporan Jimpitan</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="templateRadio" value="jaga" class="form-radio text-blue-500 rounded-full">
+            <span class="ml-2">Jadwal Jaga Hari Ini</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="templateRadio" value="ultah" class="form-radio text-blue-500 rounded-full">
+            <span class="ml-2">Ulang Tahun</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="input-group mt-4">
         <label>Pesan:</label><br>
         <button id="emoji-button" type="button" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 mb-2">
           😃 Emoji
@@ -151,6 +173,34 @@ $groupId = "6285729705810-1505093181@g.us";
 
     button.addEventListener('click', () => {
       picker.togglePicker(button);
+    });
+
+    document.querySelectorAll('input[name="templateRadio"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        const val = this.value;
+        const textarea = document.getElementById('message');
+        if (val === 'kosong') {
+          textarea.value = '';
+        } else if (val === 'jimpitan') {
+          textarea.value = 'Memuat...';
+          fetch('ambil_data_jimpitan.php')
+            .then(res => res.text())
+            .then(txt => textarea.value = txt)
+            .catch(() => textarea.value = 'Gagal mengambil data');
+        } else if (val === 'jaga') {
+          textarea.value = 'Memuat...';
+          fetch('ambil_data_jaga.php')
+            .then(res => res.text())
+            .then(txt => textarea.value = txt)
+            .catch(() => textarea.value = 'Gagal mengambil data');
+        } else if (val === 'ultah') {
+          textarea.value = 'Memuat...';
+          fetch('ambil_data_ultah.php')
+            .then(res => res.text())
+            .then(txt => textarea.value = txt)
+            .catch(() => textarea.value = 'Gagal mengambil data');
+        }
+      });
     });
   </script>
 <script>
