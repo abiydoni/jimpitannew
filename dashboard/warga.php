@@ -305,14 +305,14 @@ include 'header.php';
 
 <style>
 .foto-preview {
-  width: 120px;
-  height: 160px; /* 3x4 aspect ratio */
-  border-radius: 0.375rem; /* rounded-md */
+  width: 160px;
+  height: 213px; /* 3x4 besar */
+  border-radius: 0.375rem;
   object-fit: cover;
   border: 2px solid #ccc;
   cursor: pointer;
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 1rem auto;
 }
 .foto-upload-label {
   display: flex;
@@ -324,6 +324,28 @@ include 'header.php';
   margin-top: 8px;
   color: #888;
   font-size: 12px;
+}
+
+/* Tata letak grid 2 kolom untuk field, responsive */
+@media (min-width: 640px) {
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+  }
+}
+@media (max-width: 639px) {
+  .form-grid {
+    display: block;
+  }
+}
+.form-section-title {
+  grid-column: span 2;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 </style>
 
