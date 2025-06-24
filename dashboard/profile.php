@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare("UPDATE tb_profil SET gambar = ? WHERE kode = ?")->execute([$gambarName, $_POST['kode']]);
     }
 
-    echo "<script>alert('Profil diperbarui!');location.href='profil.php';</script>";
+    echo "<script>alert('Profil diperbarui!');location.href='profile.php';</script>";
     exit;
 }
 
