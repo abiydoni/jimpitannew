@@ -65,7 +65,6 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
                     <input type="text" name="hp" value="<?= htmlspecialchars($profil['hp']) ?>" class="w-full border px-2 py-1 rounded text-xs">
                 </div>
                 <div>
-                    <label class="block font-medium mb-1">Logo (optional)</label>
                     <label class="foto-upload-label">
                         <img id="logoPreview" src="<?php echo !empty($profil['logo']) ? '../assets/image/'.$profil['logo'] : '../assets/image/jimpitan.png'; ?>" class="foto-preview" alt="Logo">
                         <span class="text-xs text-gray-500">Klik gambar untuk ganti logo</span>
@@ -73,7 +72,6 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
                     </label>
                 </div>
                 <div>
-                    <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
                     <label class="foto-upload-label">
                         <img id="wallpaperPreview" src="<?php echo !empty($profil['gambar']) ? '../assets/image/'.$profil['gambar'] : '../assets/image/walqr.jpg'; ?>" class="foto-preview" alt="Wallpaper">
                         <span class="text-xs text-gray-500">Klik gambar untuk ganti wallpaper</span>
@@ -99,8 +97,8 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
 
 <style>
 .foto-preview {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 0.375rem;
   object-fit: cover;
   border: 2px solid #ccc;
@@ -125,19 +123,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logo
     const logoPreview = document.getElementById('logoPreview');
     const logoInput = document.getElementById('logoInput');
-    logoPreview.onclick = function() { logoInput.click(); };
+    logoPreview.replaceWith(logoPreview.cloneNode(true));
+    const newLogoPreview = document.getElementById('logoPreview');
+    newLogoPreview.addEventListener('click', function() { logoInput.click(); });
     logoInput.onchange = function(e) {
         if (e.target.files[0]) {
-            logoPreview.src = URL.createObjectURL(e.target.files[0]);
+            newLogoPreview.src = URL.createObjectURL(e.target.files[0]);
         }
     };
     // Wallpaper
     const wallpaperPreview = document.getElementById('wallpaperPreview');
     const wallpaperInput = document.getElementById('wallpaperInput');
-    wallpaperPreview.onclick = function() { wallpaperInput.click(); };
+    wallpaperPreview.replaceWith(wallpaperPreview.cloneNode(true));
+    const newWallpaperPreview = document.getElementById('wallpaperPreview');
+    newWallpaperPreview.addEventListener('click', function() { wallpaperInput.click(); });
     wallpaperInput.onchange = function(e) {
         if (e.target.files[0]) {
-            wallpaperPreview.src = URL.createObjectURL(e.target.files[0]);
+            newWallpaperPreview.src = URL.createObjectURL(e.target.files[0]);
         }
     };
 });
