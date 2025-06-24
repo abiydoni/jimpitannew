@@ -39,18 +39,18 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="head">
                         <h3>Daftar Tarif</h3>
                         <div class="mb-4 text-center">
-                            <button type="button" id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="button" id="openModal" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
                         </div>
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th style="text-align: left;">Kode Tarif</th>
-                                <th style="text-align: center;">Nama Tarif</th>
-                                <th style="text-align: center;">Tarif</th>
-                                <th style="text-align: center;">Aksi</th>
+                                <th class="text-left border px-3 py-2">Kode Tarif</th>
+                                <th class="text-center border px-3 py-2">Nama Tarif</th>
+                                <th class="text-center border px-3 py-2">Tarif</th>
+                                <th class="text-center border px-3 py-2">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,10 +60,10 @@ $tarif_1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
+                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
-                                    <a href="setting.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
+                                    <a href="setting.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
                                 </td>

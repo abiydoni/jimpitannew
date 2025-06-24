@@ -65,7 +65,7 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
         <div class="overflow-x-auto">
-            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="px-3 py-2 border">Kode</th>
@@ -93,8 +93,8 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                             <td class="border px-3 py-2 text-center"><?= $m['admin'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
                             <td class="border px-1 py-1 text-center">
-                                <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
-                                <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600">🗑️</a>
+                                <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
+                                <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
