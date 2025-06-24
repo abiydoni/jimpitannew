@@ -47,8 +47,8 @@ if (!isset($_SESSION['user'])) {
                     <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th class="border px-3 py-2">ID</th>
                                 <th class="border px-3 py-2">Nama KK</th>
+                                <th class="border px-3 py-2">ID</th>
                                 <th class="border px-3 py-2">Alamat</th>
                                 <th class="border px-3 py-2">HP</th>
                                 <th class="border px-3 py-2">Foto</th>
