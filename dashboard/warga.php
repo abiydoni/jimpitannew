@@ -330,6 +330,9 @@ let filteredWarga = [];
 let currentPage = 1;
 const pageSize = 10;
 
+// Tambahkan variabel global untuk DataTable
+var wargaTable = null;
+
 // Fungsi untuk format tanggal
 function formatDateForDisplay(dateString) {
   if (!dateString || dateString === '0000-00-00') return '';
@@ -358,6 +361,17 @@ function formatDateForDisplay(dateString) {
 
 // Fungsi untuk render tabel
 function renderTable(data, page = 1) {
+  // Siapkan array data untuk DataTables
+  const tableData = data.length ? data.map((row, idx) => [
+    (idx + 1),
+    `<span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>`,
+    `<span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>`,
+    row.nama || '-',
+    row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-',
+    row.tgl_lahir && row.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(row.tgl_lahir) : '-',
+    (row.rt ? row.rt.toString().padStart(3, '0') : '-') + '/' + (row.rw ? row.rw.toString().padStart(3, '0') : '-'),
+    row.hp || '-',
+    `<button class="editBtn text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-id="${encodeURIComponent(JSON.stringify(row))}" title="Edit"><i class='bx bx-edit'></i></button>
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   let html = '';
