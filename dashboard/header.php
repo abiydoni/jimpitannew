@@ -24,6 +24,13 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Dapatkan halaman aktif
 $currentPage = basename($_SERVER['PHP_SELF']);
+
+// Ambil nama dari tb_profil
+$profil_nama = 'Dashboard';
+$stmtProfil = $pdo->query("SELECT nama FROM tb_profil LIMIT 1");
+if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
+    $profil_nama = $rowProfil['nama'];
+}
 ?>
 
 
@@ -32,6 +39,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($profil_nama) ?></title>
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
@@ -63,7 +71,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <section id="sidebar">
         <a href="#" class="brand">
             <i class='bx bx-square-rounded'></i>
-            <span class="text">Jimpitan</span>
+            <span class="text">appsBee</span>
         </a>
         <ul class="side-menu top">
             <?php foreach ($menuItems as $item): ?>
