@@ -9,19 +9,23 @@ include 'header.php';
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" title="Tambah Warga">
+<<<<<<< HEAD
                     <i class='bx bx-plus text-lg'></i>
+=======
+                    <i class='bx bx-plus' style="font-size:24px"></i>
+>>>>>>> ae8ab755d718012ff14d2f023cb0de7ef9398e17
                 </button>
-                <button id="printBtn" class="bg-purple-500 hover:bg-purple-700 text-white p-2 rounded text-sm ml-1" title="Print Data">
-                    <i class='bx bx-printer text-lg'></i>
+                <button id="printBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" title="Print Data">
+                    <i class='bx bx-printer' style="font-size:24px"></i>
                 </button>
-                <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white p-2 rounded text-sm ml-1" title="Export Excel">
-                    <i class='bx bx-export text-lg'></i>
+                <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded text-sm ml-1" title="Export Excel">
+                    <i class='bx bx-export'></i>
                 </button>
-                <button id="downloadTemplateBtn" class="bg-gray-500 hover:bg-gray-700 text-white p-2 rounded text-sm ml-1" title="Download Template">
-                    <i class='bx bx-download text-lg'></i>
+                <button id="downloadTemplateBtn" class="bg-gray-500 hover:bg-gray-700 text-white px-2 py-1 rounded text-sm ml-1" title="Download Template">
+                    <i class='bx bx-download'></i>
                 </button>
-                <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white p-2 rounded text-sm ml-1 cursor-pointer" title="Import Excel">
-                    <i class='bx bx-import text-lg'></i>
+                <label for="importInput" class="bg-yellow-500 hover:bg-yellow-700 text-white px-2 py-1 rounded text-sm ml-1 cursor-pointer" title="Import Excel">
+                    <i class='bx bx-import'></i>
                     <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden" />
                 </label>
             </div>
@@ -330,6 +334,9 @@ let filteredWarga = [];
 let currentPage = 1;
 const pageSize = 10;
 
+// Tambahkan variabel global untuk DataTable
+var wargaTable = null;
+
 // Fungsi untuk format tanggal
 function formatDateForDisplay(dateString) {
   if (!dateString || dateString === '0000-00-00') return '';
@@ -358,6 +365,17 @@ function formatDateForDisplay(dateString) {
 
 // Fungsi untuk render tabel
 function renderTable(data, page = 1) {
+  // Siapkan array data untuk DataTables
+  const tableData = data.length ? data.map((row, idx) => [
+    (idx + 1),
+    `<span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>`,
+    `<span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>`,
+    row.nama || '-',
+    row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-',
+    row.tgl_lahir && row.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(row.tgl_lahir) : '-',
+    (row.rt ? row.rt.toString().padStart(3, '0') : '-') + '/' + (row.rw ? row.rw.toString().padStart(3, '0') : '-'),
+    row.hp || '-',
+    `<button class="editBtn text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-id="${encodeURIComponent(JSON.stringify(row))}" title="Edit"><i class='bx bx-edit'></i></button>
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   let html = '';
@@ -387,10 +405,10 @@ function renderTable(data, page = 1) {
         <td class="px-3 py-1 w-32 text-center">${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
         <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
         <td class="px-3 py-1 w-32 text-center">
-          <button class="editBtn p-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-xs" data-id="${encodedData}" title="Edit">
+          <button class="editBtn text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-id="${encodedData}" title="Edit">
             <i class='bx bx-edit'></i>
           </button>
-          <button class="deleteBtn p-1 bg-red-500 text-white rounded ml-1 hover:bg-red-600 text-xs" data-id="${row.id_warga}" title="Hapus">
+          <button class="deleteBtn text-red-600 hover:text-red-800 font-bold py-1 px-1 ml-1" data-id="${row.id_warga}" title="Hapus">
             <i class='bx bx-trash'></i>
           </button>
         </td>
@@ -399,6 +417,23 @@ function renderTable(data, page = 1) {
   }
   
   $('#dataBody').html(html);
+  // Inisialisasi DataTables setelah data di-render
+  if ($.fn.DataTable.isDataTable('#example')) {
+    $('#example').DataTable().destroy();
+  }
+  $('#example').DataTable({
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    searching: true,
+    order: [[0, 'asc']],
+    language: {
+      lengthMenu: '_MENU_ Entri per halaman',
+      zeroRecords: 'No records found',
+      info: 'Showing page _PAGE_ of _PAGES_',
+      infoEmpty: 'No records available',
+      infoFiltered: '(filtered from _MAX_ total records)'
+    }
+  });
 }
 
 // Fungsi untuk render pagination

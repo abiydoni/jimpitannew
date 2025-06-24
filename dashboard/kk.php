@@ -36,7 +36,7 @@ if (!isset($_SESSION['user'])) {
                     <div class="head">
                         <h3>DATA KEPALA KELUARGA</h3>
                         <div class="mb-4 text-center">
-                            <button type="button" id="addDataBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
+                            <button type="button" id="addDataBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
                             <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -44,16 +44,15 @@ if (!isset($_SESSION['user'])) {
                             </button>
                         </div>
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th class="border px-4 py-2">Code ID</th>
-                                <th class="border px-4 py-2">Nama KK</th>
-                                <th class="border px-4 py-2">HP</th>
-                                <th style="text-align: center;">
-                                    <input type="checkbox" id="selectAllCheckbox" style="display:none">
-                                    <label for="selectAllCheckbox" style="font-size:24px"><i class='bx bx-check-double'></i></label>
-                                </th>
+                                <th class="border px-3 py-2">ID</th>
+                                <th class="border px-3 py-2">Nama KK</th>
+                                <th class="border px-3 py-2">Alamat</th>
+                                <th class="border px-3 py-2">HP</th>
+                                <th class="border px-3 py-2">Foto</th>
+                                <th class="border px-3 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,17 +61,19 @@ if (!isset($_SESSION['user'])) {
                                     foreach ($data as $row): ?>
                                         <tr class="border-b hover:bg-gray-100">
                                             <td>
-                                                <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-500 hover:underline">
+                                                <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-600 hover:text-blue-800">
                                                     <?php echo htmlspecialchars($row["kk_name"]); ?>
                                                 </a>
                                             </td>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["kk_alamat"]); ?></td>
                                             <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["kk_foto"]); ?></td>
                                             <td class="flex justify-center space-x-2">
-                                                <button class="text-yellow-600 hover:text-yellow-400 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">
+                                                <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">
                                                     <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                                 </button>
-                                                <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
+                                                <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
                                                     <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                                 </a>
                                                 <input type="checkbox" class="print-checkbox">    
@@ -114,7 +115,7 @@ if (!isset($_SESSION['user'])) {
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
-                    <input type="submit" class="bg-blue-500 text-white px-3 py-1 rounded" value="Tambah"> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
+                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah"> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
                 </div>
             </form>
         </div>
@@ -143,7 +144,7 @@ if (!isset($_SESSION['user'])) {
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
-                    <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" value="Update">
+                    <input type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" value="Update">
                 </div>
             </form>
         </div>
