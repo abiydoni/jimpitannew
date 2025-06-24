@@ -25,11 +25,13 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Dapatkan halaman aktif
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-// Ambil nama dari tb_profil
+// Ambil nama dan logo dari tb_profil
 $profil_nama = 'Dashboard';
-$stmtProfil = $pdo->query("SELECT nama FROM tb_profil LIMIT 1");
+$profil_logo = '';
+$stmtProfil = $pdo->query("SELECT nama, logo FROM tb_profil LIMIT 1");
 if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
     $profil_nama = $rowProfil['nama'];
+    $profil_logo = $rowProfil['logo'];
 }
 ?>
 
@@ -69,8 +71,12 @@ if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
 <body>
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <a href="#" class="brand">
-            <i class='bx bx-square-rounded'></i>
+        <a href="#" class="brand flex items-center gap-2">
+            <?php if ($profil_logo): ?>
+                <img src="<?= htmlspecialchars($profil_logo) ?>" alt="Logo" class="w-8 h-8 object-contain rounded" />
+            <?php else: ?>
+                <i class='bx bx-square-rounded'></i>
+            <?php endif; ?>
             <span class="text">appsBee</span>
         </a>
         <ul class="side-menu top">
