@@ -1,5 +1,6 @@
 <?php
-include 'header.php';
+  ob_start();
+  include 'header.php';
 
 // Proses value checkbox agar tetap 0 jika tidak dicentang
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -176,3 +177,7 @@ function closeModal() {
     document.getElementById('menuModal').classList.add('hidden');
 }
 </script> 
+
+<?php
+  ob_end_flush();
+  ?>
