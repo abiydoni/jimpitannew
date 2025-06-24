@@ -399,23 +399,6 @@ function renderTable(data, page = 1) {
   }
   
   $('#dataBody').html(html);
-  // Inisialisasi ulang DataTables
-  if ($.fn.DataTable.isDataTable('#example')) {
-    $('#example').DataTable().destroy();
-  }
-  $('#example').DataTable({
-    pageLength: 10,
-    lengthMenu: [10, 25, 50, 100],
-    searching: true,
-    order: [[0, 'asc']],
-    language: {
-      lengthMenu: '_MENU_ Entri per halaman',
-      zeroRecords: 'No records found',
-      info: 'Showing page _PAGE_ of _PAGES_',
-      infoEmpty: 'No records available',
-      infoFiltered: '(filtered from _MAX_ total records)'
-    }
-  });
 }
 
 // Fungsi untuk render pagination
@@ -1965,6 +1948,21 @@ $(document).ready(function() {
       }).fail(function(xhr, status, error) {
         alert('Error: ' + error);
       });
+    }
+  });
+  
+  // Inisialisasi ulang DataTables
+  $('#example').DataTable({
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    searching: true,
+    order: [[0, 'asc']],
+    language: {
+      lengthMenu: '_MENU_ Entri per halaman',
+      zeroRecords: 'No records found',
+      info: 'Showing page _PAGE_ of _PAGES_',
+      infoEmpty: 'No records available',
+      infoFiltered: '(filtered from _MAX_ total records)'
     }
   });
 });
