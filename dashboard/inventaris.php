@@ -62,27 +62,23 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
             <thead class="bg-gray-200">
               <tr>
-                <th class="border px-2 py-1 text-left">kode</th>
-                <th class="border px-2 py-1 text-center">Parent</th>
-                <th class="border px-2 py-1 text-center">nama</th>
-                <th class="border px-2 py-1 text-left">Deskripsi</th>
-                <th class="border px-2 py-1 text-center">Aksi</th>
+                <th class="text-left border px-3 py-2">Kode</th>
+                <th class="text-center border px-3 py-2">Kode Barang</th>
+                <th class="text-center border px-3 py-2">Nama</th>
+                <th class="text-left border px-3 py-2">Jumlah</th>
+                <th class="text-center border px-3 py-2">Aksi</th>
               </tr>
             </thead>
-            <tbody class="text-[10px]">
+            <tbody>
               <?php foreach ($menus as $m): ?>
-                <tr class="hover:bg-gray-50">
-                  <td class="border px-2 py-1"><?= $m['kode'] ?></td>
-                  <td class="border px-2 py-1 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
-                  <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['nama']) ?></td>
-                  <td class="border px-2 py-1"><?= htmlspecialchars($m['jumlah']) ?></td>
-                  <td class="border px-1 py-1 text-center">
-                    <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
-                      ✏️
-                    </button>
-                    <a href="?delete=<?= $m['kode'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
-                      🗑️
-                    </a>
+                <tr class="border-b hover:bg-gray-100">
+                  <td class="border px-3 py-2 text-left"><?= $m['kode'] ?></td>
+                  <td class="border px-3 py-2 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
+                  <td class="border px-3 py-2 text-center font-mono"><?= htmlspecialchars($m['nama']) ?></td>
+                  <td class="border px-3 py-2 text-left"><?= htmlspecialchars($m['jumlah']) ?></td>
+                  <td class="flex justify-center space-x-2 border px-3 py-2">
+                    <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1"><i class='bx bx-edit'></i></button>
+                    <a href="?delete=<?= $m['kode'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800 font-bold py-1 px-1"><i class='bx bx-trash'></i></a>
                   </td>
                 </tr>
               <?php endforeach ?>

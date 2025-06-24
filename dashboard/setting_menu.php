@@ -68,6 +68,9 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
             <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
+                        <th class="text-left border px-3 py-2">Kode</th>
+                        <th class="text-left border px-3 py-2">Nama</th>
+                        <th class="text-left border px-3 py-2">URL</th>
                         <th class="px-3 py-2 border">Kode</th>
                         <th class="px-3 py-2 border">Nama</th>
                         <th class="px-3 py-2 border">URL</th>
