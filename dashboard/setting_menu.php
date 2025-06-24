@@ -71,12 +71,11 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                         <th class="px-3 py-2 border">Nama</th>
                         <th class="px-3 py-2 border">URL</th>
                         <th class="px-3 py-2 border">Ikon</th>
-                        <th class="px-3 py-2 border">Status</th>
+                        <th class="px-3 py-2 border">Warga</th>
+                        <th class="px-3 py-2 border">User</th>
                         <th class="px-3 py-2 border">Pengurus</th>
                         <th class="px-3 py-2 border">Admin</th>
                         <th class="px-3 py-2 border">S Admin</th>
-                        <th class="px-3 py-2 border">Warga</th>
-                        <th class="px-3 py-2 border">Tanggal</th>
                         <th class="px-3 py-2 border text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -87,12 +86,11 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                             <td class="border px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
                             <td class="border px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>
                             <td class="border px-3 py-2"><i class="bx <?= htmlspecialchars($m['ikon']) ?> text-lg"></i> <span class="text-xs text-gray-500"><?= htmlspecialchars($m['ikon']) ?></span></td>
+                            <td class="border px-3 py-2 text-center"><?= $m['warga'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['status'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['pengurus'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['admin'] ?></td>
                             <td class="border px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['warga'] ?></td>
-                            <td class="border px-3 py-2 text-xs"><?= $m['tanggal'] ?></td>
                             <td class="border px-1 py-1 text-center">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600">🗑️</a>
@@ -116,12 +114,12 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
             <input type="text" name="ikon" id="ikon" placeholder="Boxicons Class" class="w-full border p-2 mb-2" required>
             <div class="grid grid-cols-2 gap-2 mb-2">
                 <label class="flex items-center gap-2">
-                    <input type="checkbox" name="status" id="status" value="1">
-                    <span>Status Aktif</span>
-                </label>
-                <label class="flex items-center gap-2">
                     <input type="checkbox" name="warga" id="warga" value="1">
                     <span>Warga</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" name="status" id="status" value="1">
+                    <span>User</span>
                 </label>
                 <label class="flex items-center gap-2">
                     <input type="checkbox" name="pengurus" id="pengurus" value="1">
