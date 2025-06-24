@@ -64,43 +64,41 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
             <h2 class="text-xl font-bold">📋 Manajemen Menu (tb_menu)</h2>
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
-        <div class="overflow-x-auto">
-            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="text-left border px-3 py-2">Kode</th>
-                        <th class="text-left border px-3 py-2">Nama</th>
-                        <th class="text-left border px-3 py-2">URL</th>
-                        <th class="text-left border px-3 py-2">Ikon</th>
-                        <th class="text-center border px-3 py-2">Warga</th>
-                        <th class="text-center border px-3 py-2">User</th>
-                        <th class="text-center border px-3 py-2">Pengurus</th>
-                        <th class="text-center border px-3 py-2">Admin</th>
-                        <th class="text-center border px-3 py-2">S Admin</th>
-                        <th class="text-center border px-3 py-2">Aksi</th>
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="text-left border px-3 py-2">Kode</th>
+                    <th class="text-left border px-3 py-2">Nama</th>
+                    <th class="text-left border px-3 py-2">URL</th>
+                    <th class="text-left border px-3 py-2">Ikon</th>
+                    <th class="text-center border px-3 py-2">Warga</th>
+                    <th class="text-center border px-3 py-2">User</th>
+                    <th class="text-center border px-3 py-2">Pengurus</th>
+                    <th class="text-center border px-3 py-2">Admin</th>
+                    <th class="text-center border px-3 py-2">S Admin</th>
+                    <th class="text-center border px-3 py-2">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($menus as $m): ?>
+                    <tr class="border-b hover:bg-gray-100">
+                        <td class="px-3 py-2"><?= $m['kode'] ?></td>
+                        <td class="px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
+                        <td class="px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>
+                        <td class="px-3 py-2"><i class="bx <?= htmlspecialchars($m['ikon']) ?> text-lg"></i> <span class="text-xs text-gray-500"><?= htmlspecialchars($m['ikon']) ?></span></td>
+                        <td class="px-3 py-2 text-center"><?= $m['warga'] ?></td>
+                        <td class="px-3 py-2 text-center"><?= $m['status'] ?></td>
+                        <td class="px-3 py-2 text-center"><?= $m['pengurus'] ?></td>
+                        <td class="px-3 py-2 text-center"><?= $m['admin'] ?></td>
+                        <td class="px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
+                        <td class="px-1 py-1 text-center">
+                            <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
+                            <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($menus as $m): ?>
-                        <tr class="border-b hover:bg-gray-100">
-                            <td class="px-3 py-2"><?= $m['kode'] ?></td>
-                            <td class="px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
-                            <td class="px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>
-                            <td class="px-3 py-2"><i class="bx <?= htmlspecialchars($m['ikon']) ?> text-lg"></i> <span class="text-xs text-gray-500"><?= htmlspecialchars($m['ikon']) ?></span></td>
-                            <td class="px-3 py-2 text-center"><?= $m['warga'] ?></td>
-                            <td class="px-3 py-2 text-center"><?= $m['status'] ?></td>
-                            <td class="px-3 py-2 text-center"><?= $m['pengurus'] ?></td>
-                            <td class="px-3 py-2 text-center"><?= $m['admin'] ?></td>
-                            <td class="px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
-                            <td class="px-1 py-1 text-center">
-                                <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
-                                <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 

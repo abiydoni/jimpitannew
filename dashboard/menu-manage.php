@@ -50,37 +50,35 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
         <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
         <!-- Tabel -->
-        <div class="overflow-x-auto">
-          <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="px-3 py-2 border">#</th>
-                        <th class="px-3 py-2 border">Judul</th>
-                        <th class="px-3 py-2 border text-center">Icon</th>
-                        <th class="px-3 py-2 border">URL</th>
-                        <th class="px-3 py-2 border text-center">Urutan</th>
-                        <th class="px-3 py-2 border">Role</th>
-                        <th class="px-3 py-2 border text-center">Aksi</th>
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="px-3 py-2 border">#</th>
+                    <th class="px-3 py-2 border">Judul</th>
+                    <th class="px-3 py-2 border text-center">Icon</th>
+                    <th class="px-3 py-2 border">URL</th>
+                    <th class="px-3 py-2 border text-center">Urutan</th>
+                    <th class="px-3 py-2 border">Role</th>
+                    <th class="px-3 py-2 border text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($menus as $m): ?>
+                    <tr class="border-b hover:bg-gray-100">
+                        <td class="px-3 py-2"><?= $m['id'] ?></td>
+                        <td class="px-3 py-2"><?= $m['title'] ?></td>
+                        <td class="px-3 py-2 text-center"><i class="bx <?= $m['icon'] ?>"></i></td>
+                        <td class="px-3 py-2"><?= $m['url'] ?></td>
+                        <td class="px-3 py-2 text-center"><?= $m['urutan'] ?></td>
+                        <td class="px-3 py-2"><?= $m['role'] ?></td>
+                        <td class="px-1 py-1 text-center">
+                            <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
+                            <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($menus as $m): ?>
-                        <tr class="border-b hover:bg-gray-100">
-                            <td class="px-3 py-2"><?= $m['id'] ?></td>
-                            <td class="px-3 py-2"><?= $m['title'] ?></td>
-                            <td class="px-3 py-2 text-center"><i class="bx <?= $m['icon'] ?>"></i></td>
-                            <td class="px-3 py-2"><?= $m['url'] ?></td>
-                            <td class="px-3 py-2 text-center"><?= $m['urutan'] ?></td>
-                            <td class="px-3 py-2"><?= $m['role'] ?></td>
-                            <td class="px-1 py-1 text-center">
-                                <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
-                                <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 
