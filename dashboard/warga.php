@@ -383,9 +383,9 @@ function renderTable(data, page = 1) {
           <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
         </td>
         <td class="px-3 py-1 w-56 text-left">${row.nama || '-'}</td>
-        <td class="px-3 py-1 w-32 text-center">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+        <td class="px-3 py-1 w-32 text-left">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td class="px-3 py-1 w-36 text-left">${tanggalLahir}</td>
-        <td class="px-3 py-1 w-32 text-center">${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
+        <td class="px-3 py-1 w-32 text-left">${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
         <td class="px-3 py-1 w-44 text-left">${row.hp || '-'}</td>
         <td class="px-3 py-1 w-32 text-center">
           <button class="editBtn text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-id="${encodedData}" title="Edit">
@@ -837,12 +837,12 @@ function displayKK(kk) {
     const tanggalLahirAnggota = anggota.tgl_lahir && anggota.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(anggota.tgl_lahir) : '-';
     anggotaHTML += `
       <tr class="border-b hover:bg-gray-50">
-        <td class="px-2 py-1 text-center text-xs">${index + 1}</td>
+        <td class="px-2 py-1 text-left text-xs">${index + 1}</td>
         <td class="px-2 py-1 text-xs">${anggota.nik || '-'}</td>
         <td class="px-2 py-1 text-xs">${anggota.nama || '-'}</td>
-        <td class="px-2 py-1 text-center text-xs">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
+        <td class="px-2 py-1 text-left text-xs">${anggota.jenkel === 'L' ? 'Laki-laki' : anggota.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td class="px-2 py-1 text-xs">${anggota.tpt_lahir || '-'}</td>
-        <td class="px-2 py-1 text-center text-xs">${tanggalLahirAnggota}</td>
+        <td class="px-2 py-1 text-left text-xs">${tanggalLahirAnggota}</td>
         <td class="px-2 py-1 text-xs">${anggota.agama || '-'}</td>
         <td class="px-2 py-1 text-xs">${anggota.status || '-'}</td>
         <td class="px-2 py-1 text-xs">${anggota.pekerjaan || '-'}</td>

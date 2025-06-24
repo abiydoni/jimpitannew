@@ -61,19 +61,19 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
           <thead class="bg-gray-200">
             <tr>
-              <th class="text-left border px-3 py-2">Kode</th>
-              <th class="text-center border px-3 py-2">Kode Barang</th>
-              <th class="text-center border px-3 py-2">Nama</th>
-              <th class="text-left border px-3 py-2">Jumlah</th>
-              <th class="text-center border px-3 py-2">Aksi</th>
+              <th class="border px-3 py-2">Kode</th>
+              <th class="border px-3 py-2">Kode Barang</th>
+              <th class="border px-3 py-2">Nama</th>
+              <th class="border px-3 py-2">Jumlah</th>
+              <th class="border px-3 py-2">Aksi</th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($menus as $m): ?>
               <tr class="border-b hover:bg-gray-100">
                 <td class="px-3 py-2 text-left"><?= $m['kode'] ?></td>
-                <td class="px-3 py-2 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
-                <td class="px-3 py-2 text-center font-mono"><?= htmlspecialchars($m['nama']) ?></td>
+                <td class="px-3 py-2 text-left"><?= $m['kode_brg'] ?? '—' ?></td>
+                <td class="px-3 py-2 text-left"><?= htmlspecialchars($m['nama']) ?></td>
                 <td class="px-3 py-2 text-left"><?= htmlspecialchars($m['jumlah']) ?></td>
                 <td class="flex justify-center space-x-2 px-3 py-2">
                   <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1"><i class='bx bx-edit'></i></button>
