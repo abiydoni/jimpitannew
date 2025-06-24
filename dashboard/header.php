@@ -32,6 +32,10 @@ $stmtProfil = $pdo->query("SELECT nama, logo FROM tb_profil LIMIT 1");
 if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
     $profil_nama = $rowProfil['nama'];
     $profil_logo = $rowProfil['logo'];
+    // Jika logo tidak mengandung '/' (hanya nama file), tambahkan path ../assets/image/
+    if ($profil_logo && strpos($profil_logo, '/') === false) {
+        $profil_logo = '../assets/image/' . $profil_logo;
+    }
 }
 ?>
 
