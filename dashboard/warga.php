@@ -9,11 +9,7 @@ include 'header.php';
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" title="Tambah Warga">
-<<<<<<< HEAD
-                    <i class='bx bx-plus text-lg'></i>
-=======
                     <i class='bx bx-plus' style="font-size:24px"></i>
->>>>>>> ae8ab755d718012ff14d2f023cb0de7ef9398e17
                 </button>
                 <button id="printBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" title="Print Data">
                     <i class='bx bx-printer' style="font-size:24px"></i>
@@ -66,9 +62,7 @@ include 'header.php';
                         <th class="py-2 px-3 w-32 text-center border">Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="dataBody">
-                    <tr><td colspan="9" class="text-center text-gray-500">Loading...</td></tr>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
         
