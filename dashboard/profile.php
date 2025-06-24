@@ -121,25 +121,15 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Logo
-    const logoPreview = document.getElementById('logoPreview');
-    const logoInput = document.getElementById('logoInput');
-    logoPreview.replaceWith(logoPreview.cloneNode(true));
-    const newLogoPreview = document.getElementById('logoPreview');
-    newLogoPreview.addEventListener('click', function() { logoInput.click(); });
-    logoInput.onchange = function(e) {
+    document.getElementById('logoInput').onchange = function(e) {
         if (e.target.files[0]) {
-            newLogoPreview.src = URL.createObjectURL(e.target.files[0]);
+            document.getElementById('logoPreview').src = URL.createObjectURL(e.target.files[0]);
         }
     };
     // Wallpaper
-    const wallpaperPreview = document.getElementById('wallpaperPreview');
-    const wallpaperInput = document.getElementById('wallpaperInput');
-    wallpaperPreview.replaceWith(wallpaperPreview.cloneNode(true));
-    const newWallpaperPreview = document.getElementById('wallpaperPreview');
-    newWallpaperPreview.addEventListener('click', function() { wallpaperInput.click(); });
-    wallpaperInput.onchange = function(e) {
+    document.getElementById('wallpaperInput').onchange = function(e) {
         if (e.target.files[0]) {
-            newWallpaperPreview.src = URL.createObjectURL(e.target.files[0]);
+            document.getElementById('wallpaperPreview').src = URL.createObjectURL(e.target.files[0]);
         }
     };
 });
