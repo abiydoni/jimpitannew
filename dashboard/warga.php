@@ -9,10 +9,10 @@ include 'header.php';
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
                 <button id="tambahBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" title="Tambah Warga">
-                    <i class='bx bx-plus' style="font-size:24px"></i>
+                    <i class='bx bx-plus'></i>
                 </button>
                 <button id="printBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" title="Print Data">
-                    <i class='bx bx-printer' style="font-size:24px"></i>
+                    <i class='bx bx-printer'></i>
                 </button>
                 <button id="exportBtn" class="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded text-sm ml-1" title="Export Excel">
                     <i class='bx bx-export'></i>
