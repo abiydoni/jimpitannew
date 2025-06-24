@@ -1261,7 +1261,7 @@ $('#foto_file').change(function() {
     if (!allowedTypes.includes(file.type)) {
       alert('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
       this.value = '';
-      $('#fotoPreview').html('');
+      $('#fotoPreview').attr('src', 'images/users.gif');
       return;
     }
     
@@ -1269,7 +1269,7 @@ $('#foto_file').change(function() {
     if (file.size > 2 * 1024 * 1024) {
       alert('Ukuran file terlalu besar. Maksimal 2MB');
       this.value = '';
-      $('#fotoPreview').html('');
+      $('#fotoPreview').attr('src', 'images/users.gif');
       return;
     }
     
@@ -1277,7 +1277,7 @@ $('#foto_file').change(function() {
     if (file.size < 10 * 1024) {
       alert('Ukuran file terlalu kecil. Minimal 10KB');
       this.value = '';
-      $('#fotoPreview').html('');
+      $('#fotoPreview').attr('src', 'images/users.gif');
       return;
     }
     
@@ -1291,7 +1291,7 @@ $('#foto_file').change(function() {
       if (width > 1920 || height > 1080) {
         alert('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
         $('#foto_file')[0].value = '';
-        $('#fotoPreview').html('');
+        $('#fotoPreview').attr('src', 'images/users.gif');
         return;
       }
       
@@ -1299,21 +1299,14 @@ $('#foto_file').change(function() {
       if (width < 100 || height < 100) {
         alert('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
         $('#foto_file')[0].value = '';
-        $('#fotoPreview').html('');
+        $('#fotoPreview').attr('src', 'images/users.gif');
         return;
       }
       
       // Jika semua validasi berhasil, tampilkan preview
       const reader = new FileReader();
       reader.onload = function(e) {
-        $('#fotoPreview').html(`
-          <div class="mt-2">
-            <img src="${e.target.result}" alt="Preview Foto" class="w-20 h-20 object-cover rounded-md border">
-            <div class="text-xs text-gray-600 mt-1">
-              Ukuran: ${(file.size / 1024).toFixed(1)}KB | Dimensi: ${width}x${height}px
-            </div>
-          </div>
-        `);
+        $('#fotoPreview').attr('src', e.target.result);
       };
       reader.readAsDataURL(file);
     };
@@ -1321,12 +1314,12 @@ $('#foto_file').change(function() {
     img.onerror = function() {
       alert('File bukan gambar yang valid');
       $('#foto_file')[0].value = '';
-      $('#fotoPreview').html('');
+      $('#fotoPreview').attr('src', 'images/users.gif');
     };
     
     img.src = URL.createObjectURL(file);
   } else {
-    $('#fotoPreview').html('');
+    $('#fotoPreview').attr('src', 'images/users.gif');
   }
 });
 
@@ -1605,6 +1598,10 @@ $(document).ready(function() {
     $('#formAction').val('create');
     $('#negara').val('Indonesia');
     
+    // Reset foto preview
+    $('#fotoPreview').attr('src', 'images/users.gif');
+    $('#foto').val('');
+    
     // Reset dan disable dropdown wilayah
     $('#propinsi').val('').prop('disabled', false);
     $('#propinsi_nama').val('');
@@ -1732,6 +1729,9 @@ $(document).ready(function() {
     try {
       const data = JSON.parse(decodeURIComponent(encodedData));
       
+      console.log('Edit data:', data); // Debug - lihat semua data
+      console.log('Foto data:', data.foto); // Debug - lihat data foto khusus
+      
       $('#modalTitle').text('Edit Warga');
       $('#formAction').val('update');
       $('#id_warga').val(data.id_warga);
@@ -1792,13 +1792,16 @@ $(document).ready(function() {
         $('#foto').val(data.foto);
         // Tampilkan preview foto jika ada
         if (data.foto && data.foto !== '') {
-          $('#fotoPreview').html(`<img src="${data.foto}" alt="Foto Warga" class="w-20 h-20 object-cover rounded-md border">`);
+          console.log('Setting foto preview:', data.foto); // Debug
+          $('#fotoPreview').attr('src', data.foto);
         } else {
-          $('#fotoPreview').html('');
+          console.log('No foto, using default'); // Debug
+          $('#fotoPreview').attr('src', 'images/users.gif');
         }
       } else {
+        console.log('No foto data'); // Debug
         $('#foto').val('');
-        $('#fotoPreview').html('');
+        $('#fotoPreview').attr('src', 'images/users.gif');
       }
       
       // Set wilayah - perlu memuat data wilayah terlebih dahulu
@@ -1930,12 +1933,6 @@ $(document).ready(function() {
 // Upload foto modern
 $(document).on('click', '#fotoPreview', function() {
   $('#foto_file').click();
-});
-$(document).on('change', '#foto_file', function(event) {
-  const [file] = event.target.files;
-  if (file) {
-    $('#fotoPreview').attr('src', URL.createObjectURL(file));
-  }
 });
 </script>
 

@@ -192,6 +192,13 @@ try {
             // Debug logging
             error_log("Read action - Found " . count($result) . " records");
             
+            // Debug foto data
+            foreach ($result as $index => $row) {
+                if (isset($row['foto']) && !empty($row['foto'])) {
+                    error_log("Record $index - Foto: '" . $row['foto'] . "'");
+                }
+            }
+            
             echo json_encode($result);
         } catch (Exception $e) {
             error_log("Error in read action: " . $e->getMessage());
@@ -248,6 +255,13 @@ try {
             $foto = uploadFoto($_FILES['foto_file'], $oldFoto);
         } else {
             $foto = $_POST['foto'] ?? $oldFoto;
+        }
+        
+        // Debug logging untuk foto
+        error_log("Update foto - Old: '$oldFoto', New: '$foto', POST foto: '" . ($_POST['foto'] ?? '') . "'");
+        error_log("FILES foto_file: " . (isset($_FILES['foto_file']) ? 'set' : 'not set'));
+        if (isset($_FILES['foto_file'])) {
+            error_log("FILES foto_file error: " . $_FILES['foto_file']['error']);
         }
 
         $stmt = $pdo->prepare("UPDATE tb_warga SET
