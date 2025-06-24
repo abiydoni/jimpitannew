@@ -59,7 +59,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
         </div>
         <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+          <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
             <thead class="bg-gray-200">
               <tr>
                 <th class="text-left border px-3 py-2">Kode</th>

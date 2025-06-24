@@ -65,7 +65,7 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
             <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Menu</button>
         </div>
         <div class="overflow-x-auto">
-            <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="text-left border px-3 py-2">Kode</th>
