@@ -1252,85 +1252,102 @@ function loadRWDropdown() {
 loadRTDropdown();
 loadRWDropdown();
 
+// Flag untuk memastikan event handler hanya terdaftar sekali
+let eventHandlersRegistered = false;
+
 // Event handlers
 $(document).ready(function() {
   loadData();
   
-  // Event handler untuk preview foto - dipindah ke dalam ready
-  $('#foto_file').change(function() {
-    const file = this.files[0];
-    if (file) {
-      // Validasi tipe file
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-      if (!allowedTypes.includes(file.type)) {
-        alert('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
-        this.value = '';
-        $('#fotoPreview').attr('src', 'images/users.gif');
-        return;
-      }
-      
-      // Validasi ukuran (max 2MB)
-      if (file.size > 2 * 1024 * 1024) {
-        alert('Ukuran file terlalu besar. Maksimal 2MB');
-        this.value = '';
-        $('#fotoPreview').attr('src', 'images/users.gif');
-        return;
-      }
-      
-      // Validasi ukuran minimum (min 10KB)
-      if (file.size < 10 * 1024) {
-        alert('Ukuran file terlalu kecil. Minimal 10KB');
-        this.value = '';
-        $('#fotoPreview').attr('src', 'images/users.gif');
-        return;
-      }
-      
-      // Validasi dimensi gambar
-      const img = new Image();
-      img.onload = function() {
-        const width = this.width;
-        const height = this.height;
-        
-        // Batasi dimensi maksimal (1920x1080)
-        if (width > 1920 || height > 1080) {
-          alert('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
-          $('#foto_file')[0].value = '';
+  // Pastikan event handler hanya terdaftar sekali
+  if (!eventHandlersRegistered) {
+    // Hapus semua event handler yang mungkin ada
+    $(document).off('click', '#fotoPreview');
+    $('#foto_file').off('change');
+    $('#fotoPreview').off('click');
+    
+    // Event handler untuk preview foto - dipindah ke dalam ready
+    $('#foto_file').on('change', function() {
+      console.log('File input changed'); // Debug
+      const file = this.files[0];
+      if (file) {
+        // Validasi tipe file
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+          alert('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
+          this.value = '';
           $('#fotoPreview').attr('src', 'images/users.gif');
           return;
         }
         
-        // Batasi dimensi minimal (100x100)
-        if (width < 100 || height < 100) {
-          alert('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
-          $('#foto_file')[0].value = '';
+        // Validasi ukuran (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          alert('Ukuran file terlalu besar. Maksimal 2MB');
+          this.value = '';
           $('#fotoPreview').attr('src', 'images/users.gif');
           return;
         }
         
-        // Jika semua validasi berhasil, tampilkan preview
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          $('#fotoPreview').attr('src', e.target.result);
+        // Validasi ukuran minimum (min 10KB)
+        if (file.size < 10 * 1024) {
+          alert('Ukuran file terlalu kecil. Minimal 10KB');
+          this.value = '';
+          $('#fotoPreview').attr('src', 'images/users.gif');
+          return;
+        }
+        
+        // Validasi dimensi gambar
+        const img = new Image();
+        img.onload = function() {
+          const width = this.width;
+          const height = this.height;
+          
+          // Batasi dimensi maksimal (1920x1080)
+          if (width > 1920 || height > 1080) {
+            alert('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
+            $('#foto_file')[0].value = '';
+            $('#fotoPreview').attr('src', 'images/users.gif');
+            return;
+          }
+          
+          // Batasi dimensi minimal (100x100)
+          if (width < 100 || height < 100) {
+            alert('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
+            $('#foto_file')[0].value = '';
+            $('#fotoPreview').attr('src', 'images/users.gif');
+            return;
+          }
+          
+          // Jika semua validasi berhasil, tampilkan preview
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $('#fotoPreview').attr('src', e.target.result);
+          };
+          reader.readAsDataURL(file);
         };
-        reader.readAsDataURL(file);
-      };
-      
-      img.onerror = function() {
-        alert('File bukan gambar yang valid');
-        $('#foto_file')[0].value = '';
+        
+        img.onerror = function() {
+          alert('File bukan gambar yang valid');
+          $('#foto_file')[0].value = '';
+          $('#fotoPreview').attr('src', 'images/users.gif');
+        };
+        
+        img.src = URL.createObjectURL(file);
+      } else {
         $('#fotoPreview').attr('src', 'images/users.gif');
-      };
-      
-      img.src = URL.createObjectURL(file);
-    } else {
-      $('#fotoPreview').attr('src', 'images/users.gif');
-    }
-  });
-  
-  // Upload foto modern - dipindah ke dalam ready
-  $(document).on('click', '#fotoPreview', function() {
-    $('#foto_file').click();
-  });
+      }
+    });
+    
+    // Upload foto modern - menggunakan off() dan on() untuk mencegah duplikasi
+    $('#fotoPreview').off('click').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Foto preview clicked'); // Debug
+      $('#foto_file').click();
+    });
+    
+    eventHandlersRegistered = true;
+  }
   
   // Event handler alternatif untuk tombol simpan (jika form submit tidak berfungsi)
   $(document).on('click', '#wargaForm button[type="submit"]', function(e) {
