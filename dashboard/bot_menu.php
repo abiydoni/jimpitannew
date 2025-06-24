@@ -77,12 +77,8 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <td class="px-3 py-2"><?= htmlspecialchars($m['description']) ?></td>
                   <td class="px-3 py-2 truncate"><?= htmlspecialchars($m['url']) ?></td>
                   <td class="px-1 py-1 text-center">
-                    <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
-                      ✏️
-                    </button>
-                    <a href="?delete=<?= $m['id'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800">
-                      🗑️
-                    </a>
+                    <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800"><i class='bx bx-edit'></i></button>
+                    <a href="?delete=<?= $m['id'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800"><i class='bx bx-trash'></i></a>
                   </td>
                 </tr>
               <?php endforeach ?>

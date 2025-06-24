@@ -92,8 +92,8 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                         <td class="px-3 py-2 text-center"><?= $m['admin'] ?></td>
                         <td class="px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
                         <td class="px-1 py-1 text-center">
-                            <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
-                            <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
+                            <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800"><i class='bx bx-edit'></i></button>
+                            <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800"><i class='bx bx-trash'></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
