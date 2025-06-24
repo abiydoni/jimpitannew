@@ -48,7 +48,7 @@ include 'header.php';
         </div>
         
         <div id="table-container">
-            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="py-2 px-3 w-10 border">No</th>
@@ -62,7 +62,9 @@ include 'header.php';
                         <th class="py-2 px-3 w-32 text-center border">Aksi</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody id="dataBody">
+                    <tr><td colspan="9" class="text-center text-gray-500">Loading...</td></tr>
+                </tbody>
             </table>
         </div>
         
@@ -359,21 +361,9 @@ function formatDateForDisplay(dateString) {
 
 // Fungsi untuk render tabel
 function renderTable(data, page = 1) {
-  // Siapkan array data untuk DataTables
-  const tableData = data.length ? data.map((row, idx) => [
-    (idx + 1),
-    `<span class="text-blue-600 hover:text-blue-800 cursor-pointer underline" onclick="showBiodata('${row.nik || ''}')">${row.nik || '-'}</span>`,
-    `<span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>`,
-    row.nama || '-',
-    row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-',
-    row.tgl_lahir && row.tgl_lahir !== '0000-00-00' ? formatDateForDisplay(row.tgl_lahir) : '-',
-    (row.rt ? row.rt.toString().padStart(3, '0') : '-') + '/' + (row.rw ? row.rw.toString().padStart(3, '0') : '-'),
-    row.hp || '-',
-    `<button class="editBtn text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-id="${encodeURIComponent(JSON.stringify(row))}" title="Edit"><i class='bx bx-edit'></i></button>
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   let html = '';
-  
   if (!data.length) {
     html = '<tr><td colspan="9" class="text-center text-gray-500">Tidak ditemukan data yang cocok</td></tr>';
   } else {
@@ -384,7 +374,6 @@ function renderTable(data, page = 1) {
       }
       const jsonData = JSON.stringify(row);
       const encodedData = encodeURIComponent(jsonData);
-      
       html += `<tr class="border-b hover:bg-gray-50">
         <td class="px-3 py-1 w-10 text-center">${start + idx + 1}</td>
         <td class="px-3 py-1 w-40 text-left">
@@ -409,25 +398,7 @@ function renderTable(data, page = 1) {
       </tr>`;
     });
   }
-  
-  $('#dataBody').html(html);
-  // Inisialisasi DataTables setelah data di-render
-  if ($.fn.DataTable.isDataTable('#example')) {
-    $('#example').DataTable().destroy();
-  }
-  $('#example').DataTable({
-    pageLength: 10,
-    lengthMenu: [10, 25, 50, 100],
-    searching: true,
-    order: [[0, 'asc']],
-    language: {
-      lengthMenu: '_MENU_ Entri per halaman',
-      zeroRecords: 'No records found',
-      info: 'Showing page _PAGE_ of _PAGES_',
-      infoEmpty: 'No records available',
-      infoFiltered: '(filtered from _MAX_ total records)'
-    }
-  });
+  document.getElementById('dataBody').innerHTML = html;
 }
 
 // Fungsi untuk render pagination
