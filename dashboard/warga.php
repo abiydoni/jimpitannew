@@ -8,7 +8,7 @@ include 'header.php';
         <div class="head">
             <h3>Data Warga</h3>
             <div class="mb-4 text-center">
-                <button id="tambahBtn" class="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded text-sm" title="Tambah Warga">
+                <button id="tambahBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" title="Tambah Warga">
                     <i class='bx bx-plus text-lg'></i>
                 </button>
                 <button id="printBtn" class="bg-purple-500 hover:bg-purple-700 text-white p-2 rounded text-sm ml-1" title="Print Data">
@@ -48,18 +48,18 @@ include 'header.php';
         </div>
         
         <div id="table-container">
-            <table id="wargaTable" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-3 w-10">No</th>
-                        <th class="py-2 px-3 w-40 text-left">NIK</th>
-                        <th class="py-2 px-3 w-40 text-left">NIK KK</th>
-                        <th class="py-2 px-3 w-56 text-left">Nama</th>
-                        <th class="py-2 px-3 w-32 text-center">Jenis Kelamin</th>
-                        <th class="py-2 px-3 w-36 text-left">Tanggal Lahir</th>
-                        <th class="py-2 px-3 w-32 text-center">RT/RW</th>
-                        <th class="py-2 px-3 w-44 text-left">No HP</th>
-                        <th class="py-2 px-3 w-32 text-center">Aksi</th>
+                        <th class="py-2 px-3 w-10 border">No</th>
+                        <th class="py-2 px-3 w-40 text-left border">NIK</th>
+                        <th class="py-2 px-3 w-40 text-left border">NIK KK</th>
+                        <th class="py-2 px-3 w-56 text-left border">Nama</th>
+                        <th class="py-2 px-3 w-32 text-center border">Jenis Kelamin</th>
+                        <th class="py-2 px-3 w-36 text-left border">Tanggal Lahir</th>
+                        <th class="py-2 px-3 w-32 text-center border">RT/RW</th>
+                        <th class="py-2 px-3 w-44 text-left border">No HP</th>
+                        <th class="py-2 px-3 w-32 text-center border">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="dataBody">

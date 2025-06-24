@@ -45,7 +45,7 @@ if (!isset($_SESSION['user'])) {
                     <div class="head">
                         <h3>Data User dan Jadwal Jaga</h3>
                         <div class="mb-4 text-center">
-                            <button type="button" id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="button" id="openModal" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
                             </button>
                             <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -55,31 +55,33 @@ if (!isset($_SESSION['user'])) {
                             </button>                        
                         </div>
                     </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th style="text-align: left;">Kode ID</th>
-                                <th style="text-align: center;">Username</th>
-                                <th style="text-align: center;">Nama</th>
-                                <th style="text-align: center;">Shift</th>
-                                <th style="text-align: center;">Aksi</th>
+                                <th class="border px-3 py-2">ID</th>
+                                <th class="border px-3 py-2">Username</th>
+                                <th class="border px-3 py-2">Nama</th>
+                                <th class="border px-3 py-2">Shift</th>
+                                <th class="border px-3 py-2">Role</th>
+                                <th class="border px-3 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php foreach($users as $user): ?>
                             <tr class="border-b hover:bg-gray-100">
-                                <td><?php echo htmlspecialchars($user["id_code"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["user_name"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["name"]); ?></td>
-                                <td><?php echo htmlspecialchars($user["shift"]); ?></td>
-                                <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="text-blue-600 hover:text-blue-400 font-bold py-1 px-1">
+                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["user_name"]); ?></td>
+                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["name"]); ?></td>
+                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["shift"]); ?></td>
+                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["role"]); ?></td>
+                                <td class="border px-3 py-2 text-center">
+                                    <button onclick="openEditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
-                                    <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="text-red-600 hover:text-red-400 font-bold py-1 px-1">
+                                    <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
-                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['password']; ?>')" class="text-yellow-600 hover:text-yellow-400 font-bold py-1 px-1">
+                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['password']; ?>')" class="text-yellow-600 hover:text-yellow-800 font-bold py-1 px-1">
                                         <i class='bx bx-key'></i> <!-- Ikon untuk ubah password -->
                                     </button>                                
                                 </td>
