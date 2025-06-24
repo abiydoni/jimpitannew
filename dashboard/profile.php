@@ -66,25 +66,19 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Logo (optional)</label>
-                    <div class="flex items-center gap-2">
-                        <?php if (!empty($profil['logo'])): ?>
-                            <img id="logoPreview" src="../assets/image/<?= $profil['logo'] ?>" alt="Logo" class="h-10 mt-1 border rounded">
-                        <?php else: ?>
-                            <img id="logoPreview" src="../assets/image/jimpitan.png" alt="Logo" class="h-10 mt-1 border rounded">
-                        <?php endif; ?>
-                        <button type="button" id="btnEditLogo" class="bg-gray-200 px-2 py-1 rounded text-xs hover:bg-blue-200 flex items-center"><i class='bx bx-edit'></i> Edit Logo</button>
-                    </div>
+                    <label class="foto-upload-label">
+                        <img id="logoPreview" src="<?php echo !empty($profil['logo']) ? '../assets/image/'.$profil['logo'] : '../assets/image/jimpitan.png'; ?>" class="foto-preview" alt="Logo">
+                        <span class="text-xs text-gray-500">Klik gambar untuk ganti logo</span>
+                        <input type="file" name="logo" id="logoInput" accept="image/*" style="display:none">
+                    </label>
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Wallpaper / Gambar (optional)</label>
-                    <div class="flex items-center gap-2">
-                        <?php if (!empty($profil['gambar'])): ?>
-                            <img id="wallpaperPreview" src="../assets/image/<?= $profil['gambar'] ?>" alt="Wallpaper" class="h-10 mt-1 border rounded">
-                        <?php else: ?>
-                            <img id="wallpaperPreview" src="../assets/image/walqr.jpg" alt="Wallpaper" class="h-10 mt-1 border rounded">
-                        <?php endif; ?>
-                        <button type="button" id="btnEditWallpaper" class="bg-gray-200 px-2 py-1 rounded text-xs hover:bg-blue-200 flex items-center"><i class='bx bx-edit'></i> Edit Wallpaper</button>
-                    </div>
+                    <label class="foto-upload-label">
+                        <img id="wallpaperPreview" src="<?php echo !empty($profil['gambar']) ? '../assets/image/'.$profil['gambar'] : '../assets/image/walqr.jpg'; ?>" class="foto-preview" alt="Wallpaper">
+                        <span class="text-xs text-gray-500">Klik gambar untuk ganti wallpaper</span>
+                        <input type="file" name="gambar" id="wallpaperInput" accept="image/*" style="display:none">
+                    </label>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block font-medium mb-1">Catatan</label>
@@ -103,99 +97,50 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
 
 <?php include 'footer.php'; ?>
 
-<!-- MODAL LOGO -->
-<div id="modalLogo" class="modal-overlay hidden">
-  <div class="modal-container max-w-xs">
-    <div class="flex justify-between items-center mb-2">
-      <h3 class="font-semibold text-base">Upload Logo</h3>
-      <button id="closeModalLogo" class="text-xl">&times;</button>
-    </div>
-    <form id="formLogo" enctype="multipart/form-data">
-      <input type="hidden" name="kode" value="<?= htmlspecialchars($profil['kode']) ?>">
-      <input type="file" name="logo" id="inputLogo" accept="image/*" class="mb-2 w-full">
-      <img id="previewLogoImg" src="<?php echo !empty($profil['logo']) ? '../assets/image/'.$profil['logo'] : '../assets/image/jimpitan.png'; ?>" class="h-16 mx-auto mb-2 border rounded" alt="Preview Logo">
-      <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded w-full">Upload</button>
-    </form>
-  </div>
-</div>
-<!-- MODAL WALLPAPER -->
-<div id="modalWallpaper" class="modal-overlay hidden">
-  <div class="modal-container max-w-xs">
-    <div class="flex justify-between items-center mb-2">
-      <h3 class="font-semibold text-base">Upload Wallpaper</h3>
-      <button id="closeModalWallpaper" class="text-xl">&times;</button>
-    </div>
-    <form id="formWallpaper" enctype="multipart/form-data">
-      <input type="hidden" name="kode" value="<?= htmlspecialchars($profil['kode']) ?>">
-      <input type="file" name="gambar" id="inputWallpaper" accept="image/*" class="mb-2 w-full">
-      <img id="previewWallpaperImg" src="<?php echo !empty($profil['gambar']) ? '../assets/image/'.$profil['gambar'] : '../assets/image/walqr.jpg'; ?>" class="h-16 mx-auto mb-2 border rounded" alt="Preview Wallpaper">
-      <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded w-full">Upload</button>
-    </form>
-  </div>
-</div>
-
+<style>
+.foto-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 0.375rem;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto 0.5rem auto;
+}
+.foto-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.foto-upload-label span {
+  margin-top: 4px;
+  color: #888;
+  font-size: 12px;
+}
+</style>
 <script>
-// Modal logic
-const modalLogo = document.getElementById('modalLogo');
-const btnEditLogo = document.getElementById('btnEditLogo');
-const closeModalLogo = document.getElementById('closeModalLogo');
-const inputLogo = document.getElementById('inputLogo');
-const previewLogoImg = document.getElementById('previewLogoImg');
-const logoPreview = document.getElementById('logoPreview');
-
-btnEditLogo.onclick = () => { modalLogo.classList.remove('hidden'); };
-closeModalLogo.onclick = () => { modalLogo.classList.add('hidden'); };
-modalLogo.onclick = e => { if (e.target === modalLogo) modalLogo.classList.add('hidden'); };
-inputLogo.onchange = e => {
-  if (e.target.files[0]) {
-    previewLogoImg.src = URL.createObjectURL(e.target.files[0]);
-  }
-};
-
-document.getElementById('formLogo').onsubmit = async function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  const res = await fetch('profile.php?upload=logo', { method: 'POST', body: formData });
-  const data = await res.json();
-  if (data.success) {
-    logoPreview.src = previewLogoImg.src;
-    alert('Logo berhasil diupload!');
-    modalLogo.classList.add('hidden');
-  } else {
-    alert('Gagal upload logo!');
-  }
-};
-
-// Modal Wallpaper
-const modalWallpaper = document.getElementById('modalWallpaper');
-const btnEditWallpaper = document.getElementById('btnEditWallpaper');
-const closeModalWallpaper = document.getElementById('closeModalWallpaper');
-const inputWallpaper = document.getElementById('inputWallpaper');
-const previewWallpaperImg = document.getElementById('previewWallpaperImg');
-const wallpaperPreview = document.getElementById('wallpaperPreview');
-
-btnEditWallpaper.onclick = () => { modalWallpaper.classList.remove('hidden'); };
-closeModalWallpaper.onclick = () => { modalWallpaper.classList.add('hidden'); };
-modalWallpaper.onclick = e => { if (e.target === modalWallpaper) modalWallpaper.classList.add('hidden'); };
-inputWallpaper.onchange = e => {
-  if (e.target.files[0]) {
-    previewWallpaperImg.src = URL.createObjectURL(e.target.files[0]);
-  }
-};
-
-document.getElementById('formWallpaper').onsubmit = async function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  const res = await fetch('profile.php?upload=wallpaper', { method: 'POST', body: formData });
-  const data = await res.json();
-  if (data.success) {
-    wallpaperPreview.src = previewWallpaperImg.src;
-    alert('Wallpaper berhasil diupload!');
-    modalWallpaper.classList.add('hidden');
-  } else {
-    alert('Gagal upload wallpaper!');
-  }
-};
+document.addEventListener('DOMContentLoaded', function() {
+    // Logo
+    const logoPreview = document.getElementById('logoPreview');
+    const logoInput = document.getElementById('logoInput');
+    logoPreview.onclick = function() { logoInput.click(); };
+    logoInput.onchange = function(e) {
+        if (e.target.files[0]) {
+            logoPreview.src = URL.createObjectURL(e.target.files[0]);
+        }
+    };
+    // Wallpaper
+    const wallpaperPreview = document.getElementById('wallpaperPreview');
+    const wallpaperInput = document.getElementById('wallpaperInput');
+    wallpaperPreview.onclick = function() { wallpaperInput.click(); };
+    wallpaperInput.onchange = function(e) {
+        if (e.target.files[0]) {
+            wallpaperPreview.src = URL.createObjectURL(e.target.files[0]);
+        }
+    };
+});
 </script>
 
 <?php
