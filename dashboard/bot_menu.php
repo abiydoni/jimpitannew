@@ -57,7 +57,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <h2 class="text-xl font-bold">📋 Daftar Menu Bot</h2>
           <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah</button>
         </div>
-        <div class="overflow-x-auto">
           <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
             <thead class="bg-gray-200">
               <tr>
@@ -89,7 +88,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <?php endforeach ?>
             </tbody>
           </table>
-        </div>
     </div>
 </div>
 
