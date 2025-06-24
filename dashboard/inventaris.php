@@ -72,10 +72,10 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
               <?php foreach ($menus as $m): ?>
                 <tr class="border-b hover:bg-gray-100">
-                  <td class="border px-3 py-2 text-left"><?= $m['kode'] ?></td>
-                  <td class="border px-3 py-2 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
-                  <td class="border px-3 py-2 text-center font-mono"><?= htmlspecialchars($m['nama']) ?></td>
-                  <td class="border px-3 py-2 text-left"><?= htmlspecialchars($m['jumlah']) ?></td>
+                  <td class="px-3 py-2 text-left"><?= $m['kode'] ?></td>
+                  <td class="px-3 py-2 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
+                  <td class="px-3 py-2 text-center font-mono"><?= htmlspecialchars($m['nama']) ?></td>
+                  <td class="px-3 py-2 text-left"><?= htmlspecialchars($m['jumlah']) ?></td>
                   <td class="flex justify-center space-x-2 border px-3 py-2">
                     <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1"><i class='bx bx-edit'></i></button>
                     <a href="?delete=<?= $m['kode'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800 font-bold py-1 px-1"><i class='bx bx-trash'></i></a>

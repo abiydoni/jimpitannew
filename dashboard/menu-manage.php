@@ -66,13 +66,13 @@ $menus = $pdo->query("SELECT * FROM tb_dashboard_menu ORDER BY urutan")->fetchAl
                 <tbody>
                     <?php foreach ($menus as $m): ?>
                         <tr>
-                            <td class="border px-3 py-2"><?= $m['id'] ?></td>
-                            <td class="border px-3 py-2"><?= $m['title'] ?></td>
-                            <td class="border px-3 py-2 text-center"><i class="bx <?= $m['icon'] ?>"></i></td>
-                            <td class="border px-3 py-2"><?= $m['url'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['urutan'] ?></td>
-                            <td class="border px-3 py-2"><?= $m['role'] ?></td>
-                            <td class="border px-1 py-1 text-center">
+                            <td class="px-3 py-2"><?= $m['id'] ?></td>
+                            <td class="px-3 py-2"><?= $m['title'] ?></td>
+                            <td class="px-3 py-2 text-center"><i class="bx <?= $m['icon'] ?>"></i></td>
+                            <td class="px-3 py-2"><?= $m['url'] ?></td>
+                            <td class="px-3 py-2 text-center"><?= $m['urutan'] ?></td>
+                            <td class="px-3 py-2"><?= $m['role'] ?></td>
+                            <td class="px-1 py-1 text-center">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['id'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
                             </td>

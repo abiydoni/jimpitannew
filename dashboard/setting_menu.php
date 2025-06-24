@@ -83,16 +83,16 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                 <tbody>
                     <?php foreach ($menus as $m): ?>
                         <tr>
-                            <td class="border px-3 py-2"><?= $m['kode'] ?></td>
-                            <td class="border px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
-                            <td class="border px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>
-                            <td class="border px-3 py-2"><i class="bx <?= htmlspecialchars($m['ikon']) ?> text-lg"></i> <span class="text-xs text-gray-500"><?= htmlspecialchars($m['ikon']) ?></span></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['warga'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['status'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['pengurus'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['admin'] ?></td>
-                            <td class="border px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
-                            <td class="border px-1 py-1 text-center">
+                            <td class="px-3 py-2"><?= $m['kode'] ?></td>
+                            <td class="px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
+                            <td class="px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>
+                            <td class="px-3 py-2"><i class="bx <?= htmlspecialchars($m['ikon']) ?> text-lg"></i> <span class="text-xs text-gray-500"><?= htmlspecialchars($m['ikon']) ?></span></td>
+                            <td class="px-3 py-2 text-center"><?= $m['warga'] ?></td>
+                            <td class="px-3 py-2 text-center"><?= $m['status'] ?></td>
+                            <td class="px-3 py-2 text-center"><?= $m['pengurus'] ?></td>
+                            <td class="px-3 py-2 text-center"><?= $m['admin'] ?></td>
+                            <td class="px-3 py-2 text-center"><?= $m['s_admin'] ?></td>
+                            <td class="px-1 py-1 text-center">
                                 <button onclick='openEditModal(<?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800">✏️</button>
                                 <a onclick="return confirm('Hapus menu ini?')" href="?delete=<?= $m['kode'] ?>" class="text-red-600 hover:text-red-800">🗑️</a>
                             </td>

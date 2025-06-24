@@ -69,12 +69,12 @@ if (!isset($_SESSION['user'])) {
                         <tbody>
                         <?php foreach($users as $user): ?>
                             <tr class="border-b hover:bg-gray-100">
-                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["id_code"]); ?></td>
-                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["user_name"]); ?></td>
-                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["name"]); ?></td>
-                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["shift"]); ?></td>
-                                <td class="border px-3 py-2"><?php echo htmlspecialchars($user["role"]); ?></td>
-                                <td class="border px-3 py-2 text-center">
+                                <td class="px-3 py-2"><?php echo htmlspecialchars($user["id_code"]); ?></td>
+                                <td class="px-3 py-2"><?php echo htmlspecialchars($user["user_name"]); ?></td>
+                                <td class="px-3 py-2"><?php echo htmlspecialchars($user["name"]); ?></td>
+                                <td class="px-3 py-2"><?php echo htmlspecialchars($user["shift"]); ?></td>
+                                <td class="px-3 py-2"><?php echo htmlspecialchars($user["role"]); ?></td>
+                                <td class="px-3 py-2 text-center">
                                     <button onclick="openEditUserModal('<?php echo $user['id_code']; ?>', '<?php echo $user['user_name']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['shift']; ?>', '<?php echo $user['role']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>

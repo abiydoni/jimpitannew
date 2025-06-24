@@ -72,12 +72,12 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
               <?php foreach ($menus as $m): ?>
                 <tr class="hover:bg-gray-50">
-                  <td class="border px-2 py-1"><?= $m['id'] ?></td>
-                  <td class="border px-2 py-1 text-center"><?= $m['parent_id'] ?? '—' ?></td>
-                  <td class="border px-2 py-1 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
-                  <td class="border px-2 py-1"><?= htmlspecialchars($m['description']) ?></td>
-                  <td class="border px-2 py-1 truncate"><?= htmlspecialchars($m['url']) ?></td>
-                  <td class="border px-1 py-1 text-center">
+                  <td class="px-3 py-2"><?= $m['id'] ?></td>
+                  <td class="px-3 py-2 text-center"><?= $m['parent_id'] ?? '—' ?></td>
+                  <td class="px-3 py-2 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
+                  <td class="px-3 py-2"><?= htmlspecialchars($m['description']) ?></td>
+                  <td class="px-3 py-2 truncate"><?= htmlspecialchars($m['url']) ?></td>
+                  <td class="px-1 py-1 text-center">
                     <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800">
                       ✏️
                     </button>
