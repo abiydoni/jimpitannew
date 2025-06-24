@@ -82,7 +82,7 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                 </thead>
                 <tbody>
                     <?php foreach ($menus as $m): ?>
-                        <tr>
+                        <tr class="border-b hover:bg-gray-100">
                             <td class="px-3 py-2"><?= $m['kode'] ?></td>
                             <td class="px-3 py-2"><?= htmlspecialchars($m['nama']) ?></td>
                             <td class="px-3 py-2"><?= htmlspecialchars($m['alamat_url']) ?></td>

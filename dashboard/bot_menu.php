@@ -71,7 +71,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </thead>
             <tbody>
               <?php foreach ($menus as $m): ?>
-                <tr class="hover:bg-gray-50">
+                <tr class="border-b hover:bg-gray-100">
                   <td class="px-3 py-2"><?= $m['id'] ?></td>
                   <td class="px-3 py-2 text-center"><?= $m['parent_id'] ?? '—' ?></td>
                   <td class="px-3 py-2 font-mono text-center"><?= htmlspecialchars($m['keyword']) ?></td>
