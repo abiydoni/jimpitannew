@@ -76,7 +76,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <td class="px-3 py-2 text-center"><?= $m['kode_brg'] ?? '—' ?></td>
                   <td class="px-3 py-2 text-center font-mono"><?= htmlspecialchars($m['nama']) ?></td>
                   <td class="px-3 py-2 text-left"><?= htmlspecialchars($m['jumlah']) ?></td>
-                  <td class="flex justify-center space-x-2 border px-3 py-2">
+                  <td class="flex justify-center space-x-2 px-3 py-2">
                     <button onclick='openModal(<?= json_encode($m) ?>)' title="Edit" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1"><i class='bx bx-edit'></i></button>
                     <a href="?delete=<?= $m['kode'] ?>" onclick="return confirm('Yakin hapus menu ini?')" title="Hapus" class="text-red-600 hover:text-red-800 font-bold py-1 px-1"><i class='bx bx-trash'></i></a>
                   </td>
