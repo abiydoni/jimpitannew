@@ -21,6 +21,9 @@ $role = $_SESSION['user']['role'];
 $stmt = $pdo->prepare("SELECT * FROM tb_dashboard_menu WHERE FIND_IN_SET(?, role) ORDER BY urutan");
 $stmt->execute([$role]);
 $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Dapatkan halaman aktif
+$currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
 
@@ -64,7 +67,8 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </a>
         <ul class="side-menu top">
             <?php foreach ($menuItems as $item): ?>
-                <li>
+                <?php $isActive = (basename($item['url']) === $currentPage) ? 'active' : ''; ?>
+                <li class="<?= $isActive ?>">
                     <a href="<?= htmlspecialchars($item['url']) ?>">
                         <i class='bx <?= htmlspecialchars($item['icon']) ?> text-2xl'></i>
                         <span class="text"><?= htmlspecialchars($item['title']) ?></span>
