@@ -71,16 +71,13 @@ $menus = $pdo->query("SELECT * FROM tb_menu ORDER BY kode DESC")->fetchAll(PDO::
                         <th class="text-left border px-3 py-2">Kode</th>
                         <th class="text-left border px-3 py-2">Nama</th>
                         <th class="text-left border px-3 py-2">URL</th>
-                        <th class="px-3 py-2 border">Kode</th>
-                        <th class="px-3 py-2 border">Nama</th>
-                        <th class="px-3 py-2 border">URL</th>
-                        <th class="px-3 py-2 border">Ikon</th>
-                        <th class="px-3 py-2 border">Warga</th>
-                        <th class="px-3 py-2 border">User</th>
-                        <th class="px-3 py-2 border">Pengurus</th>
-                        <th class="px-3 py-2 border">Admin</th>
-                        <th class="px-3 py-2 border">S Admin</th>
-                        <th class="px-3 py-2 border text-center">Aksi</th>
+                        <th class="text-left border px-3 py-2">Ikon</th>
+                        <th class="text-center border px-3 py-2">Warga</th>
+                        <th class="text-center border px-3 py-2">User</th>
+                        <th class="text-center border px-3 py-2">Pengurus</th>
+                        <th class="text-center border px-3 py-2">Admin</th>
+                        <th class="text-center border px-3 py-2">S Admin</th>
+                        <th class="text-center border px-3 py-2">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
