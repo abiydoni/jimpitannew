@@ -1252,110 +1252,84 @@ function loadRWDropdown() {
 loadRTDropdown();
 loadRWDropdown();
 
-// Flag untuk memastikan event handler hanya terdaftar sekali
-let eventHandlersRegistered = false;
-
 // Event handlers
 $(document).ready(function() {
   loadData();
-  
-  // Pastikan event handler hanya terdaftar sekali
-  if (!eventHandlersRegistered) {
-    // Hapus semua event handler yang mungkin ada
-    $(document).off('click', '#fotoPreview');
-    $('#foto_file').off('change');
-    $('#fotoPreview').off('click');
-    
-    // Event handler untuk preview foto - dipindah ke dalam ready
-    $('#foto_file').on('change', function() {
-      console.log('File input changed'); // Debug
-      const file = this.files[0];
-      if (file) {
-        // Validasi tipe file
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        if (!allowedTypes.includes(file.type)) {
-          alert('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
-          this.value = '';
-          $('#fotoPreview').attr('src', 'images/users.gif');
-          return;
-        }
-        
-        // Validasi ukuran (max 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-          alert('Ukuran file terlalu besar. Maksimal 2MB');
-          this.value = '';
-          $('#fotoPreview').attr('src', 'images/users.gif');
-          return;
-        }
-        
-        // Validasi ukuran minimum (min 10KB)
-        if (file.size < 10 * 1024) {
-          alert('Ukuran file terlalu kecil. Minimal 10KB');
-          this.value = '';
-          $('#fotoPreview').attr('src', 'images/users.gif');
-          return;
-        }
-        
-        // Validasi dimensi gambar
-        const img = new Image();
-        img.onload = function() {
-          const width = this.width;
-          const height = this.height;
-          
-          // Batasi dimensi maksimal (1920x1080)
-          if (width > 1920 || height > 1080) {
-            alert('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
-            $('#foto_file')[0].value = '';
-            $('#fotoPreview').attr('src', 'images/users.gif');
-            return;
-          }
-          
-          // Batasi dimensi minimal (100x100)
-          if (width < 100 || height < 100) {
-            alert('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
-            $('#foto_file')[0].value = '';
-            $('#fotoPreview').attr('src', 'images/users.gif');
-            return;
-          }
-          
-          // Jika semua validasi berhasil, tampilkan preview
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            $('#fotoPreview').attr('src', e.target.result);
-          };
-          reader.readAsDataURL(file);
-        };
-        
-        img.onerror = function() {
-          alert('File bukan gambar yang valid');
+
+  // Event handler untuk preview foto
+  $('#foto_file').off('change').on('change', function() {
+    const file = this.files[0];
+    if (file) {
+      // Validasi tipe file
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Tipe file tidak diizinkan. Gunakan JPG, PNG, atau GIF');
+        this.value = '';
+        $('#fotoPreview').attr('src', 'images/users.gif');
+        return;
+      }
+      // Validasi ukuran (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran file terlalu besar. Maksimal 2MB');
+        this.value = '';
+        $('#fotoPreview').attr('src', 'images/users.gif');
+        return;
+      }
+      // Validasi ukuran minimum (min 10KB)
+      if (file.size < 10 * 1024) {
+        alert('Ukuran file terlalu kecil. Minimal 10KB');
+        this.value = '';
+        $('#fotoPreview').attr('src', 'images/users.gif');
+        return;
+      }
+      // Validasi dimensi gambar
+      const img = new Image();
+      img.onload = function() {
+        const width = this.width;
+        const height = this.height;
+        if (width > 1920 || height > 1080) {
+          alert('Dimensi gambar terlalu besar. Maksimal 1920x1080 pixel');
           $('#foto_file')[0].value = '';
           $('#fotoPreview').attr('src', 'images/users.gif');
+          return;
+        }
+        if (width < 100 || height < 100) {
+          alert('Dimensi gambar terlalu kecil. Minimal 100x100 pixel');
+          $('#foto_file')[0].value = '';
+          $('#fotoPreview').attr('src', 'images/users.gif');
+          return;
+        }
+        // Jika semua validasi berhasil, tampilkan preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          $('#fotoPreview').attr('src', e.target.result);
         };
-        
-        img.src = URL.createObjectURL(file);
-      } else {
+        reader.readAsDataURL(file);
+      };
+      img.onerror = function() {
+        alert('File bukan gambar yang valid');
+        $('#foto_file')[0].value = '';
         $('#fotoPreview').attr('src', 'images/users.gif');
-      }
-    });
-    
-    // Upload foto modern - menggunakan off() dan on() untuk mencegah duplikasi
-    $('#fotoPreview').off('click').on('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('Foto preview clicked'); // Debug
-      $('#foto_file').click();
-    });
-    
-    eventHandlersRegistered = true;
-  }
-  
+      };
+      img.src = URL.createObjectURL(file);
+    } else {
+      $('#fotoPreview').attr('src', 'images/users.gif');
+    }
+  });
+
+  // Upload foto modern
+  $('#fotoPreview').off('click').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#foto_file').click();
+  });
+
   // Event handler alternatif untuk tombol simpan (jika form submit tidak berfungsi)
   $(document).on('click', '#wargaForm button[type="submit"]', function(e) {
-    console.log('Submit button clicked'); // Debug
     e.preventDefault();
     $('#wargaForm').submit();
   });
-  
+
   // Search input dan filter tambahan
   $('#searchInput, #nikkInput, #jenkelInput, #rtInput, #rwInput').on('input change', function() {
     filteredWarga = filterWarga();
@@ -1363,7 +1337,7 @@ $(document).ready(function() {
     renderTable(filteredWarga, currentPage);
     renderPagination(filteredWarga, currentPage);
   });
-  
+
   // Reset search
   $('#resetSearch').click(function() {
     $('#searchInput').val('');
@@ -1376,25 +1350,22 @@ $(document).ready(function() {
     renderTable(filteredWarga, currentPage);
     renderPagination(filteredWarga, currentPage);
   });
-  
+
   // Print button
   $('#printBtn').click(function() {
     printWargaData();
   });
-  
+
   // Export button
   $('#exportBtn').click(function() {
-    // Tampilkan loading untuk export
     $('#loadingModal').removeClass('hidden').addClass('modal-show');
     $('#loadingText').text('Sedang mempersiapkan data untuk export...');
     $('#progressBar').css('width', '30%');
     $('#progressText').text('30% selesai');
-    
     $.post('api/warga_action.php', { action: 'read' }, function(data) {
       $('#loadingText').text('Sedang memproses data...');
       $('#progressBar').css('width', '60%');
       $('#progressText').text('60% selesai');
-      
       try {
         const warga = JSON.parse(data);
         if (!warga.length) {
@@ -1402,12 +1373,9 @@ $(document).ready(function() {
           alert('Tidak ada data untuk diexport!');
           return;
         }
-        
         $('#loadingText').text('Sedang membuat file Excel...');
         $('#progressBar').css('width', '80%');
         $('#progressText').text('80% selesai');
-        
-        // Header untuk export
         const header = [
           'Nama', 'NIK', 'NIK KK', 'Hubungan', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 
           'Alamat', 'RT', 'RW', 'Kelurahan', 'Kecamatan', 'Kota', 'Provinsi', 'Negara', 
@@ -1440,23 +1408,17 @@ $(document).ready(function() {
             row.hp || ''
           ]);
         });
-        
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Data Warga');
-        
         $('#loadingText').text('Sedang mengunduh file...');
         $('#progressBar').css('width', '100%');
         $('#progressText').text('100% selesai');
-        
-        // Download file
         XLSX.writeFile(wb, `Data_Warga_${new Date().toISOString().split('T')[0]}.xlsx`);
-        
         setTimeout(() => {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
           alert('Export berhasil!');
         }, 1000);
-        
       } catch (e) {
         $('#loadingModal').removeClass('modal-show').addClass('hidden');
         alert('Error saat export: ' + e.message);
@@ -1466,7 +1428,7 @@ $(document).ready(function() {
       alert('Error: ' + error);
     });
   });
-  
+
   // Download template button
   $('#downloadTemplateBtn').click(function() {
     const header = [
@@ -1474,37 +1436,30 @@ $(document).ready(function() {
       'Alamat', 'RT', 'RW', 'Kelurahan', 'Kecamatan', 'Kota', 'Provinsi', 'Negara', 
       'Agama', 'Status', 'Pekerjaan', 'No HP'
     ];
-    
     const templateData = [
       header,
       ['Contoh Nama', '1234567890123456', '1234567890123456', 'Kepala Keluarga', 'L', 'Jakarta', '15-08-1990', 
        'Jl. Contoh No. 123', '001', '001', 'Contoh Kelurahan', 'Contoh Kecamatan', 'Contoh Kota', 'Contoh Provinsi', 'Indonesia', 
        'Islam', 'Kawin', 'PNS', '081234567890']
     ];
-    
     const ws = XLSX.utils.aoa_to_sheet(templateData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Template');
-    
     XLSX.writeFile(wb, 'Template_Data_Warga.xlsx');
   });
-  
+
   // Import Excel
   $('#importInput').change(function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    
     if (!file.name.match(/\.(xlsx|xls)$/)) {
       alert('File harus berformat Excel (.xlsx atau .xls)');
       return;
     }
-    
-    // Tampilkan loading modal
     $('#loadingModal').removeClass('hidden').addClass('modal-show');
     $('#loadingText').text('Sedang membaca file Excel...');
     $('#progressBar').css('width', '20%');
     $('#progressText').text('20% selesai');
-    
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
@@ -1513,61 +1468,45 @@ $(document).ready(function() {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        
         if (jsonData.length < 2) {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
           alert('File Excel kosong atau tidak memiliki data!');
           return;
         }
-        
         const headers = jsonData[0];
         const rows = jsonData.slice(1);
-        
         $('#loadingText').text('Sedang memvalidasi data...');
         $('#progressBar').css('width', '40%');
         $('#progressText').text('40% selesai');
-        
-        // Validasi data
         let validData = [];
         let errors = [];
-        
         rows.forEach((row, index) => {
           if (row.length < headers.length) {
             errors.push(`Baris ${index + 2}: Data tidak lengkap`);
             return;
           }
-          
           const rowData = {};
           headers.forEach((header, colIndex) => {
             rowData[header.toLowerCase().replace(/\s+/g, '_')] = row[colIndex] || '';
           });
-          
-          // Validasi NIK
           if (!rowData.nik || !/^\d{16}$/.test(rowData.nik)) {
             errors.push(`Baris ${index + 2}: NIK harus 16 digit angka`);
             return;
           }
-          
-          // Validasi NIK KK
           if (!rowData.nik_kk || !/^\d{16}$/.test(rowData.nik_kk)) {
             errors.push(`Baris ${index + 2}: NIK KK harus 16 digit angka`);
             return;
           }
-          
           validData.push(rowData);
         });
-        
         if (errors.length > 0) {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
           alert('Error validasi:\n' + errors.join('\n'));
           return;
         }
-        
         $('#loadingText').text('Sedang menyimpan data...');
         $('#progressBar').css('width', '60%');
         $('#progressText').text('60% selesai');
-        
-        // Kirim data ke server
         $.post('api/warga_action.php', { 
           action: 'import_excel', 
           data: JSON.stringify(validData) 
@@ -1575,56 +1514,44 @@ $(document).ready(function() {
           $('#loadingText').text('Import selesai!');
           $('#progressBar').css('width', '100%');
           $('#progressText').text('100% selesai');
-          
           setTimeout(() => {
             $('#loadingModal').removeClass('modal-show').addClass('hidden');
-            
             try {
               const result = JSON.parse(response);
               let message = `Import selesai!\nBerhasil: ${result.success_count} data\nGagal: ${result.error_count} data`;
-              
               if (result.errors && result.errors.length > 0) {
                 message += '\n\nError:\n' + result.errors.slice(0, 5).join('\n');
                 if (result.errors.length > 5) {
                   message += `\n...dan ${result.errors.length - 5} error lainnya`;
                 }
               }
-              
               alert(message);
             } catch (e) {
               alert('Import berhasil! ' + response);
             }
-            
             loadData(); // Reload data
             $('#importInput').val(''); // Reset input file
           }, 1000);
-          
         }).fail(function(xhr, status, error) {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
           alert('Error saat import: ' + error);
         });
-        
       } catch (e) {
         $('#loadingModal').removeClass('modal-show').addClass('hidden');
         alert('Error membaca file: ' + e.message);
       }
     };
-    
     reader.readAsArrayBuffer(file);
   });
-  
+
   // Tambah button
   $('#tambahBtn').click(function() {
     $('#modalTitle').text('Tambah Warga');
     $('#wargaForm')[0].reset();
     $('#formAction').val('create');
     $('#negara').val('Indonesia');
-    
-    // Reset foto preview
     $('#fotoPreview').attr('src', 'images/users.gif');
     $('#foto').val('');
-    
-    // Reset dan disable dropdown wilayah
     $('#propinsi').val('').prop('disabled', false);
     $('#propinsi_nama').val('');
     $('#kota').html('<option value="">Pilih Kota/Kabupaten</option>').prop('disabled', true);
@@ -1633,50 +1560,37 @@ $(document).ready(function() {
     $('#kecamatan_nama').val('');
     $('#kelurahan').html('<option value="">Pilih Kelurahan</option>').prop('disabled', true);
     $('#kelurahan_nama').val('');
-    
-    // Reload RT dan RW dropdown
     loadRTDropdown();
     loadRWDropdown();
-    
     $('#modal').removeClass('hidden').addClass('modal-show');
   });
-  
+
   // Cancel button
   $('#cancelBtn').click(function() {
     $('#modal').removeClass('modal-show').addClass('hidden');
   });
-  
+
   // Close modal when clicking outside
   $('#modal').click(function(e) {
     if (e.target === this) {
       $('#modal').removeClass('modal-show').addClass('hidden');
     }
   });
-  
+
   // Form submit
   $('#wargaForm').submit(function(e) {
     e.preventDefault();
-    
-    // Validasi form
     if (!this.checkValidity()) {
       this.reportValidity();
       return;
     }
-    
-    // Ambil nama wilayah dari hidden input
     const propinsiNama = $('#propinsi_nama').val() || $('#propinsi option:selected').text();
     const kotaNama = $('#kota_nama').val() || $('#kota option:selected').text();
     const kecamatanNama = $('#kecamatan_nama').val() || $('#kecamatan option:selected').text();
     const kelurahanNama = $('#kelurahan_nama').val() || $('#kelurahan option:selected').text();
-    
-    // Format RT dan RW ke 3 digit
     const rt = $('#rt').val() ? $('#rt').val().toString().padStart(3, '0') : '';
     const rw = $('#rw').val() ? $('#rw').val().toString().padStart(3, '0') : '';
-    
-    // Buat FormData untuk menangani file upload
     const formData = new FormData();
-    
-    // Tambahkan semua field ke FormData
     formData.append('action', $('#formAction').val());
     formData.append('id_warga', $('#id_warga').val());
     formData.append('nama', $('#nama').val());
@@ -1699,18 +1613,13 @@ $(document).ready(function() {
     formData.append('negara', $('#negara').val());
     formData.append('hp', $('#hp').val());
     formData.append('foto', $('#foto').val());
-    
-    // Tambahkan file foto jika ada
     const fotoFile = $('#foto_file')[0].files[0];
     if (fotoFile) {
       formData.append('foto_file', fotoFile);
     }
-    
-    // Disable tombol submit dan tampilkan loading
     const submitBtn = $(this).find('button[type="submit"]');
     const originalText = submitBtn.text();
     submitBtn.prop('disabled', true).text('Menyimpan...');
-    
     $.ajax({
       url: 'api/warga_action.php',
       type: 'POST',
@@ -1721,7 +1630,6 @@ $(document).ready(function() {
         submitBtn.prop('disabled', false).text(originalText);
         $('#modal').removeClass('modal-show').addClass('hidden');
         loadData();
-        
         try {
           const result = JSON.parse(res);
           if (result.success) {
@@ -1744,16 +1652,12 @@ $(document).ready(function() {
       }
     });
   });
-  
+
   // Edit button
   $(document).on('click', '.editBtn', function() {
     const encodedData = $(this).data('id');
     try {
       const data = JSON.parse(decodeURIComponent(encodedData));
-      
-      console.log('Edit data:', data); // Debug - lihat semua data
-      console.log('Foto data:', data.foto); // Debug - lihat data foto khusus
-      
       $('#modalTitle').text('Edit Warga');
       $('#formAction').val('update');
       $('#id_warga').val(data.id_warga);
@@ -1763,177 +1667,60 @@ $(document).ready(function() {
       $('#hubungan').val(data.hubungan);
       $('#jenkel').val(data.jenkel);
       $('#tpt_lahir').val(data.tpt_lahir);
-      
-      // Format tanggal untuk date input (YYYY-MM-DD)
       if (data.tgl_lahir && data.tgl_lahir !== '0000-00-00') {
-        // Jika sudah dalam format YYYY-MM-DD, gunakan langsung
         if (/^\d{4}-\d{2}-\d{2}$/.test(data.tgl_lahir)) {
           $('#tgl_lahir').val(data.tgl_lahir);
+        } else if (/^\d{2}-\d{2}-\d{4}$/.test(data.tgl_lahir)) {
+          const parts = data.tgl_lahir.split('-');
+          $('#tgl_lahir').val(`${parts[2]}-${parts[1]}-${parts[0]}`);
         } else {
-          // Jika dalam format DD-MM-YYYY, convert ke YYYY-MM-DD
-          if (/^\d{2}-\d{2}-\d{4}$/.test(data.tgl_lahir)) {
-            const parts = data.tgl_lahir.split('-');
-            $('#tgl_lahir').val(`${parts[2]}-${parts[1]}-${parts[0]}`);
-          } else {
-            // Coba parse sebagai Date object
-            const date = new Date(data.tgl_lahir);
-            if (!isNaN(date.getTime())) {
-              const year = date.getFullYear();
-              const month = (date.getMonth() + 1).toString().padStart(2, '0');
-              const day = date.getDate().toString().padStart(2, '0');
-              $('#tgl_lahir').val(`${year}-${month}-${day}`);
-            }
+          const date = new Date(data.tgl_lahir);
+          if (!isNaN(date.getTime())) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            $('#tgl_lahir').val(`${year}-${month}-${day}`);
           }
         }
       } else {
         $('#tgl_lahir').val('');
       }
-      
       $('#agama').val(data.agama);
       $('#status').val(data.status);
       $('#pekerjaan').val(data.pekerjaan);
       $('#alamat').val(data.alamat);
-      
-      // Set RT dan RW dengan format 3 digit
       if (data.rt) {
         const rtFormatted = data.rt.toString().padStart(3, '0');
         $('#rt').val(rtFormatted);
       } else {
         $('#rt').val('');
       }
-      
       if (data.rw) {
         const rwFormatted = data.rw.toString().padStart(3, '0');
         $('#rw').val(rwFormatted);
       } else {
         $('#rw').val('');
       }
-      
-      // Set foto jika ada
       if (data.foto) {
         $('#foto').val(data.foto);
-        // Tampilkan preview foto jika ada
         if (data.foto && data.foto !== '') {
-          console.log('Setting foto preview:', data.foto); // Debug
           $('#fotoPreview').attr('src', data.foto);
         } else {
-          console.log('No foto, using default'); // Debug
           $('#fotoPreview').attr('src', 'images/users.gif');
         }
       } else {
-        console.log('No foto data'); // Debug
         $('#foto').val('');
         $('#fotoPreview').attr('src', 'images/users.gif');
       }
-      
-      // Set wilayah - perlu memuat data wilayah terlebih dahulu
       setWilayahForEdit(data);
-      
       $('#negara').val(data.negara);
       $('#hp').val(data.hp);
-      
       $('#modal').removeClass('hidden').addClass('modal-show');
     } catch (e) {
       alert('Error parsing data: ' + e.message);
     }
   });
-  
-  // Fungsi untuk set wilayah saat edit
-  async function setWilayahForEdit(data) {
-    try {
-      // Load provinsi terlebih dahulu
-      await loadProvinsi();
-      
-      // Cari dan set provinsi
-      let provinsiFound = false;
-      $('#propinsi option').each(function() {
-        if ($(this).text().toLowerCase() === data.propinsi.toLowerCase()) {
-          $('#propinsi').val($(this).val());
-          $('#propinsi_nama').val(data.propinsi);
-          provinsiFound = true;
-          return false; // break loop
-        }
-      });
-      
-      if (provinsiFound && $('#propinsi').val()) {
-        // Load kota
-        await loadKota($('#propinsi').val());
-        
-        // Cari dan set kota
-        let kotaFound = false;
-        $('#kota option').each(function() {
-          if ($(this).text().toLowerCase() === data.kota.toLowerCase()) {
-            $('#kota').val($(this).val());
-            $('#kota_nama').val(data.kota);
-            kotaFound = true;
-            return false; // break loop
-          }
-        });
-        
-        if (kotaFound && $('#kota').val()) {
-          // Load kecamatan
-          await loadKecamatan($('#kota').val());
-          
-          // Cari dan set kecamatan
-          let kecamatanFound = false;
-          $('#kecamatan option').each(function() {
-            if ($(this).text().toLowerCase() === data.kecamatan.toLowerCase()) {
-              $('#kecamatan').val($(this).val());
-              $('#kecamatan_nama').val(data.kecamatan);
-              kecamatanFound = true;
-              return false; // break loop
-            }
-          });
-          
-          if (kecamatanFound && $('#kecamatan').val()) {
-            // Load kelurahan
-            await loadKelurahan($('#kecamatan').val());
-            
-            // Cari dan set kelurahan
-            let kelurahanFound = false;
-            $('#kelurahan option').each(function() {
-              if ($(this).text().toLowerCase() === data.kelurahan.toLowerCase()) {
-                $('#kelurahan').val($(this).val());
-                $('#kelurahan_nama').val(data.kelurahan);
-                kelurahanFound = true;
-                return false; // break loop
-              }
-            });
-            
-            if (!kelurahanFound) {
-              // Jika tidak ditemukan, set nama saja
-              $('#kelurahan').val(data.kelurahan);
-              $('#kelurahan_nama').val(data.kelurahan);
-            }
-          } else {
-            // Jika tidak ditemukan, set nama saja
-            $('#kecamatan').val(data.kecamatan);
-            $('#kecamatan_nama').val(data.kecamatan);
-          }
-        } else {
-          // Jika tidak ditemukan, set nama saja
-          $('#kota').val(data.kota);
-          $('#kota_nama').val(data.kota);
-        }
-      } else {
-        // Jika tidak ditemukan, set nama saja
-        $('#propinsi').val(data.propinsi);
-        $('#propinsi_nama').val(data.propinsi);
-      }
-    } catch (error) {
-      console.error('Error setting wilayah for edit:', error);
-      // Fallback: set nama saja
-      $('#propinsi').val(data.propinsi);
-      $('#propinsi_nama').val(data.propinsi);
-      $('#kota').val(data.kota);
-      $('#kota_nama').val(data.kota);
-      $('#kecamatan').val(data.kecamatan);
-      $('#kecamatan_nama').val(data.kecamatan);
-      $('#kelurahan').val(data.kelurahan);
-      $('#kelurahan_nama').val(data.kelurahan);
-    }
-  }
-  
+
   // Delete button
   $(document).on('click', '.deleteBtn', function() {
     if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
@@ -1951,6 +1738,102 @@ $(document).ready(function() {
     }
   });
 });
+
+// Fungsi untuk menampilkan biodata
+function setWilayahForEdit(data) {
+  try {
+    // Load provinsi terlebih dahulu
+    await loadProvinsi();
+    
+    // Cari dan set provinsi
+    let provinsiFound = false;
+    $('#propinsi option').each(function() {
+      if ($(this).text().toLowerCase() === data.propinsi.toLowerCase()) {
+        $('#propinsi').val($(this).val());
+        $('#propinsi_nama').val(data.propinsi);
+        provinsiFound = true;
+        return false; // break loop
+      }
+    });
+    
+    if (provinsiFound && $('#propinsi').val()) {
+      // Load kota
+      await loadKota($('#propinsi').val());
+      
+      // Cari dan set kota
+      let kotaFound = false;
+      $('#kota option').each(function() {
+        if ($(this).text().toLowerCase() === data.kota.toLowerCase()) {
+          $('#kota').val($(this).val());
+          $('#kota_nama').val(data.kota);
+          kotaFound = true;
+          return false; // break loop
+        }
+      });
+      
+      if (kotaFound && $('#kota').val()) {
+        // Load kecamatan
+        await loadKecamatan($('#kota').val());
+        
+        // Cari dan set kecamatan
+        let kecamatanFound = false;
+        $('#kecamatan option').each(function() {
+          if ($(this).text().toLowerCase() === data.kecamatan.toLowerCase()) {
+            $('#kecamatan').val($(this).val());
+            $('#kecamatan_nama').val(data.kecamatan);
+            kecamatanFound = true;
+            return false; // break loop
+          }
+        });
+        
+        if (kecamatanFound && $('#kecamatan').val()) {
+          // Load kelurahan
+          await loadKelurahan($('#kecamatan').val());
+          
+          // Cari dan set kelurahan
+          let kelurahanFound = false;
+          $('#kelurahan option').each(function() {
+            if ($(this).text().toLowerCase() === data.kelurahan.toLowerCase()) {
+              $('#kelurahan').val($(this).val());
+              $('#kelurahan_nama').val(data.kelurahan);
+              kelurahanFound = true;
+              return false; // break loop
+            }
+          });
+          
+          if (!kelurahanFound) {
+            // Jika tidak ditemukan, set nama saja
+            $('#kelurahan').val(data.kelurahan);
+            $('#kelurahan_nama').val(data.kelurahan);
+          }
+        } else {
+          // Jika tidak ditemukan, set nama saja
+          $('#kecamatan').val(data.kecamatan);
+          $('#kecamatan_nama').val(data.kecamatan);
+        }
+      } else {
+        // Jika tidak ditemukan, set nama saja
+        $('#kota').val(data.kota);
+        $('#kota_nama').val(data.kota);
+      }
+    } else {
+      // Jika tidak ditemukan, set nama saja
+      $('#propinsi').val(data.propinsi);
+      $('#propinsi_nama').val(data.propinsi);
+    }
+  } catch (error) {
+    console.error('Error setting wilayah for edit:', error);
+    // Fallback: set nama saja
+    $('#propinsi').val(data.propinsi);
+    $('#propinsi_nama').val(data.propinsi);
+    $('#kota').val(data.kota);
+    $('#kota_nama').val(data.kota);
+    $('#kecamatan').val(data.kecamatan);
+    $('#kecamatan_nama').val(data.kecamatan);
+    $('#kelurahan').val(data.kelurahan);
+    $('#kelurahan_nama').val(data.kelurahan);
+  }
+}
 </script>
 
 <?php include 'footer.php'; ?> 
