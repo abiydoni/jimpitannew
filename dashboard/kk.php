@@ -250,7 +250,7 @@ if (!isset($_SESSION['user'])) {
                 open: false,
                 options: [],
                 selectedOption: null,
-                filteredOptions() {
+                get filteredOptions() {
                     if (!Array.isArray(this.options)) return [];
                     if (!this.search) return this.options;
                     const term = this.search.toLowerCase();
