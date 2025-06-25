@@ -333,7 +333,7 @@ include 'header.php';
 }
 
 table.min-w-full {
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
+  font-family: 'Consolas', 'Courier New', monospace;
   font-size: 13px;
 }
 </style>
@@ -539,7 +539,7 @@ function printWargaData() {
           }
         }
         body {
-          font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
+          font-family: 'Consolas', 'Courier New', monospace;
           font-size: 10px;
           margin: 0;
           padding: 0;
@@ -953,7 +953,7 @@ function printBiodata() {
       <head>
         <title>Biodata Warga</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
+          body { font-family: 'Consolas', 'Courier New', monospace; margin: 20px; }
           .border-2 { border: 2px solid #d1d5db; }
           .border-gray-300 { border-color: #d1d5db; }
           .rounded-lg { border-radius: 8px; }
@@ -1026,7 +1026,7 @@ function printKK() {
       <head>
         <title>Biodata Kartu Keluarga</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
+          body { font-family: 'Consolas', 'Courier New', monospace; margin: 20px; }
           .border-2 { border: 2px solid #d1d5db; }
           .border-gray-300 { border-color: #d1d5db; }
           .rounded-lg { border-radius: 8px; }
