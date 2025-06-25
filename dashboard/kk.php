@@ -150,13 +150,7 @@ if (!isset($_SESSION['user'])) {
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
-            // Tambah tombol untuk modal baru
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2';
-            btn.innerHTML = "<i class='bx bx-plus'></i> Tambah KK dari Warga";
-            btn.onclick = openAddNikkModal;
-            document.querySelector('.head .mb-4').appendChild(btn);
+            // Hapus seluruh kode penambahan tombol Tambah KK dari Warga secara dinamis
             // Event change untuk update kk_name & nokk otomatis
             document.getElementById('nikkDropdown').addEventListener('change', function() {
                 const selected = this.options[this.selectedIndex];
