@@ -3,7 +3,7 @@ include 'get_konfigurasi.php';
 
 // Ambil konfigurasi dari database
 $filePesan = get_konfigurasi('report3');
-$groupId = get_konfigurasi('group_id2');
+$groupId = get_konfigurasi('group_id3');
 $apiUrl = get_konfigurasi('api_url_group');
 $sessionId = get_konfigurasi('session_id');
 
