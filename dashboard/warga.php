@@ -331,6 +331,11 @@ include 'header.php';
   padding-bottom: 0.25rem;
   margin-bottom: 0.5rem;
 }
+
+table.min-w-full {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
+  font-size: 13px;
+}
 </style>
 
 <script>
@@ -534,7 +539,7 @@ function printWargaData() {
           }
         }
         body {
-          font-family: Arial, sans-serif;
+          font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
           font-size: 10px;
           margin: 0;
           padding: 0;
