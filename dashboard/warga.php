@@ -374,6 +374,8 @@ function renderTable(data, page = 1) {
       }
       const jsonData = JSON.stringify(row);
       const encodedData = encodeURIComponent(jsonData);
+      // Tambahkan icon king jika hubungan Kepala Keluarga
+      const namaDisplay = row.hubungan === 'Kepala Keluarga' ? '👑 ' + (row.nama || '-') : (row.nama || '-');
       html += `<tr class="border-b hover:bg-gray-50">
         <td class="px-3 py-1 w-10 text-center">${start + idx + 1}</td>
         <td class="px-3 py-1 w-40 text-left">
@@ -382,7 +384,7 @@ function renderTable(data, page = 1) {
         <td class="px-3 py-1 w-40 text-left">
           <span class="text-green-600 hover:text-green-800 cursor-pointer underline" onclick="showKK('${row.nikk || ''}')">${row.nikk || '-'}</span>
         </td>
-        <td class="px-3 py-1 w-56 text-left">${row.nama || '-'}</td>
+        <td class="px-3 py-1 w-56 text-left">${namaDisplay}</td>
         <td class="px-3 py-1 w-32 text-left">${row.jenkel === 'L' ? 'Laki-laki' : row.jenkel === 'P' ? 'Perempuan' : '-'}</td>
         <td class="px-3 py-1 w-36 text-left">${tanggalLahir}</td>
         <td class="px-3 py-1 w-32 text-left">${row.rt ? row.rt.toString().padStart(3, '0') : '-'}/${row.rw ? row.rw.toString().padStart(3, '0') : '-'}</td>
