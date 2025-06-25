@@ -44,7 +44,27 @@ if (!isset($_SESSION['user'])) {
 }
 // Include the database connection
 
+// Rekap jumlah KK yang belum masuk jimpitan (belum ada di tb_warga.nokk)
+$kk_belum_jimpitan = [];
+try {
+    $sql_belum = "SELECT * FROM master_kk WHERE nokk NOT IN (SELECT DISTINCT nokk FROM tb_warga WHERE nokk IS NOT NULL AND nokk != '')";
+    $stmt_belum = $pdo->query($sql_belum);
+    $kk_belum_jimpitan = $stmt_belum->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $kk_belum_jimpitan = [];
+}
+$jumlah_kk_belum = count($kk_belum_jimpitan);
 ?>
+<div class="mb-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded">
+  <b>Jumlah KK yang belum masuk jimpitan:</b> <?= $jumlah_kk_belum ?>
+  <?php if ($jumlah_kk_belum > 0): ?>
+    <ul class="list-disc ml-6 mt-1 text-xs">
+      <?php foreach ($kk_belum_jimpitan as $kk): ?>
+        <li><?= htmlspecialchars($kk['kk_name']) ?> (<?= htmlspecialchars($kk['nokk']) ?>)</li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+</div>
 
 <div class="table-data">
     <div class="order">
