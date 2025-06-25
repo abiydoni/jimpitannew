@@ -90,15 +90,28 @@ if (!isset($_SESSION['user'])) {
     <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
             <h2 class="text-lg font-bold mb-2">Edit Data Master KK</h2>
-            <form action="api/kk_update.php" method="POST">
-                <input type="hidden" name="code_id" id="edit_code_id">
+            <form action="api/kk_update.php" method="POST" x-data="kkDropdownSearch()" x-init="init()">
+                <div class="mb-2">
+                    <label class="block mb-1">Code ID</label>
+                    <input type="text" name="code_id" id="edit_code_id" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.code_id : ''">
+                </div>
+                <div class="mb-2 relative">
+                    <label class="block mb-1">No KK (NIKK) / Nama KK</label>
+                    <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
+                    <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+                        <template x-for="kk in filteredOptions" :key="kk.nikk">
+                            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
+                        </template>
+                    </ul>
+                    <input type="hidden" id="edit_nikkDropdown" name="nikk" :value="selectedOption ? selectedOption.nikk : ''">
+                </div>
                 <div class="mb-2">
                     <label class="block mb-1">No KK</label>
-                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1" required>
+                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
                 </div>
                 <div class="mb-2">
                     <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1" required>
+                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
