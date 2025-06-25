@@ -114,6 +114,14 @@ if (!isset($_SESSION['user'])) {
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
                 </div>
+                <div class="mb-2">
+                    <label class="block mb-1">No KK</label>
+                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" name="kk_name" id="edit_kk_name2" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
+                </div>
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
                     <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
@@ -123,10 +131,6 @@ if (!isset($_SESSION['user'])) {
                         </template>
                     </ul>
                     <input type="hidden" id="edit_nikkDropdown" name="nikk" :value="selectedOption ? selectedOption.nikk : ''">
-                </div>
-                <div class="mb-2">
-                    <label class="block mb-1">No KK</label>
-                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
