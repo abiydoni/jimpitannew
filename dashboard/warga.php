@@ -207,6 +207,7 @@ include 'header.php';
                                 <option value="Petani">Petani</option>
                                 <option value="Pedagang">Pedagang</option>
                                 <option value="Pelajar">Pelajar</option>
+                                <option value="Pensiunan">Pensiunan</option>
                                 <option value="Tidak Bekerja">Tidak Bekerja</option>
                                 <option value="IRT">Ibu Rumah Tangga</option>
                                 <option value="Lainnya">Lainnya</option>
