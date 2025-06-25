@@ -111,7 +111,7 @@ if (!isset($_SESSION['user'])) {
     <div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
             <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
-            <form id="formAddNikk" action="#" method="POST" x-data="kkDropdownSearch()">
+            <form id="formAddNikk" action="#" method="POST" x-data="kkDropdownSearch()" x-init="init()">
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
                     <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
@@ -267,6 +267,7 @@ if (!isset($_SESSION['user'])) {
                 async init() {
                     const res = await fetch('api/get_nikk_group.php');
                     this.options = await res.json();
+                    console.log('NIKK options loaded:', this.options);
                 }
             }
         }
