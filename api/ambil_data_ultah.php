@@ -41,12 +41,12 @@ if ($data && count($data) > 0) {
         $pesan .= "$no. *{$warga['nama']}* (lahir: $tgl $bln) 🎂\n";
         $no++;
     }
-    $pesan .= "\nSemoga panjang umur, sehat selalu, dan bahagia! 🎈✨\n";
+    $pesan .= "\nSemoga panjang umur, sehat selalu, dan bahagia! 🎈✨";
 } else {
-    $pesan .= "Tidak ada warga yang berulang tahun hari ini. 😊\n";
+    $pesan .= "kosong";
 }
 
-$pesan .= "\nSalam hangat dari RT 07! 💐\n";
+$pesan .= "\n\nSalam hangat dari RT 07! 💐\n";
 $pesan .= "\n_- Pesan Otomatis dari System -_";
 
 header('Content-Type: text/plain');
