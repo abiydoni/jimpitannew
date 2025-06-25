@@ -202,7 +202,7 @@ include 'api/get_info.php';
 }
 .box-info2 {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 2.5rem;
   justify-content: center;
   margin-bottom: 1.5rem;
@@ -213,34 +213,37 @@ include 'api/get_info.php';
   min-width: 320px;
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  /* box-shadow: 0 2px 12px rgba(0,0,0,0.06); */
   padding: 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  transition: box-shadow 0.2s, transform 0.2s;
   position: relative;
   margin: 0;
   max-width: 100%;
+  /* Hapus efek hover/transform */
+  box-shadow: none;
+  transition: none;
 }
 .box-info2 li:hover {
-  box-shadow: 0 8px 24px rgba(37,99,235,0.13);
-  transform: translateY(-3px) scale(1.02);
+  box-shadow: none;
+  transform: none;
 }
 @media (max-width: 900px) {
   .box-info2 {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1.2rem;
   }
   .box-info2 li {
-    flex: 1 1 100%;
+    flex: 1 1 50%;
     min-width: 0;
     padding: 1rem 0.5rem;
   }
 }
 @media (max-width: 600px) {
   .box-info2 {
+    flex-wrap: wrap;
     gap: 0.7rem;
   }
   .box-info2 li {
