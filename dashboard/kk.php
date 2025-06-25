@@ -180,29 +180,33 @@ if (!isset($_SESSION['user'])) {
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
-            // Event change untuk update kk_name & nokk otomatis
-            document.getElementById('nikkDropdown').addEventListener('change', function() {
-                const selected = this.options[this.selectedIndex];
-                const text = selected.textContent.split(' - ');
-                document.getElementById('kkNameAuto').value = text[1] || '';
-                document.getElementById('nokkAuto').value = selected.getAttribute('data-nokk') || '';
-            });
-            // Submit form (AJAX)
-            document.getElementById('formAddNikk').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const nikk = document.getElementById('nikkDropdown').value;
-                const kk_name = document.getElementById('kkNameAuto').value;
-                const nokk = document.getElementById('nokkAuto').value;
-                fetch('api/kk_insert.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}`
-                })
-                .then(res => res.text())
-                .then(resp => {
-                    alert('Data berhasil ditambah!');
-                    location.reload();
+            var nikkDropdown = document.getElementById('nikkDropdown');
+            if (nikkDropdown) {
+                nikkDropdown.addEventListener('change', function() {
+                    const selected = this.options[this.selectedIndex];
+                    const text = selected.textContent.split(' - ');
+                    document.getElementById('kkNameAuto').value = text[1] || '';
+                    document.getElementById('nokkAuto').value = selected.getAttribute('data-nokk') || '';
                 });
-            });
+            }
+            var formAddNikk = document.getElementById('formAddNikk');
+            if (formAddNikk) {
+                formAddNikk.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const nikk = document.getElementById('nikkDropdown').value;
+                    const kk_name = document.getElementById('kkNameAuto').value;
+                    const nokk = document.getElementById('nokkAuto').value;
+                    fetch('api/kk_insert.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}`
+                    })
+                    .then(res => res.text())
+                    .then(resp => {
+                        alert('Data berhasil ditambah!');
+                        location.reload();
+                    });
+                });
+            }
         });
     </script>
