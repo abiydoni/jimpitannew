@@ -29,6 +29,15 @@ include 'header.php';
         
         <!-- Search dan Reset -->
         <div class="mb-2 flex flex-wrap gap-2 items-center">
+          <label class="text-xs">Tampilkan
+            <select id="pageSizeSelect" class="border px-2 py-1 rounded text-xs">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            baris
+          </label>
           <input type="text" id="searchInput" class="border px-2 py-1 rounded text-xs w-48" placeholder="Cari nama/NIK/Alamat/Tgl Lahir (DD-MM-YYYY)...">
           <input type="text" id="nikkInput" class="border px-2 py-1 rounded text-xs w-32" placeholder="NIKK">
           <select id="jenkelInput" class="border px-2 py-1 rounded text-xs w-24">
@@ -328,7 +337,7 @@ include 'header.php';
 let allWarga = [];
 let filteredWarga = [];
 let currentPage = 1;
-const pageSize = 10;
+let pageSize = 10;
 
 // Tambahkan variabel global untuk DataTable
 var wargaTable = null;
@@ -1952,6 +1961,14 @@ $(document).ready(function() {
       });
     }
   });
+});
+
+// Ganti pageSize jika user memilih
+$(document).on('change', '#pageSizeSelect', function() {
+  pageSize = parseInt($(this).val(), 10);
+  currentPage = 1;
+  renderTable(filteredWarga, currentPage);
+  renderPagination(filteredWarga, currentPage);
 });
 </script>
 
