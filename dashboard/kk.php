@@ -110,6 +110,10 @@ if (!isset($_SESSION['user'])) {
                     <label class="block mb-1">Code ID</label>
                     <input type="text" name="code_id" id="edit_code_id" class="border rounded w-full p-1 bg-gray-100" readonly required>
                 </div>
+                <div class="mb-2">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                </div>
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
                     <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
@@ -123,10 +127,6 @@ if (!isset($_SESSION['user'])) {
                 <div class="mb-2">
                     <label class="block mb-1">No KK</label>
                     <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
-                </div>
-                <div class="mb-2">
-                    <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
@@ -183,6 +183,7 @@ if (!isset($_SESSION['user'])) {
                 const nikk = this.getAttribute('data-nikk');
                 const kk_name = this.getAttribute('data-name');
                 document.getElementById('edit_code_id').value = code_id;
+                document.getElementById('edit_kk_name').value = kk_name;
                 // Set Alpine.js selectedOption di modal edit (tanpa code_id)
                 const modal = document.getElementById('editModal');
                 if (modal && modal.__x) {
