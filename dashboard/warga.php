@@ -1738,20 +1738,20 @@ $(document).ready(function() {
         $('#modal').removeClass('modal-show').addClass('hidden');
         loadData();
         
-        // try {
-        //   const result = JSON.parse(res);
-        //   if (result.success) {
-        //     alert('Data berhasil disimpan!');
-        //   } else {
-        //     alert('Error: ' + (result.message || 'Terjadi kesalahan'));
-        //   }
-        // } catch (e) {
-        //   if (res === 'success' || res === 'updated') {
-        //     alert('Data berhasil disimpan!');
-        //   } else {
-        //     alert('Response: ' + res);
-        //   }
-        // }
+        try {
+          const result = JSON.parse(res);
+          if (result.success) {
+            showToast('Data berhasil disimpan!', 'success');
+          } else {
+            showToast('Error: ' + (result.message || 'Terjadi kesalahan'), 'error');
+          }
+        } catch (e) {
+          if (res === 'success' || res === 'updated') {
+            showToast('Data berhasil disimpan!', 'success');
+          } else {
+            showToast('Response: ' + res, 'error');
+          }
+        }
       },
       error: function(xhr, status, error) {
         submitBtn.prop('disabled', false).text(originalText);
@@ -1957,9 +1957,9 @@ $(document).ready(function() {
       $.post('api/warga_action.php', { action: 'delete', id_warga: id }, function(res) {
         if (res === 'deleted') {
           loadData();
-          alert('Data berhasil dihapus!');
+          showToast('Data berhasil dihapus!', 'success');
         } else {
-          alert('Gagal menghapus data: ' + res);
+          showToast('Gagal menghapus data: ' + res, 'error');
         }
       }).fail(function(xhr, status, error) {
         alert('Error: ' + error);
@@ -1975,6 +1975,25 @@ $(document).on('change', '#pageSizeSelect', function() {
   renderTable(filteredWarga, currentPage);
   renderPagination(filteredWarga, currentPage);
 });
+
+// Tambahkan import SweetAlert2 jika belum ada
+if (!window.Swal) {
+  var script = document.createElement('script');
+  script.src = 'js/sweetalert2.all.min.js';
+  document.head.appendChild(script);
+}
+// Fungsi toast SweetAlert2
+function showToast(msg, icon = 'success') {
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: icon,
+    title: msg,
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true
+  });
+}
 </script>
 
 <?php include 'footer.php'; ?> 
