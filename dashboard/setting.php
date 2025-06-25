@@ -18,8 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE tb_konfigurasi SET value = :value WHERE nama = :nama");
         $stmt->execute([':value' => $value, ':nama' => $nama]);
     }
-    echo "<div class='bg-green-100 text-green-800 p-2 mb-3 rounded text-sm'>✅ Konfigurasi berhasil diperbarui.</div>";
-    header("Refresh:1");
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Konfigurasi berhasil diperbarui.', 'icon' => 'success'];
+    header("Location: setting.php");
+    exit;
 }
 
 include 'header.php';
@@ -34,7 +36,34 @@ if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
     exit;
 }
 
-
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
 ?>
 
 <div class="table-data px-2">

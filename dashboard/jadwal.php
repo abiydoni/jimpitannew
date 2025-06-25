@@ -9,7 +9,8 @@ if (isset($_GET['delete'])) {
     $sql = "DELETE FROM users WHERE id_code=?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id_code]);
-
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'User berhasil dihapus!', 'icon' => 'success'];
     header("Location: jadwal.php");
     exit();
 }
@@ -298,6 +299,36 @@ if (!isset($_SESSION['user'])) {
         }
     </script>
 
+<?php
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
+?>
 
 <?php
 // Tutup koneksi
