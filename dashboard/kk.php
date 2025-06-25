@@ -158,6 +158,10 @@ if (!isset($_SESSION['user'])) {
                 .then(res => res.json())
                 .then(data => {
                     const select = document.getElementById('nikkDropdown');
+                    // Destroy select2 jika sudah pernah diinisialisasi
+                    if ($(select).hasClass('select2-hidden-accessible')) {
+                        $(select).select2('destroy');
+                    }
                     select.innerHTML = '';
                     data.forEach(item => {
                         const opt = document.createElement('option');
