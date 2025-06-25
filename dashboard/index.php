@@ -28,8 +28,22 @@ include 'api/get_info.php';
                 <li>
                     <i class='bx bxs-group bx-lg' ></i>
                     <span class="text">
+                        <h3 id="totalPeserta"><?php echo $totalKKj; ?> KK</h3>
+                        <a href="kk.php">Jimpitan</a>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group bx-lg' ></i>
+                    <span class="text">
                         <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
-                        <a href="kk.php">Kepala Keluarga</a>
+                        <a href="warga.php">Kepala Keluarga</a>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group bx-lg' ></i>
+                    <span class="text">
+                        <h3 id="totalPeserta"><?php echo $totalWarga; ?> Orang</h3>
+                        <a href="warga.php">Total Warga</a>
                     </span>
                 </li>
                 <li>
