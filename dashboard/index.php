@@ -91,9 +91,10 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
                               <br>
-                                <table id="example" class="table-jaga-malam min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                                <table class="table-jaga-malam min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                                     <thead class="bg-gray-200">
                                         <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">No</th>
                                             <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
                                             <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
                                         </tr>
@@ -101,7 +102,7 @@ include 'api/get_info.php';
                                     <tbody>
                                     <?php
                                         if ($data) {
-                                            // Mapping hari Inggris ke Indonesia
+                                            $no = 1;
                                             $hariIndo = [
                                                 'Sunday' => 'Minggu',
                                                 'Monday' => 'Senin',
@@ -113,6 +114,7 @@ include 'api/get_info.php';
                                             ];
                                             foreach ($data as $row): ?>
                                                 <tr class="border-b hover:bg-gray-100">
+                                                    <td><?php echo $no++; ?></td>
                                                     <td><?php echo htmlspecialchars($row["name"]); ?></td>
                                                     <td><?php 
                                                         $shift = $row["shift"];
@@ -121,7 +123,7 @@ include 'api/get_info.php';
                                                 </tr>
                                             <?php endforeach;
                                         } else {
-                                            echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
+                                            echo '<tr><td colspan="3" class="text-center">No data available</td></tr>';
                                         }
                                     ?>
                                     </tbody>
@@ -265,13 +267,11 @@ include 'api/get_info.php';
     padding: 0.7rem 0.2rem;
   }
 }
-.table-jaga-malam tr {
-  border-bottom: 1px solid #e5e7eb;
-}
-.table-jaga-malam thead tr {
-  border-bottom: 2px solid #cbd5e1;
-}
 .table-jaga-malam td, .table-jaga-malam th {
+  border-bottom: 1px solid #e5e7eb;
   padding: 0.5rem 0.7rem;
+}
+.table-jaga-malam thead tr th {
+  border-bottom: 2px solid #cbd5e1;
 }
 </style>
