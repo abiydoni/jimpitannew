@@ -12,11 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($id) {
         $stmt = $pdo->prepare("UPDATE tb_botmenu SET parent_id = ?, keyword = ?, description = ?, url = ? WHERE id = ?");
         $stmt->execute([$parent_id, $keyword, $description, $url, $id]);
+        session_start();
+        $_SESSION['swal'] = ['msg' => 'Menu berhasil diupdate!', 'icon' => 'success'];
     } else {
         $stmt = $pdo->prepare("INSERT INTO tb_botmenu (parent_id, keyword, description, url) VALUES (?, ?, ?, ?)");
         $stmt->execute([$parent_id, $keyword, $description, $url]);
+        session_start();
+        $_SESSION['swal'] = ['msg' => 'Menu berhasil ditambah!', 'icon' => 'success'];
     }
-
     header("Location: bot_menu.php#menu-table");
     exit;
 }
@@ -25,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_botmenu WHERE id = ?");
     $stmt->execute([$_GET['delete']]);
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Menu berhasil dihapus!', 'icon' => 'success'];
     header("Location: bot_menu.php#menu-table");
     exit;
 }
@@ -168,4 +173,36 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </form>
     </div>
   </div>
+
+<?php
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
+?>
+
 <?php include 'footer.php'; ?>

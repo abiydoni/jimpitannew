@@ -11,6 +11,8 @@ if (isset($_POST['add_menu'])) {
         $_POST['urutan'],
         $_POST['role']
     ]);
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Menu berhasil ditambah!', 'icon' => 'success'];
     header("Location: menu-manage.php#menu-table");
     exit;
 }
@@ -26,6 +28,8 @@ if (isset($_POST['edit_menu'])) {
         $_POST['role'],
         $_POST['id']
     ]);
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Menu berhasil diupdate!', 'icon' => 'success'];
     header("Location: menu-manage.php#menu-table");
     exit;
 }
@@ -34,6 +38,8 @@ if (isset($_POST['edit_menu'])) {
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM tb_dashboard_menu WHERE id=?");
     $stmt->execute([$_GET['delete']]);
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Menu berhasil dihapus!', 'icon' => 'success'];
     header("Location: menu-manage.php#menu-table");
     exit;
 }
@@ -166,3 +172,34 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<?php
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
+?>
