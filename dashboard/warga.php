@@ -200,10 +200,11 @@ include 'header.php';
                             <select name="pekerjaan" id="pekerjaan" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
                                 <option value="">Pilih Pekerjaan</option>
                                 <option value="PNS">PNS</option>
+                                <option value="BUMN">BUMN</option>
                                 <option value="TNI">TNI</option>
                                 <option value="Polri">Polri</option>
                                 <option value="Swasta">Swasta</option>
-                                <option value="Wiraswasta">Wiraswasta</option>
+                                <option value="Wirausaha">Wirausaha</option>
                                 <option value="Petani">Petani</option>
                                 <option value="Pedagang">Pedagang</option>
                                 <option value="Pelajar">Pelajar</option>
