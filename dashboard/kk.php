@@ -153,12 +153,10 @@ if (!isset($_SESSION['user'])) {
             loadNikkDropdown();
         }
         function loadNikkDropdown() {
-            // Ambil data NIKK, KK Name, dan No KK dari API
             fetch('api/get_nikk_group.php')
                 .then(res => res.json())
                 .then(data => {
                     const select = document.getElementById('nikkDropdown');
-                    // Destroy select2 jika sudah pernah diinisialisasi
                     if ($(select).hasClass('select2-hidden-accessible')) {
                         $(select).select2('destroy');
                     }
@@ -167,15 +165,13 @@ if (!isset($_SESSION['user'])) {
                         const opt = document.createElement('option');
                         opt.value = item.nikk;
                         opt.textContent = item.nikk + ' - ' + item.kk_name;
-                        opt.setAttribute('data-nokk', item.nokk);
+                        opt.setAttribute('data-nokk', item.nikk);
                         select.appendChild(opt);
                     });
-                    // Set field otomatis pertama kali
                     if (data.length > 0) {
                         document.getElementById('kkNameAuto').value = data[0].kk_name;
-                        document.getElementById('nokkAuto').value = data[0].nokk;
+                        document.getElementById('nokkAuto').value = data[0].nikk;
                     }
-                    // Inisialisasi select2 setelah data dimasukkan
                     $(select).select2({
                         dropdownParent: $('#addModalNikk'),
                         width: '100%',
