@@ -36,7 +36,7 @@ if (!isset($_SESSION['user'])) {
         <div class="head">
             <h3>DATA KEPALA KELUARGA</h3>
             <div class="mb-4 text-center">
-                <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" data-modal-toggle="addModalNikk" onclick="toggleModal('addModalNikk')">
+                <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onclick="openAddNikkModal()">
                     <i class='bx bx-plus' style="font-size:24px"></i>
                 </button>
                 <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -153,6 +153,7 @@ if (!isset($_SESSION['user'])) {
             loadNikkDropdown();
         }
         function loadNikkDropdown() {
+            console.log('loadNikkDropdown called');
             fetch('api/get_nikk_group.php')
                 .then(res => res.json())
                 .then(data => {
@@ -177,6 +178,7 @@ if (!isset($_SESSION['user'])) {
                         width: '100%',
                         placeholder: 'Cari NIKK...'
                     });
+                    console.log('Dropdown options:', select.innerHTML);
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
