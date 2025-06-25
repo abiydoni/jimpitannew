@@ -25,17 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validasi input
     if (empty($user_name) || empty($name) || empty($shift) || empty($role)) {
-        // Tangani kesalahan input
-        echo "<script>alert('Input tidak boleh kosong!'); window.location.href='../jadwal.php';</script>"; // Ganti dengan messagebox
+        session_start();
+        $_SESSION['swal'] = ['msg' => 'Input tidak boleh kosong!', 'icon' => 'error'];
+        header('Location: ../jadwal.php');
         exit();
     }
 
     // Update user data in the database
     $sql = "UPDATE users SET user_name = ?, name = ?, shift = ?, role = ? WHERE id_code = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$user_name, $name, $shift, $role, $id_code]); // Menambahkan id_code ke parameter
-    // Menambahkan pengalihan setelah pesan berhasil
-    echo "<script>alert('Data berhasil diperbarui!'); window.location.href='../jadwal.php';</script>";
+    $stmt->execute([$user_name, $name, $shift, $role, $id_code]);
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Data berhasil diperbarui!', 'icon' => 'success'];
+    header('Location: ../jadwal.php');
     exit();
 }
 ?>

@@ -379,7 +379,7 @@ $jumlah_nikk_belum = count($warga_nikk_belum_kk);
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
-                        alert('Code ID sudah ada, silakan gunakan yang lain!');
+                        showToast('Code ID sudah ada, silakan gunakan yang lain!', 'error');
                         codeIdInput.value = '';
                         codeIdInput.focus();
                     }
@@ -432,3 +432,34 @@ $jumlah_nikk_belum = count($warga_nikk_belum_kk);
             });
         });
     </script>
+
+<?php
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
+?>

@@ -239,11 +239,12 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
                 data: JSON.stringify(dataToSend),
                 success: function(response) {
                     if (response.success) {
-                        Swal.fire('Data saved!', '', 'success').then(() => {
+                        showToast('Data saved!', 'success');
+                        setTimeout(() => {
                             window.location.href = 'keuangan.php'; // Arahkan ke halaman keuangan setelah menyimpan
-                        });
+                        }, 2000);
                     } else {
-                        Swal.fire('Error', response.message, 'error');
+                        showToast('Error', 'error');
                     }
                     // Reset form and close modal if necessary
                     $('#dataForm')[0].reset();
@@ -251,7 +252,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
-                    Swal.fire('Error saving data', '', 'error');
+                    showToast('Error saving data', 'error');
                 }
             });
         });
@@ -325,4 +326,24 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
                 Swal.fire('Peringatan', 'Silakan pilih bulan terlebih dahulu!', 'warning'); // Tambahkan pesan peringatan
             }
         });
+    </script>
+
+    <script>
+    // Tambahkan SweetAlert2 jika belum ada
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
     </script>

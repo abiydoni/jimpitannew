@@ -664,7 +664,7 @@ function printWargaData() {
 // Fungsi untuk menampilkan biodata warga
 function showBiodata(nik) {
   if (!nik || nik === '-') {
-    alert('NIK tidak valid');
+    showToast('NIK tidak valid', 'error');
     return;
   }
   
@@ -692,7 +692,7 @@ function showBiodata(nik) {
 // Fungsi untuk menampilkan data KK
 function showKK(nikk) {
   if (!nikk || nikk === '-') {
-    alert('NIKK tidak valid');
+    showToast('NIKK tidak valid', 'error');
     return;
   }
   
@@ -1583,7 +1583,7 @@ $(document).ready(function() {
         
         if (errors.length > 0) {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
-          alert('Error validasi:\n' + errors.join('\n'));
+          showToast('Error validasi:\n' + errors.join('\n'), 'error');
           return;
         }
         
@@ -1614,9 +1614,9 @@ $(document).ready(function() {
                 }
               }
               
-              alert(message);
+              showToast(message, result.error_count > 0 ? 'error' : 'success');
             } catch (e) {
-              alert('Import berhasil! ' + response);
+              showToast('Import berhasil! ' + response, 'success');
             }
             
             loadData(); // Reload data
@@ -1625,12 +1625,12 @@ $(document).ready(function() {
           
         }).fail(function(xhr, status, error) {
           $('#loadingModal').removeClass('modal-show').addClass('hidden');
-          alert('Error saat import: ' + error);
+          showToast('Error saat import: ' + error, 'error');
         });
         
       } catch (e) {
         $('#loadingModal').removeClass('modal-show').addClass('hidden');
-        alert('Error membaca file: ' + e.message);
+        showToast('Error membaca file: ' + e.message, 'error');
       }
     };
     

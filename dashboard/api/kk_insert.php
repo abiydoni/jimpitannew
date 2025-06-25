@@ -30,11 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $exists = $stmt_check->fetchColumn();
 
     if ($exists > 0) {
-        // Jika code_id sudah ada, redirect dengan pesan error
-        echo "<script>
-                alert('Code ID sudah ada');
-                window.history.back(); // Kembali ke halaman sebelumnya
-              </script>";
+        session_start();
+        $_SESSION['swal'] = ['msg' => 'Code ID sudah ada', 'icon' => 'error'];
+        header('Location: ../kk.php');
         exit;
     }
     
@@ -44,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Siapkan dan eksekusi pernyataan SQL untuk menyimpan data
     $stmt = $pdo->prepare("INSERT INTO master_kk (code_id, kk_name, nokk) VALUES (?, ?, ?)");
     $stmt->execute([$code_id, $kk_name, $nokk]);
-
-    // Redirect setelah berhasil
-    echo "<script>alert('Data berhasih ditambahkan!'); window.location.href='../kk.php';</script>";
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Data berhasil ditambahkan!', 'icon' => 'success'];
+    header('Location: ../kk.php');
     exit;
 }
 ?>

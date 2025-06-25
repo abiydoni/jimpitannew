@@ -49,6 +49,44 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     function closeModal() {
       document.getElementById('modal').classList.add('hidden');
     }
+    // Tambahkan SweetAlert2 jika belum ada
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    // Konfirmasi hapus dengan SweetAlert2
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a[href*="delete="]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Yakin hapus menu ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal',
+            position: 'top-end',
+            toast: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = this.href;
+            }
+          });
+        });
+      });
+    });
   </script>
 
 <div class="table-data" id="menu-table">
