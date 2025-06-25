@@ -106,7 +106,7 @@ if (!isset($_SESSION['user'])) {
         <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
             <h2 class="text-lg font-bold mb-2">Edit Data Master KK</h2>
             <form action="api/kk_update.php" method="POST" x-data="kkDropdownSearch()" x-init="init()">
-                <div class="mb-2">
+                <div class="mb-2 grid grid-cols-2 gap-3">
                     <label class="block mb-1">Code ID</label>
                     <input type="text" name="code_id" id="edit_code_id" class="border rounded w-full p-1 bg-gray-100" readonly required>
                     <label class="block mb-1">Nama KK</label>
