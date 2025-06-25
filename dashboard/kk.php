@@ -66,7 +66,7 @@ if (!isset($_SESSION['user'])) {
                                 <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["nokk"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>">
+                                    <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-nikk="<?php echo $row['nokk']; ?>" data-name="<?php echo $row['kk_name']; ?>">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
                                     <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
@@ -151,7 +151,6 @@ if (!isset($_SESSION['user'])) {
         </div>
     </div>
     <?php include 'footer.php'; ?>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
     <script>
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -161,8 +160,15 @@ if (!isset($_SESSION['user'])) {
         // Script untuk mengisi data modal edit
         document.querySelectorAll('[data-modal-toggle="editModal"]').forEach(button => {
             button.addEventListener('click', function () {
-                document.getElementById('edit_code_id').value = this.getAttribute('data-id');
-                document.getElementById('edit_kk_name').value = this.getAttribute('data-name');
+                const code_id = this.getAttribute('data-id');
+                const nikk = this.getAttribute('data-nikk');
+                const kk_name = this.getAttribute('data-name');
+                // Set Alpine.js selectedOption di modal edit
+                const modal = document.getElementById('editModal');
+                if (modal && modal.__x) {
+                    modal.__x.$data.selectedOption = { code_id, nikk, kk_name };
+                    modal.__x.$data.search = nikk + ' - ' + kk_name;
+                }
                 toggleModal('editModal');
             });
         });
