@@ -184,18 +184,15 @@ if (!isset($_SESSION['user'])) {
                         width: '100%',
                         placeholder: 'Pilih No KK disini...',
                         matcher: function(params, data) {
-                            // If there are no search terms, return all of the data
+                            console.log('Matcher called:', params.term, data.text, data.element ? $(data.element).attr('data-kk_name') : '');
                             if ($.trim(params.term) === '') {
                                 return data;
                             }
-                            // Do not display the item if there is no 'text' property
                             if (typeof data.text === 'undefined') {
                                 return null;
                             }
-                            // Custom search: match NIKK atau kk_name
                             var term = params.term.toLowerCase();
                             var text = data.text.toLowerCase();
-                            // Cek juga data-kk_name
                             var kkName = '';
                             if (data.element) {
                                 kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
@@ -203,7 +200,6 @@ if (!isset($_SESSION['user'])) {
                             if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) {
                                 return data;
                             }
-                            // Return `null` if the term should not be displayed
                             return null;
                         }
                     });
