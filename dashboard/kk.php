@@ -289,6 +289,31 @@ if (!isset($_SESSION['user'])) {
                     });
                 });
             }
+            // Handler submit form edit KK (editModal)
+            var formEditKK = document.querySelector('#editModal form');
+            if (formEditKK) {
+                formEditKK.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const code_id = document.getElementById('edit_code_id').value;
+                    const nikk = document.getElementById('edit_nikkDropdown').value;
+                    const kk_name = document.getElementById('edit_kk_name').value;
+                    const nokk = document.getElementById('edit_nokk').value;
+                    fetch('api/kk_update.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `code_id=${encodeURIComponent(code_id)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}&nikk=${encodeURIComponent(nikk)}`
+                    })
+                    .then(res => res.text())
+                    .then(resp => {
+                        if (resp.includes('berhasil')) {
+                            showToast('Data berhasil diupdate!', 'success');
+                            setTimeout(() => location.reload(), 1200);
+                        } else {
+                            showToast('Gagal update data!', 'error');
+                        }
+                    });
+                });
+            }
         });
         function kkDropdownSearch() {
             return {
