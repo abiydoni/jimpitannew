@@ -251,6 +251,7 @@ if (!isset($_SESSION['user'])) {
                 options: [],
                 selectedOption: null,
                 filteredOptions() {
+                    if (!Array.isArray(this.options)) return [];
                     if (!this.search) return this.options;
                     const term = this.search.toLowerCase();
                     return this.options.filter(kk =>
