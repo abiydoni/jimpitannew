@@ -179,6 +179,7 @@ if (!isset($_SESSION['user'])) {
                         placeholder: 'Cari NIKK...'
                     });
                     console.log('Dropdown options:', select.innerHTML);
+                    console.log('Select2 status:', typeof $.fn.select2);
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
