@@ -72,13 +72,14 @@ include 'api/get_info.php';
                 </li>
             </ul>
 
-            <ul class="box-info">
-                <li>
-                    <div class="table-data">
-                        <div class="order">
-                            <div class="head">
-                                <h3>Jaga Malam Hari ini</h3>
-                            </div>
+            <div class="wide-container">
+                <ul class="box-info">
+                    <li>
+                        <div class="table-data">
+                            <div class="order">
+                                <div class="head">
+                                    <h3>Jaga Malam Hari ini</h3>
+                                </div>
                                 <?php
                                     // Mengatur locale ke bahasa Indonesia
                                     setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
@@ -90,36 +91,36 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
                               <br>
-                            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                                <thead class="bg-gray-200">
-                                    <tr>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                    if ($data) {
-                                        foreach ($data as $row): ?>
-                                            <tr class="border-b hover:bg-gray-100">
-                                                <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                            </tr>
-                                        <?php endforeach;
-                                    } else {
-                                        echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
-                                    }
-                                ?>
-                                </tbody>
-                            </table>                        
+                                <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                                    <thead class="bg-gray-200">
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        if ($data) {
+                                            foreach ($data as $row): ?>
+                                                <tr class="border-b hover:bg-gray-100">
+                                                    <td><?php echo htmlspecialchars($row["name"]); ?></td>
+                                                    <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                                </tr>
+                                            <?php endforeach;
+                                        } else {
+                                            echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
+                                        }
+                                    ?>
+                                    </tbody>
+                                </table>                        
+                            </div>
                         </div>
-                    </div>
-
-                </li>
-                <li>
-                    <canvas id="myChart" style="height: 400px;" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
-                </li>
+                    </li>
+                    <li>
+                        <canvas id="myChart" style="height: 400px;" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
+                    </li>
                 </ul>
+            </div>
 <?php include 'footer.php'; ?>
   <script>
     // Fetch data dari API
@@ -172,3 +173,31 @@ include 'api/get_info.php';
       });
     }
   </script>
+
+<style>
+.wide-container {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  padding: 1.5rem 1.2rem;
+}
+.wide-container .box-info {
+  flex-wrap: nowrap;
+  gap: 2rem;
+}
+.wide-container .box-info li {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  .wide-container .box-info {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .wide-container {
+    padding: 0.5rem 0.2rem;
+  }
+}
+</style>
