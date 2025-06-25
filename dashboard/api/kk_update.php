@@ -10,6 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $pdo->prepare("UPDATE master_kk SET kk_name = ?, nokk = ? WHERE code_id = ?");
     $stmt->execute([$kk_name, $nokk, $id]);
 
-    echo "<script>alert('Data berhasil diubah!'); window.location.href='../kk.php';</script>";
+    // Tidak perlu alert di sini, karena file ini redirect. Jika ingin AJAX, pindahkan notifikasi ke frontend.
 }
 ?>

@@ -278,8 +278,14 @@ if (!isset($_SESSION['user'])) {
                     })
                     .then(res => res.text())
                     .then(resp => {
-                        alert('Data berhasil ditambah!');
-                        location.reload();
+                        if (resp.includes('berhasih') || resp.includes('berhasil')) {
+                            showToast('Data berhasil ditambah!', 'success');
+                            setTimeout(() => location.reload(), 1200);
+                        } else if (resp.includes('Code ID sudah ada')) {
+                            showToast('Code ID sudah ada!', 'error');
+                        } else {
+                            showToast('Gagal menambah data!', 'error');
+                        }
                     });
                 });
             }
@@ -331,5 +337,45 @@ if (!isset($_SESSION['user'])) {
             if (codeIdInput) {
                 codeIdInput.addEventListener('blur', cekCodeIdUnik);
             }
+        });
+
+        // Tambahkan import SweetAlert2 jika belum ada
+        if (!window.Swal) {
+            var script = document.createElement('script');
+            script.src = 'js/sweetalert2.all.min.js';
+            document.head.appendChild(script);
+        }
+        // Fungsi toast SweetAlert2
+        function showToast(msg, icon = 'success') {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: icon,
+                title: msg,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        }
+
+        // Pada hapus data (link delete)
+        document.querySelectorAll('a[href^="kk.php?delete="]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!confirm('Yakin ingin menghapus data?')) {
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
+                fetch(this.href)
+                    .then(res => res.text())
+                    .then(resp => {
+                        if (resp.includes('Location: kk.php')) {
+                            showToast('Data berhasil dihapus!', 'success');
+                            setTimeout(() => location.reload(), 1200);
+                        } else {
+                            showToast('Gagal menghapus data!', 'error');
+                        }
+                    });
+            });
         });
     </script>
