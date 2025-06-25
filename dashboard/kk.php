@@ -11,6 +11,21 @@ if (isset($_GET['delete'])) {
     header("Location: kk.php");
     exit();
 }
+
+if (isset($_GET['cek_code_id'])) {
+    header('Content-Type: application/json');
+    $code_id = $_GET['cek_code_id'] ?? '';
+    if (!$code_id) {
+        echo json_encode(['exists' => false]);
+        exit;
+    }
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM master_kk WHERE code_id = ?');
+    $stmt->execute([$code_id]);
+    $exists = $stmt->fetchColumn() > 0;
+    echo json_encode(['exists' => $exists]);
+    exit;
+}
+
 include 'header.php';
 
 // Prepare and execute the SQL statement
@@ -127,7 +142,7 @@ if (!isset($_SESSION['user'])) {
             <form id="formAddNikk" action="#" method="POST" x-data="kkDropdownSearch()" x-init="init()">
                 <div class="mb-2">
                     <label class="block mb-1">Code ID</label>
-                    <input type="text" id="add_code_id" name="code_id" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.code_id || '' : ''">
+                    <input type="text" id="add_code_id" name="code_id" class="border rounded w-full p-1" required placeholder="Contoh: RT0700001">
                 </div>
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
@@ -295,4 +310,25 @@ if (!isset($_SESSION['user'])) {
                 }
             }
         }
+        // Validasi realtime code_id unik pada modal tambah KK
+        function cekCodeIdUnik() {
+            const codeIdInput = document.getElementById('add_code_id');
+            const codeId = codeIdInput.value.trim();
+            if (!codeId) return;
+            fetch('kk.php?cek_code_id=' + encodeURIComponent(codeId))
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        alert('Code ID sudah ada, silakan gunakan yang lain!');
+                        codeIdInput.value = '';
+                        codeIdInput.focus();
+                    }
+                });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeIdInput = document.getElementById('add_code_id');
+            if (codeIdInput) {
+                codeIdInput.addEventListener('blur', cekCodeIdUnik);
+            }
+        });
     </script>
