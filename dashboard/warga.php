@@ -80,6 +80,11 @@ include 'header.php';
         
         <!-- Pagination -->
         <div id="pagination" class="flex justify-center items-center gap-1 mt-2 text-xs"></div>
+        <!-- Tambahan: Jumlah KK dan Jumlah Warga -->
+        <div id="rekap-warga-kk" class="flex flex-wrap gap-4 justify-center items-center mt-2 text-sm font-semibold text-gray-700">
+          <span id="jumlahWarga">Jumlah Warga: ...</span>
+          <span id="jumlahKK">Jumlah KK: ...</span>
+        </div>
     </div>
 </div>
 
@@ -1997,6 +2002,24 @@ function showToast(msg, icon = 'success') {
     timerProgressBar: true
   });
 }
+
+// Tambahkan fungsi update rekap jumlah warga dan KK berbasis allWarga
+function updateRekap() {
+  // Jumlah warga unik berdasarkan nik
+  const nikSet = new Set(allWarga.map(w => w.nik).filter(nik => nik && nik !== ''));
+  document.getElementById('jumlahWarga').textContent = 'Jumlah Warga: ' + nikSet.size;
+  // Jumlah KK unik berdasarkan nikk (tidak kosong/null)
+  const nikkSet = new Set(allWarga.map(w => w.nikk).filter(nikk => nikk && nikk !== ''));
+  document.getElementById('jumlahKK').textContent = 'Jumlah KK: ' + nikkSet.size;
+}
+// Panggil updateRekap setiap kali data warga selesai load
+const origLoadData = loadData;
+loadData = function() {
+  origLoadData();
+  setTimeout(updateRekap, 500); // Tunggu data warga terisi
+};
+// Panggil juga saat halaman pertama kali
+setTimeout(updateRekap, 1000);
 </script>
 
 <?php include 'footer.php'; ?> 
