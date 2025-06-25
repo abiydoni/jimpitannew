@@ -11,12 +11,12 @@ if (isset($_GET['delete'])) {
     header("Location: kk.php");
     exit();
 }
+include 'header.php';
 
 // Prepare and execute the SQL statement
 $sql = "SELECT * FROM master_kk";
 $stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-include 'header.php';
 // Check if user is logged in
 if (!isset($_SESSION['user'])) {
     header('Location: ../login.php'); // Redirect to login page
