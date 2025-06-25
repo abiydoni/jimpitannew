@@ -166,7 +166,7 @@ if (!isset($_SESSION['user'])) {
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
-                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
+                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Tambah</button>
                 </div>
             </form>
         </div>
