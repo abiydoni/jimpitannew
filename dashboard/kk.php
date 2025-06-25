@@ -164,8 +164,8 @@ if (!isset($_SESSION['user'])) {
                     select.innerHTML = '';
                     // Tambahkan option kosong di awal
                     const emptyOpt = document.createElement('option');
-                    emptyOpt.value = 'Pilih No KK disini...';
-                    emptyOpt.textContent = '';
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = 'Pilih No KK disini...';
                     select.appendChild(emptyOpt);
                     data.forEach(item => {
                         const opt = document.createElement('option');
@@ -175,13 +175,13 @@ if (!isset($_SESSION['user'])) {
                         select.appendChild(opt);
                     });
                     // Reset value ke kosong
-                    select.value = 'Pilih No KK disini...';
+                    select.value = '';
                     document.getElementById('kkNameAuto').value = '';
                     document.getElementById('nokkAuto').value = '';
                     $(select).select2({
                         dropdownParent: $('#addModalNikk'),
                         width: '100%',
-                        placeholder: 'Cari NIKK...'
+                        placeholder: 'Pilih No KK'
                     });
                     console.log('Dropdown options:', select.innerHTML);
                     console.log('Select2 status:', typeof $.fn.select2);
