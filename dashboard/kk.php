@@ -31,59 +31,59 @@ if (!isset($_SESSION['user'])) {
 
 ?>
 
-            <div class="table-data">
-                <div class="order">
-                    <div class="head">
-                        <h3>DATA KEPALA KELUARGA</h3>
-                        <div class="mb-4 text-center">
-                            <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" data-modal-toggle="addModalNikk" onclick="toggleModal('addModalNikk')">
-                                <i class='bx bx-plus' style="font-size:24px"></i>
-                            </button>
-                            <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <i class='bx bx-printer' style="font-size:24px"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th class="border px-3 py-2">Nama KK</th>
-                                <th class="border px-3 py-2">ID</th>
-                                <th class="border px-3 py-2">No KK</th>
-                                <th class="border px-3 py-2 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                if ($data) {
-                                    foreach ($data as $row): ?>
-                                        <tr class="border-b hover:bg-gray-100">
-                                            <td>
-                                                <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-600 hover:text-blue-800">
-                                                    <?php echo htmlspecialchars($row["kk_name"]); ?>
-                                                </a>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["nokk"]); ?></td>
-                                            <td class="flex justify-center space-x-2">
-                                                <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>">
-                                                    <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
-                                                </button>
-                                                <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
-                                                    <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
-                                                </a>
-                                                <input type="checkbox" class="print-checkbox">    
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; 
-                                } else {
-                                    echo '<tr><td colspan="3">No data available</td></tr>';
-                                }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-data">
+    <div class="order">
+        <div class="head">
+            <h3>DATA KEPALA KELUARGA</h3>
+            <div class="mb-4 text-center">
+                <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" data-modal-toggle="addModalNikk" onclick="toggleModal('addModalNikk')">
+                    <i class='bx bx-plus' style="font-size:24px"></i>
+                </button>
+                <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <i class='bx bx-printer' style="font-size:24px"></i>
+                </button>
             </div>
+        </div>
+        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border px-3 py-2">Nama KK</th>
+                    <th class="border px-3 py-2">ID</th>
+                    <th class="border px-3 py-2">No KK</th>
+                    <th class="border px-3 py-2 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    if ($data) {
+                        foreach ($data as $row): ?>
+                            <tr class="border-b hover:bg-gray-100">
+                                <td>
+                                    <a href="detailkk.php?nama=<?= urlencode($row['kk_name']) ?>" class="text-blue-600 hover:text-blue-800">
+                                        <?php echo htmlspecialchars($row["kk_name"]); ?>
+                                    </a>
+                                </td>
+                                <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["nokk"]); ?></td>
+                                <td class="flex justify-center space-x-2">
+                                    <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>">
+                                        <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
+                                    </button>
+                                    <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
+                                        <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
+                                    </a>
+                                    <input type="checkbox" class="print-checkbox">    
+                                </td>
+                            </tr>
+                        <?php endforeach; 
+                    } else {
+                        echo '<tr><td colspan="3">No data available</td></tr>';
+                    }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
     <!-- Modal Tambah Data -->
     <!-- (Dihapus, hanya pakai modal addModalNikk) -->
     <!-- Modal Edit Data -->
@@ -171,6 +171,12 @@ if (!isset($_SESSION['user'])) {
                         document.getElementById('kkNameAuto').value = data[0].kk_name;
                         document.getElementById('nokkAuto').value = data[0].nokk;
                     }
+                    // Inisialisasi select2 setelah data dimasukkan
+                    $(select).select2({
+                        dropdownParent: $('#addModalNikk'),
+                        width: '100%',
+                        placeholder: 'Cari NIKK...'
+                    });
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
