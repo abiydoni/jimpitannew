@@ -162,6 +162,11 @@ if (!isset($_SESSION['user'])) {
                         $(select).select2('destroy');
                     }
                     select.innerHTML = '';
+                    // Tambahkan option kosong di awal
+                    const emptyOpt = document.createElement('option');
+                    emptyOpt.value = '';
+                    emptyOpt.textContent = '';
+                    select.appendChild(emptyOpt);
                     data.forEach(item => {
                         const opt = document.createElement('option');
                         opt.value = item.nikk;
@@ -169,10 +174,10 @@ if (!isset($_SESSION['user'])) {
                         opt.setAttribute('data-nokk', item.nikk);
                         select.appendChild(opt);
                     });
-                    if (data.length > 0) {
-                        document.getElementById('kkNameAuto').value = data[0].kk_name;
-                        document.getElementById('nokkAuto').value = data[0].nikk;
-                    }
+                    // Reset value ke kosong
+                    select.value = '';
+                    document.getElementById('kkNameAuto').value = '';
+                    document.getElementById('nokkAuto').value = '';
                     $(select).select2({
                         dropdownParent: $('#addModalNikk'),
                         width: '100%',
