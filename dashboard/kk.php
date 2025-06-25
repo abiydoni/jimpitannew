@@ -86,20 +86,24 @@ if (!isset($_SESSION['user'])) {
             </div>
     <!-- Modal Tambah Data -->
     <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-3 rounded shadow-lg"> <!-- Mengubah p-5 menjadi p-3 untuk memperkecil padding -->
-            <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
+        <div class="bg-white p-3 rounded shadow-lg">
+            <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2>
             <form action="api/kk_insert.php" method="POST">
-                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
+                <div class="mb-2">
                     <label class="block mb-1">Code ID (Awali dengan : RT07 dan 5 angka berikutnya!)</label>
-                    <input value="RT07" type="text" name="code_id" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
+                    <input value="RT07" type="text" name="code_id" class="border rounded w-full p-1" required>
                 </div>
-                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
+                <div class="mb-2">
+                    <label class="block mb-1">No KK</label>
+                    <input type="text" name="nokk" class="border rounded w-full p-1" required>
+                </div>
+                <div class="mb-2">
                     <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
+                    <input type="text" name="kk_name" class="border rounded w-full p-1" required>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
-                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah"> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
+                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button>
+                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
                 </div>
             </form>
         </div>
@@ -110,6 +114,10 @@ if (!isset($_SESSION['user'])) {
             <h2 class="text-lg font-bold mb-4">Edit Data Master KK</h2>
             <form action="api/kk_update.php" method="POST">
                 <input type="hidden" name="code_id" id="edit_code_id">
+                <div class="mb-4">
+                    <label class="block mb-1">No KK</label>
+                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-2" required>
+                </div>
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-2" required>
@@ -129,6 +137,10 @@ if (!isset($_SESSION['user'])) {
                 <div class="mb-2">
                     <label class="block mb-1">No KK (NIKK)</label>
                     <select id="nikkDropdown" name="nikk" class="border rounded w-full p-1" required></select>
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-1">No KK</label>
+                    <input type="text" id="nokkAuto" name="nokk" class="border rounded w-full p-1 bg-gray-100" readonly required>
                 </div>
                 <div class="mb-2">
                     <label class="block mb-1">Nama KK</label>
@@ -163,7 +175,7 @@ if (!isset($_SESSION['user'])) {
             loadNikkDropdown();
         }
         function loadNikkDropdown() {
-            // Ambil data NIKK dan KK Name dari API
+            // Ambil data NIKK, KK Name, dan No KK dari API
             fetch('api/get_nikk_group.php')
                 .then(res => res.json())
                 .then(data => {
@@ -173,11 +185,13 @@ if (!isset($_SESSION['user'])) {
                         const opt = document.createElement('option');
                         opt.value = item.nikk;
                         opt.textContent = item.nikk + ' - ' + item.kk_name;
+                        opt.setAttribute('data-nokk', item.nokk);
                         select.appendChild(opt);
                     });
-                    // Trigger event untuk set kk_name pertama kali
+                    // Set field otomatis pertama kali
                     if (data.length > 0) {
                         document.getElementById('kkNameAuto').value = data[0].kk_name;
+                        document.getElementById('nokkAuto').value = data[0].nokk;
                     }
                 });
         }
@@ -189,21 +203,23 @@ if (!isset($_SESSION['user'])) {
             btn.innerHTML = "<i class='bx bx-plus'></i> Tambah KK dari Warga";
             btn.onclick = openAddNikkModal;
             document.querySelector('.head .mb-4').appendChild(btn);
-            // Event change untuk update kk_name otomatis
+            // Event change untuk update kk_name & nokk otomatis
             document.getElementById('nikkDropdown').addEventListener('change', function() {
                 const selected = this.options[this.selectedIndex];
                 const text = selected.textContent.split(' - ');
                 document.getElementById('kkNameAuto').value = text[1] || '';
+                document.getElementById('nokkAuto').value = selected.getAttribute('data-nokk') || '';
             });
             // Submit form (AJAX)
             document.getElementById('formAddNikk').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const nikk = document.getElementById('nikkDropdown').value;
                 const kk_name = document.getElementById('kkNameAuto').value;
+                const nokk = document.getElementById('nokkAuto').value;
                 fetch('api/kk_insert.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}`
+                    body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}`
                 })
                 .then(res => res.text())
                 .then(resp => {

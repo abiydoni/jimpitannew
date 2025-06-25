@@ -39,10 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     $kk_name = $_POST['kk_name'];
+    $nokk = $_POST['nokk'];
 
     // Siapkan dan eksekusi pernyataan SQL untuk menyimpan data
-    $stmt = $pdo->prepare("INSERT INTO master_kk (code_id, kk_name) VALUES (?, ?)");
-    $stmt->execute([$code_id, $kk_name]);
+    $stmt = $pdo->prepare("INSERT INTO master_kk (code_id, kk_name, nokk) VALUES (?, ?, ?)");
+    $stmt->execute([$code_id, $kk_name, $nokk]);
 
     // Redirect setelah berhasil
     echo "<script>alert('Data berhasih ditambahkan!'); window.location.href='../kk.php';</script>";
