@@ -93,7 +93,7 @@ if (!isset($_SESSION['user'])) {
             <form action="api/kk_update.php" method="POST" x-data="kkDropdownSearch()" x-init="init()">
                 <div class="mb-2">
                     <label class="block mb-1">Code ID</label>
-                    <input type="text" name="code_id" id="edit_code_id" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.code_id : ''">
+                    <input type="text" name="code_id" id="edit_code_id" class="border rounded w-full p-1 bg-gray-100" readonly required>
                 </div>
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
@@ -125,6 +125,10 @@ if (!isset($_SESSION['user'])) {
         <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
             <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
             <form id="formAddNikk" action="#" method="POST" x-data="kkDropdownSearch()" x-init="init()">
+                <div class="mb-2">
+                    <label class="block mb-1">Code ID</label>
+                    <input type="text" id="add_code_id" name="code_id" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.code_id || '' : ''">
+                </div>
                 <div class="mb-2 relative">
                     <label class="block mb-1">No KK (NIKK) / Nama KK</label>
                     <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
@@ -163,10 +167,11 @@ if (!isset($_SESSION['user'])) {
                 const code_id = this.getAttribute('data-id');
                 const nikk = this.getAttribute('data-nikk');
                 const kk_name = this.getAttribute('data-name');
-                // Set Alpine.js selectedOption di modal edit
+                document.getElementById('edit_code_id').value = code_id;
+                // Set Alpine.js selectedOption di modal edit (tanpa code_id)
                 const modal = document.getElementById('editModal');
                 if (modal && modal.__x) {
-                    modal.__x.$data.selectedOption = { code_id, nikk, kk_name };
+                    modal.__x.$data.selectedOption = { nikk, kk_name };
                     modal.__x.$data.search = nikk + ' - ' + kk_name;
                 }
                 toggleModal('editModal');
