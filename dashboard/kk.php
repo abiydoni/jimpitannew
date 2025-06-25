@@ -111,18 +111,24 @@ if (!isset($_SESSION['user'])) {
     <div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
             <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
-            <form id="formAddNikk" action="#" method="POST">
-                <div class="mb-2">
-                    <label class="block mb-1">No KK (NIKK)</label>
-                    <select id="nikkDropdown" name="nikk" class="border rounded w-full p-1" required></select>
+            <form id="formAddNikk" action="#" method="POST" x-data="kkDropdownSearch()">
+                <div class="mb-2 relative">
+                    <label class="block mb-1">No KK (NIKK) / Nama KK</label>
+                    <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off">
+                    <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+                        <template x-for="kk in filteredOptions" :key="kk.nikk">
+                            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
+                        </template>
+                    </ul>
+                    <input type="hidden" id="nikkDropdown" name="nikk" :value="selectedOption ? selectedOption.nikk : ''">
                 </div>
                 <div class="mb-2">
                     <label class="block mb-1">No KK</label>
-                    <input type="text" id="nokkAuto" name="nokk" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                    <input type="text" id="nokkAuto" name="nokk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
                 </div>
                 <div class="mb-2">
                     <label class="block mb-1">Nama KK</label>
-                    <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                    <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
@@ -132,6 +138,7 @@ if (!isset($_SESSION['user'])) {
         </div>
     </div>
     <?php include 'footer.php'; ?>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
     <script>
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -237,4 +244,29 @@ if (!isset($_SESSION['user'])) {
                 });
             }
         });
+        function kkDropdownSearch() {
+            return {
+                search: '',
+                open: false,
+                options: [],
+                selectedOption: null,
+                filteredOptions() {
+                    if (!this.search) return this.options;
+                    const term = this.search.toLowerCase();
+                    return this.options.filter(kk =>
+                        kk.nikk.toLowerCase().includes(term) ||
+                        kk.kk_name.toLowerCase().includes(term)
+                    );
+                },
+                selectOption(kk) {
+                    this.selectedOption = kk;
+                    this.search = kk.nikk + ' - ' + kk.kk_name;
+                    this.open = false;
+                },
+                async init() {
+                    const res = await fetch('api/get_nikk_group.php');
+                    this.options = await res.json();
+                }
+            }
+        }
     </script>
