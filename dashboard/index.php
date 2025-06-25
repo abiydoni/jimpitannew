@@ -78,7 +78,7 @@ include 'api/get_info.php';
                         <!-- <div class="table-data"> -->
                             <div class="order">
                                 <div class="head">
-                                    <h3>Jaga Malam Hari ini</h3>
+                                    <h1 class="judul-jaga">Jaga Malam Hari ini</h1>
                                 </div>
                                 <?php
                                     // Mengatur locale ke bahasa Indonesia
@@ -91,7 +91,7 @@ include 'api/get_info.php';
                                     echo "<p>$tanggal_sekarang</p>";
                                 ?>
                               <br>
-                                <table class="table-jaga-malam min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                                <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
                                     <thead class="bg-gray-200">
                                         <tr>
                                             <th class="border border-gray-300 px-4 py-2 text-left">No</th>
@@ -273,5 +273,17 @@ include 'api/get_info.php';
 }
 .table-jaga-malam thead tr th {
   border-bottom: 2px solid #cbd5e1;
+}
+.table-jaga-malam h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+.judul-jaga {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 0.7rem;
 }
 </style>
