@@ -73,7 +73,7 @@ include 'api/get_info.php';
             </ul>
 
             <div class="wide-container">
-                <ul class="box-info">
+                <ul class="box-info2">
                     <li>
                         <div class="table-data">
                             <div class="order">
@@ -198,6 +198,55 @@ include 'api/get_info.php';
 @media (max-width: 600px) {
   .wide-container {
     padding: 0.5rem 0.2rem;
+  }
+}
+.box-info2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+.box-info2 li {
+  flex: 1 1 50%;
+  min-width: 320px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  margin: 0;
+  max-width: 100%;
+}
+.box-info2 li:hover {
+  box-shadow: 0 8px 24px rgba(37,99,235,0.13);
+  transform: translateY(-3px) scale(1.02);
+}
+@media (max-width: 900px) {
+  .box-info2 {
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+  .box-info2 li {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 1rem 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .box-info2 {
+    gap: 0.7rem;
+  }
+  .box-info2 li {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 0.7rem 0.2rem;
   }
 }
 </style>
