@@ -164,7 +164,7 @@ if (!isset($_SESSION['user'])) {
                     select.innerHTML = '';
                     // Tambahkan option kosong di awal
                     const emptyOpt = document.createElement('option');
-                    emptyOpt.value = '';
+                    emptyOpt.value = 'Pilih No KK disini...';
                     emptyOpt.textContent = '';
                     select.appendChild(emptyOpt);
                     data.forEach(item => {
@@ -175,7 +175,7 @@ if (!isset($_SESSION['user'])) {
                         select.appendChild(opt);
                     });
                     // Reset value ke kosong
-                    select.value = '';
+                    select.value = 'Pilih No KK disini...';
                     document.getElementById('kkNameAuto').value = '';
                     document.getElementById('nokkAuto').value = '';
                     $(select).select2({
