@@ -75,44 +75,46 @@ include 'api/get_info.php';
             <div class="wide-container">
                 <ul class="box-info2">
                     <li>
-                        <div class="table-data">
-                            <div class="head">
-                                <h3>Jaga Malam Hari ini</h3>
-                            </div>
-                            <?php
-                                // Mengatur locale ke bahasa Indonesia
-                                setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
-                                // setlocale(LC_TIME, 'ind'); // Untuk Windows
-
-                                // Mengambil tanggal sekarang
-                                $tanggal_sekarang = strftime("%A, %d %B %Y");
-
-                                echo "<p>$tanggal_sekarang</p>";
-                            ?>
-                          <br>
-                            <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
-                                <thead class="bg-gray-200">
-                                    <tr>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <!-- <div class="table-data"> -->
+                            <div class="order">
+                                <div class="head">
+                                    <h3>Jaga Malam Hari ini</h3>
+                                </div>
                                 <?php
-                                    if ($data) {
-                                        foreach ($data as $row): ?>
-                                            <tr class="border-b hover:bg-gray-100">
-                                                <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                                <td><?php echo htmlspecialchars($row["shift"]); ?></td>
-                                            </tr>
-                                        <?php endforeach;
-                                    } else {
-                                        echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
-                                    }
+                                    // Mengatur locale ke bahasa Indonesia
+                                    setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk sistem berbasis Unix/Linux
+                                    // setlocale(LC_TIME, 'ind'); // Untuk Windows
+
+                                    // Mengambil tanggal sekarang
+                                    $tanggal_sekarang = strftime("%A, %d %B %Y");
+
+                                    echo "<p>$tanggal_sekarang</p>";
                                 ?>
-                                </tbody>
-                            </table>                        
-                        </div>
+                              <br>
+                                <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden" style="width:100%">
+                                    <thead class="bg-gray-200">
+                                        <tr>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">NAMA</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">SHIFT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        if ($data) {
+                                            foreach ($data as $row): ?>
+                                                <tr class="border-b hover:bg-gray-100">
+                                                    <td><?php echo htmlspecialchars($row["name"]); ?></td>
+                                                    <td><?php echo htmlspecialchars($row["shift"]); ?></td>
+                                                </tr>
+                                            <?php endforeach;
+                                        } else {
+                                            echo '<tr><td colspan="2" class="text-center">No data available</td></tr>';
+                                        }
+                                    ?>
+                                    </tbody>
+                                </table>                        
+                            </div>
+                        <!-- </div> -->
                     </li>
                     <li>
                         <canvas id="myChart" style="height: 400px;" class="w-full max-w-md mx-auto bg-white p-4 rounded-lg shadow"></canvas>
