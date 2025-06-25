@@ -30,7 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare("UPDATE tb_profil SET gambar = ? WHERE kode = ?")->execute([$gambarName, $_POST['kode']]);
     }
 
-    echo "<script>alert('Profil diperbarui!');location.href='profile.php';</script>";
+    // Ganti alert dengan session notifikasi
+    session_start();
+    $_SESSION['swal'] = ['msg' => 'Profil diperbarui!', 'icon' => 'success'];
+    header('Location: profile.php');
     exit;
 }
 
@@ -121,17 +124,29 @@ $profil = $pdo->query("SELECT * FROM tb_profil LIMIT 1")->fetch(PDO::FETCH_ASSOC
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Logo
-    document.getElementById('logoInput').onchange = function(e) {
-        if (e.target.files[0]) {
-            document.getElementById('logoPreview').src = URL.createObjectURL(e.target.files[0]);
-        }
-    };
+    var logoInput = document.getElementById('logoInput');
+    if (logoInput) {
+        logoInput.onchange = function(e) {
+            if (e.target.files[0]) {
+                var logoPreview = document.getElementById('logoPreview');
+                if (logoPreview) {
+                    logoPreview.src = URL.createObjectURL(e.target.files[0]);
+                }
+            }
+        };
+    }
     // Wallpaper
-    document.getElementById('wallpaperInput').onchange = function(e) {
-        if (e.target.files[0]) {
-            document.getElementById('wallpaperPreview').src = URL.createObjectURL(e.target.files[0]);
-        }
-    };
+    var wallpaperInput = document.getElementById('wallpaperInput');
+    if (wallpaperInput) {
+        wallpaperInput.onchange = function(e) {
+            if (e.target.files[0]) {
+                var wallpaperPreview = document.getElementById('wallpaperPreview');
+                if (wallpaperPreview) {
+                    wallpaperPreview.src = URL.createObjectURL(e.target.files[0]);
+                }
+            }
+        };
+    }
 });
 </script>
 
@@ -163,3 +178,33 @@ if (isset($_GET['upload']) && ($_GET['upload'] === 'logo' || $_GET['upload'] ===
     echo json_encode(['success' => false]);
     exit;
 }
+
+// Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!empty($_SESSION['swal'])) {
+  $msg = $_SESSION['swal']['msg'];
+  $icon = $_SESSION['swal']['icon'];
+  echo "<script>
+    if (!window.Swal) {
+      var script = document.createElement('script');
+      script.src = 'js/sweetalert2.all.min.js';
+      document.head.appendChild(script);
+    }
+    function showToast(msg, icon = 'success') {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('{$msg}', '{$icon}');
+    });
+  </script>";
+  unset($_SESSION['swal']);
+}
+?>
