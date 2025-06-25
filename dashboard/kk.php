@@ -49,9 +49,7 @@ if (!isset($_SESSION['user'])) {
                             <tr>
                                 <th class="border px-3 py-2">Nama KK</th>
                                 <th class="border px-3 py-2">ID</th>
-                                <th class="border px-3 py-2">Alamat</th>
-                                <th class="border px-3 py-2">HP</th>
-                                <th class="border px-3 py-2">Foto</th>
+                                <th class="border px-3 py-2">No KK</th>
                                 <th class="border px-3 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -66,11 +64,9 @@ if (!isset($_SESSION['user'])) {
                                                 </a>
                                             </td>
                                             <td><?php echo htmlspecialchars($row["code_id"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["kk_alamat"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["kk_hp"]); ?></td>
-                                            <td><?php echo htmlspecialchars($row["kk_foto"]); ?></td>
+                                            <td><?php echo htmlspecialchars($row["nokk"]); ?></td>
                                             <td class="flex justify-center space-x-2">
-                                                <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>" data-alamat="<?php echo $row['kk_alamat']; ?>" data-hp="<?php echo $row['kk_hp']; ?>" data-foto="<?php echo $row['kk_foto']; ?>">
+                                                <button class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1" data-modal-toggle="editModal" data-id="<?php echo $row['code_id']; ?>" data-name="<?php echo $row['kk_name']; ?>">
                                                     <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                                 </button>
                                                 <a href="kk.php?delete=<?php echo $row['code_id']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $row['kk_name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
@@ -92,7 +88,7 @@ if (!isset($_SESSION['user'])) {
     <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-3 rounded shadow-lg"> <!-- Mengubah p-5 menjadi p-3 untuk memperkecil padding -->
             <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
-            <form action="api/kk_insert.php" method="POST" enctype="multipart/form-data">
+            <form action="api/kk_insert.php" method="POST">
                 <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Code ID (Awali dengan : RT07 dan 5 angka berikutnya!)</label>
                     <input value="RT07" type="text" name="code_id" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
@@ -100,18 +96,6 @@ if (!isset($_SESSION['user'])) {
                 <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
-                </div>
-                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
-                    <label class="block mb-1">Alamat</label>
-                    <input type="text" name="kk_alamat" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
-                </div>
-                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
-                    <label class="block mb-1">HP</label>
-                    <input type="text" name="kk_hp" class="border rounded w-full p-1" required> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
-                </div>
-                <div class="mb-2"> <!-- Mengubah mb-4 menjadi mb-2 untuk memperkecil margin bawah -->
-                    <label class="block mb-1">Foto</label>
-                    <input type="file" name="kk_foto" class="border rounded w-full p-1"> <!-- Mengubah p-2 menjadi p-1 untuk memperkecil padding -->
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button> <!-- Mengubah px-4 py-2 menjadi px-3 py-1 untuk memperkecil ukuran tombol -->
@@ -124,27 +108,35 @@ if (!isset($_SESSION['user'])) {
     <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded shadow-lg">
             <h2 class="text-lg font-bold mb-4">Edit Data Master KK</h2>
-            <form action="api/kk_update.php" method="POST" enctype="multipart/form-data">
+            <form action="api/kk_update.php" method="POST">
                 <input type="hidden" name="code_id" id="edit_code_id">
                 <div class="mb-4">
                     <label class="block mb-1">Nama KK</label>
                     <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-2" required>
                 </div>
-                <div class="mb-4">
-                    <label class="block mb-1">Alamat</label>
-                    <input type="text" name="kk_alamat" id="edit_kk_alamat" class="border rounded w-full p-2" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block mb-1">HP</label>
-                    <input type="text" name="kk_hp" id="edit_kk_hp" class="border rounded w-full p-2" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block mb-1">Foto</label>
-                    <input type="file" name="kk_foto" class="border rounded w-full p-2">
-                </div>
                 <div class="flex justify-end">
                     <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
                     <input type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal Tambah Data KK dari Warga (NIKK) -->
+    <div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
+            <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
+            <form id="formAddNikk" action="#" method="POST">
+                <div class="mb-2">
+                    <label class="block mb-1">No KK (NIKK)</label>
+                    <select id="nikkDropdown" name="nikk" class="border rounded w-full p-1" required></select>
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
+                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
                 </div>
             </form>
         </div>
@@ -161,9 +153,63 @@ if (!isset($_SESSION['user'])) {
             button.addEventListener('click', function () {
                 document.getElementById('edit_code_id').value = this.getAttribute('data-id');
                 document.getElementById('edit_kk_name').value = this.getAttribute('data-name');
-                document.getElementById('edit_kk_alamat').value = this.getAttribute('data-alamat');
-                document.getElementById('edit_kk_hp').value = this.getAttribute('data-hp');
                 toggleModal('editModal');
+            });
+        });
+
+        // Modal Tambah Data KK dari Warga (NIKK)
+        function openAddNikkModal() {
+            toggleModal('addModalNikk');
+            loadNikkDropdown();
+        }
+        function loadNikkDropdown() {
+            // Ambil data NIKK dan KK Name dari API
+            fetch('api/get_nikk_group.php')
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById('nikkDropdown');
+                    select.innerHTML = '';
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.nikk;
+                        opt.textContent = item.nikk + ' - ' + item.kk_name;
+                        select.appendChild(opt);
+                    });
+                    // Trigger event untuk set kk_name pertama kali
+                    if (data.length > 0) {
+                        document.getElementById('kkNameAuto').value = data[0].kk_name;
+                    }
+                });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tambah tombol untuk modal baru
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2';
+            btn.innerHTML = "<i class='bx bx-plus'></i> Tambah KK dari Warga";
+            btn.onclick = openAddNikkModal;
+            document.querySelector('.head .mb-4').appendChild(btn);
+            // Event change untuk update kk_name otomatis
+            document.getElementById('nikkDropdown').addEventListener('change', function() {
+                const selected = this.options[this.selectedIndex];
+                const text = selected.textContent.split(' - ');
+                document.getElementById('kkNameAuto').value = text[1] || '';
+            });
+            // Submit form (AJAX)
+            document.getElementById('formAddNikk').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nikk = document.getElementById('nikkDropdown').value;
+                const kk_name = document.getElementById('kkNameAuto').value;
+                fetch('api/kk_insert.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}`
+                })
+                .then(res => res.text())
+                .then(resp => {
+                    alert('Data berhasil ditambah!');
+                    location.reload();
+                });
             });
         });
     </script>
