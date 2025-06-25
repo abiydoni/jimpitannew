@@ -1738,20 +1738,20 @@ $(document).ready(function() {
         $('#modal').removeClass('modal-show').addClass('hidden');
         loadData();
         
-        try {
-          const result = JSON.parse(res);
-          if (result.success) {
-            alert('Data berhasil disimpan!');
-          } else {
-            alert('Error: ' + (result.message || 'Terjadi kesalahan'));
-          }
-        } catch (e) {
-          if (res === 'success' || res === 'updated') {
-            alert('Data berhasil disimpan!');
-          } else {
-            alert('Response: ' + res);
-          }
-        }
+        // try {
+        //   const result = JSON.parse(res);
+        //   if (result.success) {
+        //     alert('Data berhasil disimpan!');
+        //   } else {
+        //     alert('Error: ' + (result.message || 'Terjadi kesalahan'));
+        //   }
+        // } catch (e) {
+        //   if (res === 'success' || res === 'updated') {
+        //     alert('Data berhasil disimpan!');
+        //   } else {
+        //     alert('Response: ' + res);
+        //   }
+        // }
       },
       error: function(xhr, status, error) {
         submitBtn.prop('disabled', false).text(originalText);
