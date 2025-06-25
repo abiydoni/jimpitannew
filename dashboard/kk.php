@@ -37,7 +37,7 @@ if (!isset($_SESSION['user'])) {
                         <h3>DATA KEPALA KELUARGA</h3>
                         <div class="mb-4 text-center">
                             <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" data-modal-toggle="addModalNikk" onclick="toggleModal('addModalNikk')">
-                                <i class='bx bx-plus' style="font-size:24px"></i> Tambah KK dari Warga
+                                <i class='bx bx-plus' style="font-size:24px"></i>
                             </button>
                             <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <i class='bx bx-printer' style="font-size:24px"></i>
@@ -107,6 +107,30 @@ if (!isset($_SESSION['user'])) {
             </form>
         </div>
     </div>
+    <!-- Modal Tambah Data KK dari Warga (NIKK) -->
+    <div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
+            <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
+            <form id="formAddNikk" action="#" method="POST">
+                <div class="mb-2">
+                    <label class="block mb-1">No KK (NIKK)</label>
+                    <select id="nikkDropdown" name="nikk" class="border rounded w-full p-1" required></select>
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-1">No KK</label>
+                    <input type="text" id="nokkAuto" name="nokk" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-1">Nama KK</label>
+                    <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
+                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
+                </div>
+            </form>
+        </div>
+    </div>
     <?php include 'footer.php'; ?>
     <script>
         function toggleModal(modalId) {
@@ -150,7 +174,6 @@ if (!isset($_SESSION['user'])) {
                 });
         }
         document.addEventListener('DOMContentLoaded', function() {
-            // Hapus seluruh kode penambahan tombol Tambah KK dari Warga secara dinamis
             // Event change untuk update kk_name & nokk otomatis
             document.getElementById('nikkDropdown').addEventListener('change', function() {
                 const selected = this.options[this.selectedIndex];
