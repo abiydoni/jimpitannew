@@ -267,13 +267,14 @@ if (!isset($_SESSION['user'])) {
             if (formAddNikk) {
                 formAddNikk.addEventListener('submit', function(e) {
                     e.preventDefault();
+                    const code_id = document.getElementById('add_code_id').value;
                     const nikk = document.getElementById('nikkDropdown').value;
                     const kk_name = document.getElementById('kkNameAuto').value;
                     const nokk = document.getElementById('nokkAuto').value;
                     fetch('api/kk_insert.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `code_id=${encodeURIComponent(nikk)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}`
+                        body: `code_id=${encodeURIComponent(code_id)}&kk_name=${encodeURIComponent(kk_name)}&nokk=${encodeURIComponent(nokk)}`
                     })
                     .then(res => res.text())
                     .then(resp => {
