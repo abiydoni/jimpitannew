@@ -114,12 +114,14 @@ include 'api/get_info.php';
                                             ];
                                             foreach ($data as $row): ?>
                                                 <tr class="border-b hover:bg-gray-100">
-                                                    <td><?php echo $no++; ?></td>
-                                                    <td><?php echo htmlspecialchars($row["name"]); ?></td>
-                                                    <td><?php 
-                                                        $shift = $row["shift"];
-                                                        echo isset($hariIndo[$shift]) ? $hariIndo[$shift] : htmlspecialchars($shift);
-                                                    ?></td>
+                                                    <td style="font-size:0.92rem;"><?php echo $no++; ?></td>
+                                                    <td style="font-size:0.92rem;"><?php echo htmlspecialchars($row["name"]); ?></td>
+                                                    <td style="font-size:0.92rem;">
+                                                        <?php 
+                                                            $shift = $row["shift"];
+                                                            echo isset($hariIndo[$shift]) ? $hariIndo[$shift] : htmlspecialchars($shift);
+                                                        ?>
+                                                    </td>
                                                 </tr>
                                             <?php endforeach;
                                         } else {
@@ -266,19 +268,6 @@ include 'api/get_info.php';
     min-width: 0;
     padding: 0.7rem 0.2rem;
   }
-}
-.table-jaga-malam td, .table-jaga-malam th {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0.5rem 0.7rem;
-}
-.table-jaga-malam thead tr th {
-  border-bottom: 2px solid #cbd5e1;
-}
-.table-jaga-malam h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: #222;
 }
 .judul-jaga {
   font-size: 2rem;
