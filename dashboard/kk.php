@@ -36,11 +36,11 @@ if (!isset($_SESSION['user'])) {
                     <div class="head">
                         <h3>DATA KEPALA KELUARGA</h3>
                         <div class="mb-4 text-center">
-                            <button type="button" id="addDataBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" data-modal-toggle="addModal" onclick="toggleModal('addModal')">
-                                <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
+                            <button type="button" id="addDataBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" data-modal-toggle="addModalNikk" onclick="toggleModal('addModalNikk')">
+                                <i class='bx bx-plus' style="font-size:24px"></i> Tambah KK dari Warga
                             </button>
                             <button type="button" id="printSelectedBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <i class='bx bx-printer' style="font-size:24px"></i> <!-- Ikon untuk print report -->
+                                <i class='bx bx-printer' style="font-size:24px"></i>
                             </button>
                         </div>
                     </div>
@@ -85,70 +85,24 @@ if (!isset($_SESSION['user'])) {
                 </div>
             </div>
     <!-- Modal Tambah Data -->
-    <div id="addModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-3 rounded shadow-lg">
-            <h2 class="text-lg font-bold mb-2">Tambah Data Master KK</h2>
-            <form action="api/kk_insert.php" method="POST">
-                <div class="mb-2">
-                    <label class="block mb-1">Code ID (Awali dengan : RT07 dan 5 angka berikutnya!)</label>
-                    <input value="RT07" type="text" name="code_id" class="border rounded w-full p-1" required>
-                </div>
-                <div class="mb-2">
-                    <label class="block mb-1">No KK</label>
-                    <input type="text" name="nokk" class="border rounded w-full p-1" required>
-                </div>
-                <div class="mb-2">
-                    <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" class="border rounded w-full p-1" required>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModal')">Tutup</button>
-                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- (Dihapus, hanya pakai modal addModalNikk) -->
     <!-- Modal Edit Data -->
     <div id="editModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-5 rounded shadow-lg">
-            <h2 class="text-lg font-bold mb-4">Edit Data Master KK</h2>
+        <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
+            <h2 class="text-lg font-bold mb-2">Edit Data Master KK</h2>
             <form action="api/kk_update.php" method="POST">
                 <input type="hidden" name="code_id" id="edit_code_id">
-                <div class="mb-4">
-                    <label class="block mb-1">No KK</label>
-                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-2" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block mb-1">Nama KK</label>
-                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-2" required>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
-                    <input type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" value="Update">
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Modal Tambah Data KK dari Warga (NIKK) -->
-    <div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
-            <h2 class="text-lg font-bold mb-2">Tambah Data KK dari Warga</h2>
-            <form id="formAddNikk" action="#" method="POST">
-                <div class="mb-2">
-                    <label class="block mb-1">No KK (NIKK)</label>
-                    <select id="nikkDropdown" name="nikk" class="border rounded w-full p-1" required></select>
-                </div>
                 <div class="mb-2">
                     <label class="block mb-1">No KK</label>
-                    <input type="text" id="nokkAuto" name="nokk" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                    <input type="text" name="nokk" id="edit_nokk" class="border rounded w-full p-1" required>
                 </div>
                 <div class="mb-2">
                     <label class="block mb-1">Nama KK</label>
-                    <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required>
+                    <input type="text" name="kk_name" id="edit_kk_name" class="border rounded w-full p-1" required>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
-                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Tambah">
+                    <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('editModal')">Tutup</button>
+                    <input type="submit" class="bg-blue-600 text-white px-3 py-1 rounded" value="Update">
                 </div>
             </form>
         </div>
