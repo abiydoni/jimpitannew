@@ -301,7 +301,7 @@ if (!isset($_SESSION['user'])) {
                     e.preventDefault();
                     const code_id = document.getElementById('edit_code_id').value;
                     const nikk = document.getElementById('edit_nikkDropdown').value;
-                    const kk_name = document.getElementById('edit_kk_name').value;
+                    const kk_name = document.getElementById('edit_kk_name2').value;
                     const nokk = document.getElementById('edit_nokk').value;
                     fetch('api/kk_update.php', {
                         method: 'POST',
