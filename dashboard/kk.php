@@ -44,23 +44,30 @@ if (!isset($_SESSION['user'])) {
 }
 // Include the database connection
 
-// Rekap jumlah KK yang belum masuk jimpitan (belum ada di tb_warga.nokk)
-$kk_belum_jimpitan = [];
+// Rekap: tb_warga.nikk yang tidak ada di master_kk.nokk
+$warga_nikk_belum_kk = [];
 try {
-    $sql_belum = "SELECT * FROM master_kk WHERE nokk NOT IN (SELECT DISTINCT nokk FROM tb_warga WHERE nokk IS NOT NULL AND nokk != '')";
+    $sql_belum = "SELECT DISTINCT nikk FROM tb_warga WHERE nikk IS NOT NULL AND nikk != '' AND nikk NOT IN (SELECT nokk FROM master_kk WHERE nokk IS NOT NULL AND nokk != '')";
     $stmt_belum = $pdo->query($sql_belum);
-    $kk_belum_jimpitan = $stmt_belum->fetchAll(PDO::FETCH_ASSOC);
+    $nikk_list = $stmt_belum->fetchAll(PDO::FETCH_COLUMN);
+    // Ambil nama KK dari tb_warga (yang hubungan Kepala Keluarga)
+    if ($nikk_list) {
+        $in = str_repeat('?,', count($nikk_list) - 1) . '?';
+        $stmt_nama = $pdo->prepare("SELECT nikk, nama FROM tb_warga WHERE hubungan='Kepala Keluarga' AND nikk IN ($in)");
+        $stmt_nama->execute($nikk_list);
+        $warga_nikk_belum_kk = $stmt_nama->fetchAll(PDO::FETCH_ASSOC);
+    }
 } catch (Exception $e) {
-    $kk_belum_jimpitan = [];
+    $warga_nikk_belum_kk = [];
 }
-$jumlah_kk_belum = count($kk_belum_jimpitan);
+$jumlah_nikk_belum = count($warga_nikk_belum_kk);
 ?>
 <div class="mb-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded">
-  <b>Jumlah KK yang belum masuk jimpitan:</b> <?= $jumlah_kk_belum ?>
-  <?php if ($jumlah_kk_belum > 0): ?>
+  <b>Jumlah NIKK warga yang belum terdaftar di master KK:</b> <?= $jumlah_nikk_belum ?>
+  <?php if ($jumlah_nikk_belum > 0): ?>
     <ul class="list-disc ml-6 mt-1 text-xs">
-      <?php foreach ($kk_belum_jimpitan as $kk): ?>
-        <li><?= htmlspecialchars($kk['kk_name']) ?> (<?= htmlspecialchars($kk['nokk']) ?>)</li>
+      <?php foreach ($warga_nikk_belum_kk as $item): ?>
+        <li><?= htmlspecialchars($item['nama']) ?> (<?= htmlspecialchars($item['nikk']) ?>)</li>
       <?php endforeach; ?>
     </ul>
   <?php endif; ?>
