@@ -191,10 +191,11 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 
 <script>
 function loadNikkDropdown() {
+    console.log('loadNikkDropdown called');
     fetch('api/get_nikk_group.php')
         .then(res => res.json())
         .then(data => {
-            const select = document.getElementById('select-nokk');
+            const select = document.getElementById('nikkDropdown');
             if ($(select).hasClass('select2-hidden-accessible')) {
                 $(select).select2('destroy');
             }
@@ -212,10 +213,16 @@ function loadNikkDropdown() {
                 opt.setAttribute('data-kk_name', item.kk_name);
                 select.appendChild(opt);
             });
+            // Reset value ke kosong
+            select.value = '';
+            document.getElementById('kkNameAuto').value = '';
+            document.getElementById('nokkAuto').value = '';
             $(select).select2({
+                dropdownParent: $('#addModalNikk'),
                 width: '100%',
                 placeholder: 'Pilih No KK disini...',
                 matcher: function(params, data) {
+                    console.log('Matcher called:', params.term, data.text, data.element ? $(data.element).attr('data-kk_name') : '');
                     if ($.trim(params.term) === '') {
                         return data;
                     }
@@ -234,6 +241,8 @@ function loadNikkDropdown() {
                     return null;
                 }
             });
+            console.log('Dropdown options:', select.innerHTML);
+            console.log('Select2 status:', typeof $.fn.select2);
         });
 }
 function openModalTambah() {
