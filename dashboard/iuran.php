@@ -7,14 +7,14 @@ include 'header.php';
 // Handle tambah iuran
 $notif = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['aksi'] === 'tambah') {
-    $nokk = $_POST['nokk'];
+    $nikk = $_POST['nikk'];
     $jenis = $_POST['jenis_iuran'];
     $bulan = $_POST['bulan'];
     $tahun = $_POST['tahun'];
     $jumlah = $_POST['jumlah'];
     try {
-        $stmt = $pdo->prepare("REPLACE INTO tb_iuran (nokk, jenis_iuran, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Lunas', NOW())");
-        $stmt->execute([$nokk, $jenis, $bulan, $tahun, $jumlah]);
+        $stmt = $pdo->prepare("REPLACE INTO tb_iuran (nikk, jenis_iuran, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Lunas', NOW())");
+        $stmt->execute([$nikk, $jenis, $bulan, $tahun, $jumlah]);
         $notif = ['type' => 'success', 'msg' => 'Data iuran berhasil disimpan!'];
     } catch (Exception $e) {
         $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan data: ' . $e->getMessage()];
@@ -23,27 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
 
 // Ambil data rekap per KK
 $sql = "SELECT 
-          i.nokk,
-          (SELECT nama FROM tb_warga w WHERE w.nikk = i.nokk AND w.hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
+          i.nikk,
+          (SELECT nama FROM tb_warga w WHERE w.nikk = i.nikk AND w.hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
           i.tahun,
           GROUP_CONCAT(DISTINCT i.jenis_iuran) AS jenis_ikut,
           SUM(i.jumlah) AS total_bayar
         FROM tb_iuran i
-        GROUP BY i.nokk, i.tahun
+        GROUP BY i.nikk, i.tahun
         ORDER BY i.tahun DESC";
 $stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil detail jika ada request detail
 $detail = null;
-if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
-    $dnokk = $_GET['detail_nokk'];
+if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
+    $dnikk = $_GET['detail_nikk'];
     $dtahun = $_GET['detail_tahun'];
-    $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nokk = ? AND tahun = ? ORDER BY bulan");
-    $stmt->execute([$dnokk, $dtahun]);
+    $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND tahun = ? ORDER BY bulan");
+    $stmt->execute([$dnikk, $dtahun]);
     $detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $kepala = $pdo->prepare("SELECT nama FROM tb_warga WHERE nikk = ? AND hubungan = 'Kepala Keluarga' LIMIT 1");
-    $kepala->execute([$dnokk]);
+    $kepala->execute([$dnikk]);
     $kepala = $kepala->fetchColumn();
 }
 ?>
@@ -72,13 +72,13 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
       <tbody>
         <?php foreach($data as $row): ?>
         <tr class="hover:bg-gray-100">
-          <td class="px-4 py-2 border"><?= htmlspecialchars($row['nokk']) ?></td>
+          <td class="px-4 py-2 border"><?= htmlspecialchars($row['nikk']) ?></td>
           <td class="px-4 py-2 border"><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
           <td class="px-4 py-2 border"><?= $row['tahun'] ?></td>
           <td class="px-4 py-2 border"><?= $row['jenis_ikut'] ?></td>
           <td class="px-4 py-2 border font-semibold">Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></td>
           <td class="px-4 py-2 border">
-            <a href="?detail_nokk=<?= urlencode($row['nokk']) ?>&detail_tahun=<?= urlencode($row['tahun']) ?>#detailModal" class="text-blue-600 hover:underline">Detail</a>
+            <a href="?detail_nikk=<?= urlencode($row['nikk']) ?>&detail_tahun=<?= urlencode($row['tahun']) ?>#detailModal" class="text-blue-600 hover:underline">Detail</a>
           </td>
         </tr>
         <?php endforeach ?>
@@ -98,8 +98,16 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
       <input type="hidden" name="aksi" value="tambah">
       <div class="mb-4">
         <label class="block mb-1">No KK</label>
-        <select id="select-nokk" name="nokk" class="w-full border rounded p-2" required></select>
+        <select id="select-nikk" name="nikk" class="w-full border rounded p-2" required></select>
       </div>
+        <div class="mb-2">
+            <label class="block mb-1">No KK</label>
+            <input type="text" id="nikkAuto" name="nikk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
+        </div>
+        <div class="mb-2">
+            <label class="block mb-1">Nama KK</label>
+            <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
+        </div>
       <div class="mb-4">
         <label class="block mb-1">Jenis Iuran</label>
         <select name="jenis_iuran" class="w-full border rounded p-2" required>
@@ -141,7 +149,7 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
   <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-3xl">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">Detail Iuran - <?= htmlspecialchars($kepala) ?> (<?= htmlspecialchars($dnokk) ?>)</h2>
+      <h2 class="text-xl font-bold">Detail Iuran - <?= htmlspecialchars($kepala) ?> (<?= htmlspecialchars($dnikk) ?>)</h2>
       <a href="iuran.php" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</a>
     </div>
     <div class="overflow-x-auto">
@@ -190,65 +198,71 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 <?php endif; ?>
 
 <script>
-function loadNikkDropdown() {
-    console.log('loadNikkDropdown called');
-    fetch('api/get_nikk_group.php')
-        .then(res => res.json())
-        .then(data => {
-            const select = document.getElementById('nikkDropdown');
-            if ($(select).hasClass('select2-hidden-accessible')) {
-                $(select).select2('destroy');
-            }
-            select.innerHTML = '';
-            // Tambahkan option kosong di awal
-            const emptyOpt = document.createElement('option');
-            emptyOpt.value = '';
-            emptyOpt.textContent = 'Pilih No KK disini...';
-            select.appendChild(emptyOpt);
-            data.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item.nikk;
-                opt.textContent = item.nikk + ' - ' + item.kk_name;
-                opt.setAttribute('data-nokk', item.nikk);
-                opt.setAttribute('data-kk_name', item.kk_name);
-                select.appendChild(opt);
-            });
-            // Reset value ke kosong
-            select.value = '';
-            document.getElementById('kkNameAuto').value = '';
-            document.getElementById('nokkAuto').value = '';
-            $(select).select2({
-                dropdownParent: $('#addModalNikk'),
-                width: '100%',
-                placeholder: 'Pilih No KK disini...',
-                matcher: function(params, data) {
-                    console.log('Matcher called:', params.term, data.text, data.element ? $(data.element).attr('data-kk_name') : '');
-                    if ($.trim(params.term) === '') {
-                        return data;
-                    }
-                    if (typeof data.text === 'undefined') {
+    // Modal Tambah Data KK dari Warga (NIKK)
+    function openAddNikkModal() {
+        toggleModal('addModalNikk');
+        loadNikkDropdown();
+    }
+
+    function loadNikkDropdown() {
+        console.log('loadNikkDropdown called');
+        fetch('api/get_nikk_group.php')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById('nikkDropdown');
+                if ($(select).hasClass('select2-hidden-accessible')) {
+                    $(select).select2('destroy');
+                }
+                select.innerHTML = '';
+                // Tambahkan option kosong di awal
+                const emptyOpt = document.createElement('option');
+                emptyOpt.value = '';
+                emptyOpt.textContent = 'Pilih No KK disini...';
+                select.appendChild(emptyOpt);
+                data.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.nikk;
+                    opt.textContent = item.nikk + ' - ' + item.kk_name;
+                    opt.setAttribute('data-nikk', item.nikk);
+                    opt.setAttribute('data-kk_name', item.kk_name);
+                    select.appendChild(opt);
+                });
+                // Reset value ke kosong
+                select.value = '';
+                document.getElementById('kkNameAuto').value = '';
+                document.getElementById('nikkAuto').value = '';
+                $(select).select2({
+                    dropdownParent: $('#addModalNikk'),
+                    width: '100%',
+                    placeholder: 'Pilih No KK disini...',
+                    matcher: function(params, data) {
+                        console.log('Matcher called:', params.term, data.text, data.element ? $(data.element).attr('data-kk_name') : '');
+                        if ($.trim(params.term) === '') {
+                            return data;
+                        }
+                        if (typeof data.text === 'undefined') {
+                            return null;
+                        }
+                        var term = params.term.toLowerCase();
+                        var text = data.text.toLowerCase();
+                        var kkName = '';
+                        if (data.element) {
+                            kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
+                        }
+                        if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) {
+                            return data;
+                        }
                         return null;
                     }
-                    var term = params.term.toLowerCase();
-                    var text = data.text.toLowerCase();
-                    var kkName = '';
-                    if (data.element) {
-                        kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
-                    }
-                    if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) {
-                        return data;
-                    }
-                    return null;
-                }
+                });
+                console.log('Dropdown options:', select.innerHTML);
+                console.log('Select2 status:', typeof $.fn.select2);
             });
-            console.log('Dropdown options:', select.innerHTML);
-            console.log('Select2 status:', typeof $.fn.select2);
-        });
-}
-function openModalTambah() {
-    document.getElementById('modalTambah').classList.remove('hidden');
-    loadNikkDropdown();
-}
+    }
+    function openModalTambah() {
+        document.getElementById('modalTambah').classList.remove('hidden');
+        loadNikkDropdown();
+    }
 </script>
 
 <?php include 'footer.php'; ?> 
