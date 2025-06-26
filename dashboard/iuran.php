@@ -194,14 +194,18 @@ $(document).ready(function() {
   $('#select-nokk').select2({
     placeholder: 'Cari No KK',
     ajax: {
-      url: 'api/search_kk.php',
+      url: 'api/get_nikk_group.php',
       dataType: 'json',
       delay: 250,
-      data: function (params) {
-        return { q: params.term };
-      },
       processResults: function (data) {
-        return { results: data.results };
+        return {
+          results: data.map(function(item) {
+            return {
+              id: item.nikk,
+              text: item.nikk + ' - ' + item.kk_name
+            };
+          })
+        };
       },
       cache: true
     },
