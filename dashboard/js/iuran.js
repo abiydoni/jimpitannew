@@ -4,6 +4,7 @@ function openModal() {
 }
 
 function lihatDetail(nokk, tahun) {
+  alert("lihatDetail terpanggil: " + nokk + ", " + tahun);
   window.location.href = `../iuran_detail.php?nokk=${encodeURIComponent(
     nokk
   )}&tahun=${encodeURIComponent(tahun)}`;
