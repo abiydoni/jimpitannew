@@ -227,6 +227,7 @@ function kkDropdownSearch() {
             this.open = false;
         },
         async init() {
+            this.options = [];
             const res = await fetch('api/get_nikk_group.php');
             this.options = await res.json();
             console.log('NIKK options loaded:', this.options);
