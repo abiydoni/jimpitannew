@@ -259,6 +259,44 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
                 console.log('Select2 status:', typeof $.fn.select2);
             });
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        var nikkDropdown = document.getElementById('nikkDropdown');
+        if (nikkDropdown) {
+            nikkDropdown.addEventListener('change', function() {
+                const selected = this.options[this.selectedIndex];
+                const text = selected.textContent.split(' - ');
+                document.getElementById('kkNameAuto').value = text[1] || '';
+                document.getElementById('nokkAuto').value = selected.getAttribute('data-nokk') || '';
+            });
+        }
+    function kkDropdownSearch() {
+        return {
+            search: '',
+            open: false,
+            options: [],
+            selectedOption: null,
+            get filteredOptions() {
+                if (!Array.isArray(this.options)) return [];
+                if (!this.search) return this.options;
+                const term = this.search.toLowerCase();
+                return this.options.filter(kk =>
+                    kk.nikk.toLowerCase().includes(term) ||
+                    kk.kk_name.toLowerCase().includes(term)
+                );
+            },
+            selectOption(kk) {
+                this.selectedOption = kk;
+                this.search = kk.nikk + ' - ' + kk.kk_name;
+                this.open = false;
+            },
+            async init() {
+                const res = await fetch('api/get_nikk_group.php');
+                this.options = await res.json();
+                console.log('NIKK options loaded:', this.options);
+            }
+        }
+    }
+        
     function openModalTambah() {
         document.getElementById('modalTambah').classList.remove('hidden');
         loadNikkDropdown();
