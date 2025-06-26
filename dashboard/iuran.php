@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
 // Ambil data rekap per KK
 $sql = "SELECT 
           i.nokk,
-          (SELECT nama FROM tb_warga w WHERE w.nokk = i.nokk AND w.hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
+          (SELECT nama FROM tb_warga w WHERE w.nikk = i.nokk AND w.hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
           i.tahun,
           GROUP_CONCAT(DISTINCT i.jenis_iuran) AS jenis_ikut,
           SUM(i.jumlah) AS total_bayar
@@ -42,7 +42,7 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
     $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nokk = ? AND tahun = ? ORDER BY bulan");
     $stmt->execute([$dnokk, $dtahun]);
     $detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $kepala = $pdo->prepare("SELECT nama FROM tb_warga WHERE nokk = ? AND hubungan = 'Kepala Keluarga' LIMIT 1");
+    $kepala = $pdo->prepare("SELECT nama FROM tb_warga WHERE nikk = ? AND hubungan = 'Kepala Keluarga' LIMIT 1");
     $kepala->execute([$dnokk]);
     $kepala = $kepala->fetchColumn();
 }
