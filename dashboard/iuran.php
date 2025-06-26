@@ -55,7 +55,7 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
-    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="document.getElementById('modalTambah').classList.remove('hidden')">+ Tambah Iuran</button>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openModalTambah()">+ Tambah Iuran</button>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white border rounded shadow">
@@ -190,29 +190,36 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 <?php endif; ?>
 
 <script>
-$(document).ready(function() {
-  $('#select-nokk').select2({
-    placeholder: 'Cari No KK',
-    ajax: {
-      url: 'api/get_nikk_group.php',
-      dataType: 'json',
-      delay: 250,
-      processResults: function (data) {
-        return {
-          results: data.map(function(item) {
-            return {
-              id: item.nikk,
-              text: item.nikk + ' - ' + item.kk_name
-            };
-          })
-        };
-      },
-      cache: true
-    },
-    width: '100%',
-    theme: 'default'
-  });
-});
+function loadNikkDropdown() {
+    fetch('api/get_nikk_group.php')
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById('select-nokk');
+            if ($(select).hasClass('select2-hidden-accessible')) {
+                $(select).select2('destroy');
+            }
+            select.innerHTML = '';
+            // Tambahkan option kosong di awal
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '';
+            emptyOpt.textContent = 'Pilih No KK disini...';
+            select.appendChild(emptyOpt);
+            data.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.nikk;
+                opt.textContent = item.nikk + ' - ' + item.kk_name;
+                select.appendChild(opt);
+            });
+            $(select).select2({
+                width: '100%',
+                placeholder: 'Pilih No KK disini...'
+            });
+        });
+}
+function openModalTambah() {
+    document.getElementById('modalTambah').classList.remove('hidden');
+    loadNikkDropdown();
+}
 </script>
 
 <?php include 'footer.php'; ?> 
