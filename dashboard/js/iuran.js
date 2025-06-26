@@ -12,6 +12,12 @@ function lihatDetail(nokk, tahun) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Tambahkan event listener untuk tombol tambah iuran
+  var btn = document.getElementById("btnTambahIuran");
+  if (btn) {
+    btn.addEventListener("click", openModal);
+  }
+
   const form = document.getElementById("formIuran");
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -59,11 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
-
-  var btn = document.getElementById("btnTambahIuran");
-  if (btn) {
-    btn.addEventListener("click", openModal);
-  }
 });
 
 window.openModal = openModal;
