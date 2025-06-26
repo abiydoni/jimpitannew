@@ -1,36 +1,57 @@
-<?php include 'header.php'; ?>
-<div class="table-data">
-    <div class="order">
-        <div class="head">
-            <h3>Iuran Warga</h3>
-        </div>
-        <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
-            <thead>
-            <tr>
-                <th>No KK</th>
-                <th>Nama KK</th>
-                <th>Tahun</th>
-                <th>Jenis Iuran</th>
-                <th>Total Bayar</th>
-                <th>Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach($data as $row): ?>
-                <tr>
-                <td><?= htmlspecialchars($row['nokk']) ?></td>
-                <td><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
-                <td><?= $row['tahun'] ?></td>
-                <td><?= $row['jenis_ikut'] ?></td>
-                <td>Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></td>
-                <td>
-                    <button onclick="lihatDetail('<?= $row['nokk'] ?>', <?= $row['tahun'] ?>)" class="text-blue-600 hover:underline">Detail</button>
-                </td>
-                </tr>
-            <?php endforeach ?>
-            </tbody>
-        </table>
-    </div>
+<?php
+// iuran.php
+include 'header.php';
+include 'db.php';
+
+// Ambil data rekap per KK
+$sql = "SELECT 
+          i.nokk,
+          (SELECT nama FROM tb_warga w WHERE w.nokk = i.nokk AND hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
+          i.tahun,
+          GROUP_CONCAT(DISTINCT i.jenis_iuran) AS jenis_ikut,
+          SUM(i.jumlah) AS total_bayar
+        FROM tb_iuran i
+        GROUP BY i.nokk, i.tahun
+        ORDER BY i.tahun DESC";
+$stmt = $pdo->query($sql);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
+    <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Iuran</button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border rounded shadow">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="px-4 py-2 border">No KK</th>
+          <th class="px-4 py-2 border">Kepala Keluarga</th>
+          <th class="px-4 py-2 border">Tahun</th>
+          <th class="px-4 py-2 border">Jenis Iuran</th>
+          <th class="px-4 py-2 border">Total Bayar</th>
+          <th class="px-4 py-2 border">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($data as $row): ?>
+        <tr class="hover:bg-gray-100">
+          <td class="px-4 py-2 border"><?= htmlspecialchars($row['nokk']) ?></td>
+          <td class="px-4 py-2 border"><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
+          <td class="px-4 py-2 border"><?= $row['tahun'] ?></td>
+          <td class="px-4 py-2 border"><?= $row['jenis_ikut'] ?></td>
+          <td class="px-4 py-2 border font-semibold">Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></td>
+          <td class="px-4 py-2 border">
+            <button onclick="lihatDetail('<?= $row['nokk'] ?>', <?= $row['tahun'] ?>)" class="text-blue-600 hover:underline">Detail</button>
+          </td>
+        </tr>
+        <?php endforeach ?>
+      </tbody>
+    </table>
+  </div>
 </div>
 
+<?php include 'api/modal_iuran.php'; ?>
 <?php include 'footer.php'; ?>
