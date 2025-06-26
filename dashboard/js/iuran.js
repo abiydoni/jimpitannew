@@ -3,6 +3,12 @@ function openModal() {
   document.getElementById("modalIuran").classList.remove("hidden");
 }
 
+function lihatDetail(nokk, tahun) {
+  window.location.href = `../iuran_detail.php?nokk=${encodeURIComponent(
+    nokk
+  )}&tahun=${encodeURIComponent(tahun)}`;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("formIuran");
   form.addEventListener("submit", async function (e) {
