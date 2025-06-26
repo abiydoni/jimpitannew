@@ -2,12 +2,7 @@
 <div class="table-data">
     <div class="order">
         <div class="head">
-            <h3>Daftar Tarif</h3>
-            <div class="mb-4 text-center">
-                <button type="button" id="openModal" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    <i class='bx bx-plus' style="font-size:24px"></i> <!-- Ikon untuk tambah data -->
-                </button>
-            </div>
+            <h3>Iuran Warga</h3>
         </div>
         <table id="example" class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg overflow-hidden text-xs" style="width:100%">
             <thead>
