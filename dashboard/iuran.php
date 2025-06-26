@@ -55,7 +55,7 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
-    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openModalTambah()">+ Tambah Iuran</button>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openAddNikkModal()">+ Tambah Iuran</button>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white border rounded shadow">
@@ -87,63 +87,64 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
   </div>
 </div>
 
-<!-- Modal Tambah Iuran (Tailwind, pakai Alpine.js) -->
-<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-  <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">Tambah Pembayaran Iuran</h2>
-      <button onclick="document.getElementById('modalTambah').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">&times;</button>
+<!-- Modal Tambah Iuran (struktur persis kk.php, tambah field iuran) -->
+<div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
+        <h2 class="text-lg font-bold mb-2">Tambah Pembayaran Iuran</h2>
+        <form id="formAddIuran" method="POST" x-data="kkDropdownSearch()" x-init="init()">
+            <input type="hidden" name="aksi" value="tambah">
+            <div class="mb-2 relative">
+                <label class="block mb-1">No KK (NIKK) / Nama KK</label>
+                <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off" required>
+                <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+                    <template x-for="kk in filteredOptions" :key="kk.nikk">
+                        <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
+                    </template>
+                </ul>
+                <input type="hidden" id="nikkDropdown" name="nikk" :value="selectedOption ? selectedOption.nikk : ''" required>
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">No KK</label>
+                <input type="text" id="nokkAuto" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">Nama KK</label>
+                <input type="text" id="kkNameAuto" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">Jenis Iuran</label>
+                <select name="jenis_iuran" class="w-full border rounded p-1" required>
+                    <option value="wajib">Iuran Wajib</option>
+                    <option value="sosial">Iuran Sosial</option>
+                    <option value="17an">Iuran 17an</option>
+                    <option value="merti">Iuran Merti Desa</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">Bulan</label>
+                <select name="bulan" class="w-full border rounded p-1" required>
+                    <?php
+                    $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                    foreach ($bulan as $b) {
+                        echo "<option value='$b'>$b</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">Tahun</label>
+                <input type="number" name="tahun" class="w-full border rounded p-1" value="<?= date('Y') ?>" required>
+            </div>
+            <div class="mb-2">
+                <label class="block mb-1">Jumlah (Rp)</label>
+                <input type="number" name="jumlah" class="w-full border rounded p-1" required>
+            </div>
+            <div class="flex justify-end">
+                <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
+                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Simpan</button>
+            </div>
+        </form>
     </div>
-    <form method="post" x-data="kkDropdownSearch()" x-init="init()">
-      <input type="hidden" name="aksi" value="tambah">
-      <div class="mb-4 relative">
-        <label class="block mb-1">No KK / Nama KK</label>
-        <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-2" autocomplete="off" required>
-        <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
-          <template x-for="kk in filteredOptions" :key="kk.nikk">
-            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
-          </template>
-        </ul>
-        <input type="hidden" name="nikk" :value="selectedOption ? selectedOption.nikk : ''" required>
-      </div>
-      <div class="mb-2">
-        <label class="block mb-1">Nama KK</label>
-        <input type="text" class="border rounded w-full p-1 bg-gray-100" readonly x-model="selectedOption ? selectedOption.kk_name : ''">
-      </div>
-      <div class="mb-4">
-        <label class="block mb-1">Jenis Iuran</label>
-        <select name="jenis_iuran" class="w-full border rounded p-2" required>
-          <option value="wajib">Iuran Wajib</option>
-          <option value="sosial">Iuran Sosial</option>
-          <option value="17an">Iuran 17an</option>
-          <option value="merti">Iuran Merti Desa</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <label class="block mb-1">Bulan</label>
-        <select name="bulan" class="w-full border rounded p-2" required>
-          <?php
-          $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-          foreach ($bulan as $b) {
-              echo "<option value='$b'>$b</option>";
-          }
-          ?>
-        </select>
-      </div>
-      <div class="mb-4">
-        <label class="block mb-1">Tahun</label>
-        <input type="number" name="tahun" class="w-full border rounded p-2" value="<?= date('Y') ?>" required>
-      </div>
-      <div class="mb-4">
-        <label class="block mb-1">Jumlah (Rp)</label>
-        <input type="number" name="jumlah" class="w-full border rounded p-2" required>
-      </div>
-      <div class="flex justify-end gap-2">
-        <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Batal</button>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
-      </div>
-    </form>
-  </div>
 </div>
 
 <!-- Modal Detail Iuran (Tailwind) -->
@@ -201,6 +202,10 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
+function toggleModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.toggle('hidden');
+}
 function kkDropdownSearch() {
     return {
         search: '',
@@ -227,6 +232,9 @@ function kkDropdownSearch() {
             console.log('NIKK options loaded:', this.options);
         }
     }
+}
+function openAddNikkModal() {
+    toggleModal('addModalNikk');
 }
 </script>
 
