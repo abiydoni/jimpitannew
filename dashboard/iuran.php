@@ -100,14 +100,10 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
         <label class="block mb-1">No KK</label>
         <select id="select-nikk" name="nikk" class="w-full border rounded p-2" required></select>
       </div>
-        <div class="mb-2">
-            <label class="block mb-1">No KK</label>
-            <input type="text" id="nikkAuto" name="nikk" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
-        </div>
-        <div class="mb-2">
-            <label class="block mb-1">Nama KK</label>
-            <input type="text" id="kkNameAuto" name="kk_name" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
-        </div>
+      <div class="mb-2">
+        <label class="block mb-1">Nama KK</label>
+        <input type="text" id="kkNameAuto" class="border rounded w-full p-1 bg-gray-100" readonly>
+      </div>
       <div class="mb-4">
         <label class="block mb-1">Jenis Iuran</label>
         <select name="jenis_iuran" class="w-full border rounded p-2" required>
@@ -205,16 +201,14 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
     }
 
     function loadNikkDropdown() {
-        console.log('loadNikkDropdown called');
         fetch('api/get_nikk_group.php')
             .then(res => res.json())
             .then(data => {
-                const select = document.getElementById('nikkDropdown');
+                const select = document.getElementById('select-nikk');
                 if ($(select).hasClass('select2-hidden-accessible')) {
                     $(select).select2('destroy');
                 }
                 select.innerHTML = '';
-                // Tambahkan option kosong di awal
                 const emptyOpt = document.createElement('option');
                 emptyOpt.value = '';
                 emptyOpt.textContent = 'Pilih No KK disini...';
@@ -223,80 +217,33 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
                     const opt = document.createElement('option');
                     opt.value = item.nikk;
                     opt.textContent = item.nikk + ' - ' + item.kk_name;
-                    opt.setAttribute('data-nikk', item.nikk);
                     opt.setAttribute('data-kk_name', item.kk_name);
                     select.appendChild(opt);
                 });
-                // Reset value ke kosong
-                select.value = '';
-                document.getElementById('kkNameAuto').value = '';
-                document.getElementById('nikkAuto').value = '';
                 $(select).select2({
-                    dropdownParent: $('#addModalNikk'),
                     width: '100%',
                     placeholder: 'Pilih No KK disini...',
                     matcher: function(params, data) {
-                        console.log('Matcher called:', params.term, data.text, data.element ? $(data.element).attr('data-kk_name') : '');
-                        if ($.trim(params.term) === '') {
-                            return data;
-                        }
-                        if (typeof data.text === 'undefined') {
-                            return null;
-                        }
+                        if ($.trim(params.term) === '') return data;
+                        if (typeof data.text === 'undefined') return null;
                         var term = params.term.toLowerCase();
                         var text = data.text.toLowerCase();
                         var kkName = '';
                         if (data.element) {
                             kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
                         }
-                        if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) {
-                            return data;
-                        }
+                        if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) return data;
                         return null;
                     }
                 });
-                console.log('Dropdown options:', select.innerHTML);
-                console.log('Select2 status:', typeof $.fn.select2);
+                // Auto-isi nama KK saat select berubah
+                $('#select-nikk').on('change', function() {
+                    var selected = $(this).find('option:selected');
+                    $('#kkNameAuto').val(selected.data('kk_name') || '');
+                });
             });
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        var nikkDropdown = document.getElementById('nikkDropdown');
-        if (nikkDropdown) {
-            nikkDropdown.addEventListener('change', function() {
-                const selected = this.options[this.selectedIndex];
-                const text = selected.textContent.split(' - ');
-                document.getElementById('kkNameAuto').value = text[1] || '';
-                document.getElementById('nokkAuto').value = selected.getAttribute('data-nokk') || '';
-            });
-        }
-    function kkDropdownSearch() {
-        return {
-            search: '',
-            open: false,
-            options: [],
-            selectedOption: null,
-            get filteredOptions() {
-                if (!Array.isArray(this.options)) return [];
-                if (!this.search) return this.options;
-                const term = this.search.toLowerCase();
-                return this.options.filter(kk =>
-                    kk.nikk.toLowerCase().includes(term) ||
-                    kk.kk_name.toLowerCase().includes(term)
-                );
-            },
-            selectOption(kk) {
-                this.selectedOption = kk;
-                this.search = kk.nikk + ' - ' + kk.kk_name;
-                this.open = false;
-            },
-            async init() {
-                const res = await fetch('api/get_nikk_group.php');
-                this.options = await res.json();
-                console.log('NIKK options loaded:', this.options);
-            }
-        }
-    }
-        
+
     function openModalTambah() {
         document.getElementById('modalTambah').classList.remove('hidden');
         loadNikkDropdown();
