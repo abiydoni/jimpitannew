@@ -48,6 +48,10 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 }
 ?>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
@@ -94,15 +98,7 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
       <input type="hidden" name="aksi" value="tambah">
       <div class="mb-4">
         <label class="block mb-1">No KK</label>
-        <select name="nokk" class="w-full border rounded p-2" required>
-          <option value="">Pilih No KK</option>
-          <?php
-          $stmt = $pdo->query("SELECT DISTINCT nokk FROM tb_warga ORDER BY nokk");
-          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-              echo "<option value='{$row['nokk']}'>{$row['nokk']}</option>";
-          }
-          ?>
-        </select>
+        <select id="select-nokk" name="nokk" class="w-full border rounded p-2" required></select>
       </div>
       <div class="mb-4">
         <label class="block mb-1">Jenis Iuran</label>
@@ -192,4 +188,27 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
   });
 </script>
 <?php endif; ?>
+
+<script>
+$(document).ready(function() {
+  $('#select-nokk').select2({
+    placeholder: 'Cari No KK',
+    ajax: {
+      url: 'api/search_kk.php',
+      dataType: 'json',
+      delay: 250,
+      data: function (params) {
+        return { q: params.term };
+      },
+      processResults: function (data) {
+        return { results: data.results };
+      },
+      cache: true
+    },
+    width: '100%',
+    theme: 'default'
+  });
+});
+</script>
+
 <?php include 'footer.php'; ?> 
