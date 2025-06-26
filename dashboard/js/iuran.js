@@ -59,6 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
+
+  var btn = document.getElementById("btnTambahIuran");
+  if (btn) {
+    btn.addEventListener("click", openModal);
+  }
 });
 
 window.openModal = openModal;

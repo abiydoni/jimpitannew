@@ -24,7 +24,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
-    <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Iuran</button>
+    <button id="btnTambahIuran" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Iuran</button>
   </div>
 
   <div class="overflow-x-auto">
