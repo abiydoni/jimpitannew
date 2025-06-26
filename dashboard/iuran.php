@@ -87,22 +87,28 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
   </div>
 </div>
 
-<!-- Modal Tambah Iuran (Tailwind) -->
+<!-- Modal Tambah Iuran (Tailwind, pakai Alpine.js) -->
 <div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
   <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold">Tambah Pembayaran Iuran</h2>
       <button onclick="document.getElementById('modalTambah').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">&times;</button>
     </div>
-    <form method="post">
+    <form method="post" x-data="kkDropdownSearch()" x-init="init()">
       <input type="hidden" name="aksi" value="tambah">
-      <div class="mb-4">
-        <label class="block mb-1">No KK</label>
-        <select id="select-nikk" name="nikk" class="w-full border rounded p-2" required></select>
+      <div class="mb-4 relative">
+        <label class="block mb-1">No KK / Nama KK</label>
+        <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-2" autocomplete="off" required>
+        <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+          <template x-for="kk in filteredOptions" :key="kk.nikk">
+            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
+          </template>
+        </ul>
+        <input type="hidden" name="nikk" :value="selectedOption ? selectedOption.nikk : ''" required>
       </div>
       <div class="mb-2">
         <label class="block mb-1">Nama KK</label>
-        <input type="text" id="kkNameAuto" class="border rounded w-full p-1 bg-gray-100" readonly>
+        <input type="text" class="border rounded w-full p-1 bg-gray-100" readonly x-model="selectedOption ? selectedOption.kk_name : ''">
       </div>
       <div class="mb-4">
         <label class="block mb-1">Jenis Iuran</label>
@@ -193,61 +199,34 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
 </script>
 <?php endif; ?>
 
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
-    // Modal Tambah Data KK dari Warga (NIKK)
-    function openAddNikkModal() {
-        toggleModal('addModalNikk');
-        loadNikkDropdown();
+function kkDropdownSearch() {
+    return {
+        search: '',
+        open: false,
+        options: [],
+        selectedOption: null,
+        get filteredOptions() {
+            if (!Array.isArray(this.options)) return [];
+            if (!this.search) return this.options;
+            const term = this.search.toLowerCase();
+            return this.options.filter(kk =>
+                kk.nikk.toLowerCase().includes(term) ||
+                kk.kk_name.toLowerCase().includes(term)
+            );
+        },
+        selectOption(kk) {
+            this.selectedOption = kk;
+            this.search = kk.nikk + ' - ' + kk.kk_name;
+            this.open = false;
+        },
+        async init() {
+            const res = await fetch('api/get_nikk_group.php');
+            this.options = await res.json();
+        }
     }
-
-    function loadNikkDropdown() {
-        fetch('api/get_nikk_group.php')
-            .then(res => res.json())
-            .then(data => {
-                const select = document.getElementById('select-nikk');
-                if ($(select).hasClass('select2-hidden-accessible')) {
-                    $(select).select2('destroy');
-                }
-                select.innerHTML = '';
-                const emptyOpt = document.createElement('option');
-                emptyOpt.value = '';
-                emptyOpt.textContent = 'Pilih No KK disini...';
-                select.appendChild(emptyOpt);
-                data.forEach(item => {
-                    const opt = document.createElement('option');
-                    opt.value = item.nikk;
-                    opt.textContent = item.nikk + ' - ' + item.kk_name;
-                    opt.setAttribute('data-kk_name', item.kk_name);
-                    select.appendChild(opt);
-                });
-                $(select).select2({
-                    width: '100%',
-                    placeholder: 'Pilih No KK disini...',
-                    matcher: function(params, data) {
-                        if ($.trim(params.term) === '') return data;
-                        if (typeof data.text === 'undefined') return null;
-                        var term = params.term.toLowerCase();
-                        var text = data.text.toLowerCase();
-                        var kkName = '';
-                        if (data.element) {
-                            kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
-                        }
-                        if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) return data;
-                        return null;
-                    }
-                });
-                // Auto-isi nama KK saat select berubah
-                $('#select-nikk').on('change', function() {
-                    var selected = $(this).find('option:selected');
-                    $('#kkNameAuto').val(selected.data('kk_name') || '');
-                });
-            });
-    }
-
-    function openModalTambah() {
-        document.getElementById('modalTambah').classList.remove('hidden');
-        loadNikkDropdown();
-    }
+}
 </script>
 
 <?php include 'footer.php'; ?> 
