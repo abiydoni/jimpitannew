@@ -208,11 +208,31 @@ function loadNikkDropdown() {
                 const opt = document.createElement('option');
                 opt.value = item.nikk;
                 opt.textContent = item.nikk + ' - ' + item.kk_name;
+                opt.setAttribute('data-nokk', item.nikk);
+                opt.setAttribute('data-kk_name', item.kk_name);
                 select.appendChild(opt);
             });
             $(select).select2({
                 width: '100%',
-                placeholder: 'Pilih No KK disini...'
+                placeholder: 'Pilih No KK disini...',
+                matcher: function(params, data) {
+                    if ($.trim(params.term) === '') {
+                        return data;
+                    }
+                    if (typeof data.text === 'undefined') {
+                        return null;
+                    }
+                    var term = params.term.toLowerCase();
+                    var text = data.text.toLowerCase();
+                    var kkName = '';
+                    if (data.element) {
+                        kkName = $(data.element).attr('data-kk_name') ? $(data.element).attr('data-kk_name').toLowerCase() : '';
+                    }
+                    if (text.indexOf(term) > -1 || kkName.indexOf(term) > -1) {
+                        return data;
+                    }
+                    return null;
+                }
             });
         });
 }
