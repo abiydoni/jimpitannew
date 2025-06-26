@@ -99,9 +99,12 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
       <div class="mb-4 relative">
         <label class="block mb-1">No KK / Nama KK</label>
         <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-2" autocomplete="off" required>
-        <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
-          <template x-for="kk in filteredOptions" :key="kk.nikk ?? kk.id ?? $index">
-            <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="(kk.nikk ? kk.nikk : '-') + ' - ' + (kk.kk_name ? kk.kk_name : '-')"></li>
+        <ul x-show="open" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
+          <template x-if="filteredOptions.length > 0">
+            <template x-for="(kk, idx) in filteredOptions" :key="kk.nikk ?? idx">
+              <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer"
+                  x-text="(kk.nikk ? kk.nikk : '-') + ' - ' + (kk.kk_name ? kk.kk_name : '-')"></li>
+            </template>
           </template>
           <template x-if="filteredOptions.length === 0">
             <li class="px-2 py-1 text-gray-400">Data tidak ditemukan</li>
