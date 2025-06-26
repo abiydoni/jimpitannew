@@ -3,7 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include 'header.php';
-include 'api/db.php';
 
 // Handle tambah iuran
 $notif = null;
@@ -49,36 +48,33 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
 }
 ?>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4">Rekap Iuran per Kartu Keluarga</h1>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Iuran</button>
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="document.getElementById('modalTambah').classList.remove('hidden')">+ Tambah Iuran</button>
   </div>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover">
-      <thead class="table-light">
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border rounded shadow">
+      <thead class="bg-gray-200">
         <tr>
-          <th>No KK</th>
-          <th>Kepala Keluarga</th>
-          <th>Tahun</th>
-          <th>Jenis Iuran</th>
-          <th>Total Bayar</th>
-          <th>Aksi</th>
+          <th class="px-4 py-2 border">No KK</th>
+          <th class="px-4 py-2 border">Kepala Keluarga</th>
+          <th class="px-4 py-2 border">Tahun</th>
+          <th class="px-4 py-2 border">Jenis Iuran</th>
+          <th class="px-4 py-2 border">Total Bayar</th>
+          <th class="px-4 py-2 border">Aksi</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($data as $row): ?>
-        <tr>
-          <td><?= htmlspecialchars($row['nokk']) ?></td>
-          <td><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
-          <td><?= $row['tahun'] ?></td>
-          <td><?= $row['jenis_ikut'] ?></td>
-          <td><b>Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></b></td>
-          <td>
-            <a href="?detail_nokk=<?= urlencode($row['nokk']) ?>&detail_tahun=<?= urlencode($row['tahun']) ?>#detailModal" class="btn btn-sm btn-info">Detail</a>
+        <tr class="hover:bg-gray-100">
+          <td class="px-4 py-2 border"><?= htmlspecialchars($row['nokk']) ?></td>
+          <td class="px-4 py-2 border"><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
+          <td class="px-4 py-2 border"><?= $row['tahun'] ?></td>
+          <td class="px-4 py-2 border"><?= $row['jenis_ikut'] ?></td>
+          <td class="px-4 py-2 border font-semibold">Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></td>
+          <td class="px-4 py-2 border">
+            <a href="?detail_nokk=<?= urlencode($row['nokk']) ?>&detail_tahun=<?= urlencode($row['tahun']) ?>#detailModal" class="text-blue-600 hover:underline">Detail</a>
           </td>
         </tr>
         <?php endforeach ?>
@@ -87,111 +83,104 @@ if (isset($_GET['detail_nokk'], $_GET['detail_tahun'])) {
   </div>
 </div>
 
-<!-- Modal Tambah Iuran -->
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="post">
-        <input type="hidden" name="aksi" value="tambah">
-        <div class="modal-header">
-          <h5 class="modal-title">Tambah Pembayaran Iuran</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">No KK</label>
-            <select name="nokk" class="form-select" required>
-              <option value="">Pilih No KK</option>
-              <?php
-              $stmt = $pdo->query("SELECT DISTINCT nokk FROM tb_warga ORDER BY nokk");
-              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                  echo "<option value='{$row['nokk']}'>{$row['nokk']}</option>";
-              }
-              ?>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jenis Iuran</label>
-            <select name="jenis_iuran" class="form-select" required>
-              <option value="wajib">Iuran Wajib</option>
-              <option value="sosial">Iuran Sosial</option>
-              <option value="17an">Iuran 17an</option>
-              <option value="merti">Iuran Merti Desa</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Bulan</label>
-            <select name="bulan" class="form-select" required>
-              <?php
-              $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-              foreach ($bulan as $b) {
-                  echo "<option value='$b'>$b</option>";
-              }
-              ?>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Tahun</label>
-            <input type="number" name="tahun" class="form-control" value="<?= date('Y') ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jumlah (Rp)</label>
-            <input type="number" name="jumlah" class="form-control" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
+<!-- Modal Tambah Iuran (Tailwind) -->
+<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Tambah Pembayaran Iuran</h2>
+      <button onclick="document.getElementById('modalTambah').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">&times;</button>
     </div>
+    <form method="post">
+      <input type="hidden" name="aksi" value="tambah">
+      <div class="mb-4">
+        <label class="block mb-1">No KK</label>
+        <select name="nokk" class="w-full border rounded p-2" required>
+          <option value="">Pilih No KK</option>
+          <?php
+          $stmt = $pdo->query("SELECT DISTINCT nokk FROM tb_warga ORDER BY nokk");
+          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              echo "<option value='{$row['nokk']}'>{$row['nokk']}</option>";
+          }
+          ?>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1">Jenis Iuran</label>
+        <select name="jenis_iuran" class="w-full border rounded p-2" required>
+          <option value="wajib">Iuran Wajib</option>
+          <option value="sosial">Iuran Sosial</option>
+          <option value="17an">Iuran 17an</option>
+          <option value="merti">Iuran Merti Desa</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1">Bulan</label>
+        <select name="bulan" class="w-full border rounded p-2" required>
+          <?php
+          $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+          foreach ($bulan as $b) {
+              echo "<option value='$b'>$b</option>";
+          }
+          ?>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1">Tahun</label>
+        <input type="number" name="tahun" class="w-full border rounded p-2" value="<?= date('Y') ?>" required>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1">Jumlah (Rp)</label>
+        <input type="number" name="jumlah" class="w-full border rounded p-2" required>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Batal</button>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+      </div>
+    </form>
   </div>
 </div>
 
-<!-- Modal Detail Iuran -->
+<!-- Modal Detail Iuran (Tailwind) -->
 <?php if ($detail): ?>
-<div class="modal fade show" id="detailModal" tabindex="-1" style="display:block; background:rgba(0,0,0,0.5);" aria-modal="true" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Detail Iuran - <?= htmlspecialchars($kepala) ?> (<?= htmlspecialchars($dnokk) ?>)</h5>
-        <a href="iuran.php" class="btn-close"></a>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Bulan</th>
-              <th>Jenis Iuran</th>
-              <th>Jumlah</th>
-              <th>Status</th>
-              <th>Tanggal Bayar</th>
-              <th>Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($detail as $row): ?>
-            <tr>
-              <td><?= $row['bulan'] ?></td>
-              <td><?= $row['jenis_iuran'] ?></td>
-              <td>Rp<?= number_format($row['jumlah'], 0, ',', '.') ?></td>
-              <td><?= $row['status'] ?></td>
-              <td><?= $row['tgl_bayar'] ? date('d-m-Y H:i', strtotime($row['tgl_bayar'])) : '-' ?></td>
-              <td><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <a href="iuran.php" class="btn btn-secondary">Tutup</a>
-      </div>
+<div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-3xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Detail Iuran - <?= htmlspecialchars($kepala) ?> (<?= htmlspecialchars($dnokk) ?>)</h2>
+      <a href="iuran.php" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border rounded shadow">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="px-4 py-2 border">Bulan</th>
+            <th class="px-4 py-2 border">Jenis Iuran</th>
+            <th class="px-4 py-2 border">Jumlah</th>
+            <th class="px-4 py-2 border">Status</th>
+            <th class="px-4 py-2 border">Tanggal Bayar</th>
+            <th class="px-4 py-2 border">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($detail as $row): ?>
+          <tr class="hover:bg-gray-100">
+            <td class="px-4 py-2 border"><?= $row['bulan'] ?></td>
+            <td class="px-4 py-2 border"><?= $row['jenis_iuran'] ?></td>
+            <td class="px-4 py-2 border">Rp<?= number_format($row['jumlah'], 0, ',', '.') ?></td>
+            <td class="px-4 py-2 border"><?= $row['status'] ?></td>
+            <td class="px-4 py-2 border"><?= $row['tgl_bayar'] ? date('d-m-Y H:i', strtotime($row['tgl_bayar'])) : '-' ?></td>
+            <td class="px-4 py-2 border"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-end mt-4">
+      <a href="iuran.php" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Tutup</a>
     </div>
   </div>
 </div>
 <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <?php if ($notif): ?>
 <script>
   Swal.fire({
