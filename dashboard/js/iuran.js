@@ -1,4 +1,6 @@
 // iuran.js
+console.log("iuran.js loaded");
+
 function openModal() {
   document.getElementById("modalIuran").classList.remove("hidden");
 }
