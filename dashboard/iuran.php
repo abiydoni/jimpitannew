@@ -54,5 +54,5 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <?php include 'api/modal_iuran.php'; ?>
-<script src="../js/iuran.js"></script>
+<script src="js/iuran.js"></script>
 <?php include 'footer.php'; ?>
