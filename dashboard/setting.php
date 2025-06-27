@@ -25,17 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 include 'header.php';
-
-// Cek login dan hak akses
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php');
-    exit;
-}
-if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php');
-    exit;
-}
-
 // Tambahkan script untuk SweetAlert2 toast jika ada notifikasi dari session
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!empty($_SESSION['swal'])) {

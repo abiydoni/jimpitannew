@@ -32,17 +32,6 @@ include 'header.php';
 $sql = "SELECT * FROM master_kk";
 $stmt = $pdo->query($sql);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-    if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php'); // Alihkan ke halaman tidak diizinkan
-    exit;
-}
-// Include the database connection
 
 // Rekap: tb_warga.nikk yang tidak ada di master_kk.nokk
 $warga_nikk_belum_kk = [];

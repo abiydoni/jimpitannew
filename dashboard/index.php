@@ -1,5 +1,4 @@
 <?php include 'header.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <?php
 // Get the current day of the week (e.g., "Sunday", "Monday", etc.)

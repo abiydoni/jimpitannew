@@ -4,189 +4,155 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include 'header.php';
 
-// Handle tambah iuran
+// Ambil tahun yang dipilih atau default tahun berjalan
+$tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
+
+// Proses pembayaran
 $notif = null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['aksi'] === 'tambah') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['aksi'] === 'bayar') {
     $nikk = $_POST['nikk'];
-    $jenis = $_POST['jenis_iuran'];
-    $bulan = $_POST['bulan'];
-    $tahun = $_POST['tahun'];
-    $jumlah = $_POST['jumlah'];
+    $kode_tarif = $_POST['kode_tarif'];
+    $periode = $_POST['periode']; // format: "bulan" atau "tahun"
+    $jumlah = intval($_POST['jumlah']);
+    $bulan = null;
+    if (strpos($periode, '-') !== false) {
+        // Bulanan: format "bulan-tahun"
+        [$bulan, $tahun_bayar] = explode('-', $periode);
+    } else {
+        // Tahunan: format "tahun"
+        $tahun_bayar = $periode;
+    }
     try {
-        $stmt = $pdo->prepare("REPLACE INTO tb_iuran (nikk, jenis_iuran, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Lunas', NOW())");
-        $stmt->execute([$nikk, $jenis, $bulan, $tahun, $jumlah]);
-        $notif = ['type' => 'success', 'msg' => 'Data iuran berhasil disimpan!'];
+        $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Cicil', NOW())");
+        $stmt->execute([$nikk, $kode_tarif, $bulan, $tahun_bayar, $jumlah]);
+        $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil disimpan!'];
     } catch (Exception $e) {
-        $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan data: ' . $e->getMessage()];
+        $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan pembayaran: ' . $e->getMessage()];
     }
 }
 
-// Ambil data rekap per KK
-$sql = "SELECT 
-          i.nikk,
-          (SELECT nama FROM tb_warga w WHERE w.nikk = i.nikk AND w.hubungan = 'Kepala Keluarga' LIMIT 1) AS kepala_keluarga,
-          i.tahun,
-          GROUP_CONCAT(DISTINCT i.jenis_iuran) AS jenis_ikut,
-          SUM(i.jumlah) AS total_bayar
-        FROM tb_iuran i
-        GROUP BY i.nikk, i.tahun
-        ORDER BY i.tahun DESC";
-$stmt = $pdo->query($sql);
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Ambil detail jika ada request detail
-$detail = null;
-if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
-    $dnikk = $_GET['detail_nikk'];
-    $dtahun = $_GET['detail_tahun'];
-    $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND tahun = ? ORDER BY bulan");
-    $stmt->execute([$dnikk, $dtahun]);
-    $detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $kepala = $pdo->prepare("SELECT nama FROM tb_warga WHERE nikk = ? AND hubungan = 'Kepala Keluarga' LIMIT 1");
-    $kepala->execute([$dnikk]);
-    $kepala = $kepala->fetchColumn();
+// Ambil data tarif
+$tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
+$tarif_map = [];
+foreach ($tarif as $t) {
+    $tarif_map[$t['kode_tarif']] = $t;
 }
-?>
+$bulanan = ['TR001','TR002','TR003'];
+$tahunan = ['TR004','TR005','TR006'];
 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+// Ambil semua KK
+$kk = $pdo->query("SELECT nikk, nama FROM tb_warga WHERE hubungan='Kepala Keluarga' ORDER BY nama")->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil semua pembayaran tahun ini
+$pembayaran = $pdo->query("SELECT * FROM tb_iuran WHERE tahun='$tahun'")->fetchAll(PDO::FETCH_ASSOC);
+// Index pembayaran: [nikk][kode_tarif][periode] = total bayar
+$pembayaran_map = [];
+foreach ($pembayaran as $p) {
+    $periode = $p['bulan'] ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
+    $pembayaran_map[$p['nikk']][$p['kode_tarif']][$periode][] = $p;
+}
+
+// Dropdown tahun
+$tahun_opsi = range(date('Y')-2, date('Y')+2);
+?>
 
 <div class="container mx-auto px-4 py-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Rekap Iuran per Kartu Keluarga</h1>
-    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openAddNikkModal()">+ Tambah Iuran</button>
+    <h1 class="text-2xl font-bold">Rekap Tagihan Iuran per Kartu Keluarga</h1>
+    <form method="GET" class="flex items-center gap-2">
+      <label for="tahun" class="font-semibold">Tahun:</label>
+      <select name="tahun" id="tahun" class="border rounded p-1" onchange="this.form.submit()">
+        <?php foreach($tahun_opsi as $th): ?>
+          <option value="<?= $th ?>" <?= $th==$tahun?'selected':'' ?>><?= $th ?></option>
+        <?php endforeach; ?>
+      </select>
+    </form>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full bg-white border rounded shadow">
+    <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
       <thead class="bg-gray-200">
         <tr>
-          <th class="px-4 py-2 border">No KK</th>
-          <th class="px-4 py-2 border">Kepala Keluarga</th>
-          <th class="px-4 py-2 border">Tahun</th>
-          <th class="px-4 py-2 border">Jenis Iuran</th>
-          <th class="px-4 py-2 border">Total Bayar</th>
-          <th class="px-4 py-2 border">Aksi</th>
+          <th class="px-2 py-1 border">No KK</th>
+          <th class="px-2 py-1 border">Nama KK</th>
+          <th class="px-2 py-1 border">Jenis Iuran</th>
+          <th class="px-2 py-1 border">Periode</th>
+          <th class="px-2 py-1 border">Tarif</th>
+          <th class="px-2 py-1 border">Sudah Bayar</th>
+          <th class="px-2 py-1 border">Sisa Hutang</th>
+          <th class="px-2 py-1 border">Status</th>
+          <th class="px-2 py-1 border">Aksi</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach($data as $row): ?>
-        <tr class="hover:bg-gray-100">
-          <td class="px-4 py-2 border"><?= htmlspecialchars($row['nikk']) ?></td>
-          <td class="px-4 py-2 border"><?= htmlspecialchars($row['kepala_keluarga']) ?></td>
-          <td class="px-4 py-2 border"><?= $row['tahun'] ?></td>
-          <td class="px-4 py-2 border"><?= $row['jenis_ikut'] ?></td>
-          <td class="px-4 py-2 border font-semibold">Rp<?= number_format($row['total_bayar'], 0, ',', '.') ?></td>
-          <td class="px-4 py-2 border">
-            <a href="?detail_nikk=<?= urlencode($row['nikk']) ?>&detail_tahun=<?= urlencode($row['tahun']) ?>#detailModal" class="text-blue-600 hover:underline">Detail</a>
-          </td>
-        </tr>
-        <?php endforeach ?>
+        <?php foreach($kk as $w): ?>
+          <?php foreach($tarif as $t): ?>
+            <?php
+            $kode = $t['kode_tarif'];
+            $is_bulanan = in_array($kode, $bulanan);
+            $periode_list = $is_bulanan ? [
+              'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
+            ] : [$tahun];
+            foreach ($periode_list as $periode) {
+              $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+              $total_bayar = 0;
+              if (isset($pembayaran_map[$w['nikk']][$kode][$periode_key])) {
+                foreach ($pembayaran_map[$w['nikk']][$kode][$periode_key] as $p) {
+                  $total_bayar += intval($p['jumlah']);
+                }
+              }
+              $tarif_nom = intval($t['tarif']);
+              $sisa = $tarif_nom - $total_bayar;
+              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+            ?>
+            <tr class="hover:bg-gray-100">
+              <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
+              <td class="px-2 py-1 border"><?= htmlspecialchars($w['nama']) ?></td>
+              <td class="px-2 py-1 border"><?= htmlspecialchars($t['nama_tarif']) ?></td>
+              <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
+              <td class="px-2 py-1 border">Rp<?= number_format($tarif_nom,0,',','.') ?></td>
+              <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
+              <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
+              <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
+              <td class="px-2 py-1 border">
+                <?php if($status=='Belum Lunas'): ?>
+                  <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $w['nikk'] ?>','<?= $kode ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($t['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
+                <?php else: ?>
+                  <span class="text-gray-400">-</span>
+                <?php endif; ?>
+              </td>
+            </tr>
+            <?php } ?>
+          <?php endforeach; ?>
+        <?php endforeach; ?>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Modal Tambah Iuran (struktur persis kk.php, tambah field iuran) -->
-<div id="addModalNikk" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-3 rounded shadow-lg w-full max-w-md">
-        <h2 class="text-lg font-bold mb-2">Tambah Pembayaran Iuran</h2>
-        <form id="formAddIuran" method="POST" x-data="kkDropdownSearch()" x-init="init()">
-            <input type="hidden" name="aksi" value="tambah">
-            <div class="mb-2 relative">
-                <label class="block mb-1">No KK (NIKK) / Nama KK</label>
-                <input x-model="search" @focus="open = true" @input="open = true" type="text" placeholder="Cari No KK atau Nama KK..." class="w-full border rounded p-1" autocomplete="off" required>
-                <ul x-show="open && filteredOptions.length > 0" @click.away="open = false" class="absolute bg-white border w-full mt-1 rounded max-h-48 overflow-auto z-10">
-                    <template x-for="kk in filteredOptions" :key="kk.nikk">
-                        <li @click="selectOption(kk)" class="px-2 py-1 hover:bg-blue-500 hover:text-white cursor-pointer" x-text="kk.nikk + ' - ' + kk.kk_name"></li>
-                    </template>
-                </ul>
-                <input type="hidden" id="nikkDropdown" name="nikk" :value="selectedOption ? selectedOption.nikk : ''" required>
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">No KK</label>
-                <input type="text" id="nokkAuto" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.nikk : ''">
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">Nama KK</label>
-                <input type="text" id="kkNameAuto" class="border rounded w-full p-1 bg-gray-100" readonly required x-model="selectedOption ? selectedOption.kk_name : ''">
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">Jenis Iuran</label>
-                <select name="jenis_iuran" class="w-full border rounded p-1" required>
-                    <option value="wajib">Iuran Wajib</option>
-                    <option value="sosial">Iuran Sosial</option>
-                    <option value="17an">Iuran 17an</option>
-                    <option value="merti">Iuran Merti Desa</option>
-                </select>
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">Bulan</label>
-                <select name="bulan" class="w-full border rounded p-1" required>
-                    <?php
-                    $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-                    foreach ($bulan as $b) {
-                        echo "<option value='$b'>$b</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">Tahun</label>
-                <input type="number" name="tahun" class="w-full border rounded p-1" value="<?= date('Y') ?>" required>
-            </div>
-            <div class="mb-2">
-                <label class="block mb-1">Jumlah (Rp)</label>
-                <input type="number" name="jumlah" class="w-full border rounded p-1" required>
-            </div>
-            <div class="flex justify-end">
-                <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('addModalNikk')">Tutup</button>
-                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Simpan</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal Detail Iuran (Tailwind) -->
-<?php if ($detail): ?>
-<div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-3xl">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">Detail Iuran - <?= htmlspecialchars($kepala) ?> (<?= htmlspecialchars($dnikk) ?>)</h2>
-      <a href="iuran.php" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</a>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="min-w-full bg-white border rounded shadow">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="px-4 py-2 border">Bulan</th>
-            <th class="px-4 py-2 border">Jenis Iuran</th>
-            <th class="px-4 py-2 border">Jumlah</th>
-            <th class="px-4 py-2 border">Status</th>
-            <th class="px-4 py-2 border">Tanggal Bayar</th>
-            <th class="px-4 py-2 border">Keterangan</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($detail as $row): ?>
-          <tr class="hover:bg-gray-100">
-            <td class="px-4 py-2 border"><?= $row['bulan'] ?></td>
-            <td class="px-4 py-2 border"><?= $row['jenis_iuran'] ?></td>
-            <td class="px-4 py-2 border">Rp<?= number_format($row['jumlah'], 0, ',', '.') ?></td>
-            <td class="px-4 py-2 border"><?= $row['status'] ?></td>
-            <td class="px-4 py-2 border"><?= $row['tgl_bayar'] ? date('d-m-Y H:i', strtotime($row['tgl_bayar'])) : '-' ?></td>
-            <td class="px-4 py-2 border"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-    <div class="flex justify-end mt-4">
-      <a href="iuran.php" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Tutup</a>
-    </div>
+<!-- Modal Bayar -->
+<div id="bayarModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
+    <h2 class="text-lg font-bold mb-2">Pembayaran Iuran</h2>
+    <form method="POST" id="formBayar">
+      <input type="hidden" name="aksi" value="bayar">
+      <input type="hidden" name="nikk" id="modalNikk">
+      <input type="hidden" name="kode_tarif" id="modalKodeTarif">
+      <input type="hidden" name="periode" id="modalPeriode">
+      <div class="mb-2">
+        <label class="block mb-1">Nama Iuran</label>
+        <input type="text" id="modalNamaTarif" class="w-full border rounded p-1 bg-gray-100" readonly>
+      </div>
+      <div class="mb-2">
+        <label class="block mb-1">Jumlah Bayar (Rp)</label>
+        <input type="number" name="jumlah" id="modalJumlah" class="w-full border rounded p-1" min="1" required>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('bayarModal')">Tutup</button>
+        <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Simpan</button>
+      </div>
+    </form>
   </div>
 </div>
-<?php endif; ?>
 
 <?php if ($notif): ?>
 <script>
@@ -205,35 +171,14 @@ function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.toggle('hidden');
 }
-function kkDropdownSearch() {
-    return {
-        search: '',
-        open: false,
-        options: [],
-        selectedOption: null,
-        get filteredOptions() {
-            if (!Array.isArray(this.options)) return [];
-            if (!this.search) return this.options;
-            const term = this.search.toLowerCase();
-            return this.options.filter(kk =>
-                kk.nikk.toLowerCase().includes(term) ||
-                kk.kk_name.toLowerCase().includes(term)
-            );
-        },
-        selectOption(kk) {
-            this.selectedOption = kk;
-            this.search = kk.nikk + ' - ' + kk.kk_name;
-            this.open = false;
-        },
-        async init() {
-            const res = await fetch('api/get_nikk_group.php');
-            this.options = await res.json();
-            console.log('NIKK options loaded:', this.options);
-        }
-    }
-}
-function openAddNikkModal() {
-    toggleModal('addModalNikk');
+function openBayarModal(nikk, kode_tarif, periode, nama_tarif, sisa) {
+    document.getElementById('modalNikk').value = nikk;
+    document.getElementById('modalKodeTarif').value = kode_tarif;
+    document.getElementById('modalPeriode').value = periode;
+    document.getElementById('modalNamaTarif').value = nama_tarif;
+    document.getElementById('modalJumlah').value = sisa;
+    document.getElementById('modalJumlah').max = sisa;
+    toggleModal('bayarModal');
 }
 </script>
 
