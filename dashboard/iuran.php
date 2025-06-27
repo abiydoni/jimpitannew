@@ -15,11 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
     $kode_tarif_bayar = $_POST['kode_tarif'];
     $periode = $_POST['periode'];
     $jumlah = intval($_POST['jumlah']);
-    $bulan = null;
     if (strpos($periode, '-') !== false) {
         [$bulan, $tahun_bayar] = explode('-', $periode);
     } else {
         $tahun_bayar = $periode;
+        // Untuk tahunan, bulan diisi nama bulan saat pembayaran
+        $bulanList = [
+            'January'=>'Januari','February'=>'Februari','March'=>'Maret','April'=>'April','May'=>'Mei','June'=>'Juni',
+            'July'=>'Juli','August'=>'Agustus','September'=>'September','October'=>'Oktober','November'=>'November','December'=>'Desember'
+        ];
+        $bulan = $bulanList[date('F')];
     }
     try {
         $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Cicil', NOW())");
