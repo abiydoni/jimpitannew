@@ -32,11 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
 
 // Ambil data tarif
 $tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
+
+// Filter tarif, hilangkan Jimpitan (TR001)
+$tarif = array_filter($tarif, function($t) { return $t['kode_tarif'] !== 'TR001'; });
 $tarif_map = [];
 foreach ($tarif as $t) {
     $tarif_map[$t['kode_tarif']] = $t;
 }
-$bulanan = ['TR001','TR002','TR003'];
+$bulanan = ['TR002','TR003']; // TR001 dihapus
 $tahunan = ['TR004','TR005','TR006'];
 
 // Ambil semua KK
@@ -51,15 +54,20 @@ foreach ($pembayaran as $p) {
 }
 $tahun_opsi = range(date('Y')-2, date('Y')+2);
 
-// Icon untuk tiap jenis iuran (bisa diganti sesuai selera)
+// Icon untuk tiap jenis iuran (tanpa Jimpitan)
 $icon_map = [
-    'TR001' => '💰', // Jimpitan
     'TR002' => '🏠', // Wajib
     'TR003' => '🤝', // Sosial
     'TR004' => '🎉', // 17an
     'TR005' => '🌾', // Merti Du
     'TR006' => '💵', // Kas
 ];
+
+// Jika kode_tarif=TR001 di URL, redirect ke halaman utama iuran.php
+if ($kode_tarif === 'TR001') {
+    header('Location: iuran.php');
+    exit;
+}
 ?>
 
 <div class="container mx-auto px-4 py-6">
