@@ -110,9 +110,9 @@ if (!empty($_SESSION['swal'])) {
                         <label class="block text-sm font-medium text-gray-700">Tarif:</label>
                         <input type="text" name="tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-0.5">Jenis Kelamin *</label>
-                        <select name="jenkel" id="jenkel" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                    <div class="bg-white p-1 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Metode:</label>
+                        <select name="metode" id="metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                             <option value="">Pilih Metode</option>
                             <option value="0">Bulanan</option>
                             <option value="1">Tahunan</option>
@@ -135,6 +135,14 @@ if (!empty($_SESSION['swal'])) {
                     <div class="bg-white p-2 rounded-lg shadow-md">
                         <label class="block text-sm font-medium text-gray-700">Tarif:</label>
                         <input type="text" name="tarif" id="edit_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    </div>
+                    <div class="bg-white p-1 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Metode:</label>
+                        <select name="metode" id="metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                            <option value="">Pilih Metode</option>
+                            <option value="0">Bulanan</option>
+                            <option value="1">Tahunan</option>
+                        </select>
                     </div>
                     <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
                 </form>
@@ -166,6 +174,7 @@ if (!empty($_SESSION['swal'])) {
         document.getElementById('edit_kode_tarif').value = kode_tarif;
         document.getElementById('edit_nama_tarif').value = nama_tarif;
         document.getElementById('edit_tarif').value = tarif;
+        document.getElementById('edit_metode').value = metode;
 
         const modal = document.getElementById("editTarifModal");
         modal.classList.remove("hidden");
