@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
     $nikk_bayar = $_POST['nikk'];
     $kode_tarif_bayar = $_POST['kode_tarif'];
     $periode = $_POST['periode'];
-    $jumlah = intval($_POST['jumlah']);
+    $jumlah_bayar = intval($_POST['jumlah']); // input user, untuk jml_bayar
     if (strpos($periode, '-') !== false) {
         [$bulan, $tahun_bayar] = explode('-', $periode);
     } else {
@@ -26,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['ak
         ];
         $bulan = $bulanList[date('F')];
     }
+    // Ambil tarif tagihan dari tb_tarif
+    $jumlah_tagihan = isset($tarif_map[$kode_tarif_bayar]) ? intval($tarif_map[$kode_tarif_bayar]['tarif']) : 0;
     try {
-        $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, 'Cicil', NOW())");
-        $stmt->execute([$nikk_bayar, $kode_tarif_bayar, $bulan, $tahun_bayar, $jumlah]);
+        $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, jml_bayar, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, ?, 'Cicil', NOW())");
+        $stmt->execute([$nikk_bayar, $kode_tarif_bayar, $bulan, $tahun_bayar, $jumlah_tagihan, $jumlah_bayar]);
         $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil disimpan!'];
     } catch (Exception $e) {
         $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan pembayaran: ' . $e->getMessage()];
@@ -135,7 +137,7 @@ if ($kode_tarif === 'TR001') {
               $total_tagihan += $tarif_nom;
               if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
                 foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                  $total_bayar += intval($p['jumlah']);
+                  $total_bayar += intval($p['jml_bayar']);
                 }
               }
             }
@@ -191,7 +193,7 @@ if ($kode_tarif === 'TR001') {
             $total_bayar = 0;
             if (isset($pembayaran_map[$nikk][$kode_tarif][$periode_key])) {
               foreach ($pembayaran_map[$nikk][$kode_tarif][$periode_key] as $p) {
-                $total_bayar += intval($p['jumlah']);
+                $total_bayar += intval($p['jml_bayar']);
               }
             }
             $sisa = $tarif_nom - $total_bayar;
