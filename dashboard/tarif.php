@@ -67,6 +67,7 @@ if (!empty($_SESSION['swal'])) {
                                 <th class="text-left border px-3 py-2">Kode Tarif</th>
                                 <th class="text-center border px-3 py-2">Nama Tarif</th>
                                 <th class="text-center border px-3 py-2">Tarif</th>
+                                <th class="text-center border px-3 py-2">Metode</th>
                                 <th class="text-center border px-3 py-2">Aksi</th>
                             </tr>
                         </thead>
@@ -76,6 +77,7 @@ if (!empty($_SESSION['swal'])) {
                                 <td><?php echo htmlspecialchars($tarif["kode_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
+                                <td><?php echo htmlspecialchars($tarif["metode"]); ?></td>
                                 <td class="flex justify-center space-x-2">
                                     <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
@@ -107,6 +109,14 @@ if (!empty($_SESSION['swal'])) {
                     <div class="bg-white p-1 rounded-lg shadow-md">
                         <label class="block text-sm font-medium text-gray-700">Tarif:</label>
                         <input type="text" name="tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-0.5">Jenis Kelamin *</label>
+                        <select name="jenkel" id="jenkel" class="w-full border px-2 py-0.5 rounded text-sm form-input" required>
+                            <option value="">Pilih Metode</option>
+                            <option value="0">Bulanan</option>
+                            <option value="1">Tahunan</option>
+                        </select>
                     </div>
                     <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
                 </form>

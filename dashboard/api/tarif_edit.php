@@ -1,18 +1,5 @@
 <?php
 session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php'); // Redirect to login page
-    exit;
-}
-
-// Check if user is admin
-if (!in_array($_SESSION['user']['role'], ['pengurus', 'admin', 's_admin'])) {
-    header('Location: ../login.php');
-    exit;
-}
-
 // Include the database connection
 include 'db.php';
 
@@ -20,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_tarif = $_POST['kode_tarif'];
     $nama_tarif = $_POST['nama_tarif'];
     $tarif = $_POST['tarif'];
+    $metode = $_POST['metode'];
 
     // Validasi input
     if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif)) {
@@ -30,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update user data in the database
-    $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ? WHERE kode_tarif = ?";
+    $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ?, metode = ? WHERE kode_tarif = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nama_tarif, $tarif, $kode_tarif]);
+    $stmt->execute([$nama_tarif, $tarif, $metode, $kode_tarif]);
     session_start();
     $_SESSION['swal'] = ['msg' => 'Data berhasil diperbarui!', 'icon' => 'success'];
     header('Location: ../tarif.php');

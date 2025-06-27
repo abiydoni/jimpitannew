@@ -6,9 +6,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kode_tarif = $_POST['kode_tarif'];
     $nama_tarif = $_POST['nama_tarif'];
     $tarif = $_POST['tarif'];
+    $metode = $_POST['metode'];
 
     // SQL untuk memasukkan data
-    $sql = "INSERT INTO tb_tarif (kode_tarif, nama_tarif, tarif) VALUES (:kode_tarif, :nama_tarif, :tarif)";
+    $sql = "INSERT INTO tb_tarif (kode_tarif, nama_tarif, tarif, metode) VALUES (:kode_tarif, :nama_tarif, :tarif, :metode)";
 
     $stmt = $pdo->prepare($sql);
 
@@ -16,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':kode_tarif', $kode_tarif);
     $stmt->bindParam(':nama_tarif', $nama_tarif);
     $stmt->bindParam(':tarif', $tarif);
+    $stmt->bindParam(':metode', $metode);
 
     if ($stmt->execute()) {
         header("Location: ../tarif.php"); // Mengarahkan ke jadwal.php setelah berhasil
