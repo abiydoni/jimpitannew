@@ -72,7 +72,8 @@ if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.6/dist/datepicker.min.js"></script>
     <!-- XLSX Library untuk Export/Import Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
 <body>
     <!-- SIDEBAR -->
     <section id="sidebar">
