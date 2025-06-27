@@ -200,7 +200,6 @@ if (isset($_GET['detail_nikk'], $_GET['detail_tahun'])) {
 </script>
 <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
 function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
