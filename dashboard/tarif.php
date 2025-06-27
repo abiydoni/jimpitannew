@@ -79,7 +79,7 @@ if (!empty($_SESSION['swal'])) {
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["metode"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>, '<?php echo $metode['metode']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
+                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>, '<?php echo $tarif['metode']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
                                     <a href="tarif.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
