@@ -514,10 +514,7 @@ if ($kode_tarif === 'TR001') {
                 </div>
               <?php else: ?>
                 <?php if($total_bayar > 0): ?>
-                  <div class="flex space-x-1">
-                    <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
-                    <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $total_bayar ?>)">Batal</button>
-                  </div>
+                  <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
                 <?php endif; ?>
               <?php endif; ?>
             </td>
@@ -549,34 +546,6 @@ if ($kode_tarif === 'TR001') {
       <div class="flex justify-end">
         <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('bayarModal')">Tutup</button>
         <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Simpan</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Modal Batal -->
-<div id="batalModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
-    <h2 class="text-lg font-bold mb-2">Batalkan Pembayaran</h2>
-    <form method="POST" id="formBatal">
-      <input type="hidden" name="aksi" value="batal">
-      <input type="hidden" name="nikk" id="batalNikk">
-      <input type="hidden" name="kode_tarif" id="batalKodeTarif">
-      <input type="hidden" name="periode" id="batalPeriode">
-      <div class="mb-4">
-        <p class="text-gray-700">Pembayaran yang akan dibatalkan:</p>
-        <p class="font-semibold mt-2" id="batalNamaTarif"></p>
-        <p class="text-sm text-gray-600 mt-1" id="batalPeriodeText"></p>
-        <p class="text-sm text-gray-600 mt-1">Total sudah bayar: <span id="batalTotalBayar" class="font-semibold"></span></p>
-      </div>
-      <div class="mb-4">
-        <label class="block mb-1">Jumlah yang akan dibatalkan (Rp)</label>
-        <input type="number" name="jumlah_batal" id="batalJumlah" class="w-full border rounded p-1" min="1" required>
-        <p class="text-xs text-gray-500 mt-1">Maksimal: <span id="batalMaksimal"></span></p>
-      </div>
-      <div class="flex justify-end">
-        <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('batalModal')">Tutup</button>
-        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Batalkan</button>
       </div>
     </form>
   </div>
@@ -654,19 +623,6 @@ function openBayarModal(nikk, kode_tarif, periode, nama_tarif, sisa) {
     toggleModal('bayarModal');
 }
 
-function openBatalModal(nikk, kode_tarif, periode, nama_tarif, total_bayar) {
-    document.getElementById('batalNikk').value = nikk;
-    document.getElementById('batalKodeTarif').value = kode_tarif;
-    document.getElementById('batalPeriode').value = periode;
-    document.getElementById('batalNamaTarif').textContent = nama_tarif;
-    document.getElementById('batalPeriodeText').textContent = 'Periode: ' + periode;
-    document.getElementById('batalTotalBayar').textContent = 'Rp' + number_format(total_bayar, 0, ',', '.');
-    document.getElementById('batalMaksimal').textContent = 'Rp' + number_format(total_bayar, 0, ',', '.');
-    document.getElementById('batalJumlah').value = total_bayar;
-    document.getElementById('batalJumlah').max = total_bayar;
-    toggleModal('batalModal');
-}
-
 function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
     document.getElementById('historiNamaTarif').textContent = nama_tarif;
     document.getElementById('historiPeriodeText').textContent = 'Periode: ' + periode;
@@ -692,20 +648,23 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
 
 function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
     if (confirm('Yakin ingin menghapus pembayaran ini?')) {
+        console.log('Menghapus pembayaran:', {nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar});
+        
+        const formData = new FormData();
+        formData.append('nikk', nikk);
+        formData.append('kode_tarif', kode_tarif);
+        formData.append('bulan', bulan);
+        formData.append('tahun', tahun);
+        formData.append('jml_bayar', jml_bayar);
+        formData.append('tgl_bayar', tgl_bayar);
+        
         fetch('api/hapus_pembayaran.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'nikk=' + encodeURIComponent(nikk) + 
-                  '&kode_tarif=' + encodeURIComponent(kode_tarif) + 
-                  '&bulan=' + encodeURIComponent(bulan) + 
-                  '&tahun=' + encodeURIComponent(tahun) + 
-                  '&jml_bayar=' + encodeURIComponent(jml_bayar) + 
-                  '&tgl_bayar=' + encodeURIComponent(tgl_bayar)
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Response:', data);
             if (data.success) {
                 alert('Pembayaran berhasil dihapus');
                 location.reload(); // Reload halaman untuk memperbarui data

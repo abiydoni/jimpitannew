@@ -61,7 +61,7 @@ try {
         echo '<td class="px-3 py-2 border">Rp' . number_format($pembayaran['jml_bayar'], 0, ',', '.') . '</td>';
         echo '<td class="px-3 py-2 border">' . htmlspecialchars($pembayaran['status']) . '</td>';
         echo '<td class="px-3 py-2 border text-center">';
-        echo '<button onclick="hapusPembayaran(\'' . $pembayaran['nikk'] . '\', \'' . $pembayaran['kode_tarif'] . '\', \'' . ($pembayaran['bulan'] ?: '') . '\', \'' . $pembayaran['tahun'] . '\', \'' . $pembayaran['jml_bayar'] . '\', \'' . $pembayaran['tgl_bayar'] . '\')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">';
+        echo '<button onclick="hapusPembayaran(\'' . addslashes($pembayaran['nikk']) . '\', \'' . addslashes($pembayaran['kode_tarif']) . '\', \'' . addslashes($pembayaran['bulan'] ?: '') . '\', \'' . addslashes($pembayaran['tahun']) . '\', \'' . addslashes($pembayaran['jml_bayar']) . '\', \'' . addslashes($pembayaran['tgl_bayar']) . '\')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">';
         echo '<i class="bx bx-trash"></i>';
         echo '</button>';
         echo '</td>';
