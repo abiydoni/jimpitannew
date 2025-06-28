@@ -122,13 +122,45 @@ $kk = $pdo->query("SELECT nikk, nama FROM tb_warga WHERE hubungan='Kepala Keluar
 // Ambil semua pembayaran tahun ini
 $pembayaran = $pdo->query("SELECT * FROM tb_iuran WHERE tahun='$tahun'")->fetchAll(PDO::FETCH_ASSOC);
 
-// Debug: Tampilkan semua data pembayaran mentah
+// Debug: Query khusus untuk tarif tahunan
 if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-    echo "<div style='background: #ffe0e0; padding: 10px; margin: 10px; border: 1px solid #cc0000;'>";
-    echo "<h3>Raw Payment Data:</h3>";
-    foreach ($pembayaran as $p) {
-        echo "<p>NIKK: {$p['nikk']}, Kode: {$p['kode_tarif']}, Bulan: " . ($p['bulan'] ?: 'NULL') . ", Tahun: {$p['tahun']}, Jumlah: {$p['jml_bayar']}</p>";
+    echo "<div style='background: #e0ffe0; padding: 10px; margin: 10px; border: 1px solid #00cc00;'>";
+    echo "<h3>Query Debug:</h3>";
+    echo "<p>Tahun yang dipilih: $tahun</p>";
+    
+    // Cek tarif tahunan
+    $tahunan_tarif = $pdo->query("SELECT kode_tarif FROM tb_tarif WHERE metode = '2'")->fetchAll(PDO::FETCH_COLUMN);
+    echo "<p>Tarif tahunan: " . implode(', ', $tahunan_tarif) . "</p>";
+    
+    // Cek semua data pembayaran untuk tahun ini
+    echo "<p>Total pembayaran tahun $tahun: " . count($pembayaran) . " records</p>";
+    
+    foreach ($tahunan_tarif as $kode) {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ?");
+        $stmt->execute([$kode, $tahun]);
+        $count = $stmt->fetchColumn();
+        echo "<p>Pembayaran untuk $kode tahun $tahun: $count records</p>";
+        
+        if ($count > 0) {
+            $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE kode_tarif = ? AND tahun = ?");
+            $stmt->execute([$kode, $tahun]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo "<p>Detail pembayaran $kode:</p>";
+            foreach ($data as $d) {
+                echo "<p>  - NIKK: {$d['nikk']}, Bulan: " . ($d['bulan'] ?: 'NULL') . ", Jumlah: {$d['jml_bayar']}</p>";
+            }
+        }
     }
+    
+    // Cek apakah ada data pembayaran untuk tarif tahunan di tahun lain
+    echo "<h4>Cek data tarif tahunan di tahun lain:</h4>";
+    foreach ($tahunan_tarif as $kode) {
+        $stmt = $pdo->prepare("SELECT DISTINCT tahun FROM tb_iuran WHERE kode_tarif = ? ORDER BY tahun");
+        $stmt->execute([$kode]);
+        $tahun_list = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        echo "<p>Tarif $kode ada di tahun: " . implode(', ', $tahun_list) . "</p>";
+    }
+    
     echo "</div>";
 }
 
@@ -136,7 +168,7 @@ $pembayaran_map = [];
 foreach ($pembayaran as $p) {
     // Untuk tarif bulanan: periode = bulan-tahun
     // Untuk tarif tahunan: periode = tahun saja (bulan bisa null atau kosong)
-    if ($p['bulan'] && !empty($p['bulan'])) {
+    if ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL') {
         $periode = $p['bulan'].'-'.$p['tahun'];
     } else {
         $periode = $p['tahun'];
@@ -148,6 +180,11 @@ foreach ($pembayaran as $p) {
 if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     echo "<div style='background: #e0e0ff; padding: 10px; margin: 10px; border: 1px solid #0000cc;'>";
     echo "<h3>Payment Map Result:</h3>";
+    
+    // Cek tarif tahunan khusus
+    $tahunan_tarif = $pdo->query("SELECT kode_tarif FROM tb_tarif WHERE metode = '2'")->fetchAll(PDO::FETCH_COLUMN);
+    echo "<p>Tarif tahunan: " . implode(', ', $tahunan_tarif) . "</p>";
+    
     foreach ($pembayaran_map as $nikk => $tarif_data) {
         echo "<p>KK: $nikk</p>";
         foreach ($tarif_data as $kode => $periode_data) {
@@ -163,6 +200,28 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
             }
         }
     }
+    
+    // Cek khusus untuk tarif tahunan
+    if ($kode_tarif && in_array($kode_tarif, $tahunan_tarif)) {
+        echo "<h4>Debug Tarif Tahunan $kode_tarif:</h4>";
+        foreach ($pembayaran_map as $nikk => $tarif_data) {
+            if (isset($tarif_data[$kode_tarif])) {
+                echo "<p>KK $nikk memiliki pembayaran untuk $kode_tarif:</p>";
+                foreach ($tarif_data[$kode_tarif] as $periode => $pembayaran_list) {
+                    echo "<p>  Periode $periode: " . count($pembayaran_list) . " pembayaran</p>";
+                    $total = 0;
+                    foreach ($pembayaran_list as $p) {
+                        $total += intval($p['jml_bayar']);
+                        echo "<p>    jml_bayar: {$p['jml_bayar']}</p>";
+                    }
+                    echo "<p>  Total: $total</p>";
+                }
+            } else {
+                echo "<p>KK $nikk TIDAK memiliki pembayaran untuk $kode_tarif</p>";
+            }
+        }
+    }
+    
     echo "</div>";
 }
 
@@ -215,6 +274,17 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     }
     
     echo "<p>Pembayaran map: " . print_r($pembayaran_map, true) . "</p>";
+    echo "</div>";
+}
+
+// Debug: Tampilkan semua data pembayaran mentah
+if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+    echo "<div style='background: #ffe0e0; padding: 10px; margin: 10px; border: 1px solid #cc0000;'>";
+    echo "<h3>Raw Payment Data:</h3>";
+    echo "<p>Total records: " . count($pembayaran) . "</p>";
+    foreach ($pembayaran as $p) {
+        echo "<p>NIKK: {$p['nikk']}, Kode: {$p['kode_tarif']}, Bulan: " . ($p['bulan'] ?: 'NULL') . ", Tahun: {$p['tahun']}, Jumlah: {$p['jml_bayar']}</p>";
+    }
     echo "</div>";
 }
 
@@ -298,11 +368,12 @@ if ($kode_tarif === 'TR001') {
               if (isset($_GET['debug']) && $_GET['debug'] == '1') {
                 echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
                 echo "Perhitungan: KK={$w['nikk']}, Periode=$periode, PeriodeKey=$periode_key, Tarif=$tarif_nom<br>";
+                echo "Tahun yang dipilih: $tahun<br>";
                 echo "Pembayaran map check: " . (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) ? 'ADA' : 'TIDAK ADA') . "<br>";
                 if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
                   echo "Jumlah pembayaran: " . count($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) . "<br>";
                   foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                    echo "  - jml_bayar: {$p['jml_bayar']}<br>";
+                    echo "  - jml_bayar: {$p['jml_bayar']}, tahun: {$p['tahun']}<br>";
                   }
                 }
                 echo "</div>";
