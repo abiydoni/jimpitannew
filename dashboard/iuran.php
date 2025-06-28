@@ -8,6 +8,16 @@ $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
 $kode_tarif = isset($_GET['kode_tarif']) ? $_GET['kode_tarif'] : null;
 $nikk = isset($_GET['nikk']) ? $_GET['nikk'] : null;
 
+// Ambil data tarif terlebih dahulu
+$tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
+
+// Filter tarif, hilangkan Jimpitan (TR001)
+$tarif = array_filter($tarif, function($t) { return $t['kode_tarif'] !== 'TR001'; });
+$tarif_map = [];
+foreach ($tarif as $t) {
+    $tarif_map[$t['kode_tarif']] = $t;
+}
+
 // Proses pembayaran
 $notif = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
@@ -99,16 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
     }
 }
 
-// Ambil data tarif
-$tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
-
-// Filter tarif, hilangkan Jimpitan (TR001)
-$tarif = array_filter($tarif, function($t) { return $t['kode_tarif'] !== 'TR001'; });
-$tarif_map = [];
-foreach ($tarif as $t) {
-    $tarif_map[$t['kode_tarif']] = $t;
-}
-
 // Buat array bulanan dan tahunan berdasarkan metode
 $bulanan = [];
 $tahunan = [];
@@ -130,6 +130,36 @@ foreach ($pembayaran as $p) {
     $periode = $p['bulan'] ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
     $pembayaran_map[$p['nikk']][$p['kode_tarif']][$periode][] = $p;
 }
+
+// Debug: Tampilkan informasi pembayaran jika diperlukan
+if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+    echo "<div style='background: #f0f0f0; padding: 10px; margin: 10px; border: 1px solid #ccc;'>";
+    echo "<h3>Debug Info:</h3>";
+    echo "<p>Total pembayaran: " . count($pembayaran) . "</p>";
+    
+    // Periksa struktur tabel
+    try {
+        $stmt = $pdo->query("DESCRIBE tb_iuran");
+        $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo "<p>Struktur tabel tb_iuran:</p><ul>";
+        foreach ($columns as $col) {
+            echo "<li>{$col['Field']} - {$col['Type']}</li>";
+        }
+        echo "</ul>";
+    } catch (Exception $e) {
+        echo "<p>Error checking table structure: " . $e->getMessage() . "</p>";
+    }
+    
+    // Tampilkan beberapa data pembayaran
+    if (count($pembayaran) > 0) {
+        echo "<p>Sample pembayaran data:</p>";
+        echo "<pre>" . print_r(array_slice($pembayaran, 0, 3), true) . "</pre>";
+    }
+    
+    echo "<p>Pembayaran map: " . print_r($pembayaran_map, true) . "</p>";
+    echo "</div>";
+}
+
 $tahun_opsi = range(date('Y')-2, date('Y')+2);
 
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
@@ -209,6 +239,19 @@ if ($kode_tarif === 'TR001') {
                 foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
                   $total_bayar += intval($p['jml_bayar']);
                 }
+              }
+              
+              // Debug: Tampilkan informasi pembayaran untuk KK ini
+              if (isset($_GET['debug']) && $_GET['debug'] == '1' && $w['nikk'] == $_GET['debug_nikk']) {
+                echo "<div style='background: #e0f0ff; padding: 5px; margin: 2px; border: 1px solid #0066cc; font-size: 10px;'>";
+                echo "KK: {$w['nikk']}, Periode: $periode_key, Tarif: $tarif_nom, ";
+                echo "Pembayaran: " . (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) ? count($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) : 0) . " records";
+                if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
+                  foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
+                    echo ", jml_bayar: " . $p['jml_bayar'];
+                  }
+                }
+                echo "</div>";
               }
             }
             $sisa = $total_tagihan - $total_bayar;
