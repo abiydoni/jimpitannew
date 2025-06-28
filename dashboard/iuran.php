@@ -417,30 +417,54 @@ if ($kode_tarif === 'TR001') {
     <?php 
     $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
+    
+    // Hitung total setoran tahunan untuk tahun yang dipilih
+    $total_setoran_tahunan = 0;
+    if ($is_bulanan) {
+        // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        $stmt_tahunan->execute([$kode_tarif, $tahun]);
+        $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
+    } else {
+        // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
+        $total_setoran_tahunan = $total_setoran_terpilih;
+    }
     ?>
     <div class="mb-6">
       <h2 class="text-lg font-semibold mb-3">
         Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
-        <?php if($is_bulanan): ?>
-          - <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
-        <?php else: ?>
-          - Tahun <?= $tahun ?>
-        <?php endif; ?>
       </h2>
-      <div class="bg-white border rounded-lg p-6 shadow-sm">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-sm font-medium text-gray-600"><?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></div>
-            <div class="text-2xl font-bold text-blue-600">Rp<?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
-            <div class="text-sm text-gray-500">
-              <?php if($is_bulanan): ?>
-                Total pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
-              <?php else: ?>
-                Total pembayaran tahunan <?= $tahun ?>
-              <?php endif; ?>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Box Total Setoran Bulanan -->
+        <div class="bg-white border rounded-lg p-6 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
+              <div class="text-2xl font-bold text-blue-600">Rp<?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+              <div class="text-sm text-gray-500">
+                <?php if($is_bulanan): ?>
+                  Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
+                <?php else: ?>
+                  Pembayaran tahunan <?= $tahun ?>
+                <?php endif; ?>
+              </div>
             </div>
+            <div class="text-4xl"><?= $icon_map[$kode_tarif] ?? '💳' ?></div>
           </div>
-          <div class="text-4xl"><?= $icon_map[$kode_tarif] ?? '💳' ?></div>
+        </div>
+
+        <!-- Box Total Setoran Tahunan -->
+        <div class="bg-white border rounded-lg p-6 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
+              <div class="text-2xl font-bold text-green-600">Rp<?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
+              <div class="text-sm text-gray-500">
+                Pembayaran tahun <?= $tahun ?>
+              </div>
+            </div>
+            <div class="text-4xl">📊</div>
+          </div>
         </div>
       </div>
     </div>
