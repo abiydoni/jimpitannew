@@ -135,6 +135,9 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     // Cek semua data pembayaran untuk tahun ini
     echo "<p>Total pembayaran tahun $tahun: " . count($pembayaran) . " records</p>";
     
+    // Tampilkan SQL yang digunakan
+    echo "<p>SQL yang digunakan: SELECT * FROM tb_iuran WHERE tahun='$tahun'</p>";
+    
     foreach ($tahunan_tarif as $kode) {
         $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ?");
         $stmt->execute([$kode, $tahun]);
@@ -160,6 +163,11 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
         $tahun_list = $stmt->fetchAll(PDO::FETCH_COLUMN);
         echo "<p>Tarif $kode ada di tahun: " . implode(', ', $tahun_list) . "</p>";
     }
+    
+    // Tampilkan SQL untuk cek manual
+    echo "<h4>SQL untuk cek manual:</h4>";
+    echo "<p>Untuk cek data tarif tahunan di tahun $tahun:</p>";
+    echo "<code>SELECT * FROM tb_iuran WHERE kode_tarif IN (SELECT kode_tarif FROM tb_tarif WHERE metode = '2') AND tahun = '$tahun';</code>";
     
     echo "</div>";
 }
