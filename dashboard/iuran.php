@@ -403,20 +403,18 @@ if ($kode_tarif === 'TR001') {
                   $total_bayar += intval($p['jml_bayar']);
                 }
               }
-              
-              // Debug: Tampilkan informasi pembayaran untuk KK ini
-              if (isset($_GET['debug']) && $_GET['debug'] == '1' && $w['nikk'] == $_GET['debug_nikk']) {
-                echo "<div style='background: #e0f0ff; padding: 5px; margin: 2px; border: 1px solid #0066cc; font-size: 10px;'>";
-                echo "KK: {$w['nikk']}, Periode: $periode_key, Tarif: $tarif_nom, ";
-                echo "Pembayaran: " . (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) ? count($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) : 0) . " records";
-                if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                  foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                    echo ", jml_bayar: " . $p['jml_bayar'];
-                  }
-                }
-                echo "</div>";
-              }
             }
+            
+            // Ambil total bayar langsung dari database untuk memastikan akurasi
+            $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
+            $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+            $total_bayar_db = intval($stmt_total->fetchColumn());
+            
+            // Gunakan total dari database jika lebih besar dari 0
+            if ($total_bayar_db > 0) {
+                $total_bayar = $total_bayar_db;
+            }
+            
             $sisa = $total_tagihan - $total_bayar;
             $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
           ?>
@@ -473,6 +471,17 @@ if ($kode_tarif === 'TR001') {
                 $total_bayar += intval($p['jml_bayar']);
               }
             }
+            
+            // Ambil total bayar langsung dari database untuk memastikan akurasi
+            $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
+            $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+            $total_bayar_db = intval($stmt_total->fetchColumn());
+            
+            // Gunakan total dari database jika lebih besar dari 0
+            if ($total_bayar_db > 0) {
+                $total_bayar = $total_bayar_db;
+            }
+            
             $sisa = $tarif_nom - $total_bayar;
             $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
           ?>
