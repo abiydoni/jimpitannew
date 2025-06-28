@@ -574,8 +574,11 @@ if ($kode_tarif === 'TR001') {
     icon: "<?= $notif['type'] ?>",
     title: "<?= $notif['type'] === 'success' ? 'Sukses' : 'Gagal' ?>",
     text: "<?= addslashes($notif['msg']) ?>",
-    timer: 2000,
-    showConfirmButton: false
+    timer: 3000,
+    timerProgressBar: true,
+    showConfirmButton: false,
+    position: 'top-end',
+    toast: true
   });
 </script>
 <?php endif; ?>
@@ -642,41 +645,89 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Gagal mengambil data histori pembayaran');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Gagal mengambil data histori pembayaran',
+            timer: 4000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
     });
 }
 
 function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
-    if (confirm('Yakin ingin menghapus pembayaran ini?')) {
-        console.log('Menghapus pembayaran:', {nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar});
-        
-        const formData = new FormData();
-        formData.append('nikk', nikk);
-        formData.append('kode_tarif', kode_tarif);
-        formData.append('bulan', bulan);
-        formData.append('tahun', tahun);
-        formData.append('jml_bayar', jml_bayar);
-        formData.append('tgl_bayar', tgl_bayar);
-        
-        fetch('api/hapus_pembayaran.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Response:', data);
-            if (data.success) {
-                alert('Pembayaran berhasil dihapus');
-                location.reload(); // Reload halaman untuk memperbarui data
-            } else {
-                alert('Gagal menghapus pembayaran: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Gagal menghapus pembayaran');
-        });
-    }
+    Swal.fire({
+        title: 'Konfirmasi Hapus',
+        text: 'Yakin ingin menghapus pembayaran ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('Menghapus pembayaran:', {nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar});
+            
+            const formData = new FormData();
+            formData.append('nikk', nikk);
+            formData.append('kode_tarif', kode_tarif);
+            formData.append('bulan', bulan);
+            formData.append('tahun', tahun);
+            formData.append('jml_bayar', jml_bayar);
+            formData.append('tgl_bayar', tgl_bayar);
+            
+            fetch('api/hapus_pembayaran.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Pembayaran berhasil dihapus',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        toast: true
+                    }).then(() => {
+                        location.reload(); // Reload halaman untuk memperbarui data
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Gagal menghapus pembayaran: ' + data.message,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        toast: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Gagal menghapus pembayaran',
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+            });
+        }
+    });
 }
 </script>
 
