@@ -358,10 +358,10 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
     return $total ? intval($total) : 0;
 }
 
-// Hitung total setoran untuk semua jenis iuran di bulan dan tahun yang dipilih
+// Hitung total setoran hanya jika ada jenis iuran yang dipilih
 $total_setoran_per_iuran = [];
-foreach ($tarif as $t) {
-    $total_setoran_per_iuran[$t['kode_tarif']] = hitungTotalSetoran($pdo, $t['kode_tarif'], $bulan_filter, $tahun);
+if ($kode_tarif) {
+    $total_setoran_per_iuran[$kode_tarif] = hitungTotalSetoran($pdo, $kode_tarif, $bulan_filter, $tahun);
 }
 
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
@@ -402,24 +402,6 @@ if ($kode_tarif === 'TR001') {
     </form>
   </div>
 
-  <!-- Tampilkan total setoran per jenis iuran -->
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-3">Total Setoran <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?></h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <?php foreach($tarif as $t): ?>
-        <div class="bg-white border rounded-lg p-4 shadow-sm">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="text-sm font-medium text-gray-600"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-              <div class="text-lg font-bold text-blue-600">Rp<?= number_format($total_setoran_per_iuran[$t['kode_tarif']], 0, ',', '.') ?></div>
-            </div>
-            <div class="text-2xl"><?= $icon_map[$t['kode_tarif']] ?? '💳' ?></div>
-          </div>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-
   <?php if(!$kode_tarif): ?>
     <!-- Pilihan Jenis Iuran: Menu Box Besar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
@@ -436,6 +418,39 @@ if ($kode_tarif === 'TR001') {
     <div class="mb-4">
       <a href="iuran.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
     </div>
+
+    <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
+    <?php 
+    $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
+    $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
+    ?>
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-3">
+        Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
+        <?php if($is_bulanan): ?>
+          - <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
+        <?php else: ?>
+          - Tahun <?= $tahun ?>
+        <?php endif; ?>
+      </h2>
+      <div class="bg-white border rounded-lg p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-sm font-medium text-gray-600"><?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></div>
+            <div class="text-2xl font-bold text-blue-600">Rp<?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+            <div class="text-sm text-gray-500">
+              <?php if($is_bulanan): ?>
+                Total pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
+              <?php else: ?>
+                Total pembayaran tahunan <?= $tahun ?>
+              <?php endif; ?>
+            </div>
+          </div>
+          <div class="text-4xl"><?= $icon_map[$kode_tarif] ?? '💳' ?></div>
+        </div>
+      </div>
+    </div>
+
     <div class="overflow-x-auto">
       <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
         <thead class="bg-gray-200">
