@@ -155,13 +155,17 @@ if ($kode_tarif === 'TR001') {
           ?>
           <tr class="hover:bg-gray-100">
             <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
-            <td class="px-2 py-1 border"><?= htmlspecialchars($w['nama']) ?></td>
+            <td class="px-2 py-1 border">
+              <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
+                <?= htmlspecialchars($w['nama']) ?>
+              </a>
+            </td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_tagihan,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
             <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
             <td class="px-2 py-1 border">
-              <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&nikk=<?= urlencode($w['nikk']) ?>" class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700">Detail</a>
+              <!-- Detail button removed -->
             </td>
           </tr>
           <?php endforeach; ?>
