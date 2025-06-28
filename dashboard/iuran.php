@@ -799,7 +799,7 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
     });
 }
 
-function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
+function hapusPembayaran(id_iuran) {
     Swal.fire({
         title: 'Konfirmasi Hapus',
         text: 'Yakin ingin menghapus pembayaran ini?',
@@ -811,15 +811,10 @@ function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            console.log('Menghapus pembayaran:', {nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar});
+            console.log('Menghapus pembayaran dengan ID:', id_iuran);
             
             const formData = new FormData();
-            formData.append('nikk', nikk);
-            formData.append('kode_tarif', kode_tarif);
-            formData.append('bulan', bulan);
-            formData.append('tahun', tahun);
-            formData.append('jml_bayar', jml_bayar);
-            formData.append('tgl_bayar', tgl_bayar);
+            formData.append('id_iuran', id_iuran);
             
             fetch('api/hapus_pembayaran.php', {
                 method: 'POST',
@@ -842,15 +837,27 @@ function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
                         location.reload(); // Reload halaman untuk memperbarui data
                     });
                 } else {
+                    // Tampilkan informasi debug yang lebih detail
+                    let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
+                    if (data.debug) {
+                        debugMessage += '\n\nDebug Info:';
+                        debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
+                        debugMessage += '\n- Count Before: ' + data.debug.count_before;
+                        debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
+                        debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
+                        if (data.debug.data_to_delete) {
+                            debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                        }
+                    }
+                    
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal!',
-                        text: 'Gagal menghapus pembayaran: ' + data.message,
-                        timer: 4000,
+                        text: debugMessage,
+                        timer: 8000,
                         timerProgressBar: true,
-                        showConfirmButton: false,
-                        position: 'top-end',
-                        toast: true
+                        showConfirmButton: true,
+                        position: 'center'
                     });
                 }
             })
@@ -859,7 +866,7 @@ function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'Gagal menghapus pembayaran',
+                    text: 'Gagal menghapus pembayaran: ' + error.message,
                     timer: 4000,
                     timerProgressBar: true,
                     showConfirmButton: false,

@@ -4,63 +4,62 @@ include 'db.php';
 
 header('Content-Type: application/json');
 
-$nikk = $_POST['nikk'] ?? '';
-$kode_tarif = $_POST['kode_tarif'] ?? '';
-$bulan = $_POST['bulan'] ?? '';
-$tahun = $_POST['tahun'] ?? '';
-$jml_bayar = $_POST['jml_bayar'] ?? '';
-$tgl_bayar = $_POST['tgl_bayar'] ?? '';
+$id_iuran = $_POST['id_iuran'] ?? '';
 
 // Debug log
 error_log("hapus_pembayaran.php - Data received: " . json_encode($_POST));
 
-if (empty($nikk) || empty($kode_tarif) || empty($tahun) || empty($jml_bayar) || empty($tgl_bayar)) {
-    echo json_encode(['success' => false, 'message' => 'Data tidak lengkap', 'received' => $_POST]);
+if (empty($id_iuran)) {
+    echo json_encode(['success' => false, 'message' => 'ID iuran tidak ditemukan', 'received' => $_POST]);
     exit;
 }
 
 try {
-    // Debug: Tampilkan query yang akan dijalankan
+    // Debug: Tampilkan data yang akan dihapus
     $debug_info = [
-        'nikk' => $nikk,
-        'kode_tarif' => $kode_tarif,
-        'bulan' => $bulan,
-        'tahun' => $tahun,
-        'jml_bayar' => $jml_bayar,
-        'tgl_bayar' => $tgl_bayar
+        'id_iuran' => $id_iuran
     ];
     
     // Cek apakah data ada sebelum dihapus
-    if (!empty($bulan) && $bulan !== 'Tahunan') {
-        // Untuk tarif bulanan
-        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ?");
-        $stmt_check->execute([$nikk, $kode_tarif, $bulan, $tahun, $jml_bayar, $tgl_bayar]);
-        $count_before = $stmt_check->fetchColumn();
-        
-        $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-        $stmt->execute([$nikk, $kode_tarif, $bulan, $tahun, $jml_bayar, $tgl_bayar]);
-        
-        $debug_info['query_type'] = 'bulanan';
-        $debug_info['sql'] = "DELETE FROM tb_iuran WHERE nikk = '$nikk' AND kode_tarif = '$kode_tarif' AND bulan = '$bulan' AND tahun = '$tahun' AND jml_bayar = '$jml_bayar' AND tgl_bayar = '$tgl_bayar'";
-    } else {
-        // Untuk tarif tahunan (bulan = 'Tahunan' atau kosong)
-        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ?");
-        $stmt_check->execute([$nikk, $kode_tarif, $tahun, $jml_bayar, $tgl_bayar]);
-        $count_before = $stmt_check->fetchColumn();
-        
-        $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-        $stmt->execute([$nikk, $kode_tarif, $tahun, $jml_bayar, $tgl_bayar]);
-        
-        $debug_info['query_type'] = 'tahunan';
-        $debug_info['sql'] = "DELETE FROM tb_iuran WHERE nikk = '$nikk' AND kode_tarif = '$kode_tarif' AND tahun = '$tahun' AND bulan = 'Tahunan' AND jml_bayar = '$jml_bayar' AND tgl_bayar = '$tgl_bayar'";
-    }
+    $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE id_iuran = ?");
+    $stmt_check->execute([$id_iuran]);
+    $count_before = $stmt_check->fetchColumn();
     
-    $rows_deleted = $stmt->rowCount();
+    // Ambil data yang akan dihapus untuk debugging
+    $stmt_debug = $pdo->prepare("SELECT * FROM tb_iuran WHERE id_iuran = ?");
+    $stmt_debug->execute([$id_iuran]);
+    $data_to_delete = $stmt_debug->fetch(PDO::FETCH_ASSOC);
+    
     $debug_info['count_before'] = $count_before;
-    $debug_info['rows_deleted'] = $rows_deleted;
+    $debug_info['data_to_delete'] = $data_to_delete;
     
-    if ($rows_deleted > 0) {
-        echo json_encode(['success' => true, 'message' => 'Pembayaran berhasil dihapus', 'rows_deleted' => $rows_deleted, 'debug' => $debug_info]);
+    if ($count_before > 0) {
+        // Hapus data berdasarkan id_iuran
+        $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE id_iuran = ?");
+        $stmt->execute([$id_iuran]);
+        
+        $rows_deleted = $stmt->rowCount();
+        $debug_info['rows_deleted'] = $rows_deleted;
+        
+        // Cek lagi setelah delete untuk memastikan data benar-benar terhapus
+        $stmt_check_after = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE id_iuran = ?");
+        $stmt_check_after->execute([$id_iuran]);
+        $count_after = $stmt_check_after->fetchColumn();
+        
+        $debug_info['count_after'] = $count_after;
+        
+        if ($rows_deleted > 0 && $count_after == 0) {
+            echo json_encode(['success' => true, 'message' => 'Pembayaran berhasil dihapus', 'rows_deleted' => $rows_deleted, 'debug' => $debug_info]);
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Gagal menghapus pembayaran', 
+                'count_before' => $count_before,
+                'count_after' => $count_after,
+                'rows_deleted' => $rows_deleted,
+                'debug' => $debug_info
+            ]);
+        }
     } else {
         echo json_encode([
             'success' => false, 
