@@ -30,12 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
             [$bulan, $tahun_bayar] = explode('-', $periode);
         } else {
             $tahun_bayar = $periode;
-            // Untuk tahunan, bulan diisi nama bulan saat pembayaran
-            $bulanList = [
-                'January'=>'Januari','February'=>'Februari','March'=>'Maret','April'=>'April','May'=>'Mei','June'=>'Juni',
-                'July'=>'Juli','August'=>'Agustus','September'=>'September','October'=>'Oktober','November'=>'November','December'=>'Desember'
-            ];
-            $bulan = $bulanList[date('F')];
+            // Untuk tahunan, bulan diisi null
+            $bulan = null;
         }
         // Ambil tarif tagihan dari tb_tarif
         $jumlah_tagihan = isset($tarif_map[$kode_tarif_bayar]) ? intval($tarif_map[$kode_tarif_bayar]['tarif']) : 0;
@@ -65,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
                 $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC, id DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
             } else {
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NULL ORDER BY tgl_bayar DESC, id DESC");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') ORDER BY tgl_bayar DESC, id DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
             }
             
@@ -127,7 +123,13 @@ $kk = $pdo->query("SELECT nikk, nama FROM tb_warga WHERE hubungan='Kepala Keluar
 $pembayaran = $pdo->query("SELECT * FROM tb_iuran WHERE tahun='$tahun'")->fetchAll(PDO::FETCH_ASSOC);
 $pembayaran_map = [];
 foreach ($pembayaran as $p) {
-    $periode = $p['bulan'] ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
+    // Untuk tarif bulanan: periode = bulan-tahun
+    // Untuk tarif tahunan: periode = tahun saja (bulan bisa null atau kosong)
+    if ($p['bulan'] && !empty($p['bulan'])) {
+        $periode = $p['bulan'].'-'.$p['tahun'];
+    } else {
+        $periode = $p['tahun'];
+    }
     $pembayaran_map[$p['nikk']][$p['kode_tarif']][$periode][] = $p;
 }
 
@@ -136,6 +138,11 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     echo "<div style='background: #f0f0f0; padding: 10px; margin: 10px; border: 1px solid #ccc;'>";
     echo "<h3>Debug Info:</h3>";
     echo "<p>Total pembayaran: " . count($pembayaran) . "</p>";
+    echo "<p>Tahun yang dipilih: $tahun</p>";
+    if ($kode_tarif) {
+        echo "<p>Kode tarif: $kode_tarif</p>";
+        echo "<p>Metode tarif: " . $tarif_map[$kode_tarif]['metode'] . " (" . ($tarif_map[$kode_tarif]['metode'] == '1' ? 'Bulanan' : 'Tahunan') . ")</p>";
+    }
     
     // Periksa struktur tabel
     try {
@@ -154,6 +161,24 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     if (count($pembayaran) > 0) {
         echo "<p>Sample pembayaran data:</p>";
         echo "<pre>" . print_r(array_slice($pembayaran, 0, 3), true) . "</pre>";
+    }
+    
+    // Tampilkan pembayaran untuk tarif tertentu
+    if ($kode_tarif) {
+        echo "<p>Pembayaran untuk tarif $kode_tarif:</p>";
+        if (isset($pembayaran_map)) {
+            foreach ($pembayaran_map as $nikk_kk => $tarif_data) {
+                if (isset($tarif_data[$kode_tarif])) {
+                    echo "<p>KK $nikk_kk:</p>";
+                    foreach ($tarif_data[$kode_tarif] as $periode => $pembayaran_list) {
+                        echo "<p>  Periode $periode: " . count($pembayaran_list) . " pembayaran</p>";
+                        foreach ($pembayaran_list as $p) {
+                            echo "<p>    - jml_bayar: " . $p['jml_bayar'] . ", bulan: " . ($p['bulan'] ?: 'NULL') . ", tahun: " . $p['tahun'] . "</p>";
+                        }
+                    }
+                }
+            }
+        }
     }
     
     echo "<p>Pembayaran map: " . print_r($pembayaran_map, true) . "</p>";
