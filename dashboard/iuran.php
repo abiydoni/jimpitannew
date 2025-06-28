@@ -359,13 +359,7 @@ if ($kode_tarif) {
 }
 
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
-$icon_map = [
-    'TR002' => '🏠', // Wajib
-    'TR003' => '🤝', // Sosial
-    'TR004' => '🎉', // 17an
-    'TR005' => '🌾', // Merti Du
-    'TR006' => '💵', // Kas
-];
+// Menggunakan field icon dari database tb_tarif
 
 // Jika kode_tarif=TR001 di URL, redirect ke halaman utama iuran.php
 if ($kode_tarif === 'TR001') {
@@ -401,7 +395,7 @@ if ($kode_tarif === 'TR001') {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
       <?php foreach($tarif as $t): ?>
         <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
-          <div class="text-5xl mb-2"><?= $icon_map[$t['kode_tarif']] ?? '💳' ?></div>
+          <div class="text-5xl mb-2"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
           <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
           <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
         </a>
@@ -449,7 +443,7 @@ if ($kode_tarif === 'TR001') {
                 <?php endif; ?>
               </div>
             </div>
-            <div class="text-4xl"><?= $icon_map[$kode_tarif] ?? '💳' ?></div>
+            <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
         </div>
 
@@ -463,7 +457,7 @@ if ($kode_tarif === 'TR001') {
                 Pembayaran tahun <?= $tahun ?>
               </div>
             </div>
-            <div class="text-4xl">📊</div>
+            <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
         </div>
       </div>
