@@ -46,8 +46,17 @@ $tarif_map = [];
 foreach ($tarif as $t) {
     $tarif_map[$t['kode_tarif']] = $t;
 }
-$bulanan = ['TR002','TR003']; // TR001 dihapus
-$tahunan = ['TR004','TR005','TR006'];
+
+// Buat array bulanan dan tahunan berdasarkan metode
+$bulanan = [];
+$tahunan = [];
+foreach ($tarif as $t) {
+    if ($t['metode'] == '1') {
+        $bulanan[] = $t['kode_tarif'];
+    } elseif ($t['metode'] == '2') {
+        $tahunan[] = $t['kode_tarif'];
+    }
+}
 
 // Ambil semua KK
 $kk = $pdo->query("SELECT nikk, nama FROM tb_warga WHERE hubungan='Kepala Keluarga' ORDER BY nama")->fetchAll(PDO::FETCH_ASSOC);
@@ -100,7 +109,7 @@ if ($kode_tarif === 'TR001') {
         <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
           <div class="text-5xl mb-2"><?= $icon_map[$t['kode_tarif']] ?? '💳' ?></div>
           <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-          <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= in_array($t['kode_tarif'],$bulanan)?'/bulan':'/tahun' ?></div>
+          <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
         </a>
       <?php endforeach; ?>
     </div>
@@ -124,7 +133,7 @@ if ($kode_tarif === 'TR001') {
         </thead>
         <tbody>
           <?php
-          $is_bulanan = in_array($kode_tarif, $bulanan);
+          $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
           $periode_list = $is_bulanan ? [
             'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
           ] : [$tahun];
@@ -183,7 +192,7 @@ if ($kode_tarif === 'TR001') {
         </thead>
         <tbody>
           <?php
-          $is_bulanan = in_array($kode_tarif, $bulanan);
+          $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
           $periode_list = $is_bulanan ? [
             'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
           ] : [$tahun];

@@ -140,8 +140,9 @@ if (!empty($_SESSION['swal'])) {
                         <label class="block text-sm font-medium text-gray-700">Metode:</label>
                         <select name="metode" id="edit_metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                             <option value="">Pilih Metode</option>
-                            <option value="0">Bulanan</option>
-                            <option value="1">Tahunan</option>
+                            <option value="0">Tidak Ditampilkan</option>
+                            <option value="1">Bulanan</option>
+                            <option value="2">Tahunan</option>
                         </select>
                     </div>
                     <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
