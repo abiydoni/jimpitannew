@@ -138,7 +138,7 @@ if (!empty($_SESSION['swal'])) {
                     </div>
                     <div class="bg-white p-1 rounded-lg shadow-md">
                         <label class="block text-sm font-medium text-gray-700">Metode:</label>
-                        <select name="metode" id="metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <select name="metode" id="edit_metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                             <option value="">Pilih Metode</option>
                             <option value="0">Bulanan</option>
                             <option value="1">Tahunan</option>
@@ -180,18 +180,30 @@ if (!empty($_SESSION['swal'])) {
         modal.classList.remove("hidden");
     }
 
-    const closeeditTarifModal = document.getElementById("closeeditTarifModal");
-    closeeditTarifModal.onclick = function() {
-        const modal = document.getElementById("editTarifModal");
-        modal.classList.add("hidden");
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById("editTarifModal");
-        if (event.target == modal) {
-            modal.classList.add("hidden");
+    // Close edit modal functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const closeeditTarifModal = document.getElementById("closeeditTarifModal");
+        const editModal = document.getElementById("editTarifModal");
+        
+        if (closeeditTarifModal) {
+            closeeditTarifModal.onclick = function() {
+                editModal.classList.add("hidden");
+            }
         }
-    }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("myModal");
+            const editModal = document.getElementById("editTarifModal");
+            
+            if (event.target == modal) {
+                modal.classList.add("hidden");
+            }
+            if (event.target == editModal) {
+                editModal.classList.add("hidden");
+            }
+        }
+    });
 </script>
 <?php
 // Tutup koneksi
