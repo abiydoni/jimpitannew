@@ -5,8 +5,15 @@ error_reporting(E_ALL);
 include 'header.php';
 
 $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
+$bulan_filter = isset($_GET['bulan']) ? intval($_GET['bulan']) : intval(date('n')); // 1-12 untuk bulan
 $kode_tarif = isset($_GET['kode_tarif']) ? $_GET['kode_tarif'] : null;
 $nikk = isset($_GET['nikk']) ? $_GET['nikk'] : null;
+
+// Array nama bulan
+$nama_bulan = [
+    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+    7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+];
 
 // Ambil data tarif terlebih dahulu
 $tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
@@ -324,6 +331,39 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
 
 $tahun_opsi = range(date('Y')-2, date('Y')+2);
 
+// Fungsi untuk menghitung total setoran per bulan dan tahun
+function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
+    // Cek apakah tarif bulanan atau tahunan
+    $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
+    $stmt->execute([$kode_tarif]);
+    $metode = $stmt->fetchColumn();
+    
+    if ($metode == '1') {
+        // Tarif bulanan - hitung untuk bulan tertentu
+        $nama_bulan = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+        $bulan_nama = $nama_bulan[$bulan];
+        
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = ? AND tahun = ?");
+        $stmt->execute([$kode_tarif, $bulan_nama, $tahun]);
+    } else {
+        // Tarif tahunan - hitung untuk tahun tertentu
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+        $stmt->execute([$kode_tarif, $tahun]);
+    }
+    
+    $total = $stmt->fetchColumn();
+    return $total ? intval($total) : 0;
+}
+
+// Hitung total setoran untuk semua jenis iuran di bulan dan tahun yang dipilih
+$total_setoran_per_iuran = [];
+foreach ($tarif as $t) {
+    $total_setoran_per_iuran[$t['kode_tarif']] = hitungTotalSetoran($pdo, $t['kode_tarif'], $bulan_filter, $tahun);
+}
+
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
 $icon_map = [
     'TR002' => '🏠', // Wajib
@@ -347,6 +387,12 @@ if ($kode_tarif === 'TR001') {
       <?php if($kode_tarif): ?>
         <input type="hidden" name="kode_tarif" value="<?= htmlspecialchars($kode_tarif) ?>">
       <?php endif; ?>
+      <label for="bulan" class="font-semibold">Bulan:</label>
+      <select name="bulan" id="bulan" class="border rounded p-1" onchange="this.form.submit()">
+        <?php for($b = 1; $b <= 12; $b++): ?>
+          <option value="<?= $b ?>" <?= $b==$bulan_filter?'selected':'' ?>><?= $nama_bulan[$b] ?></option>
+        <?php endfor; ?>
+      </select>
       <label for="tahun" class="font-semibold">Tahun:</label>
       <select name="tahun" id="tahun" class="border rounded p-1" onchange="this.form.submit()">
         <?php foreach($tahun_opsi as $th): ?>
@@ -356,11 +402,29 @@ if ($kode_tarif === 'TR001') {
     </form>
   </div>
 
+  <!-- Tampilkan total setoran per jenis iuran -->
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-3">Total Setoran <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?></h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <?php foreach($tarif as $t): ?>
+        <div class="bg-white border rounded-lg p-4 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-medium text-gray-600"><?= htmlspecialchars($t['nama_tarif']) ?></div>
+              <div class="text-lg font-bold text-blue-600">Rp<?= number_format($total_setoran_per_iuran[$t['kode_tarif']], 0, ',', '.') ?></div>
+            </div>
+            <div class="text-2xl"><?= $icon_map[$t['kode_tarif']] ?? '💳' ?></div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
   <?php if(!$kode_tarif): ?>
     <!-- Pilihan Jenis Iuran: Menu Box Besar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
       <?php foreach($tarif as $t): ?>
-        <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
+        <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
           <div class="text-5xl mb-2"><?= $icon_map[$t['kode_tarif']] ?? '💳' ?></div>
           <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
           <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
@@ -370,7 +434,7 @@ if ($kode_tarif === 'TR001') {
   <?php elseif(!$nikk): ?>
     <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
     <div class="mb-4">
-      <a href="iuran.php?tahun=<?= $tahun ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
+      <a href="iuran.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
@@ -460,7 +524,7 @@ if ($kode_tarif === 'TR001') {
           <tr class="hover:bg-gray-100">
             <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
             <td class="px-2 py-1 border">
-              <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
+              <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
                 <?= htmlspecialchars($w['nama']) ?>
               </a>
             </td>
@@ -476,7 +540,7 @@ if ($kode_tarif === 'TR001') {
   <?php else: ?>
     <!-- Tabel Detail per Bulan/Tahun untuk KK Terpilih -->
     <div class="mb-4 flex items-center gap-2">
-      <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
+      <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
       <span class="font-semibold">|
         <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?> -
         <?= htmlspecialchars($nikk) ?>
