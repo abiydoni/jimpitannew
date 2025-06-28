@@ -513,9 +513,9 @@ if ($kode_tarif === 'TR001') {
             
             // Ambil total bayar langsung dari database untuk memastikan akurasi
             if ($is_bulanan) {
-                // Untuk tarif bulanan, ambil total bayar untuk semua bulan dalam tahun tersebut
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
-                $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+                // Untuk tarif bulanan, ambil total bayar untuk bulan tertentu saja
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
+                $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
             } else {
                 // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
                 $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
