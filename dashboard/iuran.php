@@ -138,6 +138,8 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     // Tampilkan SQL yang digunakan
     echo "<p>SQL yang digunakan: SELECT * FROM tb_iuran WHERE tahun='$tahun'</p>";
     
+    // Cek data pembayaran untuk tarif tahunan
+    echo "<h4>Data pembayaran untuk tarif tahunan:</h4>";
     foreach ($tahunan_tarif as $kode) {
         $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ?");
         $stmt->execute([$kode, $tahun]);
@@ -192,6 +194,15 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     // Cek tarif tahunan khusus
     $tahunan_tarif = $pdo->query("SELECT kode_tarif FROM tb_tarif WHERE metode = '2'")->fetchAll(PDO::FETCH_COLUMN);
     echo "<p>Tarif tahunan: " . implode(', ', $tahunan_tarif) . "</p>";
+    
+    // Debug mapping untuk tarif tahunan
+    echo "<h4>Debug Mapping untuk Tarif Tahunan:</h4>";
+    foreach ($pembayaran as $p) {
+        if (in_array($p['kode_tarif'], $tahunan_tarif)) {
+            $periode = ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL') ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
+            echo "<p>Data: NIKK={$p['nikk']}, Kode={$p['kode_tarif']}, Bulan=" . ($p['bulan'] ?: 'NULL') . ", Tahun={$p['tahun']}, Periode=$periode, Jumlah={$p['jml_bayar']}</p>";
+        }
+    }
     
     foreach ($pembayaran_map as $nikk => $tarif_data) {
         echo "<p>KK: $nikk</p>";
