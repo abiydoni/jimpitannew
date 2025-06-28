@@ -10,30 +10,56 @@ $nikk = isset($_GET['nikk']) ? $_GET['nikk'] : null;
 
 // Proses pembayaran
 $notif = null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['aksi'] === 'bayar') {
-    $nikk_bayar = $_POST['nikk'];
-    $kode_tarif_bayar = $_POST['kode_tarif'];
-    $periode = $_POST['periode'];
-    $jumlah_bayar = intval($_POST['jumlah']); // input user, untuk jml_bayar
-    if (strpos($periode, '-') !== false) {
-        [$bulan, $tahun_bayar] = explode('-', $periode);
-    } else {
-        $tahun_bayar = $periode;
-        // Untuk tahunan, bulan diisi nama bulan saat pembayaran
-        $bulanList = [
-            'January'=>'Januari','February'=>'Februari','March'=>'Maret','April'=>'April','May'=>'Mei','June'=>'Juni',
-            'July'=>'Juli','August'=>'Agustus','September'=>'September','October'=>'Oktober','November'=>'November','December'=>'Desember'
-        ];
-        $bulan = $bulanList[date('F')];
-    }
-    // Ambil tarif tagihan dari tb_tarif
-    $jumlah_tagihan = isset($tarif_map[$kode_tarif_bayar]) ? intval($tarif_map[$kode_tarif_bayar]['tarif']) : 0;
-    try {
-        $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, jml_bayar, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, ?, 'Cicil', NOW())");
-        $stmt->execute([$nikk_bayar, $kode_tarif_bayar, $bulan, $tahun_bayar, $jumlah_tagihan, $jumlah_bayar]);
-        $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil disimpan!'];
-    } catch (Exception $e) {
-        $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan pembayaran: ' . $e->getMessage()];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
+    if ($_POST['aksi'] === 'bayar') {
+        $nikk_bayar = $_POST['nikk'];
+        $kode_tarif_bayar = $_POST['kode_tarif'];
+        $periode = $_POST['periode'];
+        $jumlah_bayar = intval($_POST['jumlah']); // input user, untuk jml_bayar
+        if (strpos($periode, '-') !== false) {
+            [$bulan, $tahun_bayar] = explode('-', $periode);
+        } else {
+            $tahun_bayar = $periode;
+            // Untuk tahunan, bulan diisi nama bulan saat pembayaran
+            $bulanList = [
+                'January'=>'Januari','February'=>'Februari','March'=>'Maret','April'=>'April','May'=>'Mei','June'=>'Juni',
+                'July'=>'Juli','August'=>'Agustus','September'=>'September','October'=>'Oktober','November'=>'November','December'=>'Desember'
+            ];
+            $bulan = $bulanList[date('F')];
+        }
+        // Ambil tarif tagihan dari tb_tarif
+        $jumlah_tagihan = isset($tarif_map[$kode_tarif_bayar]) ? intval($tarif_map[$kode_tarif_bayar]['tarif']) : 0;
+        try {
+            $stmt = $pdo->prepare("INSERT INTO tb_iuran (nikk, kode_tarif, bulan, tahun, jumlah, jml_bayar, status, tgl_bayar) VALUES (?, ?, ?, ?, ?, ?, 'Cicil', NOW())");
+            $stmt->execute([$nikk_bayar, $kode_tarif_bayar, $bulan, $tahun_bayar, $jumlah_tagihan, $jumlah_bayar]);
+            $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil disimpan!'];
+        } catch (Exception $e) {
+            $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan pembayaran: ' . $e->getMessage()];
+        }
+    } elseif ($_POST['aksi'] === 'batal') {
+        $nikk_batal = $_POST['nikk'];
+        $kode_tarif_batal = $_POST['kode_tarif'];
+        $periode_batal = $_POST['periode'];
+        
+        if (strpos($periode_batal, '-') !== false) {
+            [$bulan_batal, $tahun_batal] = explode('-', $periode_batal);
+        } else {
+            $tahun_batal = $periode_batal;
+            $bulan_batal = null;
+        }
+        
+        try {
+            if ($bulan_batal) {
+                $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ?");
+                $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
+            } else {
+                $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NULL");
+                $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
+            }
+            $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil dibatalkan!'];
+        } catch (Exception $e) {
+            $notif = ['type' => 'error', 'msg' => 'Gagal membatalkan pembayaran: ' . $e->getMessage()];
+        }
     }
 }
 
@@ -128,7 +154,6 @@ if ($kode_tarif === 'TR001') {
             <th class="px-2 py-1 border">Sudah Bayar</th>
             <th class="px-2 py-1 border">Sisa Hutang</th>
             <th class="px-2 py-1 border">Status</th>
-            <th class="px-2 py-1 border">Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -222,7 +247,7 @@ if ($kode_tarif === 'TR001') {
               <?php if($status=='Belum Lunas'): ?>
                 <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
               <?php else: ?>
-                <span class="text-gray-400">-</span>
+                <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Batal</button>
               <?php endif; ?>
             </td>
           </tr>
@@ -258,6 +283,28 @@ if ($kode_tarif === 'TR001') {
   </div>
 </div>
 
+<!-- Modal Batal -->
+<div id="batalModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
+    <h2 class="text-lg font-bold mb-2">Batalkan Pembayaran</h2>
+    <form method="POST" id="formBatal">
+      <input type="hidden" name="aksi" value="batal">
+      <input type="hidden" name="nikk" id="batalNikk">
+      <input type="hidden" name="kode_tarif" id="batalKodeTarif">
+      <input type="hidden" name="periode" id="batalPeriode">
+      <div class="mb-4">
+        <p class="text-gray-700">Apakah Anda yakin ingin membatalkan pembayaran:</p>
+        <p class="font-semibold mt-2" id="batalNamaTarif"></p>
+        <p class="text-sm text-gray-600 mt-1" id="batalPeriodeText"></p>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('batalModal')">Tutup</button>
+        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Batalkan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <?php if ($notif): ?>
 <script>
   Swal.fire({
@@ -283,6 +330,14 @@ function openBayarModal(nikk, kode_tarif, periode, nama_tarif, sisa) {
     document.getElementById('modalJumlah').value = sisa;
     document.getElementById('modalJumlah').max = sisa;
     toggleModal('bayarModal');
+}
+function openBatalModal(nikk, kode_tarif, periode, nama_tarif) {
+    document.getElementById('batalNikk').value = nikk;
+    document.getElementById('batalKodeTarif').value = kode_tarif;
+    document.getElementById('batalPeriode').value = periode;
+    document.getElementById('batalNamaTarif').textContent = nama_tarif;
+    document.getElementById('batalPeriodeText').textContent = 'Periode: ' + periode;
+    toggleModal('batalModal');
 }
 </script>
 
