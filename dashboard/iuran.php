@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         $nikk_batal = $_POST['nikk'];
         $kode_tarif_batal = $_POST['kode_tarif'];
         $periode_batal = $_POST['periode'];
+        $jumlah_batal = intval($_POST['jumlah_batal']); // Jumlah yang akan dibatalkan
         
         if (strpos($periode_batal, '-') !== false) {
             [$bulan_batal, $tahun_batal] = explode('-', $periode_batal);
@@ -49,14 +50,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         }
         
         try {
+            // Ambil semua pembayaran untuk KK, tarif, dan periode ini, urutkan dari yang terbaru
             if ($bulan_batal) {
-                $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ?");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC, id DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
             } else {
-                $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NULL");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NULL ORDER BY tgl_bayar DESC, id DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
             }
-            $notif = ['type' => 'success', 'msg' => 'Pembayaran berhasil dibatalkan!'];
+            
+            $pembayaran_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sisa_batal = $jumlah_batal;
+            $dihapus = 0;
+            $riwayat_batal = [];
+            
+            // Hapus pembayaran mulai dari yang terbaru (terakhir)
+            foreach ($pembayaran_list as $index => $pembayaran) {
+                if ($sisa_batal <= 0) break;
+                
+                $jumlah_pembayaran = intval($pembayaran['jml_bayar']);
+                $id_pembayaran = $pembayaran['id'];
+                $tgl_pembayaran = $pembayaran['tgl_bayar'];
+                $nomor_pembayaran = count($pembayaran_list) - $index; // Nomor pembayaran (3, 2, 1)
+                
+                if ($jumlah_pembayaran <= $sisa_batal) {
+                    // Hapus seluruh pembayaran ini
+                    $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE id = ?");
+                    $stmt_hapus->execute([$id_pembayaran]);
+                    $sisa_batal -= $jumlah_pembayaran;
+                    $dihapus += $jumlah_pembayaran;
+                    $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dihapus";
+                } else {
+                    // Kurangi jumlah pembayaran ini
+                    $sisa_pembayaran = $jumlah_pembayaran - $sisa_batal;
+                    $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE id = ?");
+                    $stmt_update->execute([$sisa_pembayaran, $id_pembayaran]);
+                    $dihapus += $sisa_batal;
+                    $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($sisa_batal, 0, ',', '.') . " dari Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dikurangi";
+                    $sisa_batal = 0;
+                }
+            }
+            
+            $pesan_riwayat = implode(", ", $riwayat_batal);
+            $notif = ['type' => 'success', 'msg' => 'Berhasil membatalkan pembayaran sebesar Rp' . number_format($dihapus, 0, ',', '.') . '. ' . $pesan_riwayat];
         } catch (Exception $e) {
             $notif = ['type' => 'error', 'msg' => 'Gagal membatalkan pembayaran: ' . $e->getMessage()];
         }
@@ -189,9 +225,6 @@ if ($kode_tarif === 'TR001') {
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
             <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
-            <td class="px-2 py-1 border">
-              <!-- Detail button removed -->
-            </td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -247,7 +280,7 @@ if ($kode_tarif === 'TR001') {
               <?php if($status=='Belum Lunas'): ?>
                 <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
               <?php else: ?>
-                <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Batal</button>
+                <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $total_bayar ?>)">Batal</button>
               <?php endif; ?>
             </td>
           </tr>
@@ -293,9 +326,15 @@ if ($kode_tarif === 'TR001') {
       <input type="hidden" name="kode_tarif" id="batalKodeTarif">
       <input type="hidden" name="periode" id="batalPeriode">
       <div class="mb-4">
-        <p class="text-gray-700">Apakah Anda yakin ingin membatalkan pembayaran:</p>
+        <p class="text-gray-700">Pembayaran yang akan dibatalkan:</p>
         <p class="font-semibold mt-2" id="batalNamaTarif"></p>
         <p class="text-sm text-gray-600 mt-1" id="batalPeriodeText"></p>
+        <p class="text-sm text-gray-600 mt-1">Total sudah bayar: <span id="batalTotalBayar" class="font-semibold"></span></p>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1">Jumlah yang akan dibatalkan (Rp)</label>
+        <input type="number" name="jumlah_batal" id="batalJumlah" class="w-full border rounded p-1" min="1" required>
+        <p class="text-xs text-gray-500 mt-1">Maksimal: <span id="batalMaksimal"></span></p>
       </div>
       <div class="flex justify-end">
         <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('batalModal')">Tutup</button>
@@ -322,6 +361,34 @@ function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.toggle('hidden');
 }
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if ((sep.length > 0)) {
+        var i = s[0].length;
+        if (i % 3 !== 0) {
+            i = 3 - i % 3;
+        }
+        s[0] = s[0].padStart(s[0].length + i, '0');
+        s[0] = s[0].match(/.{3}/g).join(sep);
+    }
+    if ((prec > 0) && (s[1] || dec.length > 1)) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
+}
+
 function openBayarModal(nikk, kode_tarif, periode, nama_tarif, sisa) {
     document.getElementById('modalNikk').value = nikk;
     document.getElementById('modalKodeTarif').value = kode_tarif;
@@ -331,12 +398,17 @@ function openBayarModal(nikk, kode_tarif, periode, nama_tarif, sisa) {
     document.getElementById('modalJumlah').max = sisa;
     toggleModal('bayarModal');
 }
-function openBatalModal(nikk, kode_tarif, periode, nama_tarif) {
+
+function openBatalModal(nikk, kode_tarif, periode, nama_tarif, total_bayar) {
     document.getElementById('batalNikk').value = nikk;
     document.getElementById('batalKodeTarif').value = kode_tarif;
     document.getElementById('batalPeriode').value = periode;
     document.getElementById('batalNamaTarif').textContent = nama_tarif;
     document.getElementById('batalPeriodeText').textContent = 'Periode: ' + periode;
+    document.getElementById('batalTotalBayar').textContent = 'Rp' + number_format(total_bayar, 0, ',', '.');
+    document.getElementById('batalMaksimal').textContent = 'Rp' + number_format(total_bayar, 0, ',', '.');
+    document.getElementById('batalJumlah').value = total_bayar;
+    document.getElementById('batalJumlah').max = total_bayar;
     toggleModal('batalModal');
 }
 </script>
