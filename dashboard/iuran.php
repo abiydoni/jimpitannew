@@ -49,82 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         } catch (Exception $e) {
             $notif = ['type' => 'error', 'msg' => 'Gagal menyimpan pembayaran: ' . $e->getMessage()];
         }
-    } elseif ($_POST['aksi'] === 'batal') {
-        $nikk_batal = $_POST['nikk'];
-        $kode_tarif_batal = $_POST['kode_tarif'];
-        $periode_batal = $_POST['periode'];
-        $jumlah_batal = intval($_POST['jumlah_batal']); // Jumlah yang akan dibatalkan
-        
-        if (strpos($periode_batal, '-') !== false) {
-            [$bulan_batal, $tahun_batal] = explode('-', $periode_batal);
-        } else {
-            $tahun_batal = $periode_batal;
-            $bulan_batal = 'Tahunan';
-        }
-        
-        try {
-            // Ambil semua pembayaran untuk KK, tarif, dan periode ini, urutkan dari yang terbaru
-            if ($bulan_batal && $bulan_batal != 'Tahunan') {
-                // Untuk tarif bulanan
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC");
-                $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
-            } else {
-                // Untuk tarif tahunan
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' ORDER BY tgl_bayar DESC");
-                $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
-            }
-            
-            $pembayaran_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $sisa_batal = $jumlah_batal;
-            $dihapus = 0;
-            $riwayat_batal = [];
-            
-            // Hapus pembayaran mulai dari yang terbaru (terakhir)
-            foreach ($pembayaran_list as $index => $pembayaran) {
-                if ($sisa_batal <= 0) break;
-                
-                $jumlah_pembayaran = intval($pembayaran['jml_bayar']);
-                $tgl_pembayaran = $pembayaran['tgl_bayar'];
-                $nomor_pembayaran = count($pembayaran_list) - $index; // Nomor pembayaran (3, 2, 1)
-                
-                if ($jumlah_pembayaran <= $sisa_batal) {
-                    // Hapus seluruh pembayaran ini menggunakan kombinasi field
-                    if ($bulan_batal && $bulan_batal != 'Tahunan') {
-                        // Untuk tarif bulanan
-                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-                        $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
-                    } else {
-                        // Untuk tarif tahunan
-                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-                        $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
-                    }
-                    $sisa_batal -= $jumlah_pembayaran;
-                    $dihapus += $jumlah_pembayaran;
-                    $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dihapus";
-                } else {
-                    // Kurangi jumlah pembayaran ini menggunakan kombinasi field
-                    $sisa_pembayaran = $jumlah_pembayaran - $sisa_batal;
-                    if ($bulan_batal && $bulan_batal != 'Tahunan') {
-                        // Untuk tarif bulanan
-                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-                        $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
-                    } else {
-                        // Untuk tarif tahunan
-                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
-                        $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
-                    }
-                    $dihapus += $sisa_batal;
-                    $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($sisa_batal, 0, ',', '.') . " dari Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dikurangi";
-                    $sisa_batal = 0;
-                }
-            }
-            
-            $pesan_riwayat = implode(", ", $riwayat_batal);
-            $notif = ['type' => 'success', 'msg' => 'Berhasil membatalkan pembayaran sebesar Rp' . number_format($dihapus, 0, ',', '.') . '. ' . $pesan_riwayat];
-        } catch (Exception $e) {
-            $notif = ['type' => 'error', 'msg' => 'Gagal membatalkan pembayaran: ' . $e->getMessage()];
-        }
     }
+    // Hapus sistem batal lama untuk menghindari konflik dengan sistem hapus AJAX
 }
 
 // Buat array bulanan dan tahunan berdasarkan metode
@@ -725,6 +651,22 @@ if ($kode_tarif === 'TR001') {
 <?php endif; ?>
 
 <script>
+// Mencegah form submit yang tidak diinginkan
+document.addEventListener('DOMContentLoaded', function() {
+    // Mencegah form pembayaran ter-submit secara otomatis
+    const formBayar = document.getElementById('formBayar');
+    if (formBayar) {
+        formBayar.addEventListener('submit', function(e) {
+            // Pastikan form hanya di-submit ketika tombol "Simpan" diklik
+            const submitButton = e.submitter;
+            if (!submitButton || submitButton.textContent !== 'Simpan') {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+});
+
 function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.toggle('hidden');
@@ -834,7 +776,13 @@ function hapusPembayaran(id_iuran) {
                         position: 'top-end',
                         toast: true
                     }).then(() => {
-                        location.reload(); // Reload halaman untuk memperbarui data
+                        // Tutup modal histori terlebih dahulu
+                        toggleModal('historiModal');
+                        // Refresh halaman dengan cara yang lebih aman
+                        setTimeout(() => {
+                            // Gunakan window.location.replace untuk menghindari history stack
+                            window.location.replace(window.location.href);
+                        }, 500);
                     });
                 } else {
                     // Tampilkan informasi debug yang lebih detail
