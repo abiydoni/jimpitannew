@@ -472,14 +472,18 @@ if ($kode_tarif === 'TR001') {
               }
             }
             
-            // Ambil total bayar langsung dari database untuk memastikan akurasi
-            $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
-            $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
-            $total_bayar_db = intval($stmt_total->fetchColumn());
-            
-            // Gunakan total dari database jika lebih besar dari 0
-            if ($total_bayar_db > 0) {
-                $total_bayar = $total_bayar_db;
+            // Untuk tarif tahunan, ambil total bayar untuk tahun tersebut
+            // Untuk tarif bulanan, ambil total bayar untuk periode tersebut
+            if (!$is_bulanan) {
+                // Ambil total bayar langsung dari database untuk tarif tahunan
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
+                $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+                $total_bayar_db = intval($stmt_total->fetchColumn());
+                
+                // Gunakan total dari database jika lebih besar dari 0
+                if ($total_bayar_db > 0) {
+                    $total_bayar = $total_bayar_db;
+                }
             }
             
             $sisa = $tarif_nom - $total_bayar;
