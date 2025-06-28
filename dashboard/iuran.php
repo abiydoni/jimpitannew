@@ -339,18 +339,12 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Tarif bulanan - hitung untuk bulan tertentu
-        $nama_bulan = [
-            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-        ];
-        $bulan_nama = $nama_bulan[$bulan];
-        
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = ? AND tahun = ?");
-        $stmt->execute([$kode_tarif, $bulan_nama, $tahun]);
+        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ?");
+        $stmt->execute([$kode_tarif, $bulan, $tahun]);
     } else {
-        // Tarif tahunan - hitung untuk tahun tertentu
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+        // Tarif tahunan - hitung berdasarkan tgl_bayar di tahun tertentu
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ?");
         $stmt->execute([$kode_tarif, $tahun]);
     }
     
