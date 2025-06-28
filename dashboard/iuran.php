@@ -339,13 +339,13 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ?");
+        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan bukan "Tahunan"
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
     } else {
-        // Tarif tahunan - hitung berdasarkan tgl_bayar di tahun tertentu
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ?");
-        $stmt->execute([$kode_tarif, $tahun]);
+        // Tarif tahunan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan = "Tahunan"
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan = 'Tahunan'");
+        $stmt->execute([$kode_tarif, $bulan, $tahun]);
     }
     
     $total = $stmt->fetchColumn();
