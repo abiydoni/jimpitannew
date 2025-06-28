@@ -426,6 +426,23 @@ if ($kode_tarif === 'TR001') {
             
             $sisa = $total_tagihan - $total_bayar;
             $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+            
+            // Debug warna status
+            $warna_status = '';
+            if ($status == 'Lunas') {
+                $warna_status = 'text-green-600';
+            } elseif ($total_bayar > 0) {
+                $warna_status = 'text-orange-600';
+            } else {
+                $warna_status = 'text-red-600';
+            }
+            
+            // Debug: Tampilkan informasi warna jika diperlukan
+            if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+                echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
+                echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
+                echo "</div>";
+            }
           ?>
           <tr class="hover:bg-gray-100">
             <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
@@ -437,7 +454,7 @@ if ($kode_tarif === 'TR001') {
             <td class="px-2 py-1 border">Rp<?= number_format($total_tagihan,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':($total_bayar > 0 ? 'text-orange-600' : 'text-red-600') ?>"><?= $status ?></td>
+            <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -497,13 +514,30 @@ if ($kode_tarif === 'TR001') {
             
             $sisa = $tarif_nom - $total_bayar;
             $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+            
+            // Debug warna status
+            $warna_status = '';
+            if ($status == 'Lunas') {
+                $warna_status = 'text-green-600';
+            } elseif ($total_bayar > 0) {
+                $warna_status = 'text-orange-600';
+            } else {
+                $warna_status = 'text-red-600';
+            }
+            
+            // Debug: Tampilkan informasi warna jika diperlukan
+            if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+                echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
+                echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
+                echo "</div>";
+            }
           ?>
           <tr class="hover:bg-gray-100">
             <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($tarif_nom,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':($total_bayar > 0 ? 'text-orange-600' : 'text-red-600') ?>"><?= $status ?></td>
+            <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
             <td class="px-2 py-1 border">
               <?php if($status=='Belum Lunas'): ?>
                 <div class="flex space-x-1">
