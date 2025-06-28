@@ -58,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         try {
             // Ambil semua pembayaran untuk KK, tarif, dan periode ini, urutkan dari yang terbaru
             if ($bulan_batal) {
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC, id DESC");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
             } else {
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') ORDER BY tgl_bayar DESC, id DESC");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') ORDER BY tgl_bayar DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
             }
             
@@ -75,22 +75,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
                 if ($sisa_batal <= 0) break;
                 
                 $jumlah_pembayaran = intval($pembayaran['jml_bayar']);
-                $id_pembayaran = $pembayaran['id'];
                 $tgl_pembayaran = $pembayaran['tgl_bayar'];
                 $nomor_pembayaran = count($pembayaran_list) - $index; // Nomor pembayaran (3, 2, 1)
                 
                 if ($jumlah_pembayaran <= $sisa_batal) {
-                    // Hapus seluruh pembayaran ini
-                    $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE id = ?");
-                    $stmt_hapus->execute([$id_pembayaran]);
+                    // Hapus seluruh pembayaran ini menggunakan kombinasi field
+                    if ($bulan_batal) {
+                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
+                    } else {
+                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
+                    }
                     $sisa_batal -= $jumlah_pembayaran;
                     $dihapus += $jumlah_pembayaran;
                     $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dihapus";
                 } else {
-                    // Kurangi jumlah pembayaran ini
+                    // Kurangi jumlah pembayaran ini menggunakan kombinasi field
                     $sisa_pembayaran = $jumlah_pembayaran - $sisa_batal;
-                    $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE id = ?");
-                    $stmt_update->execute([$sisa_pembayaran, $id_pembayaran]);
+                    if ($bulan_batal) {
+                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
+                    } else {
+                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
+                    }
                     $dihapus += $sisa_batal;
                     $riwayat_batal[] = "Pembayaran ke-$nomor_pembayaran (Rp" . number_format($sisa_batal, 0, ',', '.') . " dari Rp" . number_format($jumlah_pembayaran, 0, ',', '.') . ") - Dikurangi";
                     $sisa_batal = 0;
