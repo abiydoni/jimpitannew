@@ -437,7 +437,7 @@ if ($kode_tarif === 'TR001') {
             <td class="px-2 py-1 border">Rp<?= number_format($total_tagihan,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
+            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':($total_bayar > 0 ? 'text-orange-600' : 'text-red-600') ?>"><?= $status ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -503,18 +503,18 @@ if ($kode_tarif === 'TR001') {
             <td class="px-2 py-1 border">Rp<?= number_format($tarif_nom,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
+            <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':($total_bayar > 0 ? 'text-orange-600' : 'text-red-600') ?>"><?= $status ?></td>
             <td class="px-2 py-1 border">
               <?php if($status=='Belum Lunas'): ?>
                 <div class="flex space-x-1">
                   <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
                   <?php if($total_bayar > 0): ?>
-                    <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                    <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
                   <?php endif; ?>
                 </div>
               <?php else: ?>
                 <?php if($total_bayar > 0): ?>
-                  <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                  <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
                 <?php endif; ?>
               <?php endif; ?>
             </td>
