@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
             [$bulan, $tahun_bayar] = explode('-', $periode);
         } else {
             $tahun_bayar = $periode;
-            // Untuk tahunan, bulan diisi null
-            $bulan = null;
+            // Untuk tahunan, bulan diisi "Tahunan"
+            $bulan = 'Tahunan';
         }
         // Ambil tarif tagihan dari tb_tarif
         $jumlah_tagihan = isset($tarif_map[$kode_tarif_bayar]) ? intval($tarif_map[$kode_tarif_bayar]['tarif']) : 0;
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
             [$bulan_batal, $tahun_batal] = explode('-', $periode_batal);
         } else {
             $tahun_batal = $periode_batal;
-            $bulan_batal = null;
+            $bulan_batal = 'Tahunan';
         }
         
         try {
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
                 $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal]);
             } else {
-                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') ORDER BY tgl_bayar DESC");
+                $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' ORDER BY tgl_bayar DESC");
                 $stmt->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal]);
             }
             
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
                         $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
                         $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
                     } else {
-                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_hapus = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
                         $stmt_hapus->execute([$nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
                     }
                     $sisa_batal -= $jumlah_pembayaran;
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
                         $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
                         $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $bulan_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
                     } else {
-                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+                        $stmt_update = $pdo->prepare("UPDATE tb_iuran SET jml_bayar = ? WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
                         $stmt_update->execute([$sisa_pembayaran, $nikk_batal, $kode_tarif_batal, $tahun_batal, $jumlah_pembayaran, $tgl_pembayaran]);
                     }
                     $dihapus += $sisa_batal;
@@ -186,8 +186,8 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
 $pembayaran_map = [];
 foreach ($pembayaran as $p) {
     // Untuk tarif bulanan: periode = bulan-tahun
-    // Untuk tarif tahunan: periode = tahun saja (bulan bisa null atau kosong)
-    if ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL') {
+    // Untuk tarif tahunan: periode = tahun saja (bulan = "Tahunan")
+    if ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL' && $p['bulan'] != 'Tahunan') {
         $periode = $p['bulan'].'-'.$p['tahun'];
     } else {
         $periode = $p['tahun'];
@@ -208,7 +208,7 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     echo "<h4>Debug Mapping untuk Tarif Tahunan:</h4>";
     foreach ($pembayaran as $p) {
         if (in_array($p['kode_tarif'], $tahunan_tarif)) {
-            $periode = ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL') ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
+            $periode = ($p['bulan'] && !empty($p['bulan']) && $p['bulan'] != 'NULL' && $p['bulan'] != 'Tahunan') ? $p['bulan'].'-'.$p['tahun'] : $p['tahun'];
             echo "<p>Data: NIKK={$p['nikk']}, Kode={$p['kode_tarif']}, Bulan=" . ($p['bulan'] ?: 'NULL') . ", Tahun={$p['tahun']}, Periode=$periode, Jumlah={$p['jml_bayar']}</p>";
         }
     }
@@ -415,8 +415,15 @@ if ($kode_tarif === 'TR001') {
             }
             
             // Ambil total bayar langsung dari database untuk memastikan akurasi
-            $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
-            $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+            if ($is_bulanan) {
+                // Untuk tarif bulanan, ambil total bayar untuk semua bulan dalam tahun tersebut
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan != 'Tahunan'");
+                $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+            } else {
+                // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+            }
             $total_bayar_db = intval($stmt_total->fetchColumn());
             
             // Gunakan total dari database jika lebih besar dari 0
@@ -498,18 +505,21 @@ if ($kode_tarif === 'TR001') {
               }
             }
             
-            // Untuk tarif tahunan, ambil total bayar untuk tahun tersebut
-            // Untuk tarif bulanan, ambil total bayar untuk periode tersebut
-            if (!$is_bulanan) {
-                // Ambil total bayar langsung dari database untuk tarif tahunan
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ?");
+            // Ambil total bayar langsung dari database untuk memastikan akurasi
+            if ($is_bulanan) {
+                // Untuk tarif bulanan, ambil total bayar untuk semua bulan dalam tahun tersebut
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan != 'Tahunan'");
                 $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
-                $total_bayar_db = intval($stmt_total->fetchColumn());
-                
-                // Gunakan total dari database jika lebih besar dari 0
-                if ($total_bayar_db > 0) {
-                    $total_bayar = $total_bayar_db;
-                }
+            } else {
+                // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
+                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+            }
+            $total_bayar_db = intval($stmt_total->fetchColumn());
+            
+            // Gunakan total dari database jika lebih besar dari 0
+            if ($total_bayar_db > 0) {
+                $total_bayar = $total_bayar_db;
             }
             
             $sisa = $tarif_nom - $total_bayar;

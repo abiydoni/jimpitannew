@@ -29,11 +29,11 @@ try {
         $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
         $stmt->execute([$nikk, $kode_tarif, $bulan, $tahun, $jml_bayar, $tgl_bayar]);
     } else {
-        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ?");
+        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ?");
         $stmt_check->execute([$nikk, $kode_tarif, $tahun, $jml_bayar, $tgl_bayar]);
         $count_before = $stmt_check->fetchColumn();
         
-        $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
+        $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' AND jml_bayar = ? AND tgl_bayar = ? LIMIT 1");
         $stmt->execute([$nikk, $kode_tarif, $tahun, $jml_bayar, $tgl_bayar]);
     }
     

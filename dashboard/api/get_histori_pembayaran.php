@@ -25,7 +25,7 @@ try {
         $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = ? AND tahun = ? ORDER BY tgl_bayar DESC");
         $stmt->execute([$nikk, $kode_tarif, $bulan, $tahun]);
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND (bulan IS NULL OR bulan = '') ORDER BY tgl_bayar DESC");
+        $stmt = $pdo->prepare("SELECT * FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan' ORDER BY tgl_bayar DESC");
         $stmt->execute([$nikk, $kode_tarif, $tahun]);
     }
     
