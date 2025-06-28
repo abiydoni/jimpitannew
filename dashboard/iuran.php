@@ -506,9 +506,19 @@ if ($kode_tarif === 'TR001') {
             <td class="px-2 py-1 border font-semibold <?= $status=='Lunas'?'text-green-600':'text-red-600' ?>"><?= $status ?></td>
             <td class="px-2 py-1 border">
               <?php if($status=='Belum Lunas'): ?>
-                <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
+                <div class="flex space-x-1">
+                  <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
+                  <?php if($total_bayar > 0): ?>
+                    <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                  <?php endif; ?>
+                </div>
               <?php else: ?>
-                <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $total_bayar ?>)">Batal</button>
+                <?php if($total_bayar > 0): ?>
+                  <div class="flex space-x-1">
+                    <button class="bg-orange-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                    <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openBatalModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $total_bayar ?>)">Batal</button>
+                  </div>
+                <?php endif; ?>
               <?php endif; ?>
             </td>
           </tr>
@@ -569,6 +579,23 @@ if ($kode_tarif === 'TR001') {
         <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Batalkan</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Modal Histori Pembayaran -->
+<div id="historiModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+    <h2 class="text-lg font-bold mb-2">Histori Pembayaran</h2>
+    <div class="mb-4">
+      <p class="font-semibold" id="historiNamaTarif"></p>
+      <p class="text-sm text-gray-600" id="historiPeriodeText"></p>
+    </div>
+    <div id="historiTableContainer">
+      <!-- Tabel histori akan diisi melalui AJAX -->
+    </div>
+    <div class="flex justify-end mt-4">
+      <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded" onclick="toggleModal('historiModal')">Tutup</button>
+    </div>
   </div>
 </div>
 
@@ -638,6 +665,59 @@ function openBatalModal(nikk, kode_tarif, periode, nama_tarif, total_bayar) {
     document.getElementById('batalJumlah').value = total_bayar;
     document.getElementById('batalJumlah').max = total_bayar;
     toggleModal('batalModal');
+}
+
+function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
+    document.getElementById('historiNamaTarif').textContent = nama_tarif;
+    document.getElementById('historiPeriodeText').textContent = 'Periode: ' + periode;
+    
+    // Ambil data histori pembayaran
+    fetch('api/get_histori_pembayaran.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'nikk=' + encodeURIComponent(nikk) + '&kode_tarif=' + encodeURIComponent(kode_tarif) + '&periode=' + encodeURIComponent(periode)
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('historiTableContainer').innerHTML = data;
+        toggleModal('historiModal');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Gagal mengambil data histori pembayaran');
+    });
+}
+
+function hapusPembayaran(nikk, kode_tarif, bulan, tahun, jml_bayar, tgl_bayar) {
+    if (confirm('Yakin ingin menghapus pembayaran ini?')) {
+        fetch('api/hapus_pembayaran.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'nikk=' + encodeURIComponent(nikk) + 
+                  '&kode_tarif=' + encodeURIComponent(kode_tarif) + 
+                  '&bulan=' + encodeURIComponent(bulan) + 
+                  '&tahun=' + encodeURIComponent(tahun) + 
+                  '&jml_bayar=' + encodeURIComponent(jml_bayar) + 
+                  '&tgl_bayar=' + encodeURIComponent(tgl_bayar)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Pembayaran berhasil dihapus');
+                location.reload(); // Reload halaman untuk memperbarui data
+            } else {
+                alert('Gagal menghapus pembayaran: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Gagal menghapus pembayaran');
+        });
+    }
 }
 </script>
 
