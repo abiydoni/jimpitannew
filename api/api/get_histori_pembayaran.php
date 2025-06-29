@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include '../db.php';
 
 $nikk = $_POST['nikk'] ?? '';
 $kode_tarif = $_POST['kode_tarif'] ?? '';
