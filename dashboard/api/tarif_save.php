@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -8,6 +9,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tarif = $_POST['tarif'];
     $metode = $_POST['metode'];
     $icon = $_POST['icon'];
+
+    // Validasi input
+    if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif) || empty($icon)) {
+        $_SESSION['swal'] = ['msg' => 'Input tidak boleh kosong!', 'icon' => 'error'];
+        header('Location: ../tarif.php');
+        exit();
+    }
 
     // SQL untuk memasukkan data
     $sql = "INSERT INTO tb_tarif (kode_tarif, nama_tarif, tarif, metode, icon) VALUES (:kode_tarif, :nama_tarif, :tarif, :metode, :icon)";
@@ -22,10 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':icon', $icon);
 
     if ($stmt->execute()) {
-        header("Location: ../tarif.php"); // Mengarahkan ke jadwal.php setelah berhasil
+        $_SESSION['swal'] = ['msg' => 'Data berhasil disimpan!', 'icon' => 'success'];
+        header("Location: ../tarif.php"); // Mengarahkan ke tarif.php setelah berhasil
         exit(); // Menghentikan eksekusi script setelah pengalihan
     } else {
-        echo "Gagal menyimpan data.";
+        $_SESSION['swal'] = ['msg' => 'Gagal menyimpan data!', 'icon' => 'error'];
+        header("Location: ../tarif.php");
+        exit();
     }
 }
 ?>
