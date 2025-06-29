@@ -372,7 +372,7 @@ if ($kode_tarif) {
               <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
                 <div class="text-5xl mb-2"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
                 <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                <div class="text-gray-600"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
               </a>
             <?php endforeach; ?>
           </div>
@@ -411,7 +411,7 @@ if ($kode_tarif) {
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
-                    <div class="text-2xl font-bold text-blue-600">Rp<?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+                    <div class="text-2xl font-bold text-blue-600 text-right"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
                     <div class="text-sm text-gray-500">
                       <?php if($is_bulanan): ?>
                         Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
@@ -429,7 +429,7 @@ if ($kode_tarif) {
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
-                    <div class="text-2xl font-bold text-green-600">Rp<?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
+                    <div class="text-2xl font-bold text-green-600 text-right"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
                     <div class="text-sm text-gray-500">
                       Pembayaran tahun <?= $tahun ?>
                     </div>
@@ -444,11 +444,10 @@ if ($kode_tarif) {
             <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
               <thead class="bg-gray-200">
                 <tr>
-                  <th class="px-2 py-1 border">No KK</th>
                   <th class="px-2 py-1 border">Nama KK</th>
-                  <th class="px-2 py-1 border">Total Tagihan</th>
-                  <th class="px-2 py-1 border">Sudah Bayar</th>
-                  <th class="px-2 py-1 border">Sisa Hutang</th>
+                  <th class="px-2 py-1 border text-right">Total Tagihan</th>
+                  <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+                  <th class="px-2 py-1 border text-right">Sisa Hutang</th>
                   <th class="px-2 py-1 border">Status</th>
                 </tr>
               </thead>
@@ -526,15 +525,14 @@ if ($kode_tarif) {
                   }
                 ?>
                 <tr class="hover:bg-gray-100">
-                  <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
                   <td class="px-2 py-1 border">
                     <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
                       <?= htmlspecialchars($w['nama']) ?>
                     </a>
                   </td>
-                  <td class="px-2 py-1 border">Rp<?= number_format($total_tagihan,0,',','.') ?></td>
-                  <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
-                  <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_tagihan,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
                   <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
                 </tr>
                 <?php endforeach; ?>
@@ -558,9 +556,9 @@ if ($kode_tarif) {
               <thead class="bg-gray-200">
                 <tr>
                   <th class="px-2 py-1 border">Periode</th>
-                  <th class="px-2 py-1 border">Tarif</th>
-                  <th class="px-2 py-1 border">Sudah Bayar</th>
-                  <th class="px-2 py-1 border">Sisa Hutang</th>
+                  <th class="px-2 py-1 border text-right">Tarif</th>
+                  <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+                  <th class="px-2 py-1 border text-right">Sisa Hutang</th>
                   <th class="px-2 py-1 border">Status</th>
                   <th class="px-2 py-1 border">Aksi</th>
                 </tr>
@@ -620,21 +618,27 @@ if ($kode_tarif) {
                 ?>
                 <tr class="hover:bg-gray-100">
                   <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
-                  <td class="px-2 py-1 border">Rp<?= number_format($tarif_nom,0,',','.') ?></td>
-                  <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
-                  <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($tarif_nom,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
                   <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
                   <td class="px-2 py-1 border">
                     <?php if($status=='Belum Lunas'): ?>
                       <div class="flex space-x-1">
-                        <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
+                        <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
+                          <i class="bx bx-money"></i>
+                        </button>
                         <?php if($total_bayar > 0): ?>
-                          <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                          <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                            <i class="bx bx-history"></i>
+                          </button>
                         <?php endif; ?>
                       </div>
                     <?php else: ?>
                       <?php if($total_bayar > 0): ?>
-                        <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                        <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                          <i class="bx bx-history"></i>
+                        </button>
                       <?php endif; ?>
                     <?php endif; ?>
                   </td>
