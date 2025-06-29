@@ -68,6 +68,7 @@ if (!empty($_SESSION['swal'])) {
                                 <th class="text-center border px-3 py-2">Nama Tarif</th>
                                 <th class="text-center border px-3 py-2">Tarif</th>
                                 <th class="text-center border px-3 py-2">Metode</th>
+                                <th class="text-center border px-3 py-2">icon</th>
                                 <th class="text-center border px-3 py-2">Aksi</th>
                             </tr>
                         </thead>
@@ -78,6 +79,7 @@ if (!empty($_SESSION['swal'])) {
                                 <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["metode"]); ?></td>
+                                <td><?php echo htmlspecialchars($tarif["icon"]); ?></td>
                                 <td class="flex justify-center space-x-2">
                                     <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>', '<?php echo $tarif['metode']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
@@ -118,7 +120,11 @@ if (!empty($_SESSION['swal'])) {
                             <option value="1">Tahunan</option>
                         </select>
                     </div>
-                    <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
+                    <div class="bg-white p-1 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Icon:</label>
+                        <input type="text" name="icon" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    </div>
+                <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
                 </form>
             </div>
         </div>
@@ -144,6 +150,10 @@ if (!empty($_SESSION['swal'])) {
                             <option value="1">Bulanan</option>
                             <option value="2">Tahunan</option>
                         </select>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Icon:</label>
+                        <input type="text" name="icon" id="edit_icon" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                     </div>
                     <button type="submit" class="mt-2 bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-200">Update</button>
                 </form>
@@ -171,11 +181,12 @@ if (!empty($_SESSION['swal'])) {
 </script>
 
 <script>
-    function openEditTarifModal(kode_tarif, nama_tarif, tarif, metode) {
+    function openEditTarifModal(kode_tarif, nama_tarif, tarif, metode, icon) {
         document.getElementById('edit_kode_tarif').value = kode_tarif;
         document.getElementById('edit_nama_tarif').value = nama_tarif;
         document.getElementById('edit_tarif').value = tarif;
         document.getElementById('edit_metode').value = metode;
+        document.getElementById('edit_icon').value = icon;
 
         const modal = document.getElementById("editTarifModal");
         modal.classList.remove("hidden");

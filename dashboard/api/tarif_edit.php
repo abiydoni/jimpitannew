@@ -8,9 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama_tarif = $_POST['nama_tarif'];
     $tarif = $_POST['tarif'];
     $metode = $_POST['metode'];
+    $icon = $_POST['icon'];
 
     // Validasi input
-    if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif)) {
+    if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif)) || empty($icon)) {
         session_start();
         $_SESSION['swal'] = ['msg' => 'Input tidak boleh kosong!', 'icon' => 'error'];
         header('Location: ../tarif.php');
@@ -18,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update user data in the database
-    $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ?, metode = ? WHERE kode_tarif = ?";
+    $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ?, metode = ?, icon = ? WHERE kode_tarif = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nama_tarif, $tarif, $metode, $kode_tarif]);
+    $stmt->execute([$nama_tarif, $tarif, $metode, $kode_tarif, $icon]);
     session_start();
     $_SESSION['swal'] = ['msg' => 'Data berhasil diperbarui!', 'icon' => 'success'];
     header('Location: ../tarif.php');
