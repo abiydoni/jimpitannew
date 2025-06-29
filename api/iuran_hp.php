@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+include 'db.php';
+
 $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
 $bulan_filter = isset($_GET['bulan']) ? intval($_GET['bulan']) : intval(date('n')); // 1-12 untuk bulan
 $kode_tarif = isset($_GET['kode_tarif']) ? $_GET['kode_tarif'] : null;
