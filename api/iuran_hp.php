@@ -417,10 +417,12 @@ if ($kode_tarif) {
               $warna_icon_class = $warna_icon[$index % count($warna_icon)];
               $index++;
             ?>
-              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block <?= $warna_box_class ?> rounded-lg transition p-6 text-center cursor-pointer">
-                <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
-                <div class="text-lg font-bold mb-1 text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="box-modern-link">
+                <div class="box-modern-iuran">
+                  <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
+                  <div class="text-lg font-bold mb-1 text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
+                  <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                </div>
               </a>
             <?php endforeach; ?>
           </div>
@@ -1048,3 +1050,166 @@ window.addEventListener('load', function() {
 </script>
 </body>
 </html>
+
+<style>
+/* Modern Box Styling untuk Iuran */
+.box-modern-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.box-modern-link:hover {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-4px);
+}
+
+.box-modern-iuran {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-modern-iuran:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+/* Icon Styling dengan Background */
+.box-modern-iuran .text-5xl {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.box-modern-iuran:hover .text-5xl {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Text Styling */
+.box-modern-iuran .text-lg {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
+  transition: color 0.3s ease;
+}
+
+.box-modern-iuran .text-gray-700 {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+/* Hover Effects untuk Text */
+.box-modern-link:hover .text-lg {
+  color: #0f172a;
+}
+
+.box-modern-link:hover .text-gray-700 {
+  color: #475569;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .box-modern-iuran {
+    padding: 1rem;
+    min-height: 140px;
+  }
+  
+  .box-modern-iuran .text-5xl {
+    padding: 12px;
+    font-size: 2.5rem;
+  }
+  
+  .box-modern-iuran .text-lg {
+    font-size: 1rem;
+  }
+  
+  .box-modern-iuran .text-gray-700 {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .box-modern-iuran {
+    padding: 0.8rem;
+    min-height: 120px;
+  }
+  
+  .box-modern-iuran .text-5xl {
+    padding: 10px;
+    font-size: 2rem;
+  }
+  
+  .box-modern-iuran .text-lg {
+    font-size: 0.9rem;
+  }
+  
+  .box-modern-iuran .text-gray-700 {
+    font-size: 0.75rem;
+  }
+}
+
+/* Grid Layout Improvements */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Animation untuk loading */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.box-modern-iuran {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Stagger animation untuk multiple boxes */
+.box-modern-iuran:nth-child(1) { animation-delay: 0.1s; }
+.box-modern-iuran:nth-child(2) { animation-delay: 0.2s; }
+.box-modern-iuran:nth-child(3) { animation-delay: 0.3s; }
+.box-modern-iuran:nth-child(4) { animation-delay: 0.4s; }
+.box-modern-iuran:nth-child(5) { animation-delay: 0.5s; }
+.box-modern-iuran:nth-child(6) { animation-delay: 0.6s; }
+</style>
