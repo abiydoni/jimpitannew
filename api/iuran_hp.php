@@ -908,28 +908,39 @@ function hapusPembayaran(id_iuran) {
                         }, 500);
                     });
                 } else {
-                    // Tampilkan informasi debug yang lebih detail
-                    let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
-                    if (data.debug) {
-                        debugMessage += '\n\nDebug Info:';
-                        debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
-                        debugMessage += '\n- Count Before: ' + data.debug.count_before;
-                        debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
-                        debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
-                        if (data.debug.data_to_delete) {
-                            debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                    // Tampilkan pesan error khusus untuk validasi bulan
+                    if (data.error_type === 'month_mismatch') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tidak Dapat Dihapus!',
+                            text: data.message,
+                            confirmButtonText: 'Mengerti',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Tampilkan informasi debug yang lebih detail untuk error lain
+                        let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
+                        if (data.debug) {
+                            debugMessage += '\n\nDebug Info:';
+                            debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
+                            debugMessage += '\n- Count Before: ' + data.debug.count_before;
+                            debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
+                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
+                            if (data.debug.data_to_delete) {
+                                debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                            }
                         }
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: debugMessage,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: true,
+                            position: 'center'
+                        });
                     }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: debugMessage,
-                        timer: 1500,
-                        timerProgressBar: true,
-                        showConfirmButton: true,
-                        position: 'center'
-                    });
                 }
             })
             .catch(error => {
