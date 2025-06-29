@@ -414,6 +414,10 @@ if ($kode_tarif) {
               </a>
             <?php endforeach; ?>
           </div>
+          <button class="fixed bottom-4 right-4 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+              onclick="window.location.href='../index.php'" title="Pergi ke menu">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+          </button>
         </div>
       <?php elseif(!$nikk): ?>
         <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
