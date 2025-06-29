@@ -63,7 +63,7 @@ include 'header.php';
                     <tr>
                         <th class="py-2 px-3 w-10 border">No</th>
                         <th class="py-2 px-3 w-40 text-left border">NIK</th>
-                        <th class="py-2 px-3 w-40 text-left border">NIK KK</th>
+                        <th class="py-2 px-3 w-40 text-left border">NO KK</th>
                         <th class="py-2 px-3 w-56 text-left border">Nama</th>
                         <th class="py-2 px-3 w-32 text-center border">Jenis Kelamin</th>
                         <th class="py-2 px-3 w-36 text-left border">Tanggal Lahir</th>
