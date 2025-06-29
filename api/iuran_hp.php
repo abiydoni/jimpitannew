@@ -411,7 +411,7 @@ if ($kode_tarif) {
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
-                    <div class="text-2xl font-bold text-blue-600 text-right"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+                    <div class="text-2xl font-bold text-blue-600"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
                     <div class="text-sm text-gray-500">
                       <?php if($is_bulanan): ?>
                         Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
@@ -429,7 +429,7 @@ if ($kode_tarif) {
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
-                    <div class="text-2xl font-bold text-green-600 text-right"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
+                    <div class="text-2xl font-bold text-green-600"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
                     <div class="text-sm text-gray-500">
                       Pembayaran tahun <?= $tahun ?>
                     </div>
