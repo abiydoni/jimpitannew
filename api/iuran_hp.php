@@ -542,6 +542,8 @@ if ($kode_tarif) {
           </table>
         </div>
       <?php else: ?>
+      </div>
+      <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
         <!-- Tabel Detail per Bulan/Tahun untuk KK Terpilih -->
         <div class="mb-4 flex items-center gap-2">
           <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
