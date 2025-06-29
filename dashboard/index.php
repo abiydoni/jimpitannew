@@ -302,6 +302,8 @@ include 'api/get_info.php';
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .box-info li .text {
@@ -309,17 +311,38 @@ include 'api/get_info.php';
   flex-direction: column;
   gap: 0.3rem;
   width: 100%;
+  position: relative;
 }
 
 .box-info li .text h3 {
   font-size: 1.4rem;
   font-weight: 700;
   margin: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .box-info li .text a {
   font-size: 0.9rem;
   margin-top: 0.2rem;
+  position: absolute;
+  top: -45px;
+  left: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.box-info li .text a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 1);
 }
 
 .wide-container {
@@ -434,8 +457,20 @@ include 'api/get_info.php';
     font-size: 1.2rem;
   }
   
-  .link-modern {
+  .box-info li .text a {
     font-size: 0.8rem !important;
+    top: -40px;
+    left: 60px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .box-info li .text a {
+    top: -35px;
+    left: 55px;
+    font-size: 0.75rem !important;
+    padding: 2px 5px;
   }
 }
 </style>
