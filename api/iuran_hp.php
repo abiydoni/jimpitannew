@@ -366,8 +366,8 @@ if ($kode_tarif) {
 
       <?php if(!$kode_tarif): ?>
         <!-- Pilihan Jenis Iuran: Menu Box Besar -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
-          <?php foreach($tarif as $t): ?>
+        <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+        <?php foreach($tarif as $t): ?>
             <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
               <div class="text-5xl mb-2"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
               <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
