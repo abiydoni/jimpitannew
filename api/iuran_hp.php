@@ -16,26 +16,6 @@ $nama_bulan = [
     7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
 ];
 
-// Array warna untuk box iuran (gradient 3 warna lebih terang)
-$warna_box = [
-    'bg-gradient-to-br from-blue-300 via-blue-400 to-blue-500 hover:from-blue-400 hover:via-blue-500 hover:to-blue-600 border-2 border-blue-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-green-300 via-green-400 to-green-500 hover:from-green-400 hover:via-green-500 hover:to-green-600 border-2 border-green-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-purple-300 via-purple-400 to-purple-500 hover:from-purple-400 hover:via-purple-500 hover:to-purple-600 border-2 border-purple-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 hover:from-orange-400 hover:via-orange-500 hover:to-orange-600 border-2 border-orange-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 hover:from-pink-400 hover:via-pink-500 hover:to-pink-600 border-2 border-pink-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-indigo-300 via-indigo-400 to-indigo-500 hover:from-indigo-400 hover:via-indigo-500 hover:to-indigo-600 border-2 border-indigo-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-teal-300 via-teal-400 to-teal-500 hover:from-teal-400 hover:via-teal-500 hover:to-teal-600 border-2 border-teal-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 border-2 border-yellow-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-red-300 via-red-400 to-red-500 hover:from-red-400 hover:via-red-500 hover:to-red-600 border-2 border-red-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-cyan-300 via-cyan-400 to-cyan-500 hover:from-cyan-400 hover:via-cyan-500 hover:to-cyan-600 border-2 border-cyan-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-emerald-300 via-emerald-400 to-emerald-500 hover:from-emerald-400 hover:via-emerald-500 hover:to-emerald-600 border-2 border-emerald-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-violet-300 via-violet-400 to-violet-500 hover:from-violet-400 hover:via-violet-500 hover:to-violet-600 border-2 border-violet-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 hover:from-amber-400 hover:via-amber-500 hover:to-amber-600 border-2 border-amber-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-lime-300 via-lime-400 to-lime-500 hover:from-lime-400 hover:via-lime-500 hover:to-lime-600 border-2 border-lime-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-rose-300 via-rose-400 to-rose-500 hover:from-rose-400 hover:via-rose-500 hover:to-rose-600 border-2 border-rose-200 shadow-lg hover:shadow-xl',
-    'bg-gradient-to-br from-sky-300 via-sky-400 to-sky-500 hover:from-sky-400 hover:via-sky-500 hover:to-sky-600 border-2 border-sky-200 shadow-lg hover:shadow-xl'
-];
-
 // Array warna icon untuk box iuran (warna yang sesuai dengan gradient)
 $warna_icon = [
     'text-blue-700',
@@ -413,7 +393,6 @@ if ($kode_tarif) {
             <?php 
             $index = 0;
             foreach($tarif as $t): 
-              $warna_box_class = $warna_box[$index % count($warna_box)];
               $warna_icon_class = $warna_icon[$index % count($warna_icon)];
               $index++;
             ?>
@@ -944,7 +923,6 @@ function hapusPembayaran(id_iuran) {
                             debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
                             debugMessage += '\n- Count Before: ' + data.debug.count_before;
                             debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
-                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
                             if (data.debug.data_to_delete) {
                                 debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
                             }
