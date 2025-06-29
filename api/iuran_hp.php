@@ -29,7 +29,11 @@ $warna_box = [
     'bg-red-50 border-red-200 hover:bg-red-100',
     'bg-cyan-50 border-cyan-200 hover:bg-cyan-100',
     'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
-    'bg-violet-50 border-violet-200 hover:bg-violet-100'
+    'bg-violet-50 border-violet-200 hover:bg-violet-100',
+    'bg-amber-50 border-amber-200 hover:bg-amber-100',
+    'bg-lime-50 border-lime-200 hover:bg-lime-100',
+    'bg-rose-50 border-rose-200 hover:bg-rose-100',
+    'bg-sky-50 border-sky-200 hover:bg-sky-100'
 ];
 
 // Array warna icon untuk box iuran
@@ -45,7 +49,11 @@ $warna_icon = [
     'text-red-600',
     'text-cyan-600',
     'text-emerald-600',
-    'text-violet-600'
+    'text-violet-600',
+    'text-amber-600',
+    'text-lime-600',
+    'text-rose-600',
+    'text-sky-600'
 ];
 
 // Ambil data tarif terlebih dahulu
