@@ -25,49 +25,59 @@ include 'api/get_info.php';
 
             <ul class="box-info">
                 <li class="box-modern">
-                    <i class='bx bxs-group bx-lg icon-blue'></i>
-                    <span class="text">
-                        <h3 id="totalPeserta" class="text-dark"><?php echo $totalKKj; ?> KK</h3>
-                        <a href="kk.php" class="link-modern">Jimpitan</a>
-                    </span>
+                    <a href="kk.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-blue'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalKKj; ?> KK</h3>
+                            <span class="link-text">Jimpitan</span>
+                        </span>
+                    </a>
                 </li>
                 <li class="box-modern">
-                    <i class='bx bxs-group bx-lg icon-green'></i>
-                    <span class="text">
-                        <h3 id="totalPeserta" class="text-dark"><?php echo $totalKK; ?> KK</h3>
-                        <a href="warga.php" class="link-modern">Kepala Keluarga</a>
-                    </span>
+                    <a href="warga.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-green'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalKK; ?> KK</h3>
+                            <span class="link-text">Kepala Keluarga</span>
+                        </span>
+                    </a>
                 </li>
                 <li class="box-modern">
-                    <i class='bx bxs-group bx-lg icon-purple'></i>
-                    <span class="text">
-                        <h3 id="totalPeserta" class="text-dark"><?php echo $totalWarga; ?> Orang</h3>
-                        <a href="warga.php" class="link-modern">Total Warga</a>
-                    </span>
+                    <a href="warga.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-purple'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalWarga; ?> Orang</h3>
+                            <span class="link-text">Total Warga</span>
+                        </span>
+                    </a>
                 </li>
                 <li class="box-modern">
-                    <i class='bx bxs-badge-check bx-lg icon-orange'></i>
-                    <span class="text">
-                        <h3 id="totalSaldo" class="text-dark">
-                            <?php 
-                                function formatRupiah($angka) {
-                                    return "Rp " . number_format($angka, 0, ',', '.');
-                                }
+                    <a href="keuangan.php" class="box-link">
+                        <i class='bx bxs-badge-check bx-lg icon-orange'></i>
+                        <span class="text">
+                            <h3 id="totalSaldo" class="text-dark">
+                                <?php 
+                                    function formatRupiah($angka) {
+                                        return "Rp " . number_format($angka, 0, ',', '.');
+                                    }
 
-                                // Contoh penggunaan
-                                $saldo = $totalSaldo;
-                                echo formatRupiah($saldo); // Output: Rp 1.500.000
-                            ?>
-                        </h3>
-                        <a href="keuangan.php" class="link-modern">Saldo KAS</a>
-                    </span>
+                                    // Contoh penggunaan
+                                    $saldo = $totalSaldo;
+                                    echo formatRupiah($saldo); // Output: Rp 1.500.000
+                                ?>
+                            </h3>
+                            <span class="link-text">Saldo KAS</span>
+                        </span>
+                    </a>
                 </li>
                 <li class="box-modern">
-                    <i class='bx bxs-info-circle bx-lg icon-pink'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck" class="text-dark"><?php echo $totalUsers; ?> Orang</h3>
-                        <a href="jadwal.php" class="link-modern">Users JAGA</a>
-                    </span>
+                    <a href="jadwal.php" class="box-link">
+                        <i class='bx bxs-info-circle bx-lg icon-pink'></i>
+                        <span class="text">
+                            <h3 id="totalUncheck" class="text-dark"><?php echo $totalUsers; ?> Orang</h3>
+                            <span class="link-text">Users JAGA</span>
+                        </span>
+                    </a>
                 </li>
             </ul>
 
@@ -202,12 +212,46 @@ include 'api/get_info.php';
   max-height: 140px !important;
   transition: all 0.3s ease !important;
   backdrop-filter: blur(10px) !important;
+  position: relative;
 }
 
 .box-modern:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   border-color: #cbd5e1 !important;
+}
+
+/* Box Link Styling */
+.box-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.box-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Link Text Styling */
+.link-text {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: #64748b !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  z-index: 10;
+  transition: color 0.3s ease !important;
+}
+
+.box-link:hover .link-text {
+  color: #475569 !important;
 }
 
 /* Icon Colors */
@@ -453,17 +497,15 @@ include 'api/get_info.php';
     font-size: 1.2rem;
   }
   
-  .box-info li .text a {
+  .link-text {
     font-size: 0.7rem !important;
-    top: -30px;
-    left: 55px;
+    top: -20px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .box-info li .text a {
-    top: -25px;
-    left: 50px;
+  .link-text {
+    top: -18px !important;
     font-size: 0.65rem !important;
   }
 }
