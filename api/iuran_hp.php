@@ -2,11 +2,6 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-// Pastikan pengguna sudah login
-if (!isset($_SESSION['user'])) {
-  header('Location: ../login.php'); // Redirect ke halaman login
-  exit;
-}
 
 include 'db.php';
 
