@@ -15,6 +15,38 @@ $nama_bulan = [
     7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
 ];
 
+// Array warna untuk box iuran
+$warna_box = [
+    'bg-blue-50 border-blue-200 hover:bg-blue-100',
+    'bg-green-50 border-green-200 hover:bg-green-100',
+    'bg-purple-50 border-purple-200 hover:bg-purple-100',
+    'bg-orange-50 border-orange-200 hover:bg-orange-100',
+    'bg-pink-50 border-pink-200 hover:bg-pink-100',
+    'bg-indigo-50 border-indigo-200 hover:bg-indigo-100',
+    'bg-teal-50 border-teal-200 hover:bg-teal-100',
+    'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
+    'bg-red-50 border-red-200 hover:bg-red-100',
+    'bg-cyan-50 border-cyan-200 hover:bg-cyan-100',
+    'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
+    'bg-violet-50 border-violet-200 hover:bg-violet-100'
+];
+
+// Array warna icon untuk box iuran
+$warna_icon = [
+    'text-blue-600',
+    'text-green-600',
+    'text-purple-600',
+    'text-orange-600',
+    'text-pink-600',
+    'text-indigo-600',
+    'text-teal-600',
+    'text-yellow-600',
+    'text-red-600',
+    'text-cyan-600',
+    'text-emerald-600',
+    'text-violet-600'
+];
+
 // Ambil data tarif terlebih dahulu
 $tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -326,11 +358,17 @@ if ($kode_tarif) {
   <?php if(!$kode_tarif): ?>
     <!-- Pilihan Jenis Iuran: Menu Box Besar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
-      <?php foreach($tarif as $t): ?>
-        <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
-          <div class="text-5xl mb-2"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
+      <?php 
+      $index = 0;
+      foreach($tarif as $t): 
+        $warna_box_class = $warna_box[$index % count($warna_box)];
+        $warna_icon_class = $warna_icon[$index % count($warna_icon)];
+        $index++;
+      ?>
+        <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block <?= $warna_box_class ?> rounded-lg shadow hover:shadow-lg transition p-6 text-center cursor-pointer">
+          <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
           <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-          <div class="text-gray-600">Rp<?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+          <div class="text-gray-600"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
         </a>
       <?php endforeach; ?>
     </div>
@@ -367,7 +405,7 @@ if ($kode_tarif) {
           <div class="flex items-center justify-between">
             <div>
               <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
-              <div class="text-2xl font-bold text-blue-600">Rp<?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+              <div class="text-2xl font-bold text-blue-600"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
               <div class="text-sm text-gray-500">
                 <?php if($is_bulanan): ?>
                   Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
@@ -385,7 +423,7 @@ if ($kode_tarif) {
           <div class="flex items-center justify-between">
             <div>
               <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
-              <div class="text-2xl font-bold text-green-600">Rp<?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
+              <div class="text-2xl font-bold text-green-600"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
               <div class="text-sm text-gray-500">
                 Pembayaran tahun <?= $tahun ?>
               </div>
@@ -397,14 +435,24 @@ if ($kode_tarif) {
     </div>
 
     <div class="overflow-x-auto">
-      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
+      <!-- Search Box untuk Tabel Rekap KK -->
+      <div class="mb-4">
+        <div class="relative">
+          <input type="text" id="searchRekap" placeholder="Cari nama KK..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+            <i class="bx bx-search text-gray-400"></i>
+          </div>
+        </div>
+      </div>
+      
+      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableRekap">
         <thead class="bg-gray-200">
           <tr>
             <th class="px-2 py-1 border">No KK</th>
             <th class="px-2 py-1 border">Nama KK</th>
-            <th class="px-2 py-1 border">Total Tagihan</th>
-            <th class="px-2 py-1 border">Sudah Bayar</th>
-            <th class="px-2 py-1 border">Sisa Hutang</th>
+            <th class="px-2 py-1 border text-right">Total Tagihan</th>
+            <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+            <th class="px-2 py-1 border text-right">Sisa Hutang</th>
             <th class="px-2 py-1 border">Status</th>
           </tr>
         </thead>
@@ -488,9 +536,9 @@ if ($kode_tarif) {
                 <?= htmlspecialchars($w['nama']) ?>
               </a>
             </td>
-            <td class="px-2 py-1 border">Rp<?= number_format($total_tagihan,0,',','.') ?></td>
-            <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
-            <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format($total_tagihan,0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
             <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
           </tr>
           <?php endforeach; ?>
@@ -508,13 +556,23 @@ if ($kode_tarif) {
       </span>
     </div>
     <div class="overflow-x-auto">
-      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
+      <!-- Search Box untuk Tabel Detail -->
+      <div class="mb-4">
+        <div class="relative">
+          <input type="text" id="searchDetail" placeholder="Cari periode..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+            <i class="bx bx-search text-gray-400"></i>
+          </div>
+        </div>
+      </div>
+      
+      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableDetail">
         <thead class="bg-gray-200">
           <tr>
             <th class="px-2 py-1 border">Periode</th>
-            <th class="px-2 py-1 border">Tarif</th>
-            <th class="px-2 py-1 border">Sudah Bayar</th>
-            <th class="px-2 py-1 border">Sisa Hutang</th>
+            <th class="px-2 py-1 border text-right">Tarif</th>
+            <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+            <th class="px-2 py-1 border text-right">Sisa Hutang</th>
             <th class="px-2 py-1 border">Status</th>
             <th class="px-2 py-1 border">Aksi</th>
           </tr>
@@ -574,21 +632,27 @@ if ($kode_tarif) {
           ?>
           <tr class="hover:bg-gray-100">
             <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
-            <td class="px-2 py-1 border">Rp<?= number_format($tarif_nom,0,',','.') ?></td>
-            <td class="px-2 py-1 border">Rp<?= number_format($total_bayar,0,',','.') ?></td>
-            <td class="px-2 py-1 border">Rp<?= number_format(max($sisa,0),0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format($tarif_nom,0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+            <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
             <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
             <td class="px-2 py-1 border">
               <?php if($status=='Belum Lunas'): ?>
                 <div class="flex space-x-1">
-                  <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">Bayar</button>
+                  <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
+                    <i class="bx bx-money"></i>
+                  </button>
                   <?php if($total_bayar > 0): ?>
-                    <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                    <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                      <i class="bx bx-history"></i>
+                    </button>
                   <?php endif; ?>
                 </div>
               <?php else: ?>
                 <?php if($total_bayar > 0): ?>
-                  <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">Histori</button>
+                  <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                    <i class="bx bx-history"></i>
+                  </button>
                 <?php endif; ?>
               <?php endif; ?>
             </td>
@@ -792,28 +856,39 @@ function hapusPembayaran(id_iuran) {
                         }, 500);
                     });
                 } else {
-                    // Tampilkan informasi debug yang lebih detail
-                    let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
-                    if (data.debug) {
-                        debugMessage += '\n\nDebug Info:';
-                        debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
-                        debugMessage += '\n- Count Before: ' + data.debug.count_before;
-                        debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
-                        debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
-                        if (data.debug.data_to_delete) {
-                            debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                    // Tampilkan pesan error khusus untuk validasi bulan
+                    if (data.error_type === 'month_mismatch') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tidak Dapat Dihapus!',
+                            text: data.message,
+                            confirmButtonText: 'Mengerti',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Tampilkan informasi debug yang lebih detail untuk error lain
+                        let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
+                        if (data.debug) {
+                            debugMessage += '\n\nDebug Info:';
+                            debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
+                            debugMessage += '\n- Count Before: ' + data.debug.count_before;
+                            debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
+                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
+                            if (data.debug.data_to_delete) {
+                                debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                            }
                         }
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: debugMessage,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: true,
+                            position: 'center'
+                        });
                     }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: debugMessage,
-                        timer: 1500,
-                        timerProgressBar: true,
-                        showConfirmButton: true,
-                        position: 'center'
-                    });
                 }
             })
             .catch(error => {
@@ -832,6 +907,60 @@ function hapusPembayaran(id_iuran) {
         }
     });
 }
+
+// Search Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Search function untuk tabel rekap KK
+    const searchRekap = document.getElementById('searchRekap');
+    const tableRekap = document.getElementById('tableRekap');
+    
+    if (searchRekap && tableRekap) {
+        searchRekap.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableRekap.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const namaKK = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (namaKK.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Search function untuk tabel detail
+    const searchDetail = document.getElementById('searchDetail');
+    const tableDetail = document.getElementById('tableDetail');
+    
+    if (searchDetail && tableDetail) {
+        searchDetail.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableDetail.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const periode = row.querySelector('td:first-child').textContent.toLowerCase();
+                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                
+                if (periode.includes(searchTerm) || status.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+// Clear search when page loads
+window.addEventListener('load', function() {
+    const searchRekap = document.getElementById('searchRekap');
+    const searchDetail = document.getElementById('searchDetail');
+    
+    if (searchRekap) searchRekap.value = '';
+    if (searchDetail) searchDetail.value = '';
+});
 </script>
 
 <?php include 'footer.php'; ?> 
