@@ -419,9 +419,18 @@ if ($kode_tarif) {
             ?>
               <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="box-modern-link">
                 <div class="box-modern-iuran">
-                  <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
-                  <div class="text-lg font-bold mb-1 text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                  <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                  <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center space-x-4">
+                      <div class="text-4xl <?= $warna_icon_class ?> icon-container"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
+                      <div class="text-content">
+                        <div class="text-lg font-bold text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
+                        <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                      </div>
+                    </div>
+                    <div class="text-2xl text-gray-400 arrow-icon">
+                      <i class="bx bx-chevron-right"></i>
+                    </div>
+                  </div>
                 </div>
               </a>
             <?php endforeach; ?>
@@ -1071,16 +1080,13 @@ window.addEventListener('load', function() {
   border: 2px solid #e2e8f0;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  padding: 1.5rem;
-  text-align: center;
+  padding: 1.25rem 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   position: relative;
-  min-height: 160px;
+  min-height: 80px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -1090,35 +1096,53 @@ window.addEventListener('load', function() {
   border-color: #cbd5e1;
 }
 
-/* Icon Styling dengan Background */
-.box-modern-iuran .text-5xl {
+/* Icon Container Styling */
+.icon-container {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  padding: 16px;
-  border-radius: 16px;
+  padding: 12px;
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
-  margin-bottom: 1rem;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.box-modern-iuran:hover .text-5xl {
+.box-modern-iuran:hover .icon-container {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
 }
 
-/* Text Styling */
-.box-modern-iuran .text-lg {
+/* Text Content Styling */
+.text-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.text-content .text-lg {
   font-size: 1.125rem;
   font-weight: 700;
   margin: 0;
   color: #1e293b;
   transition: color 0.3s ease;
+  line-height: 1.2;
 }
 
-.box-modern-iuran .text-gray-700 {
+.text-content .text-gray-700 {
   font-size: 0.875rem;
   color: #64748b;
   margin-top: 0.25rem;
   transition: color 0.3s ease;
+  line-height: 1.2;
+}
+
+/* Arrow Icon Styling */
+.arrow-icon {
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.box-modern-iuran:hover .arrow-icon {
+  transform: translateX(4px);
+  color: #6b7280;
 }
 
 /* Hover Effects untuk Text */
@@ -1133,41 +1157,53 @@ window.addEventListener('load', function() {
 /* Responsive Design */
 @media (max-width: 768px) {
   .box-modern-iuran {
-    padding: 1rem;
-    min-height: 140px;
+    padding: 1rem 1.25rem;
+    min-height: 70px;
   }
   
-  .box-modern-iuran .text-5xl {
-    padding: 12px;
-    font-size: 2.5rem;
+  .icon-container {
+    padding: 10px;
+    font-size: 1.5rem;
   }
   
-  .box-modern-iuran .text-lg {
+  .text-content .text-lg {
     font-size: 1rem;
   }
   
-  .box-modern-iuran .text-gray-700 {
+  .text-content .text-gray-700 {
     font-size: 0.8rem;
+  }
+  
+  .arrow-icon {
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .box-modern-iuran {
-    padding: 0.8rem;
-    min-height: 120px;
+    padding: 0.8rem 1rem;
+    min-height: 60px;
   }
   
-  .box-modern-iuran .text-5xl {
-    padding: 10px;
-    font-size: 2rem;
+  .icon-container {
+    padding: 8px;
+    font-size: 1.25rem;
   }
   
-  .box-modern-iuran .text-lg {
+  .text-content .text-lg {
     font-size: 0.9rem;
   }
   
-  .box-modern-iuran .text-gray-700 {
+  .text-content .text-gray-700 {
     font-size: 0.75rem;
+  }
+  
+  .arrow-icon {
+    font-size: 1.25rem;
+  }
+  
+  .flex.items-center.space-x-4 {
+    gap: 0.75rem;
   }
 }
 
