@@ -376,8 +376,10 @@ if ($kode_tarif) {
           <?php endforeach; ?>
         </div>
       <?php elseif(!$nikk): ?>
-        <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
+
       <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+
+        <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
         <div class="mb-4">
           <a href="iuran_hp.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
         </div>
@@ -640,6 +642,7 @@ if ($kode_tarif) {
           </table>
         </div>
       <?php endif; ?>
+      </div>
     </div>
 </body>
 <!-- Modal Bayar -->
