@@ -16,6 +16,38 @@ $nama_bulan = [
     7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
 ];
 
+// Array warna untuk box iuran
+$warna_box = [
+    'bg-blue-50 border-blue-200 hover:bg-blue-100',
+    'bg-green-50 border-green-200 hover:bg-green-100',
+    'bg-purple-50 border-purple-200 hover:bg-purple-100',
+    'bg-orange-50 border-orange-200 hover:bg-orange-100',
+    'bg-pink-50 border-pink-200 hover:bg-pink-100',
+    'bg-indigo-50 border-indigo-200 hover:bg-indigo-100',
+    'bg-teal-50 border-teal-200 hover:bg-teal-100',
+    'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
+    'bg-red-50 border-red-200 hover:bg-red-100',
+    'bg-cyan-50 border-cyan-200 hover:bg-cyan-100',
+    'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
+    'bg-violet-50 border-violet-200 hover:bg-violet-100'
+];
+
+// Array warna icon untuk box iuran
+$warna_icon = [
+    'text-blue-600',
+    'text-green-600',
+    'text-purple-600',
+    'text-orange-600',
+    'text-pink-600',
+    'text-indigo-600',
+    'text-teal-600',
+    'text-yellow-600',
+    'text-red-600',
+    'text-cyan-600',
+    'text-emerald-600',
+    'text-violet-600'
+];
+
 // Ambil data tarif terlebih dahulu
 $tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -368,9 +400,15 @@ if ($kode_tarif) {
         <!-- Pilihan Jenis Iuran: Menu Box Besar -->
         <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
-            <?php foreach($tarif as $t): ?>
-              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block bg-blue-50 border border-blue-200 rounded-lg shadow hover:shadow-lg hover:bg-blue-100 transition p-6 text-center cursor-pointer">
-                <div class="text-5xl mb-2"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
+            <?php 
+            $index = 0;
+            foreach($tarif as $t): 
+              $warna_box_class = $warna_box[$index % count($warna_box)];
+              $warna_icon_class = $warna_icon[$index % count($warna_icon)];
+              $index++;
+            ?>
+              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block <?= $warna_box_class ?> rounded-lg shadow hover:shadow-lg transition p-6 text-center cursor-pointer">
+                <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
                 <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
                 <div class="text-gray-600"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
               </a>
