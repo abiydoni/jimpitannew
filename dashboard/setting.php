@@ -66,7 +66,7 @@ if (!empty($_SESSION['swal'])) {
                 <?php foreach ($grouped as $group_id => $items): ?>
                     <fieldset class="border border-gray-300 rounded-lg p-2">
                         <legend class="text-xs font-semibold text-gray-700 px-1">🗂️ <?= $group_id ?></legend>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
                             <?php foreach ($items as $item): ?>
                                 <div class="mb-1">
                                     <label class="block text-gray-700 text-[11px] mb-0.5 font-medium">
