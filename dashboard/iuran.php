@@ -287,10 +287,17 @@ if ($kode_tarif) {
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
 // Menggunakan field icon dari database tb_tarif
 
-// Jika kode_tarif=TR001 di URL, redirect ke halaman utama iuran.php
-if ($kode_tarif === 'TR001') {
-    header('Location: iuran.php');
-    exit;
+// Jika metode=0 di URL, redirect ke halaman utama iuran.php
+if ($kode_tarif) {
+  // Ambil metode dari database
+  $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
+  $stmt->execute([$kode_tarif]);
+  $metode = $stmt->fetchColumn();
+  
+  if ($metode === '0') {
+      header('Location: iuran.php');
+      exit;
+  }
 }
 ?>
 
@@ -641,7 +648,7 @@ if ($kode_tarif === 'TR001') {
     icon: "<?= $notif['type'] ?>",
     title: "<?= $notif['type'] === 'success' ? 'Sukses' : 'Gagal' ?>",
     text: "<?= addslashes($notif['msg']) ?>",
-    timer: 3000,
+    timer: 1500,
     timerProgressBar: true,
     showConfirmButton: false,
     position: 'top-end',
@@ -732,7 +739,7 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
             icon: 'error',
             title: 'Error!',
             text: 'Gagal mengambil data histori pembayaran',
-            timer: 4000,
+            timer: 1500,
             timerProgressBar: true,
             showConfirmButton: false,
             position: 'top-end',
@@ -770,7 +777,7 @@ function hapusPembayaran(id_iuran) {
                         icon: 'success',
                         title: 'Berhasil!',
                         text: 'Pembayaran berhasil dihapus',
-                        timer: 3000,
+                        timer: 1500,
                         timerProgressBar: true,
                         showConfirmButton: false,
                         position: 'top-end',
@@ -802,7 +809,7 @@ function hapusPembayaran(id_iuran) {
                         icon: 'error',
                         title: 'Gagal!',
                         text: debugMessage,
-                        timer: 8000,
+                        timer: 1500,
                         timerProgressBar: true,
                         showConfirmButton: true,
                         position: 'center'
@@ -815,7 +822,7 @@ function hapusPembayaran(id_iuran) {
                     icon: 'error',
                     title: 'Error!',
                     text: 'Gagal menghapus pembayaran: ' + error.message,
-                    timer: 4000,
+                    timer: 1500,
                     timerProgressBar: true,
                     showConfirmButton: false,
                     position: 'top-end',
