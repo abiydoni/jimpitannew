@@ -485,7 +485,17 @@ if ($kode_tarif) {
           </div>
 
           <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
+            <!-- Search Box untuk Tabel Rekap KK -->
+            <div class="mb-4">
+              <div class="relative">
+                <input type="text" id="searchRekap" placeholder="Cari nama KK..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <i class="bx bx-search text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+            
+            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableRekap">
               <thead class="bg-gray-200">
                 <tr>
                   <th class="px-2 py-1 border">Nama KK</th>
@@ -596,7 +606,17 @@ if ($kode_tarif) {
             </span>
           </div>
           <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm">
+            <!-- Search Box untuk Tabel Detail -->
+            <div class="mb-4">
+              <div class="relative">
+                <input type="text" id="searchDetail" placeholder="Cari periode..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <i class="bx bx-search text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+            
+            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableDetail">
               <thead class="bg-gray-200">
                 <tr>
                   <th class="px-2 py-1 border">Periode</th>
@@ -950,6 +970,62 @@ function hapusPembayaran(id_iuran) {
 <script>
     const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
     document.body.style.backgroundColor = savedColor;
+</script>
+
+<!-- Search Functionality -->
+<script>
+// Search function untuk tabel rekap KK
+document.addEventListener('DOMContentLoaded', function() {
+    const searchRekap = document.getElementById('searchRekap');
+    const tableRekap = document.getElementById('tableRekap');
+    
+    if (searchRekap && tableRekap) {
+        searchRekap.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableRekap.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const namaKK = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (namaKK.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Search function untuk tabel detail
+    const searchDetail = document.getElementById('searchDetail');
+    const tableDetail = document.getElementById('tableDetail');
+    
+    if (searchDetail && tableDetail) {
+        searchDetail.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableDetail.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const periode = row.querySelector('td:first-child').textContent.toLowerCase();
+                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                
+                if (periode.includes(searchTerm) || status.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+// Clear search when page loads
+window.addEventListener('load', function() {
+    const searchRekap = document.getElementById('searchRekap');
+    const searchDetail = document.getElementById('searchDetail');
+    
+    if (searchRekap) searchRekap.value = '';
+    if (searchDetail) searchDetail.value = '';
+});
 </script>
 </body>
 </html>
