@@ -16,44 +16,44 @@ $nama_bulan = [
     7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
 ];
 
-// Array warna untuk box iuran
+// Array warna untuk box iuran (gradient 3 warna)
 $warna_box = [
-    'bg-blue-50 border-blue-200 hover:bg-blue-100',
-    'bg-green-50 border-green-200 hover:bg-green-100',
-    'bg-purple-50 border-purple-200 hover:bg-purple-100',
-    'bg-orange-50 border-orange-200 hover:bg-orange-100',
-    'bg-pink-50 border-pink-200 hover:bg-pink-100',
-    'bg-indigo-50 border-indigo-200 hover:bg-indigo-100',
-    'bg-teal-50 border-teal-200 hover:bg-teal-100',
-    'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
-    'bg-red-50 border-red-200 hover:bg-red-100',
-    'bg-cyan-50 border-cyan-200 hover:bg-cyan-100',
-    'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
-    'bg-violet-50 border-violet-200 hover:bg-violet-100',
-    'bg-amber-50 border-amber-200 hover:bg-amber-100',
-    'bg-lime-50 border-lime-200 hover:bg-lime-100',
-    'bg-rose-50 border-rose-200 hover:bg-rose-100',
-    'bg-sky-50 border-sky-200 hover:bg-sky-100'
+    'bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800',
+    'bg-gradient-to-br from-green-500 via-green-600 to-green-700 hover:from-green-600 hover:via-green-700 hover:to-green-800',
+    'bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 hover:from-purple-600 hover:via-purple-700 hover:to-purple-800',
+    'bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800',
+    'bg-gradient-to-br from-pink-500 via-pink-600 to-pink-700 hover:from-pink-600 hover:via-pink-700 hover:to-pink-800',
+    'bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 hover:from-indigo-600 hover:via-indigo-700 hover:to-indigo-800',
+    'bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 hover:from-teal-600 hover:via-teal-700 hover:to-teal-800',
+    'bg-gradient-to-br from-yellow-500 via-yellow-600 to-yellow-700 hover:from-yellow-600 hover:via-yellow-700 hover:to-yellow-800',
+    'bg-gradient-to-br from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800',
+    'bg-gradient-to-br from-cyan-500 via-cyan-600 to-cyan-700 hover:from-cyan-600 hover:via-cyan-700 hover:to-cyan-800',
+    'bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 hover:from-emerald-600 hover:via-emerald-700 hover:to-emerald-800',
+    'bg-gradient-to-br from-violet-500 via-violet-600 to-violet-700 hover:from-violet-600 hover:via-violet-700 hover:to-violet-800',
+    'bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:via-amber-700 hover:to-amber-800',
+    'bg-gradient-to-br from-lime-500 via-lime-600 to-lime-700 hover:from-lime-600 hover:via-lime-700 hover:to-lime-800',
+    'bg-gradient-to-br from-rose-500 via-rose-600 to-rose-700 hover:from-rose-600 hover:via-rose-700 hover:to-rose-800',
+    'bg-gradient-to-br from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:via-sky-700 hover:to-sky-800'
 ];
 
-// Array warna icon untuk box iuran
+// Array warna icon untuk box iuran (putih untuk kontras dengan gradient gelap)
 $warna_icon = [
-    'text-blue-600',
-    'text-green-600',
-    'text-purple-600',
-    'text-orange-600',
-    'text-pink-600',
-    'text-indigo-600',
-    'text-teal-600',
-    'text-yellow-600',
-    'text-red-600',
-    'text-cyan-600',
-    'text-emerald-600',
-    'text-violet-600',
-    'text-amber-600',
-    'text-lime-600',
-    'text-rose-600',
-    'text-sky-600'
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white',
+    'text-white'
 ];
 
 // Ambil data tarif terlebih dahulu
@@ -417,10 +417,10 @@ if ($kode_tarif) {
               $warna_icon_class = $warna_icon[$index % count($warna_icon)];
               $index++;
             ?>
-              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block <?= $warna_box_class ?> rounded-lg shadow hover:shadow-lg transition p-6 text-center cursor-pointer">
+              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="block <?= $warna_box_class ?> rounded-lg shadow hover:shadow-lg transition p-6 text-center cursor-pointer text-white">
                 <div class="text-5xl mb-2 <?= $warna_icon_class ?>"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
-                <div class="text-lg font-bold mb-1"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                <div class="text-gray-600"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                <div class="text-lg font-bold mb-1 text-white"><?= htmlspecialchars($t['nama_tarif']) ?></div>
+                <div class="text-gray-200"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
               </a>
             <?php endforeach; ?>
           </div>
