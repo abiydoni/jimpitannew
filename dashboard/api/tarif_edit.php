@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validasi input
     if (empty($kode_tarif) || empty($nama_tarif) || empty($tarif) || empty($icon)) {
-        session_start();
         $_SESSION['swal'] = ['msg' => 'Input tidak boleh kosong!', 'icon' => 'error'];
         header('Location: ../tarif.php');
         exit();
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "UPDATE tb_tarif SET nama_tarif = ?, tarif = ?, metode = ?, icon = ? WHERE kode_tarif = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$nama_tarif, $tarif, $metode, $icon, $kode_tarif]);
-    session_start();
     $_SESSION['swal'] = ['msg' => 'Data berhasil diperbarui!', 'icon' => 'success'];
     header('Location: ../tarif.php');
     exit();

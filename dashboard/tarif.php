@@ -15,11 +15,6 @@ if (isset($_GET['delete'])) {
 }
 
 include 'header.php';
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<?php
 // Ambil data dari tabel users
 $sql = "SELECT * FROM tb_tarif";
 $stmt = $pdo->query($sql);
