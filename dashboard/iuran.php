@@ -380,13 +380,16 @@ if ($kode_tarif) {
     <?php 
     $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
+    
     // Hitung total setoran tahunan untuk tahun yang dipilih
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
+        // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
         $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
         $stmt_tahunan->execute([$kode_tarif, $tahun]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } else {
+        // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
         $total_setoran_tahunan = $total_setoran_terpilih;
     }
     ?>
@@ -394,7 +397,7 @@ if ($kode_tarif) {
       <h2 class="text-lg font-semibold mb-3">
         Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Box Total Setoran Bulanan -->
         <div class="bg-white border rounded-lg p-6 shadow-sm">
           <div class="flex items-center justify-between">
@@ -412,6 +415,7 @@ if ($kode_tarif) {
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
         </div>
+
         <!-- Box Total Setoran Tahunan -->
         <div class="bg-white border rounded-lg p-6 shadow-sm">
           <div class="flex items-center justify-between">
@@ -424,73 +428,6 @@ if ($kode_tarif) {
             </div>
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
-        </div>
-        <!-- Box Jurnal -->
-        <a href="#" onclick="showJurnalTabel(); return false;" style="text-decoration:none;" class="block group">
-        <div class="bg-white border rounded-lg p-6 shadow-sm flex flex-col justify-between cursor-pointer group-hover:shadow-lg transition">
-          <div class="flex items-center justify-between mb-2">
-            <div>
-              <div class="text-2xl font-bold text-indigo-600">Jurnal <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></div>
-            </div>
-            <div class="text-4xl"><i class="bx bx-book"></i></div>
-          </div>
-        </div>
-        </a>
-      </div>
-    </div>
-
-    <!-- Tabel Jurnal untuk Iuran Terpilih -->
-    <div id="jurnalTabelContainer" style="display:none;">
-      <div class="mb-8 mt-8">
-        <h2 class="text-lg font-semibold mb-3">Jurnal <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></h2>
-        <?php
-        $stmt_jurnal = $pdo->prepare("SELECT * FROM kas_sub WHERE reff = ? ORDER BY date_trx DESC, id DESC");
-        $stmt_jurnal->execute([$kode_tarif]);
-        $jurnal_data = $stmt_jurnal->fetchAll(PDO::FETCH_ASSOC);
-        $total_debet = 0;
-        $total_kredit = 0;
-        foreach ($jurnal_data as $row) {
-          $total_debet += floatval($row['debet']);
-          $total_kredit += floatval($row['kredit']);
-        }
-        $saldo = $total_debet - $total_kredit;
-        ?>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableJurnal">
-            <thead class="bg-gray-200">
-              <tr>
-                <th class="px-2 py-1 border">Tanggal</th>
-                <th class="px-2 py-1 border">Reff</th>
-                <th class="px-2 py-1 border">Keterangan</th>
-                <th class="px-2 py-1 border text-right">Debet</th>
-                <th class="px-2 py-1 border text-right">Kredit</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if ($jurnal_data): foreach ($jurnal_data as $row): ?>
-              <tr class="hover:bg-gray-100">
-                <td class="px-2 py-1 border"><?= htmlspecialchars($row['date_trx']) ?></td>
-                <td class="px-2 py-1 border"><?= htmlspecialchars($row['reff']) ?></td>
-                <td class="px-2 py-1 border"><?= htmlspecialchars($row['desc_trx']) ?></td>
-                <td class="px-2 py-1 border text-right">Rp <?= number_format($row['debet'], 0, ',', '.') ?></td>
-                <td class="px-2 py-1 border text-right">Rp <?= number_format($row['kredit'], 0, ',', '.') ?></td>
-              </tr>
-              <?php endforeach; else: ?>
-              <tr><td colspan="5" class="text-center py-4">Tidak ada data jurnal.</td></tr>
-              <?php endif; ?>
-            </tbody>
-            <tfoot class="bg-gray-100 font-bold">
-              <tr>
-                <td colspan="3" class="text-right">Total</td>
-                <td class="px-2 py-1 border text-right text-blue-700">Rp <?= number_format($total_debet, 0, ',', '.') ?></td>
-                <td class="px-2 py-1 border text-right text-red-700">Rp <?= number_format($total_kredit, 0, ',', '.') ?></td>
-              </tr>
-              <tr>
-                <td colspan="3" class="text-right">Saldo</td>
-                <td colspan="2" class="px-2 py-1 border text-right text-green-700">Rp <?= number_format($saldo, 0, ',', '.') ?></td>
-              </tr>
-            </tfoot>
-          </table>
         </div>
       </div>
     </div>
@@ -873,6 +810,102 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
     });
 }
 
+function hapusPembayaran(id_iuran) {
+    Swal.fire({
+        title: 'Konfirmasi Hapus',
+        text: 'Yakin ingin menghapus pembayaran ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('Menghapus pembayaran dengan ID:', id_iuran);
+            
+            const formData = new FormData();
+            formData.append('id_iuran', id_iuran);
+            
+            fetch('api/hapus_pembayaran.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Pembayaran berhasil dihapus',
+                        timer: 1500,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        toast: true
+                    }).then(() => {
+                        // Tutup modal histori terlebih dahulu
+                        toggleModal('historiModal');
+                        // Refresh halaman dengan cara yang lebih aman
+                        setTimeout(() => {
+                            // Gunakan window.location.replace untuk menghindari history stack
+                            window.location.replace(window.location.href);
+                        }, 500);
+                    });
+                } else {
+                    // Tampilkan pesan error khusus untuk validasi bulan
+                    if (data.error_type === 'month_mismatch') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tidak Dapat Dihapus!',
+                            text: data.message,
+                            confirmButtonText: 'Mengerti',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Tampilkan informasi debug yang lebih detail untuk error lain
+                        let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
+                        if (data.debug) {
+                            debugMessage += '\n\nDebug Info:';
+                            debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
+                            debugMessage += '\n- Count Before: ' + data.debug.count_before;
+                            debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
+                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
+                            if (data.debug.data_to_delete) {
+                                debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
+                            }
+                        }
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: debugMessage,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: true,
+                            position: 'center'
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Gagal menghapus pembayaran: ' + error.message,
+                    timer: 1500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+            });
+        }
+    });
+}
+
 // Search Functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Search function untuk tabel rekap KK
@@ -926,12 +959,6 @@ window.addEventListener('load', function() {
     if (searchRekap) searchRekap.value = '';
     if (searchDetail) searchDetail.value = '';
 });
-
-function showJurnalTabel() {
-  var el = document.getElementById('jurnalTabelContainer');
-  if (el) el.style.display = 'block';
-  window.scrollTo({top: el.offsetTop-80, behavior: 'smooth'});
-}
 </script>
 
 <style>
