@@ -273,9 +273,9 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
             let baseCode;
 
             if (selectedValue === "IN") { // For Debit IN
-                baseCode = "100-000-"; // Base code for debit
+                baseCode = "100-001"; // Base code for debit
             } else if (selectedValue === "OUT") { // For Kredit OUT
-                baseCode = "100-000-"; // Base code for kredit
+                baseCode = "100-001"; // Base code for kredit
             } else {
                 return ''; // Return empty if no valid option is selected
             }

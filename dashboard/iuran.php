@@ -397,7 +397,7 @@ if ($kode_tarif) {
       <h2 class="text-lg font-semibold mb-3">
         Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Box Total Setoran Bulanan -->
         <div class="bg-white border rounded-lg p-6 shadow-sm">
           <div class="flex items-center justify-between">
@@ -428,6 +428,20 @@ if ($kode_tarif) {
             </div>
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
+        </div>
+
+        <!-- Box Jurnal -->
+        <div class="bg-white border rounded-lg p-6 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <div class="text-sm font-medium text-gray-600">Jurnal Keuangan</div>
+              <div class="text-2xl font-bold text-indigo-600">Akses Jurnal</div>
+              <div class="text-sm text-gray-500">Input manual ke kas_sub</div>
+            </div>
+            <div class="text-4xl"><i class="bx bx-book"></i></div>
+          </div>
+          <button onclick="openJurnalModal()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded">Input Jurnal</button>
+          <a href="keuangan.php" class="mt-2 text-indigo-600 hover:underline text-sm">Lihat Jurnal</a>
         </div>
       </div>
     </div>
@@ -704,6 +718,34 @@ if ($kode_tarif) {
   </div>
 </div>
 
+<!-- Modal Input Jurnal -->
+<div id="jurnalModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
+    <h2 class="text-lg font-bold mb-2">Input Jurnal ke kas_sub</h2>
+    <form id="formJurnal">
+      <input type="hidden" name="coa_code" value="100-002">
+      <input type="hidden" name="date_trx" id="jurnalDateTrx">
+      <input type="hidden" name="reff" value="<?= htmlspecialchars($kode_tarif) ?>">
+      <div class="mb-2">
+        <label class="block mb-1">Keterangan (desc_trx)</label>
+        <input type="text" name="desc_trx" id="jurnalDescTrx" class="w-full border rounded p-1" required>
+      </div>
+      <div class="mb-2">
+        <label class="block mb-1">Debet</label>
+        <input type="number" name="debet" id="jurnalDebet" class="w-full border rounded p-1" min="0" value="0" required>
+      </div>
+      <div class="mb-2">
+        <label class="block mb-1">Kredit</label>
+        <input type="number" name="kredit" id="jurnalKredit" class="w-full border rounded p-1" min="0" value="0" required>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('jurnalModal')">Tutup</button>
+        <button type="submit" class="bg-indigo-600 text-white px-3 py-1 rounded">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <?php if ($notif): ?>
 <script>
   Swal.fire({
@@ -810,100 +852,69 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
     });
 }
 
-function hapusPembayaran(id_iuran) {
-    Swal.fire({
-        title: 'Konfirmasi Hapus',
-        text: 'Yakin ingin menghapus pembayaran ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, Hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            console.log('Menghapus pembayaran dengan ID:', id_iuran);
-            
-            const formData = new FormData();
-            formData.append('id_iuran', id_iuran);
-            
-            fetch('api/hapus_pembayaran.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Pembayaran berhasil dihapus',
-                        timer: 1500,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                        position: 'top-end',
-                        toast: true
-                    }).then(() => {
-                        // Tutup modal histori terlebih dahulu
-                        toggleModal('historiModal');
-                        // Refresh halaman dengan cara yang lebih aman
-                        setTimeout(() => {
-                            // Gunakan window.location.replace untuk menghindari history stack
-                            window.location.replace(window.location.href);
-                        }, 500);
-                    });
-                } else {
-                    // Tampilkan pesan error khusus untuk validasi bulan
-                    if (data.error_type === 'month_mismatch') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Tidak Dapat Dihapus!',
-                            text: data.message,
-                            confirmButtonText: 'Mengerti',
-                            confirmButtonColor: '#3085d6'
-                        });
-                    } else {
-                        // Tampilkan informasi debug yang lebih detail untuk error lain
-                        let debugMessage = 'Gagal menghapus pembayaran: ' + data.message;
-                        if (data.debug) {
-                            debugMessage += '\n\nDebug Info:';
-                            debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
-                            debugMessage += '\n- Count Before: ' + data.debug.count_before;
-                            debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
-                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
-                            if (data.debug.data_to_delete) {
-                                debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
-                            }
-                        }
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: debugMessage,
-                            timer: 1500,
-                            timerProgressBar: true,
-                            showConfirmButton: true,
-                            position: 'center'
-                        });
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Gagal menghapus pembayaran: ' + error.message,
-                    timer: 1500,
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    toast: true
-                });
-            });
-        }
+function openJurnalModal() {
+  // Set tanggal otomatis hari ini
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  document.getElementById('jurnalDateTrx').value = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('jurnalDescTrx').value = '';
+  document.getElementById('jurnalDebet').value = 0;
+  document.getElementById('jurnalKredit').value = 0;
+  toggleModal('jurnalModal');
+}
+
+// Submit form jurnal
+const formJurnal = document.getElementById('formJurnal');
+if (formJurnal) {
+  formJurnal.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(formJurnal);
+    fetch('dashboard/api/add_jurnal.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sukses',
+          text: data.message,
+          timer: 1500,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          position: 'top-end',
+          toast: true
+        });
+        toggleModal('jurnalModal');
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal',
+          text: data.message,
+          timer: 1500,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          position: 'top-end',
+          toast: true
+        });
+      }
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Gagal menyimpan jurnal: ' + error.message,
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        position: 'top-end',
+        toast: true
+      });
     });
+  });
 }
 
 // Search Functionality
