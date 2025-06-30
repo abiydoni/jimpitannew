@@ -440,8 +440,10 @@ if ($kode_tarif) {
             </div>
             <div class="text-4xl"><i class="bx bx-book"></i></div>
           </div>
-          <button onclick="openJurnalModal()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded">Input Jurnal</button>
-          <a href="keuangan.php" class="mt-2 text-indigo-600 hover:underline text-sm">Lihat Jurnal</a>
+          <div class="mt-4 text-sm">
+            URL: <a href="jurnal.php?reff=<?= urlencode($kode_tarif) ?>" class="text-blue-700 underline" target="_blank">jurnal.php?reff=<?= urlencode($kode_tarif) ?></a>
+            <br><span class="text-gray-400">(Salin atau klik untuk buka jurnal khusus iuran ini)</span>
+          </div>
         </div>
       </div>
     </div>
@@ -718,34 +720,6 @@ if ($kode_tarif) {
   </div>
 </div>
 
-<!-- Modal Input Jurnal -->
-<div id="jurnalModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
-    <h2 class="text-lg font-bold mb-2">Input Jurnal ke kas_sub</h2>
-    <form id="formJurnal">
-      <input type="hidden" name="coa_code" value="100-002">
-      <input type="hidden" name="date_trx" id="jurnalDateTrx">
-      <input type="hidden" name="reff" value="<?= htmlspecialchars($kode_tarif) ?>">
-      <div class="mb-2">
-        <label class="block mb-1">Keterangan (desc_trx)</label>
-        <input type="text" name="desc_trx" id="jurnalDescTrx" class="w-full border rounded p-1" required>
-      </div>
-      <div class="mb-2">
-        <label class="block mb-1">Debet</label>
-        <input type="number" name="debet" id="jurnalDebet" class="w-full border rounded p-1" min="0" value="0" required>
-      </div>
-      <div class="mb-2">
-        <label class="block mb-1">Kredit</label>
-        <input type="number" name="kredit" id="jurnalKredit" class="w-full border rounded p-1" min="0" value="0" required>
-      </div>
-      <div class="flex justify-end">
-        <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded mr-2" onclick="toggleModal('jurnalModal')">Tutup</button>
-        <button type="submit" class="bg-indigo-600 text-white px-3 py-1 rounded">Simpan</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <?php if ($notif): ?>
 <script>
   Swal.fire({
@@ -850,71 +824,6 @@ function openHistoriModal(nikk, kode_tarif, periode, nama_tarif) {
             toast: true
         });
     });
-}
-
-function openJurnalModal() {
-  // Set tanggal otomatis hari ini
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  document.getElementById('jurnalDateTrx').value = `${yyyy}-${mm}-${dd}`;
-  document.getElementById('jurnalDescTrx').value = '';
-  document.getElementById('jurnalDebet').value = 0;
-  document.getElementById('jurnalKredit').value = 0;
-  toggleModal('jurnalModal');
-}
-
-// Submit form jurnal
-const formJurnal = document.getElementById('formJurnal');
-if (formJurnal) {
-  formJurnal.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(formJurnal);
-    fetch('dashboard/api/add_jurnal.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Sukses',
-          text: data.message,
-          timer: 1500,
-          timerProgressBar: true,
-          showConfirmButton: false,
-          position: 'top-end',
-          toast: true
-        });
-        toggleModal('jurnalModal');
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal',
-          text: data.message,
-          timer: 1500,
-          timerProgressBar: true,
-          showConfirmButton: false,
-          position: 'top-end',
-          toast: true
-        });
-      }
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: 'Gagal menyimpan jurnal: ' + error.message,
-        timer: 1500,
-        timerProgressBar: true,
-        showConfirmButton: false,
-        position: 'top-end',
-        toast: true
-      });
-    });
-  });
 }
 
 // Search Functionality
