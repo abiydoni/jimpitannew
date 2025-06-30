@@ -380,16 +380,13 @@ if ($kode_tarif) {
     <?php 
     $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
-    
     // Hitung total setoran tahunan untuk tahun yang dipilih
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
-        // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
         $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
         $stmt_tahunan->execute([$kode_tarif, $tahun]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } else {
-        // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
         $total_setoran_tahunan = $total_setoran_terpilih;
     }
     ?>
@@ -415,7 +412,6 @@ if ($kode_tarif) {
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
         </div>
-
         <!-- Box Total Setoran Tahunan -->
         <div class="bg-white border rounded-lg p-6 shadow-sm">
           <div class="flex items-center justify-between">
@@ -429,7 +425,6 @@ if ($kode_tarif) {
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
           </div>
         </div>
-
         <!-- Box Jurnal -->
         <a href="#" onclick="showJurnalTabel(); return false;" style="text-decoration:none;" class="block group">
         <div class="bg-white border rounded-lg p-6 shadow-sm flex flex-col justify-between cursor-pointer group-hover:shadow-lg transition">
