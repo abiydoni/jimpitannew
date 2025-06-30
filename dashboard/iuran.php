@@ -444,6 +444,63 @@ if ($kode_tarif) {
       </div>
     </div>
 
+    <!-- Tabel Jurnal untuk Iuran Terpilih -->
+    <?php if ($kode_tarif && !$nikk): ?>
+    <div class="mb-8 mt-8">
+      <h2 class="text-lg font-semibold mb-3">Jurnal <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></h2>
+      <?php
+      // Ambil data jurnal dari kas_sub untuk kode_tarif ini
+      $stmt_jurnal = $pdo->prepare("SELECT * FROM kas_sub WHERE reff = ? ORDER BY date_trx DESC, id DESC");
+      $stmt_jurnal->execute([$kode_tarif]);
+      $jurnal_data = $stmt_jurnal->fetchAll(PDO::FETCH_ASSOC);
+      $total_debet = 0;
+      $total_kredit = 0;
+      foreach ($jurnal_data as $row) {
+        $total_debet += floatval($row['debet']);
+        $total_kredit += floatval($row['kredit']);
+      }
+      $saldo = $total_debet - $total_kredit;
+      ?>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableJurnal">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="px-2 py-1 border">Tanggal</th>
+              <th class="px-2 py-1 border">Reff</th>
+              <th class="px-2 py-1 border">Keterangan</th>
+              <th class="px-2 py-1 border text-right">Debet</th>
+              <th class="px-2 py-1 border text-right">Kredit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if ($jurnal_data): foreach ($jurnal_data as $row): ?>
+            <tr class="hover:bg-gray-100">
+              <td class="px-2 py-1 border"><?= htmlspecialchars($row['date_trx']) ?></td>
+              <td class="px-2 py-1 border"><?= htmlspecialchars($row['reff']) ?></td>
+              <td class="px-2 py-1 border"><?= htmlspecialchars($row['desc_trx']) ?></td>
+              <td class="px-2 py-1 border text-right">Rp <?= number_format($row['debet'], 0, ',', '.') ?></td>
+              <td class="px-2 py-1 border text-right">Rp <?= number_format($row['kredit'], 0, ',', '.') ?></td>
+            </tr>
+            <?php endforeach; else: ?>
+            <tr><td colspan="5" class="text-center py-4">Tidak ada data jurnal.</td></tr>
+            <?php endif; ?>
+          </tbody>
+          <tfoot class="bg-gray-100 font-bold">
+            <tr>
+              <td colspan="3" class="text-right">Total</td>
+              <td class="px-2 py-1 border text-right text-blue-700">Rp <?= number_format($total_debet, 0, ',', '.') ?></td>
+              <td class="px-2 py-1 border text-right text-red-700">Rp <?= number_format($total_kredit, 0, ',', '.') ?></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="text-right">Saldo</td>
+              <td colspan="2" class="px-2 py-1 border text-right text-green-700">Rp <?= number_format($saldo, 0, ',', '.') ?></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <?php endif; ?>
+
     <div class="overflow-x-auto">
       <!-- Search Box untuk Tabel Rekap KK -->
       <div class="mb-4">
