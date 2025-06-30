@@ -431,20 +431,16 @@ if ($kode_tarif) {
         </div>
 
         <!-- Box Jurnal -->
-        <div class="bg-white border rounded-lg p-6 shadow-sm flex flex-col justify-between">
+        <a href="jurnal.php?reff=<?= urlencode($kode_tarif) ?>" style="text-decoration:none;" class="block group">
+        <div class="bg-white border rounded-lg p-6 shadow-sm flex flex-col justify-between cursor-pointer group-hover:shadow-lg transition">
           <div class="flex items-center justify-between mb-2">
             <div>
-              <div class="text-sm font-medium text-gray-600">Jurnal Keuangan</div>
-              <div class="text-2xl font-bold text-indigo-600">Akses Jurnal</div>
-              <div class="text-sm text-gray-500">Input manual ke kas_sub</div>
+              <div class="text-2xl font-bold text-indigo-600">Jurnal <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?></div>
             </div>
             <div class="text-4xl"><i class="bx bx-book"></i></div>
           </div>
-          <div class="mt-4 text-sm">
-            URL: <a href="jurnal.php?reff=<?= urlencode($kode_tarif) ?>" class="text-blue-700 underline" target="_blank">jurnal.php?reff=<?= urlencode($kode_tarif) ?></a>
-            <br><span class="text-gray-400">(Salin atau klik untuk buka jurnal khusus iuran ini)</span>
-          </div>
         </div>
+        </a>
       </div>
     </div>
 
