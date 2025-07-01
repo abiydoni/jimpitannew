@@ -1327,3 +1327,11 @@ window.addEventListener('load', function() {
 .box-modern-iuran:nth-child(5) { animation-delay: 0.5s; }
 .box-modern-iuran:nth-child(6) { animation-delay: 0.6s; }
 </style>
+
+<style>
+#modalPembayarBulanan .bg-white {
+  background-color: rgba(255,255,255,0.85) !important;
+  /* Atur transparansi sesuai kebutuhan */
+  backdrop-filter: blur(2px);
+}
+</style>
