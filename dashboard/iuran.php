@@ -1034,7 +1034,7 @@ function showPembayarBulanan() {
             tr.innerHTML = `<td class='px-2 py-1 border'>${idx+1}</td>`+
                 `<td class='px-2 py-1 border'>${row.nikk}</td>`+
                 `<td class='px-2 py-1 border'>${namaKK(row.nikk)}</td>`+
-                `<td class='px-2 py-1 border text-right'>${number_format(row.jml_bayar,0,',','.')}</td>`;
+                `<td class='px-2 py-1 border text-right'>${parseInt(row.jml_bayar).toLocaleString('id-ID')}</td>`;
             tbody.appendChild(tr);
         });
     }
