@@ -406,8 +406,8 @@ if ($kode_tarif) {
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
         // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
-        $stmt_tahunan->execute([$kode_tarif, $tahun]);
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ?AND MONTH(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        $stmt_tahunan->execute([$kode_tarif, $tahun, $bulan_filter]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_tahunan) {
         // Untuk tahunan, hanya tahun yang dipilih
