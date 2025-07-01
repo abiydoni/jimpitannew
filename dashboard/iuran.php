@@ -1013,7 +1013,7 @@ function showPembayarBulanan() {
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_tahunan) {
                 $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND MONTH(tgl_bayar)=? AND YEAR(tgl_bayar)=? AND bulan = 'Tahunan'");
-                $stmt->execute([$kode_tarif, $tahun]);
+                $stmt->execute([$kode_tarif, $bulan_filter, $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_seumurhidup) {
                 $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
