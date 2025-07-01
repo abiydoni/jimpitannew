@@ -295,8 +295,8 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan bukan "Tahunan"
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan bukan "Tahunan" atau "Selamanya"
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
     } else {
         // Tarif tahunan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan = "Tahunan"
@@ -1008,15 +1008,15 @@ function showPembayarBulanan() {
         $listPembayar = [];
         if ($kode_tarif) {
             if ($is_bulanan) {
-                $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan=? AND tahun=?");
-                $stmt->execute([$kode_tarif, $nama_bulan[$bulan_filter], $tahun]);
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND MONTH(tgl_bayar)=? AND YEAR(tgl_bayar)=? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
+                $stmt->execute([$kode_tarif, $bulan_filter, $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_tahunan) {
-                $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Tahunan' AND tahun=?");
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Tahunan' AND tahun=?");
                 $stmt->execute([$kode_tarif, $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_seumurhidup) {
-                $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
                 $stmt->execute([$kode_tarif, $tahun, $bulan_filter]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
