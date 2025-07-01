@@ -427,7 +427,7 @@ if ($kode_tarif) {
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Box Total Setoran Bulanan -->
-        <div class="bg-white border rounded-lg p-6 shadow-sm">
+        <div class="bg-white border rounded-lg p-6 shadow-sm cursor-pointer" onclick="showPembayarBulanan()">
           <div class="flex items-center justify-between">
             <div>
               <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
@@ -721,6 +721,31 @@ if ($kode_tarif) {
   </div>
 </div>
 
+<!-- Modal Daftar Pembayar Bulanan -->
+<div id="modalPembayarBulanan" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+    <h2 class="text-lg font-bold mb-2">Daftar KK Pembayar Bulan <span id="modalPembayarBulanText"></span></h2>
+    <div class="mb-4">
+      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tablePembayarBulanan">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="px-2 py-1 border">No</th>
+            <th class="px-2 py-1 border">NIKK</th>
+            <th class="px-2 py-1 border">Nama KK</th>
+            <th class="px-2 py-1 border text-right">Jumlah Bayar</th>
+            <th class="px-2 py-1 border">Tanggal Bayar</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyPembayarBulanan">
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-end mt-4">
+      <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded" onclick="toggleModal('modalPembayarBulanan')">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <?php if ($notif): ?>
 <script>
   Swal.fire({
@@ -976,6 +1001,48 @@ window.addEventListener('load', function() {
     if (searchRekap) searchRekap.value = '';
     if (searchDetail) searchDetail.value = '';
 });
+
+function showPembayarBulanan() {
+    // Ambil data dari PHP (tanpa file baru, gunakan data yang sudah diambil di halaman)
+    const data = <?php
+        // Ambil data pembayaran bulanan sesuai filter
+        $listPembayar = [];
+        if ($kode_tarif) {
+            if ($is_bulanan) {
+                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan=? AND i.tahun=?");
+                $stmt->execute([$kode_tarif, $nama_bulan[$bulan_filter], $tahun]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else if ($is_tahunan) {
+                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Tahunan' AND i.tahun=?");
+                $stmt->execute([$kode_tarif, $tahun]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else if ($is_seumurhidup) {
+                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Selamanya' AND i.tahun=? AND MONTH(i.tgl_bayar)=?");
+                $stmt->execute([$kode_tarif, $tahun, $bulan_filter]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+        }
+        echo json_encode($listPembayar);
+    ?>;
+    // Isi tabel
+    const tbody = document.getElementById('tbodyPembayarBulanan');
+    tbody.innerHTML = '';
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada pembayaran</td></tr>';
+    } else {
+        data.forEach((row, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td class='px-2 py-1 border'>${idx+1}</td>`+
+                `<td class='px-2 py-1 border'>${row.nikk}</td>`+
+                `<td class='px-2 py-1 border'>${row.nama}</td>`+
+                `<td class='px-2 py-1 border text-right'>${number_format(row.jml_bayar,0,',','.')}</td>`+
+                `<td class='px-2 py-1 border'>${row.tgl_bayar}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+    document.getElementById('modalPembayarBulanText').textContent = `<?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>`;
+    toggleModal('modalPembayarBulanan');
+}
 </script>
 
 <style>
