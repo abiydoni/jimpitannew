@@ -406,8 +406,8 @@ if ($kode_tarif) {
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
         // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND MONTH(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
-        $stmt_tahunan->execute([$kode_tarif, $tahun, $bulan_filter]);
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        $stmt_tahunan->execute([$kode_tarif, $tahun]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_tahunan) {
         // Untuk tahunan, hanya tahun yang dipilih
@@ -1013,7 +1013,7 @@ function showPembayarBulanan() {
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_tahunan) {
                 $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND MONTH(tgl_bayar)=? AND YEAR(tgl_bayar)=? AND bulan = 'Tahunan'");
-                $stmt->execute([$kode_tarif, $bulan_filter, $tahun]);
+                $stmt->execute([$kode_tarif, $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_seumurhidup) {
                 $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
@@ -1049,18 +1049,6 @@ function showPembayarBulanan() {
     }
     document.getElementById('modalPembayarBulanText').textContent = `<?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>`;
     toggleModal('modalPembayarBulanan');
-    // Hitung total pembayaran dari groupedArr
-    let totalBayar = 0;
-    groupedArr.forEach(row => { totalBayar += parseInt(row.jml_bayar); });
-    // Tampilkan total di bawah tabel
-    let totalDiv = document.getElementById('totalPembayaranModal');
-    if (!totalDiv) {
-        totalDiv = document.createElement('div');
-        totalDiv.id = 'totalPembayaranModal';
-        totalDiv.className = 'mt-2 text-right font-bold';
-        tbody.parentElement.parentElement.appendChild(totalDiv);
-    }
-    totalDiv.innerHTML = `Total Pembayaran: Rp ${totalBayar.toLocaleString('id-ID')}`;
 }
 
 function namaKK(nikk) {
