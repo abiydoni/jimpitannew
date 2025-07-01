@@ -311,6 +311,12 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
 $total_setoran_per_iuran = [];
 if ($kode_tarif) {
     $total_setoran_per_iuran[$kode_tarif] = hitungTotalSetoran($pdo, $kode_tarif, $bulan_filter, $tahun);
+    // Override khusus untuk seumur hidup agar identik dengan iuran.php
+    if ($is_seumurhidup) {
+        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
+        $stmt_bulan->execute([$kode_tarif, $tahun, $bulan_filter]);
+        $total_setoran_per_iuran[$kode_tarif] = intval($stmt_bulan->fetchColumn());
+    }
 }
 
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
