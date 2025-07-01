@@ -1337,6 +1337,6 @@ window.addEventListener('load', function() {
 table.min-w-full.bg-white,
 table.min-w-full.bg-white tr {
   background-color: rgba(255,255,255,0.6) !important;
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(20px);
 }
 </style>
