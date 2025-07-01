@@ -1005,7 +1005,6 @@ window.addEventListener('load', function() {
 function showPembayarBulanan() {
     // Ambil data dari PHP (tanpa file baru, gunakan data yang sudah diambil di halaman)
     const data = <?php
-        // Ambil data pembayaran bulanan sesuai filter
         $listPembayar = [];
         if ($kode_tarif) {
             if ($is_bulanan) {
@@ -1022,6 +1021,9 @@ function showPembayarBulanan() {
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
+        echo '<pre>';
+        print_r($listPembayar);
+        echo '</pre>';
         echo json_encode($listPembayar);
     ?>;
     // Isi tabel
