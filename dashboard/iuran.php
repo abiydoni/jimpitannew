@@ -1049,6 +1049,18 @@ function showPembayarBulanan() {
     }
     document.getElementById('modalPembayarBulanText').textContent = `<?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>`;
     toggleModal('modalPembayarBulanan');
+    // Hitung total pembayaran dari groupedArr
+    let totalBayar = 0;
+    groupedArr.forEach(row => { totalBayar += parseInt(row.jml_bayar); });
+    // Tampilkan total di bawah tabel
+    let totalDiv = document.getElementById('totalPembayaranModal');
+    if (!totalDiv) {
+        totalDiv = document.createElement('div');
+        totalDiv.id = 'totalPembayaranModal';
+        totalDiv.className = 'mt-2 text-right font-bold';
+        tbody.parentElement.parentElement.appendChild(totalDiv);
+    }
+    totalDiv.innerHTML = `Total Pembayaran: Rp ${totalBayar.toLocaleString('id-ID')}`;
 }
 
 function namaKK(nikk) {
