@@ -1070,8 +1070,7 @@ function namaKK(nikk) {
 }
 
 (function() {
-  var btnPrint = document.getElementById('btnPrint');
-  if (btnPrint) {
+  document.querySelectorAll('#btnPrint').forEach(function(btnPrint) {
     btnPrint.addEventListener('click', function(e) {
       e.preventDefault();
       // Tentukan tabel mana yang sedang tampil
@@ -1115,7 +1114,7 @@ function namaKK(nikk) {
       win.print();
       setTimeout(() => { win.close(); }, 500);
     });
-  }
+  });
 })();
 </script>
 
