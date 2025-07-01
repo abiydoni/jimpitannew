@@ -522,7 +522,7 @@ if ($kode_tarif) {
                   <th class="px-2 py-1 border">Status</th>
                 </tr>
               </thead>
-              <tbody class="transparan">
+              <tbody>
                 <?php
                 $periode_list = $is_bulanan ? [
                   'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
@@ -1333,11 +1333,10 @@ window.addEventListener('load', function() {
   background-color: rgba(255,255,255,0.85) !important;
   backdrop-filter: blur(2px);
 }
-.transparan {
+/* Tabel iuran rekap dan detail transparan lebih kuat */
+table.min-w-full.bg-white,
+table.min-w-full.bg-white tr {
   background-color: rgba(255,255,255,0.6) !important;
   backdrop-filter: blur(20px);
-}
-.transparan td {
-  background-color: transparent !important;
 }
 </style>
