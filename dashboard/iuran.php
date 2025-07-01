@@ -528,8 +528,8 @@ if ($kode_tarif) {
               }
               // Ambil total bayar langsung dari database untuk memastikan akurasi
               if ($is_bulanan) {
-                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
-                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
+                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun, $periode]);
               } else if ($is_tahunan) {
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
                   $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
@@ -626,7 +626,7 @@ if ($kode_tarif) {
               }
               if ($is_bulanan) {
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
-                  $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+                  $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
               } else if ($is_tahunan) {
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
                   $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
