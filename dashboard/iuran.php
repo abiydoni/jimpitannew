@@ -1046,6 +1046,12 @@ function showPembayarBulanan() {
                 `<td class='px-2 py-1 border text-right'>${parseInt(row.jml_bayar).toLocaleString('id-ID')}</td>`;
             tbody.appendChild(tr);
         });
+        // Tambahkan baris total pembayaran di akhir tabel
+        let totalBayar = groupedArr.reduce((sum, row) => sum + parseInt(row.jml_bayar), 0);
+        const trTotal = document.createElement('tr');
+        trTotal.innerHTML = `<td colspan='3' class='px-2 py-1 border text-right font-bold'>Total Pembayaran</td>`+
+            `<td class='px-2 py-1 border text-right font-bold'>${totalBayar.toLocaleString('id-ID')}</td>`;
+        tbody.appendChild(trTotal);
     }
     document.getElementById('modalPembayarBulanText').textContent = `<?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>`;
     toggleModal('modalPembayarBulanan');
