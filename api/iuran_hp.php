@@ -46,6 +46,11 @@ foreach ($tarif as $t) {
     $tarif_map[$t['kode_tarif']] = $t;
 }
 
+// Setelah $tarif_map dan sebelum digunakan di tampilan
+$is_bulanan = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '1';
+$is_tahunan = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '2';
+$is_seumurhidup = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '3';
+
 // Proses pembayaran
 $notif = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
@@ -431,7 +436,6 @@ if ($kode_tarif) {
 
           <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
           <?php 
-          $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
           $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
           
           // Hitung total setoran tahunan untuk tahun yang dipilih
@@ -510,7 +514,6 @@ if ($kode_tarif) {
               </thead>
               <tbody>
                 <?php
-                $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
                 $periode_list = $is_bulanan ? [
                   'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
                 ] : [$tahun];
@@ -632,7 +635,6 @@ if ($kode_tarif) {
               </thead>
               <tbody>
                 <?php
-                $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
                 $periode_list = $is_bulanan ? [
                   'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
                 ] : [$tahun];
