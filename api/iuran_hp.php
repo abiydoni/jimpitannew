@@ -447,13 +447,17 @@ if ($kode_tarif) {
           // Hitung total setoran tahunan untuk tahun yang dipilih
           $total_setoran_tahunan = 0;
           if ($is_bulanan) {
-              // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
               $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
               $stmt_tahunan->execute([$kode_tarif, $tahun]);
               $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
-          } else {
-              // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
-              $total_setoran_tahunan = $total_setoran_terpilih;
+          } elseif ($is_tahunan) {
+              $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+              $stmt_tahunan->execute([$kode_tarif, $tahun]);
+              $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
+          } elseif ($is_seumurhidup) {
+              $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
+              $stmt_seumur->execute([$kode_tarif]);
+              $total_setoran_tahunan = intval($stmt_seumur->fetchColumn());
           }
           ?>
           <div class="mb-6">
