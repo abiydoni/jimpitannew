@@ -1331,7 +1331,13 @@ window.addEventListener('load', function() {
 <style>
 #modalPembayarBulanan .bg-white {
   background-color: rgba(255,255,255,0.85) !important;
-  /* Atur transparansi sesuai kebutuhan */
   backdrop-filter: blur(2px);
+}
+/* Tabel iuran rekap dan detail transparan */
+table.min-w-full.bg-white,
+table.min-w-full.bg-white th,
+table.min-w-full.bg-white td {
+  background-color: rgba(255,255,255,0.85) !important;
+  backdrop-filter: blur(1px);
 }
 </style>
