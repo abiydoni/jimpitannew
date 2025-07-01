@@ -352,11 +352,6 @@ if ($kode_tarif) {
       </select>
     </form>
   </div>
-  <div class="mb-4 flex items-center gap-2">
-    <button id="btnPrint" title="Print" class="bg-blue-600 hover:bg-blue-700 text-white rounded p-2 shadow" style="font-size: 1.5rem;">
-      <i class="bx bx-printer"></i>
-    </button>
-  </div>
 
   <?php if(!$kode_tarif): ?>
     <!-- Pilihan Jenis Iuran: Menu Box Besar -->
