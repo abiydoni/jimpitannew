@@ -389,7 +389,6 @@ if ($kode_tarif) {
     $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
     $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
-    
     // Hitung total setoran tahunan untuk tahun yang dipilih
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
@@ -398,8 +397,10 @@ if ($kode_tarif) {
         $stmt_tahunan->execute([$kode_tarif, $tahun]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_tahunan) {
-        // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
-        $total_setoran_tahunan = $total_setoran_terpilih;
+        // Untuk tahunan, hanya tahun yang dipilih
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+        $stmt_tahunan->execute([$kode_tarif, $tahun]);
+        $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_seumurhidup) {
         // Untuk seumur hidup, total setoran = seluruh pembayaran sepanjang masa
         $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
@@ -421,8 +422,10 @@ if ($kode_tarif) {
               <div class="text-sm text-gray-500">
                 <?php if($is_bulanan): ?>
                   Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
-                <?php else: ?>
+                <?php elseif($is_tahunan): ?>
                   Pembayaran tahunan <?= $tahun ?>
+                <?php elseif($is_seumurhidup): ?>
+                  Pembayaran seumur hidup
                 <?php endif; ?>
               </div>
             </div>
@@ -430,14 +433,24 @@ if ($kode_tarif) {
           </div>
         </div>
 
-        <!-- Box Total Setoran Tahunan -->
+        <!-- Box Total Setoran Tahunan / Seumur Hidup -->
         <div class="bg-white border rounded-lg p-6 shadow-sm">
           <div class="flex items-center justify-between">
             <div>
-              <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
+              <div class="text-sm font-medium text-gray-600">
+                <?php if($is_seumurhidup): ?>
+                  Total Setoran
+                <?php else: ?>
+                  Total Setoran Tahunan
+                <?php endif; ?>
+              </div>
               <div class="text-2xl font-bold text-green-600"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
               <div class="text-sm text-gray-500">
-                Pembayaran tahun <?= $tahun ?>
+                <?php if($is_seumurhidup): ?>
+                  Semua pembayaran seumur hidup
+                <?php else: ?>
+                  Pembayaran tahun <?= $tahun ?>
+                <?php endif; ?>
               </div>
             </div>
             <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
