@@ -76,11 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
 // Buat array bulanan dan tahunan berdasarkan metode
 $bulanan = [];
 $tahunan = [];
+$seumurhidup = [];
 foreach ($tarif as $t) {
     if ($t['metode'] == '1') {
         $bulanan[] = $t['kode_tarif'];
     } elseif ($t['metode'] == '2') {
         $tahunan[] = $t['kode_tarif'];
+    } elseif ($t['metode'] == '3') {
+        $seumurhidup[] = $t['kode_tarif'];
     }
 }
 
@@ -220,7 +223,7 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     echo "<p>Tahun yang dipilih: $tahun</p>";
     if ($kode_tarif) {
         echo "<p>Kode tarif: $kode_tarif</p>";
-        echo "<p>Metode tarif: " . $tarif_map[$kode_tarif]['metode'] . " (" . ($tarif_map[$kode_tarif]['metode'] == '1' ? 'Bulanan' : 'Tahunan') . ")</p>";
+        echo "<p>Metode tarif: " . $tarif_map[$kode_tarif]['metode'] . " (" . ($tarif_map[$kode_tarif]['metode'] == '1' ? 'Bulanan' : ($tarif_map[$kode_tarif]['metode'] == '2' ? 'Tahunan' : 'Seumur Hidup')) . ")</p>";
     }
     
     // Periksa struktur tabel
@@ -359,7 +362,11 @@ if ($kode_tarif) {
                 <div class="text-4xl <?= $warna_icon_class ?> icon-container"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
                 <div class="text-content">
                   <div class="text-lg font-bold text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                  <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                  <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?php
+                    if($t['metode'] == '1') echo '/bulan';
+                    elseif($t['metode'] == '2') echo '/tahun';
+                    elseif($t['metode'] == '3') echo '/seumur hidup';
+                  ?></div>
                 </div>
               </div>
               <div class="text-2xl text-gray-400 arrow-icon">
@@ -379,6 +386,8 @@ if ($kode_tarif) {
     <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
     <?php 
     $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
+    $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
+    $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
     
     // Hitung total setoran tahunan untuk tahun yang dipilih
@@ -388,9 +397,14 @@ if ($kode_tarif) {
         $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
         $stmt_tahunan->execute([$kode_tarif, $tahun]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
-    } else {
+    } elseif ($is_tahunan) {
         // Jika tarif tahunan, total setoran tahunan sama dengan total setoran terpilih
         $total_setoran_tahunan = $total_setoran_terpilih;
+    } elseif ($is_seumurhidup) {
+        // Untuk seumur hidup, total setoran = seluruh pembayaran sepanjang masa
+        $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
+        $stmt_seumur->execute([$kode_tarif]);
+        $total_setoran_tahunan = intval($stmt_seumur->fetchColumn());
     }
     ?>
     <div class="mb-6">
@@ -457,60 +471,49 @@ if ($kode_tarif) {
         <tbody>
           <?php
           $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
+          $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
+          $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
           $periode_list = $is_bulanan ? [
             'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
-          ] : [$tahun];
+          ] : ($is_tahunan ? [$tahun] : ['Seumur Hidup']);
           foreach($kk as $w):
             $total_tagihan = 0;
             $total_bayar = 0;
-            foreach($periode_list as $periode) {
-              $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+            if($is_seumurhidup) {
               $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-              $total_tagihan += $tarif_nom;
-              
-              // Debug: Tampilkan perhitungan untuk setiap periode
-              if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
-                echo "Perhitungan: KK={$w['nikk']}, Periode=$periode, PeriodeKey=$periode_key, Tarif=$tarif_nom<br>";
-                echo "Tahun yang dipilih: $tahun<br>";
-                echo "Pembayaran map check: " . (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) ? 'ADA' : 'TIDAK ADA') . "<br>";
+              $total_tagihan = $tarif_nom;
+              // Total bayar: seluruh pembayaran sepanjang masa
+              $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
+              $stmt_total->execute([$w['nikk'], $kode_tarif]);
+              $total_bayar = intval($stmt_total->fetchColumn());
+              $sisa = $tarif_nom - $total_bayar;
+              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+            } else {
+              foreach($periode_list as $periode) {
+                $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+                $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                $total_tagihan += $tarif_nom;
                 if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                  echo "Jumlah pembayaran: " . count($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) . "<br>";
                   foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                    echo "  - jml_bayar: {$p['jml_bayar']}, tahun: {$p['tahun']}<br>";
+                    $total_bayar += intval($p['jml_bayar']);
                   }
                 }
-                echo "</div>";
               }
-              
-              if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                  $total_bayar += intval($p['jml_bayar']);
-                }
+              // Ambil total bayar langsung dari database untuk memastikan akurasi
+              if ($is_bulanan) {
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
+                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+              } else if ($is_tahunan) {
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
               }
+              $total_bayar_db = intval($stmt_total->fetchColumn());
+              if ($total_bayar_db > 0) {
+                  $total_bayar = $total_bayar_db;
+              }
+              $sisa = $total_tagihan - $total_bayar;
+              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
             }
-            
-            // Ambil total bayar langsung dari database untuk memastikan akurasi
-            if ($is_bulanan) {
-                // Untuk tarif bulanan, ambil total bayar untuk semua bulan dalam tahun tersebut
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
-                $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
-            } else {
-                // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-                $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
-            }
-            $total_bayar_db = intval($stmt_total->fetchColumn());
-            
-            // Gunakan total dari database jika lebih besar dari 0
-            if ($total_bayar_db > 0) {
-                $total_bayar = $total_bayar_db;
-            }
-            
-            $sisa = $total_tagihan - $total_bayar;
-            $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            
-            // Debug warna status
             $warna_status = '';
             if ($status == 'Lunas') {
                 $warna_status = 'text-green-600';
@@ -518,13 +521,6 @@ if ($kode_tarif) {
                 $warna_status = 'text-orange-600';
             } else {
                 $warna_status = 'text-red-600';
-            }
-            
-            // Debug: Tampilkan informasi warna jika diperlukan
-            if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
-                echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
-                echo "</div>";
             }
           ?>
           <tr class="hover:bg-gray-100">
@@ -578,40 +574,42 @@ if ($kode_tarif) {
         <tbody>
           <?php
           $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
+          $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
+          $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
           $periode_list = $is_bulanan ? [
             'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
-          ] : [$tahun];
+          ] : ($is_tahunan ? [$tahun] : ['Seumur Hidup']);
           foreach($periode_list as $periode) {
             $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
             $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-            $total_bayar = 0;
-            if (isset($pembayaran_map[$nikk][$kode_tarif][$periode_key])) {
-              foreach ($pembayaran_map[$nikk][$kode_tarif][$periode_key] as $p) {
-                $total_bayar += intval($p['jml_bayar']);
-              }
-            }
-            
-            // Ambil total bayar langsung dari database untuk memastikan akurasi
-            if ($is_bulanan) {
-                // Untuk tarif bulanan, ambil total bayar untuk bulan tertentu saja
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
-                $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
+            if($is_seumurhidup) {
+              // Total bayar: seluruh pembayaran sepanjang masa
+              $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
+              $stmt_total->execute([$nikk, $kode_tarif]);
+              $total_bayar = intval($stmt_total->fetchColumn());
+              $sisa = $tarif_nom - $total_bayar;
+              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
             } else {
-                // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
-                $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-                $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+              $total_bayar = 0;
+              if (isset($pembayaran_map[$nikk][$kode_tarif][$periode_key])) {
+                foreach ($pembayaran_map[$nikk][$kode_tarif][$periode_key] as $p) {
+                  $total_bayar += intval($p['jml_bayar']);
+                }
+              }
+              if ($is_bulanan) {
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
+                  $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
+              } else if ($is_tahunan) {
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                  $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+              }
+              $total_bayar_db = intval($stmt_total->fetchColumn());
+              if ($total_bayar_db > 0) {
+                  $total_bayar = $total_bayar_db;
+              }
+              $sisa = $tarif_nom - $total_bayar;
+              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
             }
-            $total_bayar_db = intval($stmt_total->fetchColumn());
-            
-            // Gunakan total dari database jika lebih besar dari 0
-            if ($total_bayar_db > 0) {
-                $total_bayar = $total_bayar_db;
-            }
-            
-            $sisa = $tarif_nom - $total_bayar;
-            $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            
-            // Debug warna status
             $warna_status = '';
             if ($status == 'Lunas') {
                 $warna_status = 'text-green-600';
@@ -619,13 +617,6 @@ if ($kode_tarif) {
                 $warna_status = 'text-orange-600';
             } else {
                 $warna_status = 'text-red-600';
-            }
-            
-            // Debug: Tampilkan informasi warna jika diperlukan
-            if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
-                echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
-                echo "</div>";
             }
           ?>
           <tr class="hover:bg-gray-100">
