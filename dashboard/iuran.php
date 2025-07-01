@@ -352,6 +352,11 @@ if ($kode_tarif) {
       </select>
     </form>
   </div>
+  <div class="mb-4 flex items-center gap-2">
+    <button id="btnPrint" title="Print" class="bg-blue-600 hover:bg-blue-700 text-white rounded p-2 shadow" style="font-size: 1.5rem;">
+      <i class="bx bx-printer"></i>
+    </button>
+  </div>
 
   <?php if(!$kode_tarif): ?>
     <!-- Pilihan Jenis Iuran: Menu Box Besar -->
@@ -1061,6 +1066,50 @@ function namaKK(nikk) {
     const kkList = <?php echo json_encode(array_column($kk, 'nama', 'nikk')); ?>;
     return kkList[nikk] || '-';
 }
+
+document.getElementById('btnPrint').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Tentukan tabel mana yang sedang tampil
+    let printArea = '';
+    if (document.getElementById('tableRekap') && document.getElementById('tableRekap').offsetParent !== null) {
+        printArea = document.getElementById('tableRekap').outerHTML;
+    } else if (document.getElementById('tableDetail') && document.getElementById('tableDetail').offsetParent !== null) {
+        printArea = document.getElementById('tableDetail').outerHTML;
+    } else {
+        alert('Tidak ada data untuk dicetak!');
+        return;
+    }
+    // Ambil judul dan filter
+    let title = document.querySelector('h1') ? document.querySelector('h1').outerHTML : '';
+    let filter = document.querySelector('.flex.items-center.gap-2 form') ? document.querySelector('.flex.items-center.gap-2 form').outerHTML : '';
+    // Buat window print
+    let win = window.open('', '', 'width=900,height=650');
+    win.document.write(`
+        <html>
+        <head>
+            <title>Print Iuran</title>
+            <link href=\"https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css\" rel=\"stylesheet\">
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #888; padding: 6px 8px; font-size: 12px; }
+                th { background: #f1f5f9; }
+                h1 { margin-bottom: 10px; }
+                .print-filter { margin-bottom: 10px; }
+            </style>
+        </head>
+        <body>
+            ${title}
+            <div class="print-filter">${filter}</div>
+            ${printArea}
+        </body>
+        </html>
+    `);
+    win.document.close();
+    win.focus();
+    win.print();
+    setTimeout(() => { win.close(); }, 500);
+});
 </script>
 
 <style>
@@ -1251,6 +1300,10 @@ function namaKK(nikk) {
 .box-modern-iuran:nth-child(4) { animation-delay: 0.4s; }
 .box-modern-iuran:nth-child(5) { animation-delay: 0.5s; }
 .box-modern-iuran:nth-child(6) { animation-delay: 0.6s; }
+
+@media print {
+  #btnPrint, .bg-blue-600, .hover\:bg-blue-700, .shadow, .mb-4.flex.items-center.gap-2 { display: none !important; }
+}
 </style>
 
 <?php include 'footer.php'; ?> 
