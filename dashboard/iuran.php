@@ -626,7 +626,7 @@ if ($kode_tarif) {
               }
               if ($is_bulanan) {
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
-                  $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
+                  $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
               } else if ($is_tahunan) {
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
                   $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
@@ -1068,20 +1068,34 @@ function namaKK(nikk) {
   document.querySelectorAll('#btnPrint').forEach(function(btnPrint) {
     btnPrint.addEventListener('click', function(e) {
       e.preventDefault();
-      // Tentukan tabel mana yang sedang tampil
       let printArea = '';
+      let printTitle = '';
+      // Cek mode rekap atau detail
       if (document.getElementById('tableRekap') && document.getElementById('tableRekap').offsetParent !== null) {
           printArea = document.getElementById('tableRekap').outerHTML;
+          // Ambil bulan, tahun, dan jenis iuran
+          let bulan = document.getElementById('bulan') ? document.getElementById('bulan').selectedOptions[0].text : '';
+          let tahun = document.getElementById('tahun') ? document.getElementById('tahun').value : '';
+          let jenisIuran = '';
+          let jenisIuranEl = document.querySelector('.text-lg.font-semibold.mb-3');
+          if (jenisIuranEl) {
+            jenisIuran = jenisIuranEl.textContent.replace('Total Setoran', '').trim();
+          }
+          printTitle = `${jenisIuran} - per ${bulan} ${tahun}`;
       } else if (document.getElementById('tableDetail') && document.getElementById('tableDetail').offsetParent !== null) {
           printArea = document.getElementById('tableDetail').outerHTML;
+          // Ambil jenis iuran, nikk, nama KK
+          let infoSpan = document.querySelector('.mb-4.flex.items-center.gap-2 span.font-semibold');
+          if (infoSpan) {
+            printTitle = infoSpan.textContent.replace('|', '').trim();
+          } else {
+            printTitle = 'Detail Iuran';
+          }
       } else {
           alert('Tidak ada data untuk dicetak!');
           return;
       }
-      // Ambil judul dan filter
-      let title = document.querySelector('h1') ? document.querySelector('h1').outerHTML : '';
       let filter = document.querySelector('.flex.items-center.gap-2 form') ? document.querySelector('.flex.items-center.gap-2 form').outerHTML : '';
-      // Buat window print
       let win = window.open('', '', 'width=900,height=650');
       win.document.write(`
           <html>
@@ -1095,10 +1109,11 @@ function namaKK(nikk) {
                   th { background: #f1f5f9; }
                   h1 { margin-bottom: 10px; }
                   .print-filter { margin-bottom: 10px; }
+                  .print-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 12px; }
               </style>
           </head>
           <body>
-              ${title}
+              <div class="print-title">${printTitle}</div>
               <div class="print-filter">${filter}</div>
               ${printArea}
           </body>
