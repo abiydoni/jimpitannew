@@ -1013,12 +1013,14 @@ function showPembayarBulanan() {
               $stmt->execute([$kode_tarif, $nama_bulan[$bulan_filter], $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_tahunan) {
-                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Tahunan' AND i.tahun=?");
-                $stmt->execute([$kode_tarif, $tahun]);
+              // $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Tahunan' AND i.tahun=?");
+              $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Tahunan' AND tahun=?");
+              $stmt->execute([$kode_tarif, $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_seumurhidup) {
-                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Selamanya' AND i.tahun=? AND MONTH(i.tgl_bayar)=?");
-                $stmt->execute([$kode_tarif, $tahun, $bulan_filter]);
+              // $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Selamanya' AND i.tahun=? AND MONTH(i.tgl_bayar)=?");
+              $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
+              $stmt->execute([$kode_tarif, $tahun, $bulan_filter]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
