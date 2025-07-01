@@ -1002,6 +1002,7 @@ window.addEventListener('load', function() {
     if (searchDetail) searchDetail.value = '';
 });
 
+// Pastikan fungsi ini di scope global
 function showPembayarBulanan() {
     // Ambil data dari PHP (tanpa file baru, gunakan data yang sudah diambil di halaman)
     const data = <?php
