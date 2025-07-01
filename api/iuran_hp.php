@@ -1336,7 +1336,7 @@ window.addEventListener('load', function() {
 /* Tabel iuran rekap dan detail transparan lebih kuat */
 table.min-w-full.bg-white,
 table.min-w-full.bg-white tr {
-  background-color: rgba(255,255,255,0.6) !important;
+  background-color: rgba(255,255,255,0.85) !important;
   backdrop-filter: blur(20px);
 }
 </style>
