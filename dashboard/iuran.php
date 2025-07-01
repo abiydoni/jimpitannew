@@ -1002,10 +1002,10 @@ window.addEventListener('load', function() {
     if (searchDetail) searchDetail.value = '';
 });
 
-// Pastikan fungsi ini di scope global
 function showPembayarBulanan() {
     // Ambil data dari PHP (tanpa file baru, gunakan data yang sudah diambil di halaman)
     const data = <?php
+        // Ambil data pembayaran bulanan sesuai filter
         $listPembayar = [];
         if ($kode_tarif) {
             if ($is_bulanan) {
@@ -1022,6 +1022,7 @@ function showPembayarBulanan() {
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
+        echo json_encode($listPembayar);
     ?>;
     // Isi tabel
     const tbody = document.getElementById('tbodyPembayarBulanan');
