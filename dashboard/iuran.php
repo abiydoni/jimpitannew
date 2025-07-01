@@ -1023,13 +1023,22 @@ function showPembayarBulanan() {
         }
         echo json_encode($listPembayar);
     ?>;
+    // Group data berdasarkan nikk agar tidak double, dan jumlahkan jml_bayar per nikk
+    const grouped = {};
+    data.forEach(row => {
+        if (!grouped[row.nikk]) {
+            grouped[row.nikk] = { nikk: row.nikk, jml_bayar: 0 };
+        }
+        grouped[row.nikk].jml_bayar += parseInt(row.jml_bayar);
+    });
+    const groupedArr = Object.values(grouped);
     // Isi tabel
     const tbody = document.getElementById('tbodyPembayarBulanan');
     tbody.innerHTML = '';
-    if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada pembayaran</td></tr>';
+    if (groupedArr.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada pembayaran</td></tr>';
     } else {
-        data.forEach((row, idx) => {
+        groupedArr.forEach((row, idx) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `<td class='px-2 py-1 border'>${idx+1}</td>`+
                 `<td class='px-2 py-1 border'>${row.nikk}</td>`+
