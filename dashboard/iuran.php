@@ -396,27 +396,18 @@ if ($kode_tarif) {
     $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
     $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
-    // Hitung total setoran bulanan khusus untuk seumur hidup
-    if ($is_seumurhidup) {
-        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
-        $stmt_bulan->execute([$kode_tarif, $tahun, $bulan_filter]);
-        $total_setoran_terpilih = intval($stmt_bulan->fetchColumn());
-    }
     // Hitung total setoran tahunan untuk tahun yang dipilih
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
-        // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ?AND MONTH(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND MONTH(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
         $stmt_tahunan->execute([$kode_tarif, $tahun, $bulan_filter]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_tahunan) {
-        // Untuk tahunan, hanya tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-        $stmt_tahunan->execute([$kode_tarif, $tahun]);
+        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND MONTH(tgl_bayar) = ? AND bulan = 'Tahunan'");
+        $stmt_tahunan->execute([$kode_tarif, $tahun, $bulan_filter]);
         $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
     } elseif ($is_seumurhidup) {
-        // Untuk seumur hidup, total setoran = seluruh pembayaran sepanjang masa
-        $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
+        $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya'");
         $stmt_seumur->execute([$kode_tarif]);
         $total_setoran_tahunan = intval($stmt_seumur->fetchColumn());
     }
