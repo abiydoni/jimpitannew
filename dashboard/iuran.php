@@ -596,7 +596,7 @@ if ($kode_tarif) {
             <th class="px-2 py-1 border text-right">Sudah Bayar</th>
             <th class="px-2 py-1 border text-right">Sisa Hutang</th>
             <th class="px-2 py-1 border">Status</th>
-            <th class="px-2 py-1 border">Aksi</th>
+            <th class="px-2 py-1 border aksi-print-hide">Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -653,7 +653,7 @@ if ($kode_tarif) {
             <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
             <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
             <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
-            <td class="px-2 py-1 border">
+            <td class="px-2 py-1 border aksi-print-hide">
               <?php if($status=='Belum Lunas'): ?>
                 <div class="flex space-x-1">
                   <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
@@ -1315,6 +1315,9 @@ function namaKK(nikk) {
 
 @media print {
   #btnPrint, .bg-blue-600, .hover\:bg-blue-700, .shadow, .mb-4.flex.items-center.gap-2 { display: none !important; }
+  .aksi-print-hide, .aksi-print-hide * {
+    display: none !important;
+  }
 }
 .bx-printer {
   transition: color 0.2s, transform 0.2s;
