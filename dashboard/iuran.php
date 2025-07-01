@@ -53,11 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         $kode_tarif_bayar = $_POST['kode_tarif'];
         $periode = $_POST['periode'];
         $jumlah_bayar = intval($_POST['jumlah']); // input user, untuk jml_bayar
-        if (strpos($periode, '-') !== false) {
+        // Cek metode tarif
+        $stmt_metode = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
+        $stmt_metode->execute([$kode_tarif_bayar]);
+        $metode_tarif = $stmt_metode->fetchColumn();
+        if ($metode_tarif == '3') {
+            // Untuk seumur hidup, bulan diisi 'Selamanya', tahun tetap tahun yang dipilih
+            $tahun_bayar = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
+            $bulan = 'Selamanya';
+        } else if (strpos($periode, '-') !== false) {
             [$bulan, $tahun_bayar] = explode('-', $periode);
         } else {
             $tahun_bayar = $periode;
-            // Untuk tahunan, bulan diisi "Tahunan"
             $bulan = 'Tahunan';
         }
         // Ambil tarif tagihan dari tb_tarif
@@ -391,8 +398,8 @@ if ($kode_tarif) {
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
     // Hitung total setoran bulanan khusus untuk seumur hidup
     if ($is_seumurhidup) {
-        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ?");
-        $stmt_bulan->execute([$kode_tarif, $bulan_filter, $tahun]);
+        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ?");
+        $stmt_bulan->execute([$kode_tarif, $tahun]);
         $total_setoran_terpilih = intval($stmt_bulan->fetchColumn());
     }
     // Hitung total setoran tahunan untuk tahun yang dipilih
