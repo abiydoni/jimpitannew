@@ -733,7 +733,6 @@ if ($kode_tarif) {
             <th class="px-2 py-1 border">NIKK</th>
             <th class="px-2 py-1 border">Nama KK</th>
             <th class="px-2 py-1 border text-right">Jumlah Bayar</th>
-            <th class="px-2 py-1 border">Tanggal Bayar</th>
           </tr>
         </thead>
         <tbody id="tbodyPembayarBulanan">
@@ -1009,8 +1008,9 @@ function showPembayarBulanan() {
         $listPembayar = [];
         if ($kode_tarif) {
             if ($is_bulanan) {
-                $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan=? AND i.tahun=?");
-                $stmt->execute([$kode_tarif, $nama_bulan[$bulan_filter], $tahun]);
+              // $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan=? AND i.tahun=?");
+              $stmt = $pdo->prepare("SELECT nikk, jml_bayar, tgl_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan=? AND tahun=?");
+              $stmt->execute([$kode_tarif, $nama_bulan[$bulan_filter], $tahun]);
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else if ($is_tahunan) {
                 $stmt = $pdo->prepare("SELECT i.nikk, w.nama, i.jml_bayar, i.tgl_bayar FROM tb_iuran i JOIN tb_warga w ON i.nikk=w.nikk WHERE i.kode_tarif=? AND i.bulan='Tahunan' AND i.tahun=?");
