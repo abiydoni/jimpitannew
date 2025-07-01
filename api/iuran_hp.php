@@ -522,7 +522,7 @@ if ($kode_tarif) {
                   <th class="px-2 py-1 border">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="bg-opacity-50">
                 <?php
                 $periode_list = $is_bulanan ? [
                   'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
