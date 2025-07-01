@@ -1337,7 +1337,7 @@ window.addEventListener('load', function() {
   background-color: rgba(255,255,255,0.6) !important;
   backdrop-filter: blur(20px);
 }
-.transparan tr, .transparan td, .transparan th {
+.transparan td {
   background-color: transparent !important;
 }
 </style>
