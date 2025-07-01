@@ -280,21 +280,24 @@ $tahun_opsi = range(date('Y')-2, date('Y')+2);
 
 // Fungsi untuk menghitung total setoran per bulan dan tahun
 function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
-    // Cek apakah tarif bulanan atau tahunan
+    // Cek apakah tarif bulanan, tahunan, atau seumur hidup
     $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
     $stmt->execute([$kode_tarif]);
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan bukan "Tahunan"
-        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
+        // Bulanan
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
-    } else {
-        // Tarif tahunan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan = "Tahunan"
+    } elseif ($metode == '2') {
+        // Tahunan
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan = 'Tahunan'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
+    } elseif ($metode == '3') {
+        // Seumur hidup
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
+        $stmt->execute([$kode_tarif, $tahun, $bulan]);
     }
-    
     $total = $stmt->fetchColumn();
     return $total ? intval($total) : 0;
 }
@@ -449,7 +452,7 @@ if ($kode_tarif) {
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Box Total Setoran Bulanan -->
-              <div class="bg-white border rounded-lg p-6 shadow-sm">
+              <div class="bg-white border rounded-lg p-6 shadow-sm cursor-pointer" onclick="showPembayarBulanan()">
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
@@ -457,8 +460,10 @@ if ($kode_tarif) {
                     <div class="text-sm text-gray-500">
                       <?php if($is_bulanan): ?>
                         Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
-                      <?php else: ?>
+                      <?php elseif($is_tahunan): ?>
                         Pembayaran tahunan <?= $tahun ?>
+                      <?php elseif($is_seumurhidup): ?>
+                        Pembayaran seumur hidup
                       <?php endif; ?>
                     </div>
                   </div>
@@ -756,6 +761,30 @@ if ($kode_tarif) {
   </div>
 </div>
 
+<!-- Modal Daftar Pembayar Bulanan -->
+<div id="modalPembayarBulanan" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-4 rounded shadow-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+    <h2 class="text-lg font-bold mb-2">Daftar KK Pembayar Bulan <span id="modalPembayarBulanText"></span></h2>
+    <div class="mb-4">
+      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tablePembayarBulanan">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="px-2 py-1 border">No</th>
+            <th class="px-2 py-1 border">NIKK</th>
+            <th class="px-2 py-1 border">Nama KK</th>
+            <th class="px-2 py-1 border text-right">Jumlah Bayar</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyPembayarBulanan">
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-end mt-4">
+      <button type="button" class="bg-gray-500 text-white px-3 py-1 rounded" onclick="toggleModal('modalPembayarBulanan')">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <?php if ($notif): ?>
 <script>
   Swal.fire({
@@ -955,6 +984,65 @@ function hapusPembayaran(id_iuran) {
             });
         }
     });
+}
+
+function showPembayarBulanan() {
+    const data = <?php
+        $listPembayar = [];
+        if ($kode_tarif) {
+            if ($is_bulanan) {
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND MONTH(tgl_bayar)=? AND YEAR(tgl_bayar)=? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
+                $stmt->execute([$kode_tarif, $bulan_filter, $tahun]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else if ($is_tahunan) {
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND MONTH(tgl_bayar)=? AND YEAR(tgl_bayar)=? AND bulan = 'Tahunan'");
+                $stmt->execute([$kode_tarif, $bulan_filter, $tahun]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else if ($is_seumurhidup) {
+                $stmt = $pdo->prepare("SELECT nikk, jml_bayar FROM tb_iuran WHERE kode_tarif=? AND bulan='Selamanya' AND tahun=? AND MONTH(tgl_bayar)=?");
+                $stmt->execute([$kode_tarif, $tahun, $bulan_filter]);
+                $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+        }
+        echo json_encode($listPembayar);
+    ?>;
+    // Group data berdasarkan nikk agar tidak double, dan jumlahkan jml_bayar per nikk
+    const grouped = {};
+    data.forEach(row => {
+        if (!grouped[row.nikk]) {
+            grouped[row.nikk] = { nikk: row.nikk, jml_bayar: 0 };
+        }
+        grouped[row.nikk].jml_bayar += parseInt(row.jml_bayar);
+    });
+    const groupedArr = Object.values(grouped);
+    // Isi tabel
+    const tbody = document.getElementById('tbodyPembayarBulanan');
+    tbody.innerHTML = '';
+    if (groupedArr.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada pembayaran</td></tr>';
+    } else {
+        groupedArr.forEach((row, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td class='px-2 py-1 border'>${idx+1}</td>`+
+                `<td class='px-2 py-1 border'>${row.nikk}</td>`+
+                `<td class='px-2 py-1 border'>${namaKK(row.nikk)}</td>`+
+                `<td class='px-2 py-1 border text-right'>${parseInt(row.jml_bayar).toLocaleString('id-ID')}</td>`;
+            tbody.appendChild(tr);
+        });
+        // Tambahkan baris total pembayaran di akhir tabel
+        let totalBayar = groupedArr.reduce((sum, row) => sum + parseInt(row.jml_bayar), 0);
+        const trTotal = document.createElement('tr');
+        trTotal.innerHTML = `<td colspan='3' class='px-2 py-1 border text-right font-bold'>Total Pembayaran</td>`+
+            `<td class='px-2 py-1 border text-right font-bold'>${totalBayar.toLocaleString('id-ID')}</td>`;
+        tbody.appendChild(trTotal);
+    }
+    document.getElementById('modalPembayarBulanText').textContent = `<?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>`;
+    toggleModal('modalPembayarBulanan');
+}
+
+function namaKK(nikk) {
+    const kkList = <?php echo json_encode(array_column($kk, 'nama', 'nikk')); ?>;
+    return kkList[nikk] || '-';
 }
 </script>
 
