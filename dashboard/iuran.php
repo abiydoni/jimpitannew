@@ -391,8 +391,9 @@ if ($kode_tarif) {
     </div>
   <?php elseif(!$nikk): ?>
     <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
-    <div class="mb-4">
+    <div class="mb-4 flex items-center gap-2">
       <a href="iuran.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
+      <button id="btnPrint" title="Print" style="border:none;background:none;cursor:pointer;outline:none;"><i class="bx bx-printer" style="color:#2563eb;font-size:1.6rem;"></i></button>
     </div>
 
     <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
@@ -574,6 +575,7 @@ if ($kode_tarif) {
     <!-- Tabel Detail per Bulan/Tahun untuk KK Terpilih -->
     <div class="mb-4 flex items-center gap-2">
       <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
+      <button id="btnPrint" title="Print" style="border:none;background:none;cursor:pointer;outline:none;"><i class="bx bx-printer" style="color:#2563eb;font-size:1.6rem;"></i></button>
       <span class="font-semibold">|
         <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?> -
         <?= htmlspecialchars($nikk) ?>
@@ -1248,10 +1250,6 @@ document.getElementById('btnPrint').addEventListener('click', function(e) {
   
   .text-content .text-gray-700 {
     font-size: 0.75rem;
-  }
-  
-  .arrow-icon {
-    font-size: 1.25rem;
   }
   
   .flex.items-center.space-x-4 {
