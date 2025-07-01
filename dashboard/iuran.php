@@ -1022,10 +1022,6 @@ function showPembayarBulanan() {
                 $listPembayar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
-        echo '<pre>';
-        print_r($listPembayar);
-        echo '</pre>';
-        echo json_encode($listPembayar);
     ?>;
     // Isi tabel
     const tbody = document.getElementById('tbodyPembayarBulanan');
@@ -1039,7 +1035,6 @@ function showPembayarBulanan() {
                 `<td class='px-2 py-1 border'>${row.nikk}</td>`+
                 `<td class='px-2 py-1 border'>${row.nama}</td>`+
                 `<td class='px-2 py-1 border text-right'>${number_format(row.jml_bayar,0,',','.')}</td>`+
-                `<td class='px-2 py-1 border'>${row.tgl_bayar}</td>`;
             tbody.appendChild(tr);
         });
     }
