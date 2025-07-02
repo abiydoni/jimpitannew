@@ -61,6 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
             // Untuk seumur hidup, bulan diisi 'Selamanya', tahun tetap tahun yang dipilih
             $tahun_bayar = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
             $bulan = 'Selamanya';
+        } else if (strpos($periode, 'Seumur Hidup-') !== false) {
+            // Handle periode format 'Seumur Hidup-tahun' untuk metode=3
+            $tahun_bayar = intval(substr($periode, 13)); // Ambil tahun setelah 'Seumur Hidup-'
+            $bulan = 'Selamanya';
         } else if (strpos($periode, '-') !== false) {
             [$bulan, $tahun_bayar] = explode('-', $periode);
         } else {
@@ -655,18 +659,18 @@ if ($kode_tarif) {
             <td class="px-2 py-1 border aksi-print-hide">
               <?php if($status=='Belum Lunas'): ?>
                 <div class="flex space-x-1">
-                  <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
+                  <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
                     <i class="bx bx-money"></i>
                   </button>
                   <?php if($total_bayar > 0): ?>
-                    <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                    <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
                       <i class="bx bx-history"></i>
                     </button>
                   <?php endif; ?>
                 </div>
               <?php else: ?>
                 <?php if($total_bayar > 0): ?>
-                  <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : $tahun ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                  <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
                     <i class="bx bx-history"></i>
                   </button>
                 <?php endif; ?>
