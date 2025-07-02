@@ -539,54 +539,40 @@ if ($kode_tarif) {
                 foreach($kk as $w):
                   $total_tagihan = 0;
                   $total_bayar = 0;
-                  foreach($periode_list as $periode) {
-                    $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+                  if ($is_seumurhidup) {
                     $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-                    $total_tagihan += $tarif_nom;
-                    
-                    // Debug: Tampilkan perhitungan untuk setiap periode
-                    if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                      echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
-                      echo "Perhitungan: KK={$w['nikk']}, Periode=$periode, PeriodeKey=$periode_key, Tarif=$tarif_nom<br>";
-                      echo "Tahun yang dipilih: $tahun<br>";
-                      echo "Pembayaran map check: " . (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) ? 'ADA' : 'TIDAK ADA') . "<br>";
+                    $total_tagihan = $tarif_nom;
+                    // Total bayar: seluruh pembayaran seumur hidup
+                    $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = 'Selamanya'");
+                    $stmt_total->execute([$w['nikk'], $kode_tarif]);
+                    $total_bayar = intval($stmt_total->fetchColumn());
+                    $sisa = $tarif_nom - $total_bayar;
+                    $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                  } else {
+                    foreach($periode_list as $periode) {
+                      $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+                      $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                      $total_tagihan += $tarif_nom;
                       if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                        echo "Jumlah pembayaran: " . count($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key]) . "<br>";
                         foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                          echo "  - jml_bayar: {$p['jml_bayar']}, tahun: {$p['tahun']}<br>";
+                          $total_bayar += intval($p['jml_bayar']);
                         }
                       }
-                      echo "</div>";
                     }
-                    
-                    if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                      foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                        $total_bayar += intval($p['jml_bayar']);
-                      }
+                    if ($is_bulanan) {
+                        $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
+                        $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+                    } else {
+                        $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                        $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
                     }
+                    $total_bayar_db = intval($stmt_total->fetchColumn());
+                    if ($total_bayar_db > 0) {
+                        $total_bayar = $total_bayar_db;
+                    }
+                    $sisa = $total_tagihan - $total_bayar;
+                    $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
                   }
-                  
-                  // Ambil total bayar langsung dari database untuk memastikan akurasi
-                  if ($is_bulanan) {
-                      // Untuk tarif bulanan, ambil total bayar untuk semua bulan dalam tahun tersebut
-                      $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan IS NOT NULL AND bulan != '' AND bulan != 'Tahunan'");
-                      $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
-                  } else {
-                      // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
-                      $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-                      $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
-                  }
-                  $total_bayar_db = intval($stmt_total->fetchColumn());
-                  
-                  // Gunakan total dari database jika lebih besar dari 0
-                  if ($total_bayar_db > 0) {
-                      $total_bayar = $total_bayar_db;
-                  }
-                  
-                  $sisa = $total_tagihan - $total_bayar;
-                  $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-                  
-                  // Debug warna status
                   $warna_status = '';
                   if ($status == 'Lunas') {
                       $warna_status = 'text-green-600';
@@ -594,13 +580,6 @@ if ($kode_tarif) {
                       $warna_status = 'text-orange-600';
                   } else {
                       $warna_status = 'text-red-600';
-                  }
-                  
-                  // Debug: Tampilkan informasi warna jika diperlukan
-                  if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                      echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
-                      echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
-                      echo "</div>";
                   }
                 ?>
                 <tr class="hover:bg-gray-100">
