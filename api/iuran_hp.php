@@ -464,9 +464,18 @@ if ($kode_tarif) {
               $stmt_tahunan->execute([$kode_tarif, $tahun]);
               $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
           } elseif ($is_seumurhidup) {
-              $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
-              $stmt_seumur->execute([$kode_tarif]);
-              $total_setoran_tahunan = intval($stmt_seumur->fetchColumn());
+              // DEBUG OUTPUT
+              echo '<tr><td colspan="6" style="color:red;font-size:12px">DEBUG: is_seumurhidup=' . ($is_seumurhidup ? 'TRUE' : 'FALSE') . ', nikk=' . htmlspecialchars($nikk) . ', kode_tarif=' . htmlspecialchars($kode_tarif) . '</td></tr>';
+              if ($is_seumurhidup) {
+                  $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = 'Selamanya'");
+                  $stmt_total->execute([$nikk, $kode_tarif]);
+                  $total_bayar = intval($stmt_total->fetchColumn());
+                  echo '<tr><td colspan="6" style="color:blue;font-size:12px">DEBUG: total_bayar=' . $total_bayar . '</td></tr>';
+                  $sisa = $tarif_nom - $total_bayar;
+                  $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                  $warna_status = $status == 'Lunas' ? 'text-green-600' : ($total_bayar > 0 ? 'text-orange-600' : 'text-red-600');
+              }
           }
           ?>
           <div class="mb-6">
