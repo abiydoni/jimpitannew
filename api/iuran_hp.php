@@ -541,13 +541,12 @@ if ($kode_tarif) {
                   $total_bayar = 0;
                   if ($is_seumurhidup) {
                     $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-                    $total_tagihan = $tarif_nom;
-                    // Total bayar: seluruh pembayaran seumur hidup
                     $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = 'Selamanya'");
                     $stmt_total->execute([$w['nikk'], $kode_tarif]);
                     $total_bayar = intval($stmt_total->fetchColumn());
                     $sisa = $tarif_nom - $total_bayar;
                     $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                    $warna_status = $status == 'Lunas' ? 'text-green-600' : ($total_bayar > 0 ? 'text-orange-600' : 'text-red-600');
                   } else {
                     foreach($periode_list as $periode) {
                       $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
