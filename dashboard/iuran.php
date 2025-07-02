@@ -289,21 +289,26 @@ $tahun_opsi = range(date('Y')-2, date('Y')+2);
 
 // Fungsi untuk menghitung total setoran per bulan dan tahun
 function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
-    // Cek apakah tarif bulanan atau tahunan
+    // Cek apakah tarif bulanan, tahunan, atau seumur hidup
     $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
     $stmt->execute([$kode_tarif]);
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Tarif bulanan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan bukan "Tahunan" atau "Selamanya"
+        // Tarif bulanan
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
-    } else {
-        // Tarif tahunan - hitung berdasarkan tgl_bayar di bulan tertentu dan bulan = "Tahunan"
+    } else if ($metode == '2') {
+        // Tarif tahunan
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan = 'Tahunan'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
+    } else if ($metode == '3') {
+        // Seumur hidup: hanya yang bulan='Selamanya' di tahun & bulan yang dipilih
+        $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
+        $stmt->execute([$kode_tarif, $tahun, $bulan]);
+    } else {
+        return 0;
     }
-    
     $total = $stmt->fetchColumn();
     return $total ? intval($total) : 0;
 }
@@ -397,12 +402,6 @@ if ($kode_tarif) {
     $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
     $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
     $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
-    // Hitung total setoran bulanan khusus untuk seumur hidup
-    if ($is_seumurhidup) {
-        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
-        $stmt_bulan->execute([$kode_tarif, $tahun, $bulan_filter]);
-        $total_setoran_terpilih = intval($stmt_bulan->fetchColumn());
-    }
     // Hitung total setoran tahunan untuk tahun yang dipilih
     $total_setoran_tahunan = 0;
     if ($is_bulanan) {
