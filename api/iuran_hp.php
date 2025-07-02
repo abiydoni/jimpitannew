@@ -39,8 +39,8 @@ $warna_icon = [
 // Ambil data tarif terlebih dahulu
 $tarif = $pdo->query("SELECT * FROM tb_tarif ORDER BY kode_tarif")->fetchAll(PDO::FETCH_ASSOC);
 
-// Filter tarif, hilangkan tarif dengan metode = 0
-$tarif = array_filter($tarif, function($t) { return $t['metode'] != '0'; });
+// Filter tarif, hilangkan Jimpitan (TR001)
+$tarif = array_filter($tarif, function($t) { return $t['kode_tarif'] !== 'TR001'; });
 $tarif_map = [];
 foreach ($tarif as $t) {
     $tarif_map[$t['kode_tarif']] = $t;
@@ -64,10 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
         $stmt_metode->execute([$kode_tarif_bayar]);
         $metode_tarif = $stmt_metode->fetchColumn();
         if ($metode_tarif == '3') {
+            // Untuk seumur hidup, bulan diisi 'Selamanya', tahun tetap tahun yang dipilih
             $tahun_bayar = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
             $bulan = 'Selamanya';
         } else if (strpos($periode, 'Seumur Hidup-') !== false) {
-            $tahun_bayar = intval(substr($periode, 13));
+            // Handle periode format 'Seumur Hidup-tahun' untuk metode=3
+            $tahun_bayar = intval(substr($periode, 13)); // Ambil tahun setelah 'Seumur Hidup-'
             $bulan = 'Selamanya';
         } else if (strpos($periode, '-') !== false) {
             [$bulan, $tahun_bayar] = explode('-', $periode);
@@ -91,11 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi'])) {
 // Buat array bulanan dan tahunan berdasarkan metode
 $bulanan = [];
 $tahunan = [];
+$seumurhidup = [];
 foreach ($tarif as $t) {
     if ($t['metode'] == '1') {
         $bulanan[] = $t['kode_tarif'];
     } elseif ($t['metode'] == '2') {
         $tahunan[] = $t['kode_tarif'];
+    } elseif ($t['metode'] == '3') {
+        $seumurhidup[] = $t['kode_tarif'];
     }
 }
 
@@ -300,17 +305,19 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
     $metode = $stmt->fetchColumn();
     
     if ($metode == '1') {
-        // Bulanan
+        // Tarif bulanan
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan' AND bulan != 'Selamanya'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
-    } elseif ($metode == '2') {
-        // Tahunan
+    } else if ($metode == '2') {
+        // Tarif tahunan
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND MONTH(tgl_bayar) = ? AND YEAR(tgl_bayar) = ? AND bulan = 'Tahunan'");
         $stmt->execute([$kode_tarif, $bulan, $tahun]);
-    } elseif ($metode == '3') {
-        // Seumur hidup
+    } else if ($metode == '3') {
+        // Seumur hidup: hanya yang bulan='Selamanya' di tahun & bulan yang dipilih
         $stmt = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
         $stmt->execute([$kode_tarif, $tahun, $bulan]);
+    } else {
+        return 0;
     }
     $total = $stmt->fetchColumn();
     return $total ? intval($total) : 0;
@@ -320,28 +327,22 @@ function hitungTotalSetoran($pdo, $kode_tarif, $bulan, $tahun) {
 $total_setoran_per_iuran = [];
 if ($kode_tarif) {
     $total_setoran_per_iuran[$kode_tarif] = hitungTotalSetoran($pdo, $kode_tarif, $bulan_filter, $tahun);
-    // Override khusus untuk seumur hidup agar identik dengan iuran.php
-    if ($is_seumurhidup) {
-        $stmt_bulan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND bulan = 'Selamanya' AND tahun = ? AND MONTH(tgl_bayar) = ?");
-        $stmt_bulan->execute([$kode_tarif, $tahun, $bulan_filter]);
-        $total_setoran_per_iuran[$kode_tarif] = intval($stmt_bulan->fetchColumn());
-    }
 }
 
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
 // Menggunakan field icon dari database tb_tarif
 
-// Jika metode=0 di URL, redirect ke halaman utama iuran_hp.php
+// Jika metode=0 di URL, redirect ke halaman utama iuran.php
 if ($kode_tarif) {
-    // Ambil metode dari database
-    $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
-    $stmt->execute([$kode_tarif]);
-    $metode = $stmt->fetchColumn();
-    
-    if ($metode === '0') {
-        header('Location: iuran_hp.php');
-        exit;
-    }
+  // Ambil metode dari database
+  $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
+  $stmt->execute([$kode_tarif]);
+  $metode = $stmt->fetchColumn();
+  
+  if ($metode === '0') {
+      header('Location: iuran_hp.php');
+      exit;
+  }
 }
 ?>
 
