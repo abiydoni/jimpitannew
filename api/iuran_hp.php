@@ -548,7 +548,7 @@ if ($kode_tarif) {
                   $total_bayar = 0;
                   if ($is_seumurhidup) {
                     $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-                    $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
+                    $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND bulan = 'Selamanya'");
                     $stmt_total->execute([$w['nikk'], $kode_tarif]);
                     $total_bayar = intval($stmt_total->fetchColumn());
                     $sisa = $tarif_nom - $total_bayar;
