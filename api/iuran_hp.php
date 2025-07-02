@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 include 'db.php';
 
 $tahun = isset($_GET['tahun']) ? intval($_GET['tahun']) : intval(date('Y'));
@@ -44,6 +45,11 @@ $tarif_map = [];
 foreach ($tarif as $t) {
     $tarif_map[$t['kode_tarif']] = $t;
 }
+
+// Setelah $tarif_map dan sebelum digunakan di tampilan
+$is_bulanan = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '1';
+$is_tahunan = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '2';
+$is_seumurhidup = isset($kode_tarif) && isset($tarif_map[$kode_tarif]) && $tarif_map[$kode_tarif]['metode'] == '3';
 
 // Proses pembayaran
 $notif = null;
@@ -234,7 +240,7 @@ if (isset($_GET['debug']) && $_GET['debug'] == '1') {
     echo "<p>Tahun yang dipilih: $tahun</p>";
     if ($kode_tarif) {
         echo "<p>Kode tarif: $kode_tarif</p>";
-        echo "<p>Metode tarif: " . $tarif_map[$kode_tarif]['metode'] . " (" . ($tarif_map[$kode_tarif]['metode'] == '1' ? 'Bulanan' : ($tarif_map[$kode_tarif]['metode'] == '2' ? 'Tahunan' : 'Seumur Hidup')) . ")</p>";
+        echo "<p>Metode tarif: " . $tarif_map[$kode_tarif]['metode'] . " (" . ($tarif_map[$kode_tarif]['metode'] == '1' ? 'Bulanan' : 'Tahunan') . ")</p>";
     }
     
     // Periksa struktur tabel
@@ -326,7 +332,7 @@ if ($kode_tarif) {
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
 // Menggunakan field icon dari database tb_tarif
 
-// Jika metode=0 di URL, redirect ke halaman utama iuran_hp.php
+// Jika metode=0 di URL, redirect ke halaman utama iuran.php
 if ($kode_tarif) {
   // Ambil metode dari database
   $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
@@ -383,350 +389,345 @@ if ($kode_tarif) {
         <img src="../assets/image/loading.gif" alt="Loading..." class="w-32 h-auto">
     </div>
 
-<div class="container mx-auto px-4 py-6">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Iuran Warga</h1>
-    <form method="GET" class="flex items-center gap-2">
-      <?php if($kode_tarif): ?>
-        <input type="hidden" name="kode_tarif" value="<?= htmlspecialchars($kode_tarif) ?>">
-      <?php endif; ?>
-      <label for="bulan" class="font-semibold">Bulan:</label>
-      <select name="bulan" id="bulan" class="border rounded p-1" onchange="this.form.submit()">
-        <?php for($b = 1; $b <= 12; $b++): ?>
-          <option value="<?= $b ?>" <?= $b==$bulan_filter?'selected':'' ?>><?= $nama_bulan[$b] ?></option>
-        <?php endfor; ?>
-      </select>
-      <label for="tahun" class="font-semibold">Tahun:</label>
-      <select name="tahun" id="tahun" class="border rounded p-1" onchange="this.form.submit()">
-        <?php foreach($tahun_opsi as $th): ?>
-          <option value="<?= $th ?>" <?= $th==$tahun?'selected':'' ?>><?= $th ?></option>
-        <?php endforeach; ?>
-      </select>
-    </form>
-  </div>
+      <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+        <h1 class="text-2xl font-bold">Iuran Warga</h1>
+        <form method="GET" class="flex items-center gap-2">
+          <?php if($kode_tarif): ?>
+            <input type="hidden" name="kode_tarif" value="<?= htmlspecialchars($kode_tarif) ?>">
+          <?php endif; ?>
+          <label for="bulan" class="font-semibold">Bulan:</label>
+          <select name="bulan" id="bulan" class="border rounded p-1" onchange="this.form.submit()">
+            <?php for($b = 1; $b <= 12; $b++): ?>
+              <option value="<?= $b ?>" <?= $b==$bulan_filter?'selected':'' ?>><?= $nama_bulan[$b] ?></option>
+            <?php endfor; ?>
+          </select>
+          <label for="tahun" class="font-semibold">Tahun:</label>
+          <select name="tahun" id="tahun" class="border rounded p-1" onchange="this.form.submit()">
+            <?php foreach($tahun_opsi as $th): ?>
+              <option value="<?= $th ?>" <?= $th==$tahun?'selected':'' ?>><?= $th ?></option>
+            <?php endforeach; ?>
+          </select>
+        </form>
+      </div>
 
-  <?php if(!$kode_tarif): ?>
-    <!-- Pilihan Jenis Iuran: Menu Box Besar -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
-      <?php 
-      $index = 0;
-      foreach($tarif as $t): 
-        $warna_icon_class = $warna_icon[$index % count($warna_icon)];
-        $index++;
-      ?>
-        <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="box-modern-link">
-          <div class="box-modern-iuran">
-            <div class="flex items-center justify-between w-full">
-              <div class="flex items-center space-x-4">
-                <div class="text-4xl <?= $warna_icon_class ?> icon-container"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
-                <div class="text-content">
-                  <div class="text-lg font-bold text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
-                  <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?php
-                    if($t['metode'] == '1') echo '/bulan';
-                    elseif($t['metode'] == '2') echo '/tahun';
-                    elseif($t['metode'] == '3') echo '/seumur hidup';
-                  ?></div>
+      <?php if(!$kode_tarif): ?>
+        <!-- Pilihan Jenis Iuran: Menu Box Besar -->
+        <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+            <?php 
+            $index = 0;
+            foreach($tarif as $t): 
+              $warna_icon_class = $warna_icon[$index % count($warna_icon)];
+              $index++;
+            ?>
+              <a href="?kode_tarif=<?= urlencode($t['kode_tarif']) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="box-modern-link">
+                <div class="box-modern-iuran">
+                  <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center space-x-4">
+                      <div class="text-4xl <?= $warna_icon_class ?> icon-container"><i class="bx <?= htmlspecialchars($t['icon']) ?>"></i></div>
+                      <div class="text-content">
+                        <div class="text-lg font-bold text-gray-800"><?= htmlspecialchars($t['nama_tarif']) ?></div>
+                        <div class="text-gray-700"><?= number_format($t['tarif'],0,',','.') ?><?= $t['metode'] == '1' ? '/bulan' : '/tahun' ?></div>
+                      </div>
+                    </div>
+                    <div class="text-2xl text-gray-400 arrow-icon">
+                      <i class="bx bx-chevron-right"></i>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="text-2xl text-gray-400 arrow-icon">
-                <i class="bx bx-chevron-right"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-      <?php endforeach; ?>
-    </div>
-  <?php elseif(!$nikk): ?>
-    <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
-    <div class="mb-4 flex items-center gap-2">
-      <a href="iuran_hp.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
-      <button id="btnPrint" title="Print" style="border:none;background:none;cursor:pointer;outline:none;"><i class="bx bx-printer" style="color:#2563eb;font-size:1.6rem;"></i></button>
-    </div>
-
-    <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
-    <?php 
-    $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
-    $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
-    $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
-    $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
-    // Hitung total setoran tahunan untuk tahun yang dipilih
-    $total_setoran_tahunan = 0;
-    if ($is_bulanan) {
-        // Jika tarif bulanan, hitung total pembayaran tahunan di tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
-        $stmt_tahunan->execute([$kode_tarif, $tahun]);
-        $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
-    } elseif ($is_tahunan) {
-        // Untuk tahunan, hanya tahun yang dipilih
-        $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-        $stmt_tahunan->execute([$kode_tarif, $tahun]);
-        $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
-    } elseif ($is_seumurhidup) {
-        // Untuk seumur hidup, total setoran = seluruh pembayaran sepanjang masa
-        $stmt_seumur = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ?");
-        $stmt_seumur->execute([$kode_tarif]);
-        $total_setoran_tahunan = intval($stmt_seumur->fetchColumn());
-    }
-    ?>
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold mb-3">
-        Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Box Total Setoran Bulanan -->
-        <div class="bg-white border rounded-lg p-6 shadow-sm cursor-pointer" onclick="showPembayarBulanan()">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
-              <div class="text-2xl font-bold text-blue-600"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
-              <div class="text-sm text-gray-500">
-                <?php if($is_bulanan): ?>
-                  Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
-                <?php elseif($is_tahunan): ?>
-                  Pembayaran tahunan <?= $tahun ?>
-                <?php elseif($is_seumurhidup): ?>
-                  Pembayaran seumur hidup
-                <?php endif; ?>
-              </div>
-            </div>
-            <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
-          </div>
-        </div>
-
-        <!-- Box Total Setoran Tahunan / Seumur Hidup -->
-        <div class="bg-white border rounded-lg p-6 shadow-sm">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="text-sm font-medium text-gray-600">
-                <?php if($is_seumurhidup): ?>
-                  Total Setoran
-                <?php else: ?>
-                  Total Setoran Tahunan
-                <?php endif; ?>
-              </div>
-              <div class="text-2xl font-bold text-green-600"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
-              <div class="text-sm text-gray-500">
-                <?php if($is_seumurhidup): ?>
-                  Semua pembayaran seumur hidup
-                <?php else: ?>
-                  Pembayaran tahun <?= $tahun ?>
-                <?php endif; ?>
-              </div>
-            </div>
-            <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="overflow-x-auto">
-      <!-- Search Box untuk Tabel Rekap KK -->
-      <div class="mb-4">
-        <div class="relative">
-          <input type="text" id="searchRekap" placeholder="Cari nama KK..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-          <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-            <i class="bx bx-search text-gray-400"></i>
-          </div>
-        </div>
-      </div>
-      
-      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableRekap">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="px-2 py-1 border">No KK</th>
-            <th class="px-2 py-1 border">Nama KK</th>
-            <th class="px-2 py-1 border text-right">Total Tagihan</th>
-            <th class="px-2 py-1 border text-right">Sudah Bayar</th>
-            <th class="px-2 py-1 border text-right">Sisa Hutang</th>
-            <th class="px-2 py-1 border">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
-          $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
-          $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
-          $periode_list = $is_bulanan ? [
-            'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
-          ] : ($is_tahunan ? [$tahun] : ['Seumur Hidup']);
-          foreach($kk as $w):
-            $total_tagihan = 0;
-            $total_bayar = 0;
-            if($is_seumurhidup) {
-              $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-              $total_tagihan = $tarif_nom;
-              // Total bayar: seluruh pembayaran sepanjang masa
-              $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
-              $stmt_total->execute([$w['nikk'], $kode_tarif]);
-              $total_bayar = intval($stmt_total->fetchColumn());
-              $sisa = $tarif_nom - $total_bayar;
-              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            } else {
-              foreach($periode_list as $periode) {
-                $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
-                $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-                $total_tagihan += $tarif_nom;
-                if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
-                  foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
-                    $total_bayar += intval($p['jml_bayar']);
-                  }
-                }
-              }
-              // Ambil total bayar langsung dari database untuk memastikan akurasi
-              if ($is_bulanan) {
-                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
-                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun, $periode]);
-              } else if ($is_tahunan) {
-                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-                  $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
-              }
-              $total_bayar_db = intval($stmt_total->fetchColumn());
-              if ($total_bayar_db > 0) {
-                  $total_bayar = $total_bayar_db;
-              }
-              $sisa = $total_tagihan - $total_bayar;
-              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            }
-            $warna_status = '';
-            if ($status == 'Lunas') {
-                $warna_status = 'text-green-600';
-            } elseif ($total_bayar > 0) {
-                $warna_status = 'text-orange-600';
-            } else {
-                $warna_status = 'text-red-600';
-            }
-          ?>
-          <tr class="hover:bg-gray-100">
-            <td class="px-2 py-1 border"><?= htmlspecialchars($w['nikk']) ?></td>
-            <td class="px-2 py-1 border">
-              <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
-                <?= htmlspecialchars($w['nama']) ?>
               </a>
-            </td>
-            <td class="px-2 py-1 border text-right"><?= number_format($total_tagihan,0,',','.') ?></td>
-            <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
-            <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-  <?php else: ?>
-    <!-- Tabel Detail per Bulan/Tahun untuk KK Terpilih -->
-    <div class="mb-4 flex items-center gap-2">
-      <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
-      <button id="btnPrint" title="Print" style="border:none;background:none;cursor:pointer;outline:none;"><i class="bx bx-printer" style="color:#2563eb;font-size:1.6rem;"></i></button>
-      <span class="font-semibold">|
-        <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?> -
-        <?= htmlspecialchars($nikk) ?>
-        (<?= htmlspecialchars($pdo->query("SELECT nama FROM tb_warga WHERE nikk='$nikk' AND hubungan='Kepala Keluarga' LIMIT 1")->fetchColumn()) ?>)
-      </span>
-    </div>
-    <div class="overflow-x-auto">
-      <!-- Search Box untuk Tabel Detail -->
-      <div class="mb-4">
-        <div class="relative">
-          <input type="text" id="searchDetail" placeholder="Cari periode..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-          <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-            <i class="bx bx-search text-gray-400"></i>
+            <?php endforeach; ?>
+          </div>
+          <button class="fixed bottom-4 right-4 w-12 h-12 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-110"
+              onclick="window.location.href='../index.php'" title="Pergi ke menu">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+          </button>
+        </div>
+      <?php elseif(!$nikk): ?>
+        <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
+        <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+          <div class="mb-4">
+            <a href="iuran_hp.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
+          </div>
+
+          <!-- Tampilkan total setoran untuk jenis iuran yang dipilih -->
+          <?php 
+          $total_setoran_terpilih = $total_setoran_per_iuran[$kode_tarif];
+          
+          // Hitung total setoran tahunan untuk tahun yang dipilih
+          $total_setoran_tahunan = 0;
+          if ($is_bulanan) {
+              $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND YEAR(tgl_bayar) = ? AND bulan != 'Tahunan'");
+              $stmt_tahunan->execute([$kode_tarif, $tahun]);
+              $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
+          } elseif ($is_tahunan) {
+              $stmt_tahunan = $pdo->prepare("SELECT SUM(jml_bayar) as total FROM tb_iuran WHERE kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+              $stmt_tahunan->execute([$kode_tarif, $tahun]);
+              $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
+          } elseif ($is_seumurhidup) {
+              // DEBUG OUTPUT
+              echo '<tr><td colspan="6" style="color:red;font-size:12px">DEBUG: is_seumurhidup=' . ($is_seumurhidup ? 'TRUE' : 'FALSE') . ', nikk=' . htmlspecialchars($nikk) . ', kode_tarif=' . htmlspecialchars($kode_tarif) . '</td></tr>';
+              if ($is_seumurhidup) {
+                  $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
+                  $stmt_total->execute([$nikk, $kode_tarif]);
+                  $total_bayar = intval($stmt_total->fetchColumn());
+                  echo '<tr><td colspan="6" style="color:blue;font-size:12px">DEBUG: total_bayar=' . $total_bayar . '</td></tr>';
+                  $sisa = $tarif_nom - $total_bayar;
+                  $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                  $warna_status = $status == 'Lunas' ? 'text-green-600' : ($total_bayar > 0 ? 'text-orange-600' : 'text-red-600');
+              }
+          }
+          ?>
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3">
+              Total Setoran <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Box Total Setoran Bulanan -->
+              <div class="bg-white border rounded-lg p-6 shadow-sm cursor-pointer" onclick="showPembayarBulanan()">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-sm font-medium text-gray-600">Total Setoran Bulanan</div>
+                    <div class="text-2xl font-bold text-blue-600"><?= number_format($total_setoran_terpilih, 0, ',', '.') ?></div>
+                    <div class="text-sm text-gray-500">
+                      <?php if($is_bulanan): ?>
+                        Pembayaran di bulan <?= $nama_bulan[$bulan_filter] ?> <?= $tahun ?>
+                      <?php elseif($is_tahunan): ?>
+                        Pembayaran tahunan <?= $tahun ?>
+                      <?php elseif($is_seumurhidup): ?>
+                        Pembayaran seumur hidup
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                  <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
+                </div>
+              </div>
+
+              <!-- Box Total Setoran Tahunan -->
+              <div class="bg-white border rounded-lg p-6 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-sm font-medium text-gray-600">Total Setoran Tahunan</div>
+                    <div class="text-2xl font-bold text-green-600"><?= number_format($total_setoran_tahunan, 0, ',', '.') ?></div>
+                    <div class="text-sm text-gray-500">
+                      Pembayaran tahun <?= $tahun ?>
+                    </div>
+                  </div>
+                  <div class="text-4xl"><i class="bx <?= htmlspecialchars($tarif_map[$kode_tarif]['icon']) ?>"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <!-- Search Box untuk Tabel Rekap KK -->
+            <div class="mb-4">
+              <div class="relative">
+                <input type="text" id="searchRekap" placeholder="Cari nama KK..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <i class="bx bx-search text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+            
+            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableRekap">
+              <thead class="bg-gray-200">
+                <tr>
+                  <th class="px-2 py-1 border">Nama KK</th>
+                  <th class="px-2 py-1 border text-right">Total Tagihan</th>
+                  <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+                  <th class="px-2 py-1 border text-right">Sisa Hutang</th>
+                  <th class="px-2 py-1 border">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $periode_list = $is_bulanan ? [
+                  'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
+                ] : [$tahun];
+                foreach($kk as $w):
+                  $total_tagihan = 0;
+                  $total_bayar = 0;
+                  if ($is_seumurhidup) {
+                    $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                    $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
+                    $stmt_total->execute([$w['nikk'], $kode_tarif]);
+                    $total_bayar = intval($stmt_total->fetchColumn());
+                    $sisa = $tarif_nom - $total_bayar;
+                    $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                    $warna_status = $status == 'Lunas' ? 'text-green-600' : ($total_bayar > 0 ? 'text-orange-600' : 'text-red-600');
+                  } else {
+                    foreach($periode_list as $periode) {
+                      $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+                      $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                      $total_tagihan += $tarif_nom;
+                      if (isset($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key])) {
+                        foreach ($pembayaran_map[$w['nikk']][$kode_tarif][$periode_key] as $p) {
+                          $total_bayar += intval($p['jml_bayar']);
+                        }
+                      }
+                    }
+                    if ($is_bulanan) {
+                        $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
+                        $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun, $periode]);
+                    } else {
+                        $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                        $stmt_total->execute([$w['nikk'], $kode_tarif, $tahun]);
+                    }
+                    $total_bayar_db = intval($stmt_total->fetchColumn());
+                    if ($total_bayar_db > 0) {
+                        $total_bayar = $total_bayar_db;
+                    }
+                    $sisa = $total_tagihan - $total_bayar;
+                    $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                  }
+                  $warna_status = '';
+                  if ($status == 'Lunas') {
+                      $warna_status = 'text-green-600';
+                  } elseif ($total_bayar > 0) {
+                      $warna_status = 'text-orange-600';
+                  } else {
+                      $warna_status = 'text-red-600';
+                  }
+                ?>
+                <tr class="hover:bg-gray-100">
+                  <td class="px-2 py-1 border">
+                    <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>&nikk=<?= urlencode($w['nikk']) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
+                      <?= htmlspecialchars($w['nama']) ?>
+                    </a>
+                  </td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_tagihan,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
+                  <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-      
-      <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableDetail">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="px-2 py-1 border">Periode</th>
-            <th class="px-2 py-1 border text-right">Tarif</th>
-            <th class="px-2 py-1 border text-right">Sudah Bayar</th>
-            <th class="px-2 py-1 border text-right">Sisa Hutang</th>
-            <th class="px-2 py-1 border">Status</th>
-            <th class="px-2 py-1 border aksi-print-hide">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          $is_bulanan = $tarif_map[$kode_tarif]['metode'] == '1';
-          $is_tahunan = $tarif_map[$kode_tarif]['metode'] == '2';
-          $is_seumurhidup = $tarif_map[$kode_tarif]['metode'] == '3';
-          $periode_list = $is_bulanan ? [
-            'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
-          ] : ($is_tahunan ? [$tahun] : ['Seumur Hidup']);
-          foreach($periode_list as $periode) {
-            $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
-            $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
-            if($is_seumurhidup) {
-              // Total bayar: seluruh pembayaran sepanjang masa
-              $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
-              $stmt_total->execute([$nikk, $kode_tarif]);
-              $total_bayar = intval($stmt_total->fetchColumn());
-              $sisa = $tarif_nom - $total_bayar;
-              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            } else {
-              $total_bayar = 0;
-              if (isset($pembayaran_map[$nikk][$kode_tarif][$periode_key])) {
-                foreach ($pembayaran_map[$nikk][$kode_tarif][$periode_key] as $p) {
-                  $total_bayar += intval($p['jml_bayar']);
-                }
-              }
-              if ($is_bulanan) {
-                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
-                  $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
-              } else if ($is_tahunan) {
-                  $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
-                  $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
-              }
-              $total_bayar_db = intval($stmt_total->fetchColumn());
-              if ($total_bayar_db > 0) {
-                  $total_bayar = $total_bayar_db;
-              }
-              $sisa = $tarif_nom - $total_bayar;
-              $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-            }
-            $warna_status = '';
-            if ($status == 'Lunas') {
-                $warna_status = 'text-green-600';
-            } elseif ($total_bayar > 0) {
-                $warna_status = 'text-orange-600';
-            } else {
-                $warna_status = 'text-red-600';
-            }
-          ?>
-          <tr class="hover:bg-gray-100">
-            <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
-            <td class="px-2 py-1 border text-right"><?= number_format($tarif_nom,0,',','.') ?></td>
-            <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
-            <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
-            <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
-            <td class="px-2 py-1 border aksi-print-hide">
-              <?php if($status=='Belum Lunas'): ?>
-                <div class="flex space-x-1">
-                  <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
-                    <i class="bx bx-money"></i>
-                  </button>
-                  <?php if($total_bayar > 0): ?>
-                    <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
-                      <i class="bx bx-history"></i>
-                    </button>
-                  <?php endif; ?>
+      <?php else: ?>
+        <!-- Tabel Detail per Bulan/Tahun untuk KK Terpilih -->
+        <div class="relative z-10 max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
+          <div class="mb-4 flex items-center gap-2">
+            <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
+            <span class="font-semibold">|
+              <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?> -
+              <?= htmlspecialchars($nikk) ?>
+              (<?= htmlspecialchars($pdo->query("SELECT nama FROM tb_warga WHERE nikk='$nikk' AND hubungan='Kepala Keluarga' LIMIT 1")->fetchColumn()) ?>)
+            </span>
+          </div>
+          <div class="overflow-x-auto">
+            <!-- Search Box untuk Tabel Detail -->
+            <div class="mb-4">
+              <div class="relative">
+                <input type="text" id="searchDetail" placeholder="Cari periode..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <i class="bx bx-search text-gray-400"></i>
                 </div>
-              <?php else: ?>
-                <?php if($total_bayar > 0): ?>
-                  <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
-                    <i class="bx bx-history"></i>
-                  </button>
-                <?php endif; ?>
-              <?php endif; ?>
-            </td>
-          </tr>
-          <?php } ?>
-        </tbody>
-      </table>
+              </div>
+            </div>
+            
+            <table class="min-w-full bg-white border rounded shadow text-xs md:text-sm" id="tableDetail">
+              <thead class="bg-gray-200">
+                <tr>
+                  <th class="px-2 py-1 border">Periode</th>
+                  <th class="px-2 py-1 border text-right">Tarif</th>
+                  <th class="px-2 py-1 border text-right">Sudah Bayar</th>
+                  <th class="px-2 py-1 border text-right">Sisa Hutang</th>
+                  <th class="px-2 py-1 border">Status</th>
+                  <th class="px-2 py-1 border">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $periode_list = $is_bulanan ? [
+                  'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'
+                ] : [$tahun];
+                foreach($periode_list as $periode) {
+                  $periode_key = $is_bulanan ? $periode.'-'.$tahun : $tahun;
+                  $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
+                  $total_bayar = 0;
+                  if (isset($pembayaran_map[$nikk][$kode_tarif][$periode_key])) {
+                    foreach ($pembayaran_map[$nikk][$kode_tarif][$periode_key] as $p) {
+                      $total_bayar += intval($p['jml_bayar']);
+                    }
+                  }
+                  
+                  // Ambil total bayar langsung dari database untuk memastikan akurasi
+                  if ($is_bulanan) {
+                      // Untuk tarif bulanan, ambil total bayar untuk bulan tertentu saja
+                      $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = ?");
+                      $stmt_total->execute([$nikk, $kode_tarif, $tahun, $periode]);
+                  } else {
+                      // Untuk tarif tahunan, ambil total bayar dengan bulan = 'Tahunan'
+                      $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ? AND tahun = ? AND bulan = 'Tahunan'");
+                      $stmt_total->execute([$nikk, $kode_tarif, $tahun]);
+                  }
+                  $total_bayar_db = intval($stmt_total->fetchColumn());
+                  
+                  // Gunakan total dari database jika lebih besar dari 0
+                  if ($total_bayar_db > 0) {
+                      $total_bayar = $total_bayar_db;
+                  }
+                  
+                  $sisa = $tarif_nom - $total_bayar;
+                  $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                  
+                  // Debug warna status
+                  $warna_status = '';
+                  if ($status == 'Lunas') {
+                      $warna_status = 'text-green-600';
+                  } elseif ($total_bayar > 0) {
+                      $warna_status = 'text-orange-600';
+                  } else {
+                      $warna_status = 'text-red-600';
+                  }
+                  
+                  // Debug: Tampilkan informasi warna jika diperlukan
+                  if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+                      echo "<div style='background: #ffffe0; padding: 5px; margin: 2px; border: 1px solid #cccc00; font-size: 10px;'>";
+                      echo "Debug Warna: KK={$w['nikk']}, Status=$status, TotalBayar=$total_bayar, WarnaClass=$warna_status<br>";
+                      echo "</div>";
+                  }
+                ?>
+                <tr class="hover:bg-gray-100">
+                  <td class="px-2 py-1 border"><?= $is_bulanan ? $periode.' '.$tahun : $tahun ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($tarif_nom,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format($total_bayar,0,',','.') ?></td>
+                  <td class="px-2 py-1 border text-right"><?= number_format(max($sisa,0),0,',','.') ?></td>
+                  <td class="px-2 py-1 border font-semibold <?= $warna_status ?>" style="<?= $status=='Lunas'?'color: #059669;':($total_bayar > 0 ? 'color: #ea580c;' : 'color: #dc2626;') ?>"><?= $status ?></td>
+                  <td class="px-2 py-1 border">
+                    <?php if($status=='Belum Lunas'): ?>
+                      <div class="flex space-x-1">
+                        <button class="bg-blue-600 text-white p-1 rounded text-xs hover:bg-blue-700" title="Bayar" onclick="openBayarModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>',<?= $sisa ?>)">
+                          <i class="bx bx-money"></i>
+                        </button>
+                        <?php if($total_bayar > 0): ?>
+                          <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                            <i class="bx bx-history"></i>
+                          </button>
+                        <?php endif; ?>
+                      </div>
+                    <?php else: ?>
+                      <?php if($total_bayar > 0): ?>
+                        <button class="bg-red-600 text-white p-1 rounded text-xs hover:bg-red-700" title="Histori" onclick="openHistoriModal('<?= $nikk ?>','<?= $kode_tarif ?>','<?= $is_bulanan ? $periode.'-'.$tahun : ($is_seumurhidup ? 'Seumur Hidup-'.$tahun : $tahun) ?>','<?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?>')">
+                          <i class="bx bx-history"></i>
+                        </button>
+                      <?php endif; ?>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <?php endif; ?>
+      </div>
     </div>
-  <?php endif; ?>
-</div>
-
+</body>
 <!-- Modal Bayar -->
 <div id="bayarModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="bg-white p-4 rounded shadow-lg w-full max-w-sm">
@@ -960,7 +961,6 @@ function hapusPembayaran(id_iuran) {
                             debugMessage += '\n- ID Iuran: ' + data.debug.id_iuran;
                             debugMessage += '\n- Count Before: ' + data.debug.count_before;
                             debugMessage += '\n- Count After: ' + (data.debug.count_after ?? 'N/A');
-                            debugMessage += '\n- Rows Deleted: ' + (data.debug.rows_deleted ?? 'N/A');
                             if (data.debug.data_to_delete) {
                                 debugMessage += '\n- Data Found: ' + JSON.stringify(data.debug.data_to_delete);
                             }
@@ -995,64 +995,8 @@ function hapusPembayaran(id_iuran) {
     });
 }
 
-// Search Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Search function untuk tabel rekap KK
-    const searchRekap = document.getElementById('searchRekap');
-    const tableRekap = document.getElementById('tableRekap');
-    
-    if (searchRekap && tableRekap) {
-        searchRekap.addEventListener('keyup', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = tableRekap.querySelectorAll('tbody tr');
-            
-            rows.forEach(row => {
-                const namaKK = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                if (namaKK.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    }
-    
-    // Search function untuk tabel detail
-    const searchDetail = document.getElementById('searchDetail');
-    const tableDetail = document.getElementById('tableDetail');
-    
-    if (searchDetail && tableDetail) {
-        searchDetail.addEventListener('keyup', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = tableDetail.querySelectorAll('tbody tr');
-            
-            rows.forEach(row => {
-                const periode = row.querySelector('td:first-child').textContent.toLowerCase();
-                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-                
-                if (periode.includes(searchTerm) || status.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    }
-});
-
-// Clear search when page loads
-window.addEventListener('load', function() {
-    const searchRekap = document.getElementById('searchRekap');
-    const searchDetail = document.getElementById('searchDetail');
-    
-    if (searchRekap) searchRekap.value = '';
-    if (searchDetail) searchDetail.value = '';
-});
-
 function showPembayarBulanan() {
-    // Ambil data dari PHP (tanpa file baru, gunakan data yang sudah diambil di halaman)
     const data = <?php
-        // Ambil data pembayaran bulanan sesuai filter
         $listPembayar = [];
         if ($kode_tarif) {
             if ($is_bulanan) {
@@ -1109,70 +1053,87 @@ function namaKK(nikk) {
     const kkList = <?php echo json_encode(array_column($kk, 'nama', 'nikk')); ?>;
     return kkList[nikk] || '-';
 }
-
-(function() {
-  document.querySelectorAll('#btnPrint').forEach(function(btnPrint) {
-    btnPrint.addEventListener('click', function(e) {
-      e.preventDefault();
-      let printArea = '';
-      let printTitle = '';
-      // Cek mode rekap atau detail
-      if (document.getElementById('tableRekap') && document.getElementById('tableRekap').offsetParent !== null) {
-          printArea = document.getElementById('tableRekap').outerHTML;
-          // Ambil bulan, tahun, dan jenis iuran
-          let bulan = document.getElementById('bulan') ? document.getElementById('bulan').selectedOptions[0].text : '';
-          let tahun = document.getElementById('tahun') ? document.getElementById('tahun').value : '';
-          let jenisIuran = '';
-          let jenisIuranEl = document.querySelector('.text-lg.font-semibold.mb-3');
-          if (jenisIuranEl) {
-            jenisIuran = jenisIuranEl.textContent.replace('Total Setoran', '').trim();
-          }
-          printTitle = `${jenisIuran} - per ${bulan} ${tahun}`;
-      } else if (document.getElementById('tableDetail') && document.getElementById('tableDetail').offsetParent !== null) {
-          printArea = document.getElementById('tableDetail').outerHTML;
-          // Ambil jenis iuran, nikk, nama KK
-          let infoSpan = document.querySelector('.mb-4.flex.items-center.gap-2 span.font-semibold');
-          if (infoSpan) {
-            printTitle = infoSpan.textContent.replace('|', '').trim();
-          } else {
-            printTitle = 'Detail Iuran';
-          }
-      } else {
-          alert('Tidak ada data untuk dicetak!');
-          return;
-      }
-      let filter = document.querySelector('.flex.items-center.gap-2 form') ? document.querySelector('.flex.items-center.gap-2 form').outerHTML : '';
-      let win = window.open('', '', 'width=900,height=650');
-      win.document.write(`
-          <html>
-          <head>
-              <title>Print Iuran</title>
-              <link href=\"https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css\" rel=\"stylesheet\">
-              <style>
-                  body { font-family: Arial, sans-serif; margin: 20px; }
-                  table { border-collapse: collapse; width: 100%; }
-                  th, td { border: 1px solid #888; padding: 6px 8px; font-size: 12px; }
-                  th { background: #f1f5f9; }
-                  h1 { margin-bottom: 10px; }
-                  .print-filter { margin-bottom: 10px; }
-                  .print-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 12px; }
-              </style>
-          </head>
-          <body>
-              <div class="print-title">${printTitle}</div>
-              <div class="print-filter">${filter}</div>
-              ${printArea}
-          </body>
-          </html>
-      `);
-      win.document.close();
-      win.focus();
-      win.print();
-      setTimeout(() => { win.close(); }, 500);
-    });
-  });
-})();
 </script>
+
+    <!-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/print.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/export.js"></script>
+	  <script src="js/qrcode.min.js"></script>
+    <script src="js/monthSelectPlugin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.1/exceljs.min.js"></script> -->
+    <!-- Tambahkan sebelum <script> $(document).ready(... -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script> -->
+
+<script>
+    const savedColor = localStorage.getItem('overlayColor') || '#000000E6';
+    document.body.style.backgroundColor = savedColor;
+</script>
+
+<!-- Search Functionality -->
+<script>
+// Search function untuk tabel rekap KK
+document.addEventListener('DOMContentLoaded', function() {
+    const searchRekap = document.getElementById('searchRekap');
+    const tableRekap = document.getElementById('tableRekap');
+    
+    if (searchRekap && tableRekap) {
+        searchRekap.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableRekap.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const namaKK = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (namaKK.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Search function untuk tabel detail
+    const searchDetail = document.getElementById('searchDetail');
+    const tableDetail = document.getElementById('tableDetail');
+    
+    if (searchDetail && tableDetail) {
+        searchDetail.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = tableDetail.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const periode = row.querySelector('td:first-child').textContent.toLowerCase();
+                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                
+                if (periode.includes(searchTerm) || status.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+// Clear search when page loads
+window.addEventListener('load', function() {
+    const searchRekap = document.getElementById('searchRekap');
+    const searchDetail = document.getElementById('searchDetail');
+    
+    if (searchRekap) searchRekap.value = '';
+    if (searchDetail) searchDetail.value = '';
+});
+</script>
+</body>
+</html>
 
 <style>
 /* Modern Box Styling untuk Iuran */
@@ -1312,6 +1273,10 @@ function namaKK(nikk) {
     font-size: 0.75rem;
   }
   
+  .arrow-icon {
+    font-size: 1.25rem;
+  }
+  
   .flex.items-center.space-x-4 {
     gap: 0.75rem;
   }
@@ -1358,21 +1323,11 @@ function namaKK(nikk) {
 .box-modern-iuran:nth-child(4) { animation-delay: 0.4s; }
 .box-modern-iuran:nth-child(5) { animation-delay: 0.5s; }
 .box-modern-iuran:nth-child(6) { animation-delay: 0.6s; }
-
-@media print {
-  #btnPrint, .bg-blue-600, .hover\:bg-blue-700, .shadow, .mb-4.flex.items-center.gap-2 { display: none !important; }
-  .aksi-print-hide, .aksi-print-hide * {
-    display: none !important;
-  }
-}
-.bx-printer {
-  transition: color 0.2s, transform 0.2s;
-}
-#btnPrint:hover .bx-printer {
-  color: #1d4ed8 !important;
-  transform: scale(1.15);
-}
 </style>
 
-</body>
-</html>
+<style>
+#modalPembayarBulanan .bg-white {
+  background-color: rgba(255,255,255,0.85) !important;
+  backdrop-filter: blur(2px);
+}
+</style>
