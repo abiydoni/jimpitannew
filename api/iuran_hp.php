@@ -325,7 +325,7 @@ if ($kode_tarif) {
 // Icon untuk tiap jenis iuran (tanpa Jimpitan)
 // Menggunakan field icon dari database tb_tarif
 
-// Jika metode=0 di URL, redirect ke halaman utama iuran.php
+// Jika metode=0 di URL, redirect ke halaman utama iuran_hp.php
 if ($kode_tarif) {
   // Ambil metode dari database
   $stmt = $pdo->prepare("SELECT metode FROM tb_tarif WHERE kode_tarif = ?");
@@ -333,7 +333,7 @@ if ($kode_tarif) {
   $metode = $stmt->fetchColumn();
   
   if ($metode === '0') {
-      header('Location: iuran.php');
+      header('Location: iuran_hp.php');
       exit;
   }
 }
@@ -438,7 +438,7 @@ if ($kode_tarif) {
   <?php elseif(!$nikk): ?>
     <!-- Tabel Rekap per KK untuk Jenis Iuran Terpilih -->
     <div class="mb-4 flex items-center gap-2">
-      <a href="iuran.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
+      <a href="iuran_hp.php?tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke menu iuran</a>
       <button id="btnPrint" title="Print" style="border:none;background:none;cursor:pointer;outline:none;"><i class="bx bx-printer" style="color:#2563eb;font-size:1.6rem;"></i></button>
     </div>
 
