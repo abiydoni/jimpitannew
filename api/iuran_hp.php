@@ -466,7 +466,7 @@ if ($kode_tarif) {
               $total_setoran_tahunan = intval($stmt_tahunan->fetchColumn());
           } elseif ($is_seumurhidup) {
               // DEBUG OUTPUT
-              echo '<tr><td colspan="6" style="color:red;font-size:12px">DEBUG: is_seumurhidup=' . ($is_seumurhidup ? 'TRUE' : 'FALSE') . ', nikk=' . htmlspecialchars($nikk) . ', kode_tarif=' . htmlspecialchars($kode_tarif) . '</td></tr>';
+              echo '<tr><td colspan="6" style="color:red;font-size:12px">DEBUG: is_seumurhidup=' . ($is_seumurhidup ? 'TRUE' : 'FALSE') . ', nikk=' . ($nikk ? htmlspecialchars($nikk) : '') . ', kode_tarif=' . htmlspecialchars($kode_tarif) . '</td></tr>';
               if ($is_seumurhidup) {
                   $tarif_nom = intval($tarif_map[$kode_tarif]['tarif']);
                   $stmt_total = $pdo->prepare("SELECT SUM(jml_bayar) as total_bayar FROM tb_iuran WHERE nikk = ? AND kode_tarif = ?");
@@ -614,8 +614,8 @@ if ($kode_tarif) {
             <a href="?kode_tarif=<?= urlencode($kode_tarif) ?>&tahun=<?= $tahun ?>&bulan=<?= $bulan_filter ?>" class="text-blue-600 hover:underline">&larr; Kembali ke rekap KK</a>
             <span class="font-semibold">|
               <?= htmlspecialchars($tarif_map[$kode_tarif]['nama_tarif']) ?> -
-              <?= htmlspecialchars($nikk) ?>
-              (<?= htmlspecialchars($pdo->query("SELECT nama FROM tb_warga WHERE nikk='$nikk' AND hubungan='Kepala Keluarga' LIMIT 1")->fetchColumn()) ?>)
+              <?= $nikk ? htmlspecialchars($nikk) : '' ?>
+              (<?= $nikk ? htmlspecialchars($pdo->query("SELECT nama FROM tb_warga WHERE nikk='$nikk' AND hubungan='Kepala Keluarga' LIMIT 1")->fetchColumn()) : '' ?>)
             </span>
           </div>
           <div class="overflow-x-auto">
