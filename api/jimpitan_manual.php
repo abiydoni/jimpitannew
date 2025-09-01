@@ -29,8 +29,8 @@ if (isset($_POST['submit'])) {
     $kode_u = 'system';
     $nama_u = 'system';
 
-    $stmt_insert = $pdo->prepare("INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt_insert->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u]);
+    $stmt_insert = $pdo->prepare("INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt_insert->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u, 1]);
 
     // Refresh halaman agar data tabel terupdate
     echo "<script>location.reload();</script>";

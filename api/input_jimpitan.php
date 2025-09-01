@@ -53,12 +53,12 @@ if (isset($data->report_id) && isset($data->jimpitan_date) && isset($data->nomin
     }
 
     // Siapkan pernyataan SQL untuk penyisipan
-    $sql = "INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO report (report_id, jimpitan_date, nominal, collector, kode_u, nama_u, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        // Eksekusi pernyataan
-        $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u]);
+        // Eksekusi pernyataan (status = 1 untuk data hasil scan)
+        $stmt->execute([$report_id, $jimpitan_date, $nominal, $collector, $kode_u, $nama_u, 1]);
         
             // Ambil kk_name setelah insert
         $kkQuery = "SELECT kk_name FROM master_kk WHERE code_id = ?";
