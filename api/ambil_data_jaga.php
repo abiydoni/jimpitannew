@@ -58,7 +58,7 @@ $pesan .= "🕸️ *Link scan* : https://rt07.appsbee.my.id\n\n";
 $pesan .= "*WAJIB SCAN QR*\n";
 $pesan .= "Dihimbau kepada petugas jimpitan *WAJIB SCAN QR*\n";
 $pesan .= "Jumlah uang yang di setor *HARUS SAMA DENGAN*\n";
-$pesan .= "Jumlah uang yang di SCAN\n";
+$pesan .= "Jumlah uang yang di *SCAN*\n";
 $pesan .= "_tidak boleh_ *LEBIH* _dan tidak boleh_ *KURANG*\n";
 $pesan .= "\n_- Pesan Otomatis dari System -_";
 
