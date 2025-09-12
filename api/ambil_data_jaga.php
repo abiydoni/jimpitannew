@@ -55,7 +55,12 @@ if ($users) {
 // Tambahkan penutup
 $pesan .= "\n🌟 Selamat melaksanakan tugas 🏡RT.07\n";
 $pesan .= "🕸️ *Link scan* : https://rt07.appsbee.my.id\n\n";
-$pesan .= "_- Pesan Otomatis dari System -_";
+$pesan .= "*WAJIB SCAN QR*\n";
+$pesan .= "Dihimbau kepada petugas jimpitan *WAJIB SCAN QR*\n";
+$pesan .= "Jumlah uang yang di setor *HARUS SAMA DENGAN*\n";
+$pesan .= "Jumlah uang yang di SCAN\n";
+$pesan .= "_tidak boleh_ *LEBIH* _dan tidak boleh_ *KURANG*\n";
+$pesan .= "\n_- Pesan Otomatis dari System -_";
 
 header('Content-Type: text/plain');
 echo $pesan;
