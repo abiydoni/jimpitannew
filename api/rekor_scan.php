@@ -92,7 +92,13 @@ include 'db.php';
         <div class="flex-1 border rounded-md mb-4 overflow-y-auto bg-white bg-opacity-50" style="max-height: 75vh; font-size: 12px;">
             <?php
                 // Eksekusi query
-                $stmt = $pdo->prepare("SELECT nama_u, COUNT(*) AS jumlah_scan FROM report GROUP BY kode_u ORDER BY jumlah_scan DESC");
+                $stmt = $pdo->prepare("
+                    SELECT nama_u, COUNT(*) AS jumlah_scan 
+                    FROM report 
+                    WHERE status = 1 
+                    GROUP BY kode_u 
+                    ORDER BY jumlah_scan DESC
+                ");
                 $stmt->execute();
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

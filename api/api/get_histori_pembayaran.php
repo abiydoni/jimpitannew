@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include '../db.php';
 
 $nikk = $_POST['nikk'] ?? '';
 $kode_tarif = $_POST['kode_tarif'] ?? '';
@@ -14,6 +14,9 @@ if (empty($nikk) || empty($kode_tarif) || empty($periode)) {
 // Parse periode
 if (strpos($periode, '-') !== false) {
     [$bulan, $tahun] = explode('-', $periode);
+    if ($bulan === 'Seumur Hidup') {
+        $bulan = 'Selamanya';
+    }
 } else {
     $tahun = $periode;
     $bulan = null;

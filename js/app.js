@@ -87,6 +87,10 @@ function onScanSuccess(decodedText) {
           icon: "success",
           title: "Sukses",
           text: data.message,
+          showConfirmButton: true,
+          confirmButtonText: "OK",
+          timer: 3000,
+          timerProgressBar: true,
           willClose: startScanning,
         });
       } else {

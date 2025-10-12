@@ -24,50 +24,60 @@ include 'api/get_info.php';
 ?>
 
             <ul class="box-info">
-                <li>
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalKKj; ?> KK</h3>
-                        <a href="kk.php">Jimpitan</a>
-                    </span>
+                <li class="box-modern">
+                    <a href="kk.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-blue'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalKKj; ?> KK</h3>
+                            <span class="link-text">Jimpitan</span>
+                        </span>
+                    </a>
                 </li>
-                <li>
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalKK; ?> KK</h3>
-                        <a href="warga.php">Kepala Keluarga</a>
-                    </span>
+                <li class="box-modern">
+                    <a href="warga.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-green'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalKK; ?> KK</h3>
+                            <span class="link-text">Kepala Keluarga</span>
+                        </span>
+                    </a>
                 </li>
-                <li>
-                    <i class='bx bxs-group bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalPeserta"><?php echo $totalWarga; ?> Orang</h3>
-                        <a href="warga.php">Total Warga</a>
-                    </span>
+                <li class="box-modern">
+                    <a href="warga.php" class="box-link">
+                        <i class='bx bxs-group bx-lg icon-purple'></i>
+                        <span class="text">
+                            <h3 id="totalPeserta" class="text-dark"><?php echo $totalWarga; ?> Orang</h3>
+                            <span class="link-text">Total Warga</span>
+                        </span>
+                    </a>
                 </li>
-                <li>
-                    <i class='bx bxs-badge-check bx-lg' ></i>
-                    <span class="text">
-                        <h3 id="totalSaldo">
-                            <?php 
-                                function formatRupiah($angka) {
-                                    return "Rp " . number_format($angka, 0, ',', '.');
-                                }
+                <li class="box-modern">
+                    <a href="keuangan.php" class="box-link">
+                        <i class='bx bxs-badge-check bx-lg icon-orange'></i>
+                        <span class="text">
+                            <h3 id="totalSaldo" class="text-dark">
+                                <?php 
+                                    function formatRupiah($angka) {
+                                        return "Rp " . number_format($angka, 0, ',', '.');
+                                    }
 
-                                // Contoh penggunaan
-                                $saldo = $totalSaldo;
-                                echo formatRupiah($saldo); // Output: Rp 1.500.000
-                            ?>
-                        </h3>
-                        <a href="keuangan.php">Saldo KAS</a>
-                    </span>
+                                    // Contoh penggunaan
+                                    $saldo = $totalSaldo;
+                                    echo formatRupiah($saldo); // Output: Rp 1.500.000
+                                ?>
+                            </h3>
+                            <span class="link-text">Saldo KAS</span>
+                        </span>
+                    </a>
                 </li>
-                <li>
-                    <i class='bx bxs-info-circle bx-lg'></i>
-                    <span class="text">
-                        <h3 id="totalUncheck"><?php echo $totalUsers; ?> Orang</h3>
-                        <a href="jadwal.php">Users JAGA</a>
-                    </span>
+                <li class="box-modern">
+                    <a href="jadwal.php" class="box-link">
+                        <i class='bx bxs-info-circle bx-lg icon-pink'></i>
+                        <span class="text">
+                            <h3 id="totalUncheck" class="text-dark"><?php echo $totalUsers; ?> Orang</h3>
+                            <span class="link-text">Users JAGA</span>
+                        </span>
+                    </a>
                 </li>
             </ul>
 
@@ -189,8 +199,191 @@ include 'api/get_info.php';
       });
     }
   </script>
-
 <style>
+/* Modern Box Styling */
+.box-modern {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  padding: 1rem 1.2rem !important;
+  min-height: 120px !important;
+  max-height: 140px !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  position: relative;
+}
+
+.box-modern:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Box Link Styling */
+.box-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.box-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Link Text Styling */
+.link-text {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: #64748b !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  z-index: 10;
+  transition: color 0.3s ease !important;
+}
+
+.box-link:hover .link-text {
+  color: #475569 !important;
+}
+
+/* Icon Colors */
+.icon-blue {
+  color: #3b82f6 !important;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.icon-green {
+  color: #10b981 !important;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.icon-purple {
+  color: #8b5cf6 !important;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.icon-orange {
+  color: #f59e0b !important;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+.icon-pink {
+  color: #ec4899 !important;
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.2);
+}
+
+/* Text Styling */
+.text-dark {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+.link-modern {
+  color: #64748b !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: color 0.3s ease !important;
+  font-size: 0.9rem !important;
+}
+
+.link-modern:hover {
+  color: #475569 !important;
+  text-decoration: underline !important;
+}
+
+/* Box Info Layout */
+.box-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+.box-info li {
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  margin: 0;
+}
+
+.box-info li .bx {
+  margin-bottom: 0.8rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.box-info li .text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  position: relative;
+}
+
+.box-info li .text h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.box-info li .text a {
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  position: absolute;
+  top: -35px;
+  left: 65px;
+  color: #64748b !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: color 0.3s ease !important;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.box-info li .text a:hover {
+  color: #475569 !important;
+  text-decoration: underline !important;
+}
+
 .wide-container {
   max-width: 1200px;
   margin: 0 auto 2rem auto;
@@ -274,4 +467,46 @@ include 'api/get_info.php';
   color: #222;
   margin-bottom: 0.7rem;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .box-info {
+    gap: 1rem;
+  }
+  
+  .box-info li {
+    flex: 1 1 150px;
+    min-width: 140px;
+  }
+  
+  .box-modern {
+    padding: 0.8rem 1rem !important;
+    min-height: 100px !important;
+    max-height: 120px !important;
+  }
+  
+  .box-info li .bx {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    margin-bottom: 0.6rem;
+  }
+  
+  .box-info li .text h3 {
+    font-size: 1.2rem;
+  }
+  
+  .link-text {
+    font-size: 0.7rem !important;
+    top: -20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .link-text {
+    top: -18px !important;
+    font-size: 0.65rem !important;
+  }
+}
 </style>
+

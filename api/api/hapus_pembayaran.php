@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include '../db.php';
 
 header('Content-Type: application/json');
 
@@ -34,6 +34,38 @@ try {
     $debug_info['data_to_delete'] = $data_to_delete;
     
     if ($count_before > 0) {
+        // Validasi: Cek apakah bulan pembayaran sama dengan bulan sekarang
+        $bulan_sekarang = date('n'); // 1-12
+        $tahun_sekarang = date('Y');
+        $bulan_pembayaran = date('n', strtotime($data_to_delete['tgl_bayar']));
+        $tahun_pembayaran = date('Y', strtotime($data_to_delete['tgl_bayar']));
+        
+        $debug_info['bulan_sekarang'] = $bulan_sekarang;
+        $debug_info['tahun_sekarang'] = $tahun_sekarang;
+        $debug_info['bulan_pembayaran'] = $bulan_pembayaran;
+        $debug_info['tahun_pembayaran'] = $tahun_pembayaran;
+        
+        // Jika bulan atau tahun tidak sama, tidak boleh dihapus
+        if ($bulan_pembayaran != $bulan_sekarang || $tahun_pembayaran != $tahun_sekarang) {
+            $nama_bulan = [
+                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+                7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+            ];
+            
+            $pesan_error = "Pembayaran tidak dapat dihapus! Pembayaran ini dilakukan pada " . 
+                          $nama_bulan[$bulan_pembayaran] . " " . $tahun_pembayaran . 
+                          ". Hanya pembayaran bulan " . $nama_bulan[$bulan_sekarang] . " " . $tahun_sekarang . 
+                          " yang dapat dihapus.";
+            
+            echo json_encode([
+                'success' => false, 
+                'message' => $pesan_error,
+                'error_type' => 'month_mismatch',
+                'debug' => $debug_info
+            ]);
+            exit;
+        }
+        
         // Hapus data berdasarkan id_iuran
         $stmt = $pdo->prepare("DELETE FROM tb_iuran WHERE id_iuran = ?");
         $stmt->execute([$id_iuran]);

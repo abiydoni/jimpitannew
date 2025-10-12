@@ -73,6 +73,60 @@ if ($rowProfil = $stmtProfil->fetch(PDO::FETCH_ASSOC)) {
     <!-- XLSX Library untuk Export/Import Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+.box-modern {
+  background: #fff !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  padding: 1rem 1.2rem !important;
+  min-height: 120px !important;
+  max-height: 140px !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  position: relative;
+}
+.box-modern:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border-color: #cbd5e1 !important;
+}
+.icon-blue {
+  color: #3b82f6 !important;
+  background: #e0edfd !important;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.12);
+}
+.icon-green {
+  color: #10b981 !important;
+  background: #d1fae5 !important;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.12);
+}
+.icon-purple {
+  color: #8b5cf6 !important;
+  background: #ede9fe !important;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.12);
+}
+.icon-orange {
+  color: #f59e0b !important;
+  background: #fef3c7 !important;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.12);
+}
+.icon-pink {
+  color: #ec4899 !important;
+  background: #fce7f3 !important;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.12);
+}
+    </style>
     </head>
 <body>
     <!-- SIDEBAR -->

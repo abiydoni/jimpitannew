@@ -9,12 +9,12 @@ if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$kode_tarif]);
 
+    $_SESSION['swal'] = ['msg' => 'Data berhasil dihapus!', 'icon' => 'success'];
     header("Location: tarif.php");
     exit();
 }
 
 include 'header.php';
-
 // Ambil data dari tabel users
 $sql = "SELECT * FROM tb_tarif";
 $stmt = $pdo->query($sql);
@@ -26,24 +26,16 @@ if (!empty($_SESSION['swal'])) {
   $msg = $_SESSION['swal']['msg'];
   $icon = $_SESSION['swal']['icon'];
   echo "<script>
-    if (!window.Swal) {
-      var script = document.createElement('script');
-      script.src = 'js/sweetalert2.all.min.js';
-      document.head.appendChild(script);
-    }
-    function showToast(msg, icon = 'success') {
+    document.addEventListener('DOMContentLoaded', function() {
       Swal.fire({
         toast: true,
         position: 'top-end',
-        icon: icon,
-        title: msg,
+        icon: '{$icon}',
+        title: '{$msg}',
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true
       });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      showToast('{$msg}', '{$icon}');
     });
   </script>";
   unset($_SESSION['swal']);
@@ -65,6 +57,7 @@ if (!empty($_SESSION['swal'])) {
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="text-left border px-3 py-2">Kode Tarif</th>
+                                <th class="text-center border px-3 py-2">Icon</th>
                                 <th class="text-center border px-3 py-2">Nama Tarif</th>
                                 <th class="text-center border px-3 py-2">Tarif</th>
                                 <th class="text-center border px-3 py-2">Metode</th>
@@ -75,16 +68,19 @@ if (!empty($_SESSION['swal'])) {
                         <?php foreach($tarif_1 as $tarif): ?>
                             <tr class="border-b hover:bg-gray-100">
                                 <td><?php echo htmlspecialchars($tarif["kode_tarif"]); ?></td>
+                                <td class="text-center">
+                                    <i class='bx <?php echo htmlspecialchars($tarif["icon"] ?? 'bx-money'); ?>' style="font-size: 24px;"></i>
+                                </td>
                                 <td><?php echo htmlspecialchars($tarif["nama_tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["tarif"]); ?></td>
                                 <td><?php echo htmlspecialchars($tarif["metode"]); ?></td>
                                 <td class="flex justify-center space-x-2">
-                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>', '<?php echo $tarif['metode']; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
+                                    <button onclick="openEditTarifModal('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>', '<?php echo $tarif['tarif']; ?>', '<?php echo $tarif['metode']; ?>', '<?php echo $tarif['icon'] ?? ''; ?>')" class="text-blue-600 hover:text-blue-800 font-bold py-1 px-1">
                                         <i class='bx bx-edit'></i> <!-- Ikon edit ditambahkan -->
                                     </button>
-                                    <a href="tarif.php?delete=<?php echo $tarif['kode_tarif']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $tarif['nama_tarif']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
+                                    <button onclick="confirmDelete('<?php echo $tarif['kode_tarif']; ?>', '<?php echo $tarif['nama_tarif']; ?>')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -114,11 +110,17 @@ if (!empty($_SESSION['swal'])) {
                         <label class="block text-sm font-medium text-gray-700">Metode:</label>
                         <select name="metode" id="metode" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                             <option value="">Pilih Metode</option>
-                            <option value="0">Bulanan</option>
-                            <option value="1">Tahunan</option>
+                            <option value="0">Tidak Ditampilkan</option>
+                            <option value="1">Bulanan</option>
+                            <option value="2">Tahunan</option>
                         </select>
                     </div>
-                    <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
+                    <div class="bg-white p-1 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Icon:</label>
+                        <input type="text" name="icon" placeholder="Contoh: bx-money, bx-home, bx-car" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <small class="text-gray-500 text-xs">Gunakan format Boxicons (bx-*)</small>
+                    </div>
+                <button type="submit" class="mt-1 bg-blue-500 text-white font-semibold py-1 px-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button> <!-- Mengurangi padding -->
                 </form>
             </div>
         </div>
@@ -131,6 +133,11 @@ if (!empty($_SESSION['swal'])) {
                     <div class="bg-white p-2 rounded-lg shadow-md">
                         <label class="block text-sm font-medium text-gray-700">Nama Tarif:</label>
                         <input type="text" name="nama_tarif" id="edit_nama_tarif" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg shadow-md">
+                        <label class="block text-sm font-medium text-gray-700">Icon:</label>
+                        <input type="text" name="icon" id="edit_icon" placeholder="Contoh: bx-money, bx-home, bx-car" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+                        <small class="text-gray-500">Gunakan format Boxicons (bx-*)</small>
                     </div>
                     <div class="bg-white p-2 rounded-lg shadow-md">
                         <label class="block text-sm font-medium text-gray-700">Tarif:</label>
@@ -171,11 +178,12 @@ if (!empty($_SESSION['swal'])) {
 </script>
 
 <script>
-    function openEditTarifModal(kode_tarif, nama_tarif, tarif, metode) {
+    function openEditTarifModal(kode_tarif, nama_tarif, tarif, metode, icon) {
         document.getElementById('edit_kode_tarif').value = kode_tarif;
         document.getElementById('edit_nama_tarif').value = nama_tarif;
         document.getElementById('edit_tarif').value = tarif;
         document.getElementById('edit_metode').value = metode;
+        document.getElementById('edit_icon').value = icon;
 
         const modal = document.getElementById("editTarifModal");
         modal.classList.remove("hidden");
@@ -205,6 +213,25 @@ if (!empty($_SESSION['swal'])) {
             }
         }
     });
+</script>
+
+<script>
+    function confirmDelete(kode_tarif, nama_tarif) {
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: `Yakin ingin menghapus data "${nama_tarif}"?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `tarif.php?delete=${kode_tarif}`;
+            }
+        });
+    }
 </script>
 <?php
 // Tutup koneksi

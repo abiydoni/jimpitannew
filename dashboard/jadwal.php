@@ -15,16 +15,10 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-
 // Ambil data dari tabel users
 $sql = "SELECT * FROM users";
 $stmt = $pdo->query($sql);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Ambil data kk_name dari tabel mater_kk
-$sql_kk = "SELECT kk_name FROM master_kk";
-$stmt_kk = $pdo->query($sql_kk);
-$kk_names = $stmt_kk->fetchAll(PDO::FETCH_ASSOC);
 
 include 'header.php'; // Sudah termasuk koneksi dan session
 ?>
@@ -49,7 +43,7 @@ include 'header.php'; // Sudah termasuk koneksi dan session
                             <tr>
                                 <th class="border px-3 py-2">ID</th>
                                 <th class="border px-3 py-2">Username</th>
-                                <th class="border px-3 py-2">Nama</th>
+                                <th class="border px-3 py-2">Nama Penjaga</th>
                                 <th class="border px-3 py-2">Shift</th>
                                 <th class="border px-3 py-2">Role</th>
                                 <th class="border px-3 py-2 text-center">Aksi</th>
@@ -70,7 +64,7 @@ include 'header.php'; // Sudah termasuk koneksi dan session
                                     <a href="jadwal.php?delete=<?php echo $user['id_code']; ?>" onclick="return confirm('Yakin ingin menghapus data <?php echo $user['name']; ?> ?')" class="text-red-600 hover:text-red-800 font-bold py-1 px-1">
                                         <i class='bx bx-trash'></i> <!-- Ikon hapus ditambahkan -->
                                     </a>
-                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['password']; ?>')" class="text-yellow-600 hover:text-yellow-800 font-bold py-1 px-1">
+                                    <button onclick="openChangePasswordModal('<?php echo $user['id_code']; ?>', '<?php echo $user['name']; ?>', '<?php echo $user['user_name']; ?>')" class="text-yellow-600 hover:text-yellow-800 font-bold py-1 px-1">
                                         <i class='bx bx-key'></i> <!-- Ikon untuk ubah password -->
                                     </button>                                
                                 </td>
@@ -96,13 +90,8 @@ include 'header.php'; // Sudah termasuk koneksi dan session
                     <input type="text" name="user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                 </div>
                 <div class="bg-white p-1 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <select name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                        <option value="" disabled selected>Pilih Nama KK</option>
-                        <?php foreach ($kk_names as $kk): ?>
-                            <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700">Nama Penjaga:</label>
+                    <input type="text" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" placeholder="Masukkan nama penjaga" required>
                 </div>
                 <div class="bg-white p-1 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Password:</label>
@@ -145,13 +134,8 @@ include 'header.php'; // Sudah termasuk koneksi dan session
                     <input type="text" name="user_name" id="edit_user_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
-                    <label class="block text-sm font-medium text-gray-700">Name:</label>
-                    <select name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
-                        <option value="" disabled selected>Pilih Nama KK</option>
-                        <?php foreach ($kk_names as $kk): ?>
-                            <option value="<?= htmlspecialchars($kk['kk_name']) ?>"><?= htmlspecialchars($kk['kk_name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700">Nama Penjaga:</label>
+                    <input type="text" name="name" id="edit_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" placeholder="Masukkan nama penjaga" required>
                 </div>
                 <div class="bg-white p-2 rounded-lg shadow-md">
                     <label class="block text-sm font-medium text-gray-700">Shift:</label>
