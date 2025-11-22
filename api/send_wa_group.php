@@ -1,10 +1,17 @@
 <?php
 include 'get_konfigurasi.php';
 
-// Ambil konfigurasi dari database
-$gatewayBase = get_konfigurasi('url_group'); // bisa berisi base URL gateway atau endpoint penuh
-$sessionId   = get_konfigurasi('session_id');
-$gatewayKey  = get_konfigurasi('gateway_key'); // opsional
+// Ambil konfigurasi dari database (menggunakan field yang sama)
+$gatewayBase = get_konfigurasi('url_group'); // berisi base URL Telegram API (default: https://api.telegram.org)
+$sessionId   = get_konfigurasi('session_id'); // berisi telegram_token bot
+$gatewayKey  = get_konfigurasi('gateway_key'); // opsional (tidak diperlukan untuk Telegram)
+
+// Validasi token bot
+if (empty($sessionId)) {
+	http_response_code(400);
+	echo json_encode(['error' => 'Telegram token tidak ditemukan. Pastikan konfigurasi "session_id" berisi token bot Telegram.']);
+	exit;
+}
 
 // Cek metode POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -23,12 +30,10 @@ if (empty($groupList) || $pesangroup === '') {
 	exit;
 }
 
-// Tentukan endpoint WA Gateway baru
-$gatewayBase = rtrim((string)$gatewayBase, '/');
-// Jika yang disimpan sudah mengandung "/message", anggap sudah endpoint akhir
-$apiUrl = (stripos($gatewayBase, '/message') === false)
-	? $gatewayBase . '/message/send-text'
-	: $gatewayBase;
+// Bangun URL Telegram Bot API
+// Jika url_group kosong atau tidak diisi, gunakan default api.telegram.org
+$telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
+$apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
 $logAll = "";
 $successCount = 0;
@@ -38,25 +43,23 @@ foreach ($groupList as $group) {
 	$group = trim((string)$group);
 	if ($group === '') continue;
 
-	// Pastikan format JID grup WhatsApp
-	$jid = $group;
-	if (stripos($jid, '@g.us') === false) {
-		$jid .= '@g.us';
-	}
+	// Normalisasi chat_id grup Telegram
+	// Hapus format WhatsApp jika ada (@g.us) - untuk kompatibilitas
+	$chatId = str_replace('@g.us', '', $group);
+	$chatId = trim($chatId);
 
+	if ($chatId === '') continue;
+
+	// Payload untuk Telegram Bot API
 	$payload = [
-		'session'  => $sessionId,
-		'to'       => $jid,
-		'text'     => $pesangroup,
-		'is_group' => true,
+		'chat_id' => $chatId,
+		'text'    => $pesangroup,
+		'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
 	];
 
 	$headers = [
 		'Content-Type: application/json',
 	];
-	if (!empty($gatewayKey)) {
-		$headers[] = 'key: ' . $gatewayKey; // header otentikasi gateway (opsional)
-	}
 
 	$ch = curl_init($apiUrl);
 	curl_setopt($ch, CURLOPT_POST, true);
@@ -64,9 +67,11 @@ foreach ($groupList as $group) {
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
 
 	$response = curl_exec($ch);
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	$curlError = curl_error($ch);
 	curl_close($ch);
 
 	$status = ($httpCode === 200) ? 'SUKSES' : 'GAGAL';
@@ -74,13 +79,15 @@ foreach ($groupList as $group) {
 		$successCount++;
 	} else {
 		$errorCount++;
+		// Log error detail untuk debugging
+		error_log('Gagal mengirim pesan Telegram ke chat_id: ' . $chatId . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
 	}
 
-	$logAll .= '[' . date('Y-m-d H:i:s') . "] Group: $jid | Pesan: $pesangroup | Status: $status ($httpCode)\n";
+	$logAll .= '[' . date('Y-m-d H:i:s') . "] Group: $chatId | Pesan: $pesangroup | Status: $status ($httpCode)\n";
 }
 
 // Simpan log semua
-file_put_contents(__DIR__ . '/log-kirim-wa.txt', $logAll, FILE_APPEND);
+file_put_contents(__DIR__ . '/log-kirim-telegram.txt', $logAll, FILE_APPEND);
 
 // Redirect dengan status
 if ($successCount > 0 && $errorCount === 0) {

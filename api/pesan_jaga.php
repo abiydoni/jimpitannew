@@ -9,8 +9,11 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'db.php';
+include 'get_konfigurasi.php';
 // Cek jika ada parameter status di URL
 $status = isset($_GET['status']) ? $_GET['status'] : '';
+// Ambil group_id dari konfigurasi, default ke format Telegram
+$defaultGroupId = get_konfigurasi('group_id1') ?: "-1003246088334";
 ?>
 
 <!DOCTYPE html>
@@ -37,7 +40,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
         <h1 class="text-xl font-bold text-gray-700 mb-2">
             <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
-            Kirim Pesan Group WA
+            Kirim Pesan Group Telegram
         </h1>
         <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
         <!-- Notifikasi Sukses -->
@@ -51,10 +54,10 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             </div>
         <?php endif; ?>
         <form method="post" action="send_wa_group.php">
-            <label>ID Group WA:</label>
+            <label>Chat ID Group Telegram:</label>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="groupId[]" value="120363398680818900@g.us" class="flex-1 px-2 py-1 border rounded">
+                    <input type="text" name="groupId[]" value="<?= htmlspecialchars($defaultGroupId) ?>" class="flex-1 px-2 py-1 border rounded">
                     <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
@@ -95,7 +98,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Fungsi untuk menambah input nomor WA
+        // Fungsi untuk menambah input Chat ID Telegram
         function tambahNomor(event) {
             event.preventDefault(); // Mencegah tindakan default (seperti pengalihan atau submit form)
 
@@ -107,7 +110,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'groupId[]';
-            input.placeholder = '120363398680818900@g.us';
+            input.placeholder = '-1001234567890';
             input.className = 'flex-1 px-2 py-1 border rounded';
 
             const hapusBtn = document.createElement('button');

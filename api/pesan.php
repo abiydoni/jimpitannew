@@ -51,11 +51,12 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             </div>
         <?php endif; ?>
         <form method="post" action="send_wa.php">
-            <!-- Input Nomor WA (bisa ditambah/hapus) -->
-            <label>Nomor WA:</label>
+            <!-- Input Chat ID Telegram (bisa ditambah/hapus) -->
+            <label>Chat ID Telegram:</label>
+            <p class="text-xs text-gray-500 mb-2">Untuk private chat: gunakan angka positif (contoh: 123456789). Untuk grup: gunakan angka negatif (contoh: -1001234567890)</p>
             <div id="nomor-container">
                 <div class="input-group flex items-center">
-                    <input type="text" name="phoneNumbers[]" placeholder="Contoh: 6281234567890" class="flex-1 px-2 py-1 border rounded">
+                    <input type="text" name="phoneNumbers[]" placeholder="Contoh: 123456789 atau -1001234567890" class="flex-1 px-2 py-1 border rounded">
                     <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
                 </div>
             </div>
@@ -95,7 +96,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         // Menampilkan tanggal yang diformat ke dalam elemen dengan id "tanggal"
         document.getElementById("tanggal").textContent = formatTanggalIndonesia();
 
-        // Fungsi untuk menambah input nomor WA
+        // Fungsi untuk menambah input Chat ID Telegram
         function tambahNomor(event) {
             event.preventDefault(); // Mencegah tindakan default (seperti pengalihan atau submit form)
 
@@ -107,7 +108,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'phoneNumbers[]';
-            input.placeholder = 'Contoh: 6281234567890';
+            input.placeholder = 'Contoh: 123456789 atau -1001234567890';
             input.className = 'flex-1 px-2 py-1 border rounded';
 
             const hapusBtn = document.createElement('button');

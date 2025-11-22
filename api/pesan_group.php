@@ -7,8 +7,10 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 include 'db.php';
+include 'get_konfigurasi.php';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
-$groupId = "6285729705810-1505093181@g.us";
+// Ambil group_id dari konfigurasi, default ke format Telegram
+$groupId = get_konfigurasi('group_id1') ?: "-1003246088334";
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -41,7 +43,7 @@ $groupId = "6285729705810-1505093181@g.us";
   <div class="relative z-10 flex flex-col max-w-4xl mx-auto p-4 shadow-lg rounded-lg">
     <h1 class="text-xl font-bold text-gray-700 mb-2">
       <ion-icon name="star" class="text-yellow-500 ml-1 star-spin"></ion-icon>
-      Kirim Pesan Group WA
+      Kirim Pesan Group Telegram
     </h1>
     <p class="text-sm text-gray-500 mb-4">Tanggal: <span id="tanggal"></span></p>
 
@@ -52,9 +54,14 @@ $groupId = "6285729705810-1505093181@g.us";
     <?php endif; ?>
 
     <form method="post" action="send_wa_group.php">
-      <div id="nomor-container">
-        <div class="input-group flex items-center">
-          <input type="hidden" name="groupId[]" value="<?= htmlspecialchars($groupId) ?>">
+      <div class="input-group mb-4">
+        <label class="block mb-2 text-sm text-gray-600">Chat ID Group Telegram:</label>
+        <p class="text-xs text-gray-500 mb-2">Format: angka negatif (contoh: -1001234567890)</p>
+        <div id="nomor-container">
+          <div class="input-group flex items-center">
+            <input type="text" name="groupId[]" value="<?= htmlspecialchars($groupId) ?>" class="flex-1 px-2 py-1 border rounded" placeholder="-1001234567890">
+            <button type="button" onclick="tambahNomor(event)" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">+</button>
+          </div>
         </div>
       </div>
 
@@ -100,7 +107,7 @@ $groupId = "6285729705810-1505093181@g.us";
     document.querySelector("form").addEventListener("submit", function(event) {
       const groupIds = Array.from(document.querySelectorAll('input[name="groupId[]"]')).map(input => input.value);
       const message = document.querySelector('textarea[name="message"]').value;
-      console.log("=== Kirim Pesan Group WA ===");
+      console.log("=== Kirim Pesan Group Telegram ===");
       console.log("Group ID(s):", groupIds);
       console.log("Pesan:", message);
     });
@@ -127,7 +134,7 @@ $groupId = "6285729705810-1505093181@g.us";
       const input = document.createElement('input');
       input.type = 'text';
       input.name = 'groupId[]';
-      input.placeholder = '120363398680818900@g.us';
+      input.placeholder = '-1001234567890';
       input.className = 'flex-1 px-2 py-1 border rounded';
 
       const hapusBtn = document.createElement('button');
