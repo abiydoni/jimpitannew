@@ -1,4 +1,7 @@
 <?php
+// Pastikan tidak ada output sebelum header
+ob_start();
+
 require 'db.php';
 date_default_timezone_set('Asia/Jakarta');
 
@@ -18,36 +21,65 @@ $bulanIndo = [
     '12' => 'Desember',
 ];
 
-// Ambil tanggal hari ini (tanpa tahun)
-$today = date('m-d');
+try {
+    // Ambil tanggal hari ini (tanpa tahun)
+    $today = date('m-d');
 
-// Query warga yang ulang tahun hari ini
-$stmt = $pdo->prepare("SELECT nama, tgl_lahir FROM tb_warga WHERE DATE_FORMAT(tgl_lahir, '%m-%d') = ?");
-$stmt->execute([$today]);
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Query warga yang ulang tahun hari ini
+    $stmt = $pdo->prepare("SELECT nama, tgl_lahir FROM tb_warga WHERE DATE_FORMAT(tgl_lahir, '%m-%d') = ?");
+    $stmt->execute([$today]);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Bangun pesan ucapan ultah
-$icon = "🎉🎂🥳";
-$pesan = "$icon *Selamat Ulang Tahun!* $icon\n\n";
+    // Bangun pesan ucapan ultah
+    $icon = "🎉🎂🥳";
+    $pesan = "$icon *Selamat Ulang Tahun!* $icon\n\n";
 
-if ($data && count($data) > 0) {
-    $pesan .= "Hari ini ada yang berulang tahun:\n";
-    $no = 1;
-    foreach ($data as $warga) {
-        // Format tanggal lahir ke Indonesia (tanpa tahun)
-        $tglObj = date_create($warga['tgl_lahir']);
-        $tgl = date_format($tglObj, 'd');
-        $bln = $bulanIndo[date_format($tglObj, 'm')];
-        $pesan .= "$no. *{$warga['nama']}* (lahir: $tgl $bln) 🎂\n";
-        $no++;
+    if ($data && count($data) > 0) {
+        $pesan .= "Hari ini ada yang berulang tahun:\n";
+        $no = 1;
+        foreach ($data as $warga) {
+            // Format tanggal lahir ke Indonesia (tanpa tahun)
+            $tglObj = date_create($warga['tgl_lahir']);
+            if ($tglObj) {
+                $tgl = date_format($tglObj, 'd');
+                $blnKey = date_format($tglObj, 'm');
+                $bln = isset($bulanIndo[$blnKey]) ? $bulanIndo[$blnKey] : $blnKey;
+                $nama = htmlspecialchars($warga['nama'], ENT_QUOTES, 'UTF-8');
+                $pesan .= "$no. *{$nama}* (lahir: $tgl $bln) 🎂\n";
+                $no++;
+            }
+        }
+        if ($no > 1) {
+            $pesan .= "\nSemoga panjang umur, sehat selalu, dan bahagia! 🎈✨";
+        } else {
+            $pesan .= "Tidak ada warga yang berulang tahun hari ini.";
+        }
+    } else {
+        $pesan .= "Tidak ada warga yang berulang tahun hari ini.";
     }
-    $pesan .= "\nSemoga panjang umur, sehat selalu, dan bahagia! 🎈✨";
-} else {
-    $pesan .= "kosong";
+
+    $pesan .= "\n\nSalam hangat dari RT 07! 💐\n";
+    $pesan .= "\n_- Pesan Otomatis dari System -_";
+
+} catch (PDOException $e) {
+    // Error handling untuk database
+    $pesan = "❌ *Error*\n\n";
+    $pesan .= "Terjadi kesalahan saat mengambil data ulang tahun.\n";
+    $pesan .= "Silakan coba lagi nanti.\n\n";
+    $pesan .= "_- Pesan Otomatis dari System -_";
+    error_log("Error in ambil_data_ultah.php: " . $e->getMessage());
+} catch (Exception $e) {
+    // Error handling umum
+    $pesan = "❌ *Error*\n\n";
+    $pesan .= "Terjadi kesalahan pada sistem.\n";
+    $pesan .= "Silakan coba lagi nanti.\n\n";
+    $pesan .= "_- Pesan Otomatis dari System -_";
+    error_log("Error in ambil_data_ultah.php: " . $e->getMessage());
 }
 
-$pesan .= "\n\nSalam hangat dari RT 07! 💐\n";
-$pesan .= "\n_- Pesan Otomatis dari System -_";
-
-header('Content-Type: text/plain');
+// Bersihkan output buffer dan set header
+ob_end_clean();
+header('Content-Type: text/plain; charset=utf-8');
+header('Cache-Control: no-cache, must-revalidate');
 echo $pesan;
+exit;
