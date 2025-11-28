@@ -94,11 +94,41 @@ curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
+curl_setopt($ch, CURLOPT_TIMEOUT, 30); // timeout 30 detik
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
+
+// Jika Markdown error (400 Bad Request), coba tanpa parse_mode
+if ($httpCode === 400 && $response) {
+    $responseData = json_decode($response, true);
+    if (isset($responseData['description']) && 
+        (stripos($responseData['description'], 'parse') !== false || 
+         stripos($responseData['description'], 'markdown') !== false)) {
+        // Coba kirim lagi tanpa parse_mode
+        error_log('auto_send_test.php: Markdown error, mencoba tanpa parse_mode');
+        $payloadNoMarkdown = [
+            'chat_id' => $chatId,
+            'text'    => $message,
+        ];
+        
+        $ch2 = curl_init($apiUrl);
+        curl_setopt($ch2, CURLOPT_POST, true);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($payloadNoMarkdown));
+        curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch2, CURLOPT_TIMEOUT, 30);
+        
+        $response = curl_exec($ch2);
+        $httpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch2);
+        curl_close($ch2);
+    }
+}
 
 // Bersihkan output buffer
 ob_end_clean();
@@ -118,9 +148,14 @@ if ($hasSendParam || $isCronJob) {
     if ($isCronJob) {
         // Untuk cron job, log hasil
         if ($httpCode === 200) {
-            error_log('auto_send_test.php: Pesan berhasil dikirim ke grup Telegram');
+            error_log('auto_send_test.php: Pesan berhasil dikirim ke grup Telegram (Chat ID: ' . $chatId . ')');
         } else {
-            error_log('auto_send_test.php: Gagal mengirim pesan. HTTP Code: ' . $httpCode . ', Error: ' . ($curlError ?: 'Unknown'));
+            $responseData = $response ? json_decode($response, true) : null;
+            $errorMsg = $responseData && isset($responseData['description']) ? $responseData['description'] : ($curlError ?: 'Unknown');
+            error_log('auto_send_test.php: Gagal mengirim pesan. HTTP Code: ' . $httpCode . ', Error: ' . $errorMsg . ', Chat ID: ' . $chatId);
+            if ($responseData) {
+                error_log('auto_send_test.php: Response: ' . json_encode($responseData));
+            }
         }
     } else {
         echo json_encode($result);
