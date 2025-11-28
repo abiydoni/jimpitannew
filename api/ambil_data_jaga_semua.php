@@ -40,28 +40,28 @@ try {
     // Susun pesan
     $text = "⏰ *JADWAL JAGA*\n";
     $text .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $text .= "📅 *Hari: $hariInd*\n";
-    $text .= "📆 Tanggal: $tanggal $bulanInd $tahun\n\n";
+    $text .= "📅 *Hari: " . $hariInd . "*\n";
+    $text .= "📆 Tanggal: " . $tanggal . " " . $bulanInd . " " . $tahun . "\n\n";
     
     if ($users && count($users) > 0) {
         $text .= "👥 *Daftar Petugas Jaga:*\n\n";
         $no = 1;
         foreach ($users as $user) {
             $nama = htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8');
-            $text .= "$no. $nama\n";
+            $text .= $no . ". " . $nama . "\n";
             $no++;
         }
         $text .= "\n━━━━━━━━━━━━━━━━━━━━\n";
         $text .= "📊 Total: " . count($users) . " petugas\n";
     } else {
-        $text .= "❌ Tidak ada petugas jaga.\n";
+        $text .= "❌ Tidak ada petugas jaga\\.\n";
     }
     
     $text .= "\n━━━━━━━━━━━━━━━━━━━━\n";
     $text .= "🌟 *Selamat bertugas*\n";
-    $text .= "🏡 RT.07 RW.01\n\n";
+    $text .= "🏡 RT\\.07 RW\\.01\n\n";
     $text .= "🕸️ *Link Scan:*\n";
-    $text .= "https://rt07.appsbee.my.id\n";
+    $text .= "https://rt07\\.appsbee\\.my\\.id\n";
     $text .= "\n_Pesan Otomatis dari System_";
 
 } catch (PDOException $e) {

@@ -10,7 +10,7 @@ try {
 
     $text = "📋 *DATA KEPALA KELUARGA*\n";
     $text .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $text .= "🏡 Randuares RT.07 RW.01\n\n";
+    $text .= "🏡 Randuares RT\\.07 RW\\.01\n\n";
     
     if ($data && count($data) > 0) {
         $text .= "👥 *Daftar Kepala Keluarga:*\n\n";
@@ -18,13 +18,16 @@ try {
         foreach ($data as $row) {
             $code_id = htmlspecialchars($row['code_id'], ENT_QUOTES, 'UTF-8');
             $kk_name = htmlspecialchars($row['kk_name'], ENT_QUOTES, 'UTF-8');
-            $text .= "$no. *$code_id* - $kk_name\n";
+            // Escape karakter khusus untuk markdown
+            $code_id = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $code_id);
+            $kk_name = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $kk_name);
+            $text .= $no . ". *" . $code_id . "* \\- " . $kk_name . "\n";
             $no++;
         }
         $text .= "\n━━━━━━━━━━━━━━━━━━━━\n";
         $text .= "📊 Total: " . count($data) . " KK\n";
     } else {
-        $text .= "❌ Tidak ada data tersedia.\n";
+        $text .= "❌ Tidak ada data tersedia\\.\n";
     }
     
     $text .= "\n_Pesan Otomatis dari System_";

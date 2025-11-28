@@ -31,7 +31,7 @@ try {
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Bangun pesan ucapan ultah
-    $pesan = "🎉 *SELAMAT ULANG TAHUN!* 🎂\n";
+    $pesan = "🎉 *SELAMAT ULANG TAHUN\\!* 🎂\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n\n";
 
     if ($data && count($data) > 0) {
@@ -45,23 +45,25 @@ try {
                 $blnKey = date_format($tglObj, 'm');
                 $bln = isset($bulanIndo[$blnKey]) ? $bulanIndo[$blnKey] : $blnKey;
                 $nama = htmlspecialchars($warga['nama'], ENT_QUOTES, 'UTF-8');
-                $pesan .= "$no. *{$nama}*\n";
-                $pesan .= "   🎂 Lahir: $tgl $bln\n\n";
+                // Escape karakter khusus untuk markdown
+                $nama = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $nama);
+                $pesan .= $no . ". *" . $nama . "*\n";
+                $pesan .= "   🎂 Lahir: " . $tgl . " " . $bln . "\n\n";
                 $no++;
             }
         }
         if ($no > 1) {
             $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
-            $pesan .= "🎈 *Semoga panjang umur, sehat selalu, dan bahagia!* ✨\n";
+            $pesan .= "🎈 *Semoga panjang umur, sehat selalu, dan bahagia\\!* ✨\n";
         } else {
-            $pesan .= "Tidak ada warga yang berulang tahun hari ini.\n";
+            $pesan .= "Tidak ada warga yang berulang tahun hari ini\\.\n";
         }
     } else {
-        $pesan .= "Tidak ada warga yang berulang tahun hari ini.\n";
+        $pesan .= "Tidak ada warga yang berulang tahun hari ini\\.\n";
     }
 
     $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";
-    $pesan .= "💐 *Salam hangat dari RT 07!*\n";
+    $pesan .= "💐 *Salam hangat dari RT 07\\!*\n";
     $pesan .= "\n_Pesan Otomatis dari System_";
 
 } catch (PDOException $e) {
