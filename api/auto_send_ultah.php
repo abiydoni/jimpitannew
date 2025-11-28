@@ -33,7 +33,11 @@ try {
 }
 
 // Jika dipanggil langsung via HTTP (untuk diambil bot), output pesan
-if (!isset($_GET['send']) && !isset($_POST['send'])) {
+// Cek jika ada parameter 'send' atau jika ini adalah cron job (CLI)
+$isCronJob = php_sapi_name() === 'cli';
+$hasSendParam = isset($_GET['send']) || isset($_POST['send']);
+
+if (!$hasSendParam && !$isCronJob) {
     ob_end_clean();
     header('Content-Type: text/plain; charset=utf-8');
     header('Cache-Control: no-cache, must-revalidate');
@@ -46,6 +50,15 @@ if (!isset($_GET['send']) && !isset($_POST['send'])) {
 // Jika dipanggil untuk auto-send (cron job atau dengan parameter send=1)
 // Jika pesan kosong atau berisi "kosong", hentikan proses
 if (empty(trim($message)) || stripos($message, 'kosong') !== false) {
+    error_log('auto_send_ultah.php: Pesan kosong atau berisi "kosong", tidak ada yang dikirim');
+    ob_end_clean();
+    if ($hasSendParam || $isCronJob) {
+        // Jika dipanggil dengan send parameter atau cron, output error
+        if (!$isCronJob) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['success' => false, 'error' => 'Pesan kosong']);
+        }
+    }
     exit;
 }
 
@@ -91,14 +104,27 @@ curl_close($ch);
 // Bersihkan output buffer
 ob_end_clean();
 
-// Jika dipanggil dengan parameter send, output hasil
-if (isset($_GET['send']) || isset($_POST['send'])) {
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
+// Jika dipanggil dengan parameter send atau cron job, output hasil
+if ($hasSendParam || $isCronJob) {
+    if (!$isCronJob) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    $result = [
         'success' => $httpCode === 200,
         'http_code' => $httpCode,
         'error' => $curlError ?: null,
         'response' => $response ? json_decode($response, true) : null
-    ]);
+    ];
+    
+    if ($isCronJob) {
+        // Untuk cron job, log hasil
+        if ($httpCode === 200) {
+            error_log('auto_send_ultah.php: Pesan berhasil dikirim ke grup Telegram');
+        } else {
+            error_log('auto_send_ultah.php: Gagal mengirim pesan. HTTP Code: ' . $httpCode . ', Error: ' . ($curlError ?: 'Unknown'));
+        }
+    } else {
+        echo json_encode($result);
+    }
 }
 ?>
