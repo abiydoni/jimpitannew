@@ -45,16 +45,26 @@ try {
     $stmt->execute(['shift' => $hariEng]);
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Fungsi helper untuk escape markdown Telegram
+    function escapeMarkdown($text) {
+        // Escape karakter khusus markdown yang tidak ingin di-format
+        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        foreach ($chars as $char) {
+            $text = str_replace($char, '\\' . $char, $text);
+        }
+        return $text;
+    }
+
     $pesan = "⏰ *JADWAL JAGA HARI INI*\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $pesan .= "📅 *" . $hariInd . ", " . $tanggal . " " . $bulanInd . " " . $tahun . "*\n\n";
+    $pesan .= "📅 *" . escapeMarkdown($hariInd . ", " . $tanggal . " " . $bulanInd . " " . $tahun) . "*\n\n";
 
     if ($users && count($users) > 0) {
         $pesan .= "👥 *Daftar Petugas Jaga:*\n";
         $no = 1;
         foreach ($users as $user) {
             $nama = htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8');
-            $pesan .= $no . ". " . $nama . "\n";
+            $pesan .= $no . ". " . escapeMarkdown($nama) . "\n";
             $no++;
         }
     } else {
@@ -64,10 +74,10 @@ try {
     // Tambahkan penutup
     $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";
     $pesan .= "🌟 *Selamat melaksanakan tugas*\n";
-    $pesan .= "🏡 RT\\.07 RW\\.01\n\n";
+    $pesan .= "🏡 " . escapeMarkdown("RT.07 RW.01") . "\n\n";
     $pesan .= "🕸️ *Link Scan:*\n";
-    $pesan .= "https://rt07\\.appsbee\\.my\\.id\n\n";
-    $pesan .= "⚠️ *PENTING \\- WAJIB SCAN QR*\n";
+    $pesan .= "https://rt07.appsbee.my.id\n\n";
+    $pesan .= "⚠️ *PENTING - WAJIB SCAN QR*\n";
     $pesan .= "Dihimbau kepada petugas jimpitan:\n";
     $pesan .= "• *WAJIB SCAN QR CODE*\n";
     $pesan .= "• Jumlah uang yang disetor *HARUS SAMA* dengan jumlah yang di *SCAN*\n";

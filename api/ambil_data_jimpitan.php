@@ -58,19 +58,26 @@ try {
     $bulanInd = isset($bulanIndo[$bulanEng]) ? $bulanIndo[$bulanEng] : $bulanEng;
     $tahun = $kemarin->format('Y');
 
-    $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
+    // Fungsi helper untuk escape markdown Telegram
+    function escapeMarkdown($text) {
+        // Escape karakter khusus markdown yang tidak ingin di-format
+        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        foreach ($chars as $char) {
+            $text = str_replace($char, '\\' . $char, $text);
+        }
+        return $text;
+    }
 
-    // Escape karakter khusus di tanggal
-    $tanggalLengkapEscaped = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $tanggalLengkap);
+    $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
     
     // Bangun pesan WhatsApp / Telegram
     $pesan = "📊 *REPORT JIMPITAN*\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $pesan .= "📅 *" . $tanggalLengkapEscaped . "* _\\(Semalam\\)_\n\n";
+    $pesan .= "📅 *" . escapeMarkdown($tanggalLengkap) . "* _(Semalam)_\n\n";
     $pesan .= "💰 *Total Jimpitan:*\n";
-    $pesan .= "Rp\\. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
+    $pesan .= escapeMarkdown("Rp. " . number_format($total_nominal, 0, ',', '.')) . "\n\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $pesan .= "📋 *Jimpitan yang Kosong \\(Kode KK\\):*\n\n";
+    $pesan .= "📋 *Jimpitan yang Kosong (Kode KK):*\n\n";
 
     if ($data && count($data) > 0) {
         $no = 1;
@@ -79,20 +86,17 @@ try {
             if ((int)$user['jumlah_nominal'] === 0) {
                 $code_id = htmlspecialchars($user['code_id'], ENT_QUOTES, 'UTF-8');
                 $kk_name = htmlspecialchars($user['kk_name'], ENT_QUOTES, 'UTF-8');
-                // Escape karakter khusus untuk markdown
-                $code_id = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $code_id);
-                $kk_name = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $kk_name);
-                $pesan .= $no . ". *" . $code_id . "* \\- " . $kk_name . "\n";
+                $pesan .= $no . ". *" . escapeMarkdown($code_id) . "* - " . escapeMarkdown($kk_name) . "\n";
                 $no++;
                 $adaKosong = true;
             }
         }
 
         if (!$adaKosong) {
-            $pesan .= "✅ *Semua KK sudah menyetor jimpitan\\.*\n";
+            $pesan .= "✅ *Semua KK sudah menyetor jimpitan.*\n";
         }
     } else {
-        $pesan .= "❌ Tidak ada data tersedia\\.\n";
+        $pesan .= "❌ " . escapeMarkdown("Tidak ada data tersedia.") . "\n";
     }
     
     $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";
@@ -117,21 +121,19 @@ try {
         $no_petugas = 1;
         foreach ($data_petugas as $petugas) {
             $nama_u = htmlspecialchars($petugas['nama_u'], ENT_QUOTES, 'UTF-8');
-            // Escape karakter khusus untuk markdown
-            $nama_u = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $nama_u);
             $jumlah_scan = (int)$petugas['jumlah_scan'];
-            $pesan .= $no_petugas . ". *" . $nama_u . "*\n";
+            $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*\n";
             $pesan .= "   📝 Scan: " . $jumlah_scan . " kali\n\n";
             $no_petugas++;
         }
     } else {
-        $pesan .= "👤 Tidak ada data petugas jimpitan\\.\n";
+        $pesan .= "👤 " . escapeMarkdown("Tidak ada data petugas jimpitan.") . "\n";
     }
     
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
     $pesan .= "ℹ️ *Info Aplikasi:*\n";
     $pesan .= "Warga dapat mengakses aplikasi:\n";
-    $pesan .= "🔗 https://rt07\\.appsbee\\.my\\.id\n";
+    $pesan .= "https://rt07.appsbee.my.id\n";
     $pesan .= "👤 User: *warga*\n";
     $pesan .= "🔑 Password: *warga*\n";
     $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";

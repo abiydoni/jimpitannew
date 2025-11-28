@@ -4,13 +4,23 @@ ob_start();
 
 require 'db.php'; // koneksi PDO
 
+// Fungsi helper untuk escape markdown Telegram
+function escapeMarkdown($text) {
+    // Escape karakter khusus markdown yang tidak ingin di-format
+    $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+    foreach ($chars as $char) {
+        $text = str_replace($char, '\\' . $char, $text);
+    }
+    return $text;
+}
+
 try {
     $stmt = $pdo->query("SELECT code_id, kk_name FROM master_kk ORDER BY kk_name ASC");
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $text = "📋 *DATA KEPALA KELUARGA*\n";
     $text .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $text .= "🏡 Randuares RT\\.07 RW\\.01\n\n";
+    $text .= "🏡 " . escapeMarkdown("Randuares RT.07 RW.01") . "\n\n";
     
     if ($data && count($data) > 0) {
         $text .= "👥 *Daftar Kepala Keluarga:*\n\n";
@@ -18,16 +28,13 @@ try {
         foreach ($data as $row) {
             $code_id = htmlspecialchars($row['code_id'], ENT_QUOTES, 'UTF-8');
             $kk_name = htmlspecialchars($row['kk_name'], ENT_QUOTES, 'UTF-8');
-            // Escape karakter khusus untuk markdown
-            $code_id = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $code_id);
-            $kk_name = str_replace(['*', '_', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'], ['\\*', '\\_', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'], $kk_name);
-            $text .= $no . ". *" . $code_id . "* \\- " . $kk_name . "\n";
+            $text .= $no . ". *" . escapeMarkdown($code_id) . "* - " . escapeMarkdown($kk_name) . "\n";
             $no++;
         }
         $text .= "\n━━━━━━━━━━━━━━━━━━━━\n";
         $text .= "📊 Total: " . count($data) . " KK\n";
     } else {
-        $text .= "❌ Tidak ada data tersedia\\.\n";
+        $text .= "❌ " . escapeMarkdown("Tidak ada data tersedia.") . "\n";
     }
     
     $text .= "\n_Pesan Otomatis dari System_";
