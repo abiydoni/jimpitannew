@@ -8,13 +8,26 @@ try {
     $stmt = $pdo->query("SELECT code_id, kk_name FROM master_kk ORDER BY kk_name ASC");
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $text = "📋 Data Kepala Keluarga Randuares RT.07 RW.01:\n";
-    $no = 1;
-    foreach ($data as $row) {
-        $code_id = htmlspecialchars($row['code_id'], ENT_QUOTES, 'UTF-8');
-        $kk_name = htmlspecialchars($row['kk_name'], ENT_QUOTES, 'UTF-8');
-        $text .= $no++ . ". " . $code_id . " - " . $kk_name . "\n";
+    $text = "📋 *DATA KEPALA KELUARGA*\n";
+    $text .= "━━━━━━━━━━━━━━━━━━━━\n";
+    $text .= "🏡 Randuares RT.07 RW.01\n\n";
+    
+    if ($data && count($data) > 0) {
+        $text .= "👥 *Daftar Kepala Keluarga:*\n\n";
+        $no = 1;
+        foreach ($data as $row) {
+            $code_id = htmlspecialchars($row['code_id'], ENT_QUOTES, 'UTF-8');
+            $kk_name = htmlspecialchars($row['kk_name'], ENT_QUOTES, 'UTF-8');
+            $text .= "$no. *$code_id* - $kk_name\n";
+            $no++;
+        }
+        $text .= "\n━━━━━━━━━━━━━━━━━━━━\n";
+        $text .= "📊 Total: " . count($data) . " KK\n";
+    } else {
+        $text .= "❌ Tidak ada data tersedia.\n";
     }
+    
+    $text .= "\n_Pesan Otomatis dari System_";
 } catch (PDOException $e) {
     // Error handling untuk database
     $text = "❌ *Error*\n\n";

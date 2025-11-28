@@ -45,27 +45,35 @@ try {
     $stmt->execute(['shift' => $hariEng]);
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $pesan = "⏰ *Jadwal Jaga Hari ini :* $hariInd, $tanggal $bulanInd $tahun\n\n";
+    $pesan = "⏰ *JADWAL JAGA HARI INI*\n";
+    $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
+    $pesan .= "📅 *$hariInd, $tanggal $bulanInd $tahun*\n\n";
 
     if ($users && count($users) > 0) {
+        $pesan .= "👥 *Daftar Petugas Jaga:*\n";
         $no = 1;
         foreach ($users as $user) {
             $nama = htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8');
-            $pesan .= $no++ . "️⃣ " . $nama . "\n";
+            $pesan .= "$no. $nama\n";
+            $no++;
         }
     } else {
-        $pesan .= "❌ Tidak ada petugas jaga hari ini.";
+        $pesan .= "❌ Tidak ada petugas jaga hari ini.\n";
     }
 
     // Tambahkan penutup
-    $pesan .= "\n🌟 Selamat melaksanakan tugas 🏡RT.07\n";
-    $pesan .= "🕸️ *Link scan* : https://rt07.appsbee.my.id\n\n";
-    $pesan .= "*WAJIB SCAN QR*\n";
-    $pesan .= "Dihimbau kepada petugas jimpitan *WAJIB SCAN QR*\n";
-    $pesan .= "Jumlah uang yang di setor *HARUS SAMA DENGAN*\n";
-    $pesan .= "Jumlah uang yang di *SCAN*\n";
-    $pesan .= "_tidak boleh_ *LEBIH* _dan tidak boleh_ *KURANG*\n";
-    $pesan .= "\n_- Pesan Otomatis dari System -_";
+    $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";
+    $pesan .= "🌟 *Selamat melaksanakan tugas*\n";
+    $pesan .= "🏡 RT.07 RW.01\n\n";
+    $pesan .= "🕸️ *Link Scan:*\n";
+    $pesan .= "https://rt07.appsbee.my.id\n\n";
+    $pesan .= "⚠️ *PENTING - WAJIB SCAN QR*\n";
+    $pesan .= "Dihimbau kepada petugas jimpitan:\n";
+    $pesan .= "• *WAJIB SCAN QR CODE*\n";
+    $pesan .= "• Jumlah uang yang disetor *HARUS SAMA* dengan jumlah yang di *SCAN*\n";
+    $pesan .= "• _Tidak boleh lebih dan tidak boleh kurang_\n";
+    $pesan .= "\n━━━━━━━━━━━━━━━━━━━━\n";
+    $pesan .= "_Pesan Otomatis dari System_";
 
 } catch (PDOException $e) {
     // Error handling untuk database
