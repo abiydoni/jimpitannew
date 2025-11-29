@@ -1,9 +1,9 @@
 <?php
 include 'get_konfigurasi.php';
 
-// Ambil konfigurasi dari database (menggunakan field yang sama)
-$gatewayBase = get_konfigurasi('url_group'); // berisi base URL Telegram API (default: https://api.telegram.org)
-$sessionId   = get_konfigurasi('session_id'); // berisi telegram_token bot
+// Ambil konfigurasi dari database
+$gatewayBase = get_konfigurasi('url_group');
+$sessionId   = get_konfigurasi('session_id');
 $groupId     = get_konfigurasi('group_id2');
 $filePesan   = get_konfigurasi('report3');
 
@@ -43,62 +43,53 @@ if ($pesangroup === '') {
 }
 
 // Bangun URL Telegram Bot API
-// Jika url_group kosong atau tidak diisi, gunakan default api.telegram.org
 $telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
 $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
-// Normalisasi chat_id grup Telegram
-// Hapus format WhatsApp jika ada (@g.us) - untuk kompatibilitas
-$chatId = str_replace('@g.us', '', trim((string)$groupId));
+// Normalisasi chat_id (sama seperti telebot dashboard)
+$chatId = trim((string)$groupId);
+$chatId = str_replace('@g.us', '', $chatId);
 $chatId = trim($chatId);
 
 if ($chatId === '') {
     exit;
 }
 
-// Konversi chat_id ke integer jika numeric (seperti di telebot)
-if (is_numeric($chatId)) {
-    $chatIdInt = (int)$chatId;
-} else {
-    $chatIdInt = $chatId;
-}
-
-// Payload untuk Telegram Bot API (sama persis dengan send_wa_group.php)
+// Payload untuk Telegram Bot API
+// Sama seperti telebot dashboard yang tidak menggunakan parse_mode
 $payload = [
-    'chat_id' => $chatIdInt,
+    'chat_id' => $chatId,
     'text'    => $pesangroup,
-    'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
 ];
 
 $headers = [
     'Content-Type: application/json',
 ];
 
-// Kirim ke Telegram (sama persis dengan send_wa_group.php)
+// Kirim ke Telegram (sama seperti telebot)
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log hasil (sama dengan send_wa_group.php)
+// Log hasil
 $status = ($httpCode === 200) ? 'SUKSES' : 'GAGAL';
 if ($status === 'SUKSES') {
-    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatIdInt);
+    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId);
 } else {
-    // Log error detail untuk debugging
-    error_log('auto_send_test.php: Gagal mengirim pesan Telegram ke chat_id: ' . $chatIdInt . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
+    error_log('auto_send_test.php: Gagal mengirim pesan Telegram ke chat_id: ' . $chatId . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
 }
 
-// Simpan log ke file (sama dengan send_wa_group.php)
-$logAll = '[' . date('Y-m-d H:i:s') . "] Group: $chatIdInt | Pesan: $pesangroup | Status: $status ($httpCode)\n";
+// Simpan log ke file
+$logAll = '[' . date('Y-m-d H:i:s') . "] Group: $chatId | Pesan: $pesangroup | Status: $status ($httpCode)\n";
 file_put_contents(__DIR__ . '/log-kirim-telegram.txt', $logAll, FILE_APPEND);
 
 // Output JSON jika via HTTP dengan parameter send
@@ -108,8 +99,7 @@ if (isset($_GET['send']) || isset($_POST['send'])) {
     echo json_encode([
         'success' => $httpCode === 200,
         'http_code' => $httpCode,
-        'chat_id' => $chatIdInt,
-        'chat_id_original' => $chatId,
+        'chat_id' => $chatId,
         'status' => $status,
         'error' => $httpCode !== 200 ? ($errorData && isset($errorData['description']) ? $errorData['description'] : ($curlError ?: 'Unknown')) : null,
         'response' => $errorData
