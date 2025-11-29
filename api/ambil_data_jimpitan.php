@@ -58,6 +58,16 @@ try {
     $bulanInd = isset($bulanIndo[$bulanEng]) ? $bulanIndo[$bulanEng] : $bulanEng;
     $tahun = $kemarin->format('Y');
 
+    // Fungsi helper untuk escape markdown Telegram
+    function escapeMarkdown($text) {
+        // Escape karakter khusus markdown yang tidak ingin di-format
+        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        foreach ($chars as $char) {
+            $text = str_replace($char, '\\' . $char, $text);
+        }
+        return $text;
+    }
+
     $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
     
     // Bangun pesan WhatsApp / Telegram
