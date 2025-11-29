@@ -5,7 +5,7 @@ include 'get_konfigurasi.php';
 $gatewayBase = get_konfigurasi('url_group');
 $sessionId   = get_konfigurasi('session_id');
 $groupId     = get_konfigurasi('group_id2');
-$filePesan   = get_konfigurasi('report4');
+$filePesan   = get_konfigurasi('report3');
 
 // Jika dipanggil tanpa parameter send, output pesan
 if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli') {
@@ -39,18 +39,56 @@ if (empty($groupId)) {
 
 // Ambil pesan dari file
 $pesangroup = '';
-if (!empty($filePesan) && file_exists($filePesan)) {
-    include $filePesan;
-    $pesangroup = isset($pesan) ? trim((string)$pesan) : '';
+$fileExists = false;
+$pesanExists = false;
+
+if (empty($filePesan)) {
+    if (isset($_GET['send']) || isset($_POST['send'])) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'success' => false, 
+            'error' => 'File pesan tidak dikonfigurasi (report4 kosong di database)',
+            'debug' => ['filePesan' => null]
+        ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+    error_log('auto_send_test.php: File pesan tidak dikonfigurasi');
+    exit;
 }
 
-// Validasi pesan
+if (file_exists($filePesan)) {
+    $fileExists = true;
+    include $filePesan;
+    if (isset($pesan)) {
+        $pesanExists = true;
+        $pesangroup = trim((string)$pesan);
+    }
+}
+
+// Validasi pesan dengan detail debug
 if ($pesangroup === '') {
     if (isset($_GET['send']) || isset($_POST['send'])) {
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(['success' => false, 'error' => 'Pesan kosong (file report4 tidak ada atau variabel $pesan kosong)'], JSON_UNESCAPED_UNICODE);
+        $debugInfo = [
+            'filePesan' => $filePesan,
+            'fileExists' => $fileExists,
+            'pesanExists' => $pesanExists,
+            'filePath' => $filePesan ? realpath($filePesan) : null
+        ];
+        $errorMsg = 'Pesan kosong';
+        if (!$fileExists) {
+            $errorMsg .= ' - File tidak ditemukan: ' . $filePesan;
+        } elseif (!$pesanExists) {
+            $errorMsg .= ' - Variabel $pesan tidak ada di file';
+        } else {
+            $errorMsg .= ' - Variabel $pesan kosong atau hanya whitespace';
+        }
+        echo json_encode([
+            'success' => false, 
+            'error' => $errorMsg,
+            'debug' => $debugInfo
+        ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
-    error_log('auto_send_test.php: Pesan kosong');
+    error_log('auto_send_test.php: Pesan kosong - file: ' . $filePesan . ', exists: ' . ($fileExists ? 'yes' : 'no') . ', pesan var: ' . ($pesanExists ? 'yes' : 'no'));
     exit;
 }
 
