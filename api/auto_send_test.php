@@ -1,10 +1,18 @@
 <?php
-// Set working directory ke folder script ini
-$scriptDir = dirname(__FILE__);
-chdir($scriptDir);
+// Set working directory
+chdir(__DIR__);
 
-// Include file konfigurasi
+// Include
 include __DIR__ . '/get_konfigurasi.php';
+
+// Log file untuk cron job
+$logFile = __DIR__ . '/../log_wa/log_wa_test.txt';
+
+function writeLog($message) {
+    global $logFile;
+    $timestamp = date('Y-m-d H:i:s');
+    file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
+}
 
 // Ambil konfigurasi
 $gatewayBase = get_konfigurasi('url_group');
@@ -12,8 +20,10 @@ $sessionId = get_konfigurasi('session_id');
 $groupId = get_konfigurasi('group_id2');
 $filePesan = get_konfigurasi('report3');
 
-// Jika tanpa parameter send, output pesan (hanya untuk HTTP)
-if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli') {
+$isCli = php_sapi_name() === 'cli';
+
+// Jika tanpa parameter send, output pesan (HTTP only)
+if (!isset($_GET['send']) && !isset($_POST['send']) && !$isCli) {
     if (!empty($filePesan) && file_exists($filePesan)) {
         include $filePesan;
         header('Content-Type: text/plain; charset=utf-8');
@@ -22,71 +32,71 @@ if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli'
     exit;
 }
 
-// Untuk cron job (CLI), langsung kirim pesan
-$isCli = php_sapi_name() === 'cli';
-
 // Validasi
 if (empty($sessionId)) {
-    if ($isCli) {
-        error_log('auto_send_test.php: Telegram token tidak ditemukan');
-    }
+    $msg = 'ERROR: Telegram token tidak ditemukan (session_id kosong)';
+    writeLog($msg);
+    error_log($msg);
     exit(1);
 }
 
 if (empty($groupId)) {
-    if ($isCli) {
-        error_log('auto_send_test.php: Group ID tidak ditemukan');
-    }
+    $msg = 'ERROR: Group ID tidak ditemukan (group_id2 kosong)';
+    writeLog($msg);
+    error_log($msg);
     exit(1);
 }
 
 // Ambil pesan
 $text = '';
 if (!empty($filePesan)) {
-    // Gunakan path absolut jika relative
-    if (!file_exists($filePesan) && !empty($filePesan)) {
+    if (!file_exists($filePesan)) {
         $filePesan = __DIR__ . '/' . $filePesan;
     }
     if (file_exists($filePesan)) {
         include $filePesan;
         $text = isset($pesan) ? trim((string)$pesan) : '';
+    } else {
+        $msg = 'ERROR: File pesan tidak ditemukan: ' . get_konfigurasi('report3');
+        writeLog($msg);
+        error_log($msg);
+        exit(1);
     }
 }
 
 if (empty($text)) {
-    if ($isCli) {
-        error_log('auto_send_test.php: Pesan kosong - file: ' . ($filePesan ?: 'NULL'));
-    }
+    $msg = 'ERROR: Pesan kosong';
+    writeLog($msg);
+    error_log($msg);
     exit(1);
 }
 
-// Normalisasi chat_id (sama seperti telebot dashboard)
+// Normalisasi chat_id
 $chatId = trim((string)$groupId);
 $chatId = str_replace('@g.us', '', $chatId);
 $chatId = trim($chatId);
 
 if (empty($chatId)) {
-    exit;
+    $msg = 'ERROR: Chat ID kosong setelah normalisasi';
+    writeLog($msg);
+    error_log($msg);
+    exit(1);
 }
 
-// Bangun URL Telegram Bot API
+// Bangun URL
 $telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
 $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
-// Log untuk debugging (hanya untuk CLI)
-if ($isCli) {
-    error_log('auto_send_test.php: Config - sessionId: ' . substr($sessionId, 0, 10) . '..., groupId: ' . $groupId . ', filePesan: ' . $filePesan);
-    error_log('auto_send_test.php: Chat ID: ' . $chatId . ', Message length: ' . strlen($text));
-    error_log('auto_send_test.php: API URL: ' . $telegramApiBase . '/bot[TOKEN]/sendMessage');
-}
+writeLog("INFO: Mengirim ke Chat ID: $chatId, Message length: " . strlen($text));
+writeLog("INFO: API URL: $telegramApiBase/bot[TOKEN]/sendMessage");
 
-// Payload sederhana (sama seperti telebot dashboard)
+// Payload
 $payload = [
     'chat_id' => $chatId,
     'text' => $text
 ];
 
-// Kirim ke Telegram
+// Kirim
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
@@ -100,38 +110,35 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log hasil dengan detail lengkap
+// Log hasil
 if ($httpCode == 200) {
-    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId . ' | Message length: ' . strlen($text));
-    if ($isCli) {
-        exit(0); // Success exit code
-    }
+    $msg = "SUCCESS: Pesan terkirim ke Chat ID: $chatId";
+    writeLog($msg);
+    error_log($msg);
+    exit(0);
 } else {
     $error = json_decode($result, true);
     $errorMsg = isset($error['description']) ? $error['description'] : ($curlError ?: 'Unknown error');
-    error_log('auto_send_test.php: FAILED - HTTP: ' . $httpCode . ', Chat ID: ' . $chatId . ', Error: ' . $errorMsg);
+    $msg = "FAILED: HTTP $httpCode, Chat ID: $chatId, Error: $errorMsg";
+    writeLog($msg);
     if ($result) {
-        error_log('auto_send_test.php: Response: ' . $result);
+        writeLog("Response: $result");
     }
     if ($curlError) {
-        error_log('auto_send_test.php: cURL Error: ' . $curlError);
+        writeLog("cURL Error: $curlError");
     }
-    error_log('auto_send_test.php: API URL: ' . $telegramApiBase . '/bot[TOKEN]/sendMessage');
-    error_log('auto_send_test.php: Payload: ' . json_encode($payload, JSON_UNESCAPED_UNICODE));
-    if ($isCli) {
-        exit(1); // Error exit code
-    }
+    error_log($msg);
+    exit(1);
 }
 
-// Output JSON jika via HTTP
+// Output JSON untuk HTTP
 if (isset($_GET['send']) || isset($_POST['send'])) {
     header('Content-Type: application/json; charset=utf-8');
     $errorData = json_decode($result, true);
     echo json_encode([
         'ok' => $httpCode == 200,
         'chatId' => $chatId,
-        'text' => substr($text, 0, 50) . '...',
         'error' => $httpCode != 200 ? (isset($errorData['description']) ? $errorData['description'] : ($curlError ?: 'Unknown')) : null
-    ], JSON_UNESCAPED_UNICODE);
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
 ?>
