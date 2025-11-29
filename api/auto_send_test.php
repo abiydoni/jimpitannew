@@ -1,5 +1,10 @@
 <?php
-include 'get_konfigurasi.php';
+// Set working directory ke folder script ini
+$scriptDir = dirname(__FILE__);
+chdir($scriptDir);
+
+// Include file konfigurasi
+include __DIR__ . '/get_konfigurasi.php';
 
 // Ambil konfigurasi
 $gatewayBase = get_konfigurasi('url_group');
@@ -7,7 +12,7 @@ $sessionId = get_konfigurasi('session_id');
 $groupId = get_konfigurasi('group_id2');
 $filePesan = get_konfigurasi('report3');
 
-// Jika tanpa parameter send, output pesan
+// Jika tanpa parameter send, output pesan (hanya untuk HTTP)
 if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli') {
     if (!empty($filePesan) && file_exists($filePesan)) {
         include $filePesan;
@@ -17,20 +22,42 @@ if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli'
     exit;
 }
 
+// Untuk cron job (CLI), langsung kirim pesan
+$isCli = php_sapi_name() === 'cli';
+
 // Validasi
-if (empty($sessionId) || empty($groupId)) {
-    exit;
+if (empty($sessionId)) {
+    if ($isCli) {
+        error_log('auto_send_test.php: Telegram token tidak ditemukan');
+    }
+    exit(1);
+}
+
+if (empty($groupId)) {
+    if ($isCli) {
+        error_log('auto_send_test.php: Group ID tidak ditemukan');
+    }
+    exit(1);
 }
 
 // Ambil pesan
 $text = '';
-if (!empty($filePesan) && file_exists($filePesan)) {
-    include $filePesan;
-    $text = isset($pesan) ? trim((string)$pesan) : '';
+if (!empty($filePesan)) {
+    // Gunakan path absolut jika relative
+    if (!file_exists($filePesan) && !empty($filePesan)) {
+        $filePesan = __DIR__ . '/' . $filePesan;
+    }
+    if (file_exists($filePesan)) {
+        include $filePesan;
+        $text = isset($pesan) ? trim((string)$pesan) : '';
+    }
 }
 
 if (empty($text)) {
-    exit;
+    if ($isCli) {
+        error_log('auto_send_test.php: Pesan kosong - file: ' . ($filePesan ?: 'NULL'));
+    }
+    exit(1);
 }
 
 // Normalisasi chat_id (sama seperti telebot dashboard)
@@ -64,12 +91,19 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log sederhana
+// Log hasil
 if ($httpCode == 200) {
-    error_log('auto_send_test.php: OK - ' . $chatId);
+    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId);
+    if ($isCli) {
+        exit(0); // Success exit code
+    }
 } else {
     $error = json_decode($result, true);
-    error_log('auto_send_test.php: FAIL - ' . $httpCode . ' - ' . $chatId . ' - ' . (isset($error['description']) ? $error['description'] : $curlError));
+    $errorMsg = isset($error['description']) ? $error['description'] : ($curlError ?: 'Unknown error');
+    error_log('auto_send_test.php: FAILED - HTTP: ' . $httpCode . ', Chat ID: ' . $chatId . ', Error: ' . $errorMsg);
+    if ($isCli) {
+        exit(1); // Error exit code
+    }
 }
 
 // Output JSON jika via HTTP
