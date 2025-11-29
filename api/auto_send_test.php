@@ -5,14 +5,16 @@ include 'get_konfigurasi.php';
 
 $token = get_konfigurasi('session_id');
 $chatId = get_konfigurasi('group_id2');
-$message = 'Test';
+$gatewayBase = get_konfigurasi('url_group');
+$message = 'appsbee Test';
 
 // Normalisasi chat_id
 $chatId = trim((string)$chatId);
 $chatId = is_numeric($chatId) ? (int)$chatId : $chatId;
 
-// Kirim ke Telegram
-$url = "https://api.telegram.org/bot{$token}/sendMessage";
+// Bangun URL Telegram API
+$telegramApiBase = rtrim((string)$gatewayBase, '/');
+$url = "{$telegramApiBase}/bot{$token}/sendMessage";
 $data = [
     'chat_id' => $chatId,
     'text' => $message
