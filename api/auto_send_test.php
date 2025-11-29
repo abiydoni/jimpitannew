@@ -56,9 +56,16 @@ if ($chatId === '') {
     exit;
 }
 
+// Konversi chat_id ke integer jika numeric (seperti di telebot)
+if (is_numeric($chatId)) {
+    $chatIdInt = (int)$chatId;
+} else {
+    $chatIdInt = $chatId;
+}
+
 // Payload untuk Telegram Bot API (sama persis dengan send_wa_group.php)
 $payload = [
-    'chat_id' => $chatId,
+    'chat_id' => $chatIdInt,
     'text'    => $pesangroup,
     'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
 ];
@@ -84,14 +91,14 @@ curl_close($ch);
 // Log hasil (sama dengan send_wa_group.php)
 $status = ($httpCode === 200) ? 'SUKSES' : 'GAGAL';
 if ($status === 'SUKSES') {
-    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId);
+    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatIdInt);
 } else {
     // Log error detail untuk debugging
-    error_log('auto_send_test.php: Gagal mengirim pesan Telegram ke chat_id: ' . $chatId . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
+    error_log('auto_send_test.php: Gagal mengirim pesan Telegram ke chat_id: ' . $chatIdInt . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
 }
 
 // Simpan log ke file (sama dengan send_wa_group.php)
-$logAll = '[' . date('Y-m-d H:i:s') . "] Group: $chatId | Pesan: $pesangroup | Status: $status ($httpCode)\n";
+$logAll = '[' . date('Y-m-d H:i:s') . "] Group: $chatIdInt | Pesan: $pesangroup | Status: $status ($httpCode)\n";
 file_put_contents(__DIR__ . '/log-kirim-telegram.txt', $logAll, FILE_APPEND);
 
 // Output JSON jika via HTTP dengan parameter send
@@ -101,7 +108,8 @@ if (isset($_GET['send']) || isset($_POST['send'])) {
     echo json_encode([
         'success' => $httpCode === 200,
         'http_code' => $httpCode,
-        'chat_id' => $chatId,
+        'chat_id' => $chatIdInt,
+        'chat_id_original' => $chatId,
         'status' => $status,
         'error' => $httpCode !== 200 ? ($errorData && isset($errorData['description']) ? $errorData['description'] : ($curlError ?: 'Unknown')) : null,
         'response' => $errorData
