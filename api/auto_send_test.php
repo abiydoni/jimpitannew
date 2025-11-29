@@ -1,6 +1,7 @@
 <?php
 // Ambil konfigurasi dari database
-include __DIR__ . '/get_konfigurasi.php';
+// include __DIR__ . '/get_konfigurasi.php';
+include 'get_konfigurasi.php';
 
 $token = get_konfigurasi('session_id');
 $chatId = get_konfigurasi('group_id2');
@@ -8,9 +9,21 @@ $filePesan = get_konfigurasi('report3');
 
 // Ambil pesan dari file
 $message = '';
-if (!empty($filePesan) && file_exists($filePesan)) {
-    include $filePesan;
-    $message = isset($pesan) ? $pesan : '';
+if (!empty($filePesan)) {
+    // Coba path relatif dulu
+    if (!file_exists($filePesan)) {
+        // Coba path absolut
+        $filePesan = __DIR__ . '/' . $filePesan;
+    }
+    if (file_exists($filePesan)) {
+        include $filePesan;
+        $message = isset($pesan) ? trim((string)$pesan) : '';
+    }
+}
+
+if (empty($message)) {
+    error_log('auto_send_test.php: Pesan kosong atau file tidak ditemukan: ' . get_konfigurasi('report3'));
+    exit;
 }
 
 // Normalisasi chat_id
@@ -29,6 +42,17 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-curl_exec($ch);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+$result = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
 curl_close($ch);
+
+// Log error jika gagal
+if ($httpCode != 200) {
+    $error = json_decode($result, true);
+    $errorMsg = isset($error['description']) ? $error['description'] : ($curlError ?: 'Unknown');
+    error_log("auto_send_test.php: Gagal kirim. HTTP: $httpCode, Error: $errorMsg, Chat ID: $chatId");
+}
 ?>
