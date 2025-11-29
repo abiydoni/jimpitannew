@@ -33,10 +33,13 @@ try {
     // Fungsi helper untuk escape markdown Telegram
     function escapeMarkdown($text) {
         // Escape karakter khusus markdown yang tidak ingin di-format
-        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        // Jangan escape: titik (.), tanda kurung () karena digunakan untuk format normal
+        $chars = ['_', '*', '[', ']', '~', '`', '>', '#', '+', '=', '|', '{', '}', '!'];
         foreach ($chars as $char) {
             $text = str_replace($char, '\\' . $char, $text);
         }
+        // Escape minus hanya jika bukan bagian dari angka negatif
+        $text = preg_replace('/(?<!\d)-(?!\d)/', '\\-', $text);
         return $text;
     }
 
