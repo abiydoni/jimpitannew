@@ -100,7 +100,17 @@ $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 $chatId = trim((string)$groupId);
 
 if ($chatId === '') {
+    if (isset($_GET['send']) || isset($_POST['send'])) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => false, 'error' => 'Chat ID kosong setelah trim'], JSON_UNESCAPED_UNICODE);
+    }
     exit;
+}
+
+// Pastikan chat_id adalah string (Telegram menerima string atau integer)
+// Jika numeric, tetap sebagai string untuk konsistensi
+if (is_numeric($chatId)) {
+    $chatId = (string)$chatId;
 }
 
 // Payload untuk Telegram Bot API (sama persis dengan send_wa_group.php)
@@ -164,15 +174,28 @@ if (isset($_GET['send']) || isset($_POST['send'])) {
             $errorMsg = 'Unknown error (HTTP ' . $httpCode . ')';
         }
     }
+    
+    // Debug info
+    $debugInfo = [
+        'chat_id' => $chatId,
+        'chat_id_type' => gettype($chatId),
+        'api_url' => $telegramApiBase . '/bot[TOKEN]/sendMessage',
+        'message_length' => strlen($pesangroup),
+        'message_preview' => substr($pesangroup, 0, 50) . '...',
+        'payload' => [
+            'chat_id' => $chatId,
+            'text_length' => strlen($pesangroup),
+            'parse_mode' => 'HTML'
+        ]
+    ];
+    
     echo json_encode([
         'success' => $httpCode === 200,
         'http_code' => $httpCode,
-        'chat_id' => $chatId,
-        'api_url' => $apiUrl,
-        'message_length' => strlen($pesangroup),
         'error' => $errorMsg,
         'response' => $errorData,
-        'raw_response' => $response
+        'raw_response' => $response,
+        'debug' => $debugInfo
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
 ?>
