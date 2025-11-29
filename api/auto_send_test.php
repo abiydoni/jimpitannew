@@ -2,6 +2,7 @@
 include 'get_konfigurasi.php';
 
 // Ambil konfigurasi
+$gatewayBase = get_konfigurasi('url_group');
 $sessionId = get_konfigurasi('session_id');
 $groupId = get_konfigurasi('group_id2');
 $filePesan = get_konfigurasi('report4');
@@ -27,8 +28,9 @@ if (!empty($filePesan) && file_exists($filePesan)) {
 if (empty($message)) exit;
 
 // Kirim ke Telegram
-$chatId = trim(str_replace('@g.us', '', (string)$groupId));
-$apiUrl = 'https://api.telegram.org/bot' . $sessionId . '/sendMessage';
+$chatId = trim((string)$groupId);
+$telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
+$apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, 1);
