@@ -55,25 +55,25 @@ if ($chatId === '') {
     exit;
 }
 
-// Payload untuk Telegram Bot API
-// Sama seperti telebot dashboard yang tidak menggunakan parse_mode
+// Payload untuk Telegram Bot API (sama persis dengan send_wa_group.php)
 $payload = [
     'chat_id' => $chatId,
     'text'    => $pesangroup,
+    'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
 ];
 
 $headers = [
     'Content-Type: application/json',
 ];
 
-// Kirim ke Telegram (sama seperti telebot)
+// Kirim ke Telegram (sama persis dengan send_wa_group.php)
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -96,13 +96,26 @@ file_put_contents(__DIR__ . '/log-kirim-telegram.txt', $logAll, FILE_APPEND);
 if (isset($_GET['send']) || isset($_POST['send'])) {
     header('Content-Type: application/json; charset=utf-8');
     $errorData = json_decode($response, true);
+    $errorMsg = null;
+    if ($httpCode !== 200) {
+        if ($curlError) {
+            $errorMsg = 'cURL Error: ' . $curlError;
+        } elseif ($errorData && isset($errorData['description'])) {
+            $errorMsg = $errorData['description'];
+        } else {
+            $errorMsg = 'Unknown error (HTTP ' . $httpCode . ')';
+        }
+    }
     echo json_encode([
         'success' => $httpCode === 200,
         'http_code' => $httpCode,
         'chat_id' => $chatId,
+        'api_url' => $telegramApiBase . '/bot[TOKEN]/sendMessage',
+        'message_length' => strlen($pesangroup),
         'status' => $status,
-        'error' => $httpCode !== 200 ? ($errorData && isset($errorData['description']) ? $errorData['description'] : ($curlError ?: 'Unknown')) : null,
-        'response' => $errorData
+        'error' => $errorMsg,
+        'response' => $errorData,
+        'raw_response' => $response
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
 ?>
