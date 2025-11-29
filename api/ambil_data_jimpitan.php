@@ -126,7 +126,7 @@ try {
             $nama_u = htmlspecialchars($petugas['nama_u'], ENT_QUOTES, 'UTF-8');
             $jumlah_scan = (int)$petugas['jumlah_scan'];
             $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*";
-            $pesan .= "   ➡️ Scan: " . $jumlah_scan . " kali\n";
+            $pesan .= "   ➤ Scan: " . $jumlah_scan . " kali\n";
             $no_petugas++;
         }
     } else {
