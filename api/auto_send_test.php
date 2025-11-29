@@ -5,26 +5,7 @@ include 'get_konfigurasi.php';
 
 $token = get_konfigurasi('session_id');
 $chatId = get_konfigurasi('group_id2');
-$filePesan = get_konfigurasi('report3');
-
-// Ambil pesan dari file
-$message = '';
-if (!empty($filePesan)) {
-    // Coba path relatif dulu
-    if (!file_exists($filePesan)) {
-        // Coba path absolut
-        $filePesan = __DIR__ . '/' . $filePesan;
-    }
-    if (file_exists($filePesan)) {
-        include $filePesan;
-        $message = isset($pesan) ? trim((string)$pesan) : '';
-    }
-}
-
-if (empty($message)) {
-    error_log('auto_send_test.php: Pesan kosong atau file tidak ditemukan: ' . get_konfigurasi('report3'));
-    exit;
-}
+$message = 'Test';
 
 // Normalisasi chat_id
 $chatId = trim((string)$chatId);
