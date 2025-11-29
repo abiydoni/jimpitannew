@@ -8,7 +8,7 @@ $chatId = get_konfigurasi('group_id2');
 $gatewayBase = get_konfigurasi('url_group');
 $filePesan = get_konfigurasi('report3');
 
-// Ambil pesan dari file
+// Ambil pesan dari file (gunakan output buffering karena file langsung output)
 $message = '';
 if (!empty($filePesan)) {
     // Coba path relatif dulu
@@ -17,8 +17,16 @@ if (!empty($filePesan)) {
         $filePesan = __DIR__ . '/' . $filePesan;
     }
     if (file_exists($filePesan)) {
+        // Gunakan output buffering untuk capture output dari file
+        ob_start();
         include $filePesan;
-        $message = isset($pesan) ? trim((string)$pesan) : '';
+        $message = ob_get_clean();
+        $message = trim((string)$message);
+        
+        // Jika tidak ada output, coba ambil variabel $pesan (untuk kompatibilitas)
+        if (empty($message) && isset($pesan)) {
+            $message = trim((string)$pesan);
+        }
     }
 }
 
