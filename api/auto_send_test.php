@@ -90,20 +90,25 @@ $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 writeLog("INFO: Mengirim ke Chat ID: $chatId, Message length: " . strlen($text));
 writeLog("INFO: API URL: $telegramApiBase/bot[TOKEN]/sendMessage");
 
-// Payload
+// Payload (sama persis dengan send_wa_group.php)
 $payload = [
     'chat_id' => $chatId,
-    'text' => $text
+    'text' => $text,
+    'parse_mode' => 'HTML', // sama seperti send_wa_group.php
 ];
 
-// Kirim
+$headers = [
+    'Content-Type: application/json',
+];
+
+// Kirim (sama persis dengan send_wa_group.php)
 $ch = curl_init($apiUrl);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 $result = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
