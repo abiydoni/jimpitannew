@@ -77,10 +77,10 @@ try {
     $pesan = "📊 *REPORT JIMPITAN*\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
     $pesan .= "📅 *" . escapeMarkdown($tanggalLengkap) . "* _(Semalam)_\n\n";
-    $pesan .= "💰 *Total Jimpitan:*\n";
-    $pesan .= "Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
+    $pesan .= "💰 *Total Jimpitan:*";
+    $pesan .= " Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $pesan .= "📋 *Jimpitan yang Kosong (Kode KK):*\n\n";
+    $pesan .= "📋 *Jimpitan yang Kosong:*\n\n";
 
     if ($data && count($data) > 0) {
         $no = 1;
@@ -126,7 +126,7 @@ try {
             $nama_u = htmlspecialchars($petugas['nama_u'], ENT_QUOTES, 'UTF-8');
             $jumlah_scan = (int)$petugas['jumlah_scan'];
             $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*";
-            $pesan .= "   📝 Scan: " . $jumlah_scan . " kali\n";
+            $pesan .= "   ➡️ Scan: " . $jumlah_scan . " kali\n";
             $no_petugas++;
         }
     } else {
