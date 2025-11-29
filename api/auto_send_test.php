@@ -6,7 +6,21 @@ include 'get_konfigurasi.php';
 $token = get_konfigurasi('session_id');
 $chatId = get_konfigurasi('group_id2');
 $gatewayBase = get_konfigurasi('url_group');
-$message = 'appsbee Test';
+$filePesan = get_konfigurasi('report3');
+
+// Ambil pesan dari file
+$message = '';
+if (!empty($filePesan)) {
+    // Coba path relatif dulu
+    if (!file_exists($filePesan)) {
+        // Coba path absolut
+        $filePesan = __DIR__ . '/' . $filePesan;
+    }
+    if (file_exists($filePesan)) {
+        include $filePesan;
+        $message = isset($pesan) ? trim((string)$pesan) : '';
+    }
+}
 
 // Normalisasi chat_id
 $chatId = trim((string)$chatId);
