@@ -53,7 +53,7 @@ $groupId = get_konfigurasi('group_id1') ?: "-1003246088334";
       <div class="bg-red-500 text-white p-4 rounded mb-4">Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.</div>
     <?php endif; ?>
 
-    <form method="post" action="send_wa_group.php">
+    <form method="post" action="send_group.php">
       <div class="input-group mb-4">
         <label class="block mb-2 text-sm text-gray-600">Chat ID Group Telegram:</label>
         <p class="text-xs text-gray-500 mb-2">Format: angka negatif (contoh: -1001234567890)</p>

@@ -44,17 +44,18 @@ foreach ($groupList as $group) {
 	if ($group === '') continue;
 
 	// Normalisasi chat_id grup Telegram
-	// Hapus format WhatsApp jika ada (@g.us) - untuk kompatibilitas
-	$chatId = str_replace('@g.us', '', $group);
-	$chatId = trim($chatId);
+	$chatId = trim((string)$group);
 
 	if ($chatId === '') continue;
 
+	// Normalisasi chat_id ke integer jika numeric
+	$chatIdInt = is_numeric($chatId) ? (int)$chatId : $chatId;
+
 	// Payload untuk Telegram Bot API
 	$payload = [
-		'chat_id' => $chatId,
+		'chat_id' => $chatIdInt,
 		'text'    => $pesangroup,
-		'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
+		'parse_mode' => 'Markdown'
 	];
 
 	$headers = [
@@ -68,11 +69,40 @@ foreach ($groupList as $group) {
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
+	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 	$response = curl_exec($ch);
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	$curlError = curl_error($ch);
 	curl_close($ch);
+
+	// Jika Markdown parse error, coba tanpa parse_mode
+	if ($httpCode === 400 && $response) {
+		$errorData = json_decode($response, true);
+		if (isset($errorData['description']) && 
+			(stripos($errorData['description'], 'parse') !== false || 
+			 stripos($errorData['description'], 'markdown') !== false)) {
+			// Coba kirim lagi tanpa parse_mode
+			$payloadNoMarkdown = [
+				'chat_id' => $chatIdInt,
+				'text'    => $pesangroup
+			];
+			
+			$ch2 = curl_init($apiUrl);
+			curl_setopt($ch2, CURLOPT_POST, true);
+			curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch2, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($ch2, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($payloadNoMarkdown));
+			curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($ch2, CURLOPT_TIMEOUT, 30);
+			
+			$response = curl_exec($ch2);
+			$httpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+			$curlError = curl_error($ch2);
+			curl_close($ch2);
+		}
+	}
 
 	$status = ($httpCode === 200) ? 'SUKSES' : 'GAGAL';
 	if ($status === 'SUKSES') {
