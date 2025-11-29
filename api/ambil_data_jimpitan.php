@@ -160,9 +160,17 @@ try {
     error_log("Error in ambil_data_jimpitan.php: " . $e->getMessage());
 }
 
-// Bersihkan output buffer dan set header
-ob_end_clean();
-header('Content-Type: text/plain; charset=utf-8');
-header('Cache-Control: no-cache, must-revalidate');
-echo $pesan;
-exit;
+// Cek apakah di-include atau diakses langsung
+$isIncluded = !isset($_SERVER['REQUEST_METHOD']);
+
+if ($isIncluded) {
+    // Jika di-include, jangan output, biarkan variabel $pesan tersedia
+    ob_end_clean();
+} else {
+    // Jika diakses langsung via HTTP, output seperti biasa
+    ob_end_clean();
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-cache, must-revalidate');
+    echo $pesan;
+    exit;
+}

@@ -40,10 +40,13 @@ try {
     // Fungsi helper untuk escape markdown Telegram
     function escapeMarkdown($text) {
         // Escape karakter khusus markdown yang tidak ingin di-format
-        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        // Jangan escape: titik (.), tanda kurung () karena digunakan untuk format normal
+        $chars = ['_', '*', '[', ']', '~', '`', '>', '#', '+', '=', '|', '{', '}', '!'];
         foreach ($chars as $char) {
             $text = str_replace($char, '\\' . $char, $text);
         }
+        // Escape minus hanya jika bukan bagian dari angka negatif
+        $text = preg_replace('/(?<!\d)-(?!\d)/', '\\-', $text);
         return $text;
     }
 
@@ -89,9 +92,18 @@ try {
     error_log("Error in ambil_jaga_semua.php: " . $e->getMessage());
 }
 
-// Bersihkan output buffer dan set header
-ob_end_clean();
-header('Content-Type: text/plain; charset=utf-8');
-header('Cache-Control: no-cache, must-revalidate');
-echo $text;
-exit;
+// Cek apakah di-include atau diakses langsung
+$isIncluded = !isset($_SERVER['REQUEST_METHOD']);
+
+if ($isIncluded) {
+    // Jika di-include, set variabel $pesan untuk kompatibilitas
+    $pesan = $text;
+    ob_end_clean();
+} else {
+    // Jika diakses langsung via HTTP, output seperti biasa
+    ob_end_clean();
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-cache, must-revalidate');
+    echo $text;
+    exit;
+}
