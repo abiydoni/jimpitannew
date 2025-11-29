@@ -61,10 +61,13 @@ try {
     // Fungsi helper untuk escape markdown Telegram
     function escapeMarkdown($text) {
         // Escape karakter khusus markdown yang tidak ingin di-format
-        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        // Tapi jangan escape titik (.) karena digunakan untuk format angka
+        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '=', '|', '{', '}', '!'];
         foreach ($chars as $char) {
             $text = str_replace($char, '\\' . $char, $text);
         }
+        // Escape minus hanya jika bukan bagian dari angka negatif
+        $text = preg_replace('/(?<!\d)-(?!\d)/', '\\-', $text);
         return $text;
     }
 
@@ -75,7 +78,7 @@ try {
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
     $pesan .= "📅 *" . escapeMarkdown($tanggalLengkap) . "* _(Semalam)_\n\n";
     $pesan .= "💰 *Total Jimpitan:*\n";
-    $pesan .= escapeMarkdown("Rp. " . number_format($total_nominal, 0, ',', '.')) . "\n\n";
+    $pesan .= "Rp. " . number_format($total_nominal, 0, ',', '.') . "\n\n";
     $pesan .= "━━━━━━━━━━━━━━━━━━━━\n";
     $pesan .= "📋 *Jimpitan yang Kosong (Kode KK):*\n\n";
 
@@ -123,7 +126,7 @@ try {
             $nama_u = htmlspecialchars($petugas['nama_u'], ENT_QUOTES, 'UTF-8');
             $jumlah_scan = (int)$petugas['jumlah_scan'];
             $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*";
-            $pesan .= "   📝 Scan: " . $jumlah_scan . " kali\n\n";
+            $pesan .= "   📝 Scan: " . $jumlah_scan . " kali\n";
             $no_petugas++;
         }
     } else {
