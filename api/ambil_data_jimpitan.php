@@ -58,16 +58,6 @@ try {
     $bulanInd = isset($bulanIndo[$bulanEng]) ? $bulanIndo[$bulanEng] : $bulanEng;
     $tahun = $kemarin->format('Y');
 
-    // Fungsi helper untuk escape markdown Telegram
-    function escapeMarkdown($text) {
-        // Escape karakter khusus markdown yang tidak ingin di-format
-        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-        foreach ($chars as $char) {
-            $text = str_replace($char, '\\' . $char, $text);
-        }
-        return $text;
-    }
-
     $tanggalLengkap = "$hariInd, $tgl $bulanInd $tahun";
     
     // Bangun pesan WhatsApp / Telegram
@@ -122,7 +112,7 @@ try {
         foreach ($data_petugas as $petugas) {
             $nama_u = htmlspecialchars($petugas['nama_u'], ENT_QUOTES, 'UTF-8');
             $jumlah_scan = (int)$petugas['jumlah_scan'];
-            $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*\n";
+            $pesan .= $no_petugas . ". *" . escapeMarkdown($nama_u) . "*";
             $pesan .= "   📝 Scan: " . $jumlah_scan . " kali\n\n";
             $no_petugas++;
         }

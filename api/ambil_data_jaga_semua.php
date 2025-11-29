@@ -50,8 +50,7 @@ try {
     // Susun pesan
     $text = "⏰ *JADWAL JAGA*\n";
     $text .= "━━━━━━━━━━━━━━━━━━━━\n";
-    $text .= "📅 *Hari: " . escapeMarkdown($hariInd) . "*\n";
-    $text .= "📆 Tanggal: " . escapeMarkdown($tanggal . " " . $bulanInd . " " . $tahun) . "\n\n";
+    $text .= "📅 *Hari: " . escapeMarkdown($hariInd) . "*\n\n";
     
     if ($users && count($users) > 0) {
         $text .= "👥 *Daftar Petugas Jaga:*\n\n";
