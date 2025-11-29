@@ -1,13 +1,13 @@
 <?php
 include 'get_konfigurasi.php';
 
-// Ambil konfigurasi dari database
+// Ambil konfigurasi
 $gatewayBase = get_konfigurasi('url_group');
-$sessionId   = get_konfigurasi('session_id');
-$groupId     = get_konfigurasi('group_id2');
-$filePesan   = get_konfigurasi('report3');
+$sessionId = get_konfigurasi('session_id');
+$groupId = get_konfigurasi('group_id2');
+$filePesan = get_konfigurasi('report3');
 
-// Jika dipanggil tanpa parameter send, output pesan
+// Jika tanpa parameter send, output pesan
 if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli') {
     if (!empty($filePesan) && file_exists($filePesan)) {
         include $filePesan;
@@ -17,28 +17,28 @@ if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli'
     exit;
 }
 
-// Validasi token bot
-if (empty($sessionId)) {
-    error_log('auto_send_test.php: Telegram token tidak ditemukan');
+// Validasi
+if (empty($sessionId) || empty($groupId)) {
     exit;
 }
 
-// Validasi group ID
-if (empty($groupId)) {
-    error_log('auto_send_test.php: Group ID tidak ditemukan');
-    exit;
-}
-
-// Ambil pesan dari file
-$pesangroup = '';
+// Ambil pesan
+$text = '';
 if (!empty($filePesan) && file_exists($filePesan)) {
     include $filePesan;
-    $pesangroup = isset($pesan) ? trim((string)$pesan) : '';
+    $text = isset($pesan) ? trim((string)$pesan) : '';
 }
 
-// Validasi pesan
-if ($pesangroup === '') {
-    error_log('auto_send_test.php: Pesan kosong');
+if (empty($text)) {
+    exit;
+}
+
+// Normalisasi chat_id (sama seperti telebot dashboard)
+$chatId = trim((string)$groupId);
+$chatId = str_replace('@g.us', '', $chatId);
+$chatId = trim($chatId);
+
+if (empty($chatId)) {
     exit;
 }
 
@@ -46,76 +46,41 @@ if ($pesangroup === '') {
 $telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
 $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
-// Normalisasi chat_id (sama seperti telebot dashboard)
-$chatId = trim((string)$groupId);
-$chatId = str_replace('@g.us', '', $chatId);
-$chatId = trim($chatId);
-
-if ($chatId === '') {
-    exit;
-}
-
-// Payload untuk Telegram Bot API (sama persis dengan send_wa_group.php)
+// Payload sederhana (sama seperti telebot dashboard)
 $payload = [
     'chat_id' => $chatId,
-    'text'    => $pesangroup,
-    'parse_mode' => 'HTML', // opsional: bisa diganti 'Markdown' atau dihapus
+    'text' => $text
 ];
 
-$headers = [
-    'Content-Type: application/json',
-];
-
-// Kirim ke Telegram (sama persis dengan send_wa_group.php)
+// Kirim ke Telegram
 $ch = curl_init($apiUrl);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // verifikasi SSL untuk keamanan
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 
-$response = curl_exec($ch);
+$result = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log hasil
-$status = ($httpCode === 200) ? 'SUKSES' : 'GAGAL';
-if ($status === 'SUKSES') {
-    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId);
+// Log sederhana
+if ($httpCode == 200) {
+    error_log('auto_send_test.php: OK - ' . $chatId);
 } else {
-    error_log('auto_send_test.php: Gagal mengirim pesan Telegram ke chat_id: ' . $chatId . ', HTTP Code: ' . $httpCode . ', Response: ' . $response . ', Error: ' . $curlError);
+    $error = json_decode($result, true);
+    error_log('auto_send_test.php: FAIL - ' . $httpCode . ' - ' . $chatId . ' - ' . (isset($error['description']) ? $error['description'] : $curlError));
 }
 
-// Simpan log ke file
-$logAll = '[' . date('Y-m-d H:i:s') . "] Group: $chatId | Pesan: $pesangroup | Status: $status ($httpCode)\n";
-file_put_contents(__DIR__ . '/log-kirim-telegram.txt', $logAll, FILE_APPEND);
-
-// Output JSON jika via HTTP dengan parameter send
+// Output JSON jika via HTTP
 if (isset($_GET['send']) || isset($_POST['send'])) {
     header('Content-Type: application/json; charset=utf-8');
-    $errorData = json_decode($response, true);
-    $errorMsg = null;
-    if ($httpCode !== 200) {
-        if ($curlError) {
-            $errorMsg = 'cURL Error: ' . $curlError;
-        } elseif ($errorData && isset($errorData['description'])) {
-            $errorMsg = $errorData['description'];
-        } else {
-            $errorMsg = 'Unknown error (HTTP ' . $httpCode . ')';
-        }
-    }
+    $errorData = json_decode($result, true);
     echo json_encode([
-        'success' => $httpCode === 200,
-        'http_code' => $httpCode,
-        'chat_id' => $chatId,
-        'api_url' => $telegramApiBase . '/bot[TOKEN]/sendMessage',
-        'message_length' => strlen($pesangroup),
-        'status' => $status,
-        'error' => $errorMsg,
-        'response' => $errorData,
-        'raw_response' => $response
-    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        'ok' => $httpCode == 200,
+        'chatId' => $chatId,
+        'text' => substr($text, 0, 50) . '...',
+        'error' => $httpCode != 200 ? (isset($errorData['description']) ? $errorData['description'] : ($curlError ?: 'Unknown')) : null
+    ], JSON_UNESCAPED_UNICODE);
 }
 ?>
