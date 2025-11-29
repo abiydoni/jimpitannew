@@ -61,8 +61,8 @@ try {
     // Fungsi helper untuk escape markdown Telegram
     function escapeMarkdown($text) {
         // Escape karakter khusus markdown yang tidak ingin di-format
-        // Tapi jangan escape titik (.) karena digunakan untuk format angka
-        $chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '=', '|', '{', '}', '!'];
+        // Jangan escape: titik (.), tanda kurung () karena digunakan untuk format normal
+        $chars = ['_', '*', '[', ']', '~', '`', '>', '#', '+', '=', '|', '{', '}', '!'];
         foreach ($chars as $char) {
             $text = str_replace($char, '\\' . $char, $text);
         }
