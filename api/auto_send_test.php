@@ -73,6 +73,13 @@ if (empty($chatId)) {
 $telegramApiBase = !empty($gatewayBase) ? rtrim((string)$gatewayBase, '/') : 'https://api.telegram.org';
 $apiUrl = $telegramApiBase . '/bot' . $sessionId . '/sendMessage';
 
+// Log untuk debugging (hanya untuk CLI)
+if ($isCli) {
+    error_log('auto_send_test.php: Config - sessionId: ' . substr($sessionId, 0, 10) . '..., groupId: ' . $groupId . ', filePesan: ' . $filePesan);
+    error_log('auto_send_test.php: Chat ID: ' . $chatId . ', Message length: ' . strlen($text));
+    error_log('auto_send_test.php: API URL: ' . $telegramApiBase . '/bot[TOKEN]/sendMessage');
+}
+
 // Payload sederhana (sama seperti telebot dashboard)
 $payload = [
     'chat_id' => $chatId,
@@ -82,18 +89,20 @@ $payload = [
 // Kirim ke Telegram
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 $result = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Log hasil
+// Log hasil dengan detail lengkap
 if ($httpCode == 200) {
-    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId);
+    error_log('auto_send_test.php: SUCCESS - Chat ID: ' . $chatId . ' | Message length: ' . strlen($text));
     if ($isCli) {
         exit(0); // Success exit code
     }
@@ -101,6 +110,14 @@ if ($httpCode == 200) {
     $error = json_decode($result, true);
     $errorMsg = isset($error['description']) ? $error['description'] : ($curlError ?: 'Unknown error');
     error_log('auto_send_test.php: FAILED - HTTP: ' . $httpCode . ', Chat ID: ' . $chatId . ', Error: ' . $errorMsg);
+    if ($result) {
+        error_log('auto_send_test.php: Response: ' . $result);
+    }
+    if ($curlError) {
+        error_log('auto_send_test.php: cURL Error: ' . $curlError);
+    }
+    error_log('auto_send_test.php: API URL: ' . $telegramApiBase . '/bot[TOKEN]/sendMessage');
+    error_log('auto_send_test.php: Payload: ' . json_encode($payload, JSON_UNESCAPED_UNICODE));
     if ($isCli) {
         exit(1); // Error exit code
     }
