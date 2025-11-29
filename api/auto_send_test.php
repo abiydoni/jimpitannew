@@ -4,7 +4,7 @@ include 'get_konfigurasi.php';
 // Ambil konfigurasi
 $sessionId = get_konfigurasi('session_id');
 $groupId = get_konfigurasi('group_id2');
-$filePesan = get_konfigurasi('report3');
+$filePesan = get_konfigurasi('report4');
 
 // Jika tanpa parameter send, output pesan
 if (!isset($_GET['send']) && !isset($_POST['send']) && php_sapi_name() !== 'cli') {
