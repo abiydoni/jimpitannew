@@ -1,8 +1,21 @@
 <?php
-// Hardcode untuk testing
-$token = '8582107388:AAHQtI53tspPtZZvj_eHRPKxox8QYqKEl5Y';
-$chatId = 8532362380;
-$message = "🧪 appsbee Test Message\n\n" . date('Y-m-d H:i:s');
+// Ambil konfigurasi dari database
+include __DIR__ . '/get_konfigurasi.php';
+
+$token = get_konfigurasi('session_id');
+$chatId = get_konfigurasi('group_id2');
+$filePesan = get_konfigurasi('report3');
+
+// Ambil pesan dari file
+$message = '';
+if (!empty($filePesan) && file_exists($filePesan)) {
+    include $filePesan;
+    $message = isset($pesan) ? $pesan : '';
+}
+
+// Normalisasi chat_id
+$chatId = trim((string)$chatId);
+$chatId = is_numeric($chatId) ? (int)$chatId : $chatId;
 
 // Kirim ke Telegram
 $url = "https://api.telegram.org/bot{$token}/sendMessage";
