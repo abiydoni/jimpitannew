@@ -61,33 +61,40 @@ curl_close($ch);
 
 // Output hasil
 echo "=== Hasil Pengiriman ===\n";
-echo "URL: $gatewayUrl\n";
+echo "Group ID: $groupId\n";
+echo "URL Gateway: $gatewayUrl\n";
 echo "HTTP Code: $httpCode\n";
 
 if ($httpCode == 0) {
     echo "❌ ERROR: Tidak bisa connect ke wagateway!\n";
     echo "CURL Error: " . ($curlError ?: 'Connection failed') . "\n";
     echo "CURL Errno: $curlErrno\n";
-    echo "\nKemungkinan penyebab:\n";
-    echo "1. Wagateway belum running (jalankan: npm start di folder WAGATEWAY)\n";
-    echo "2. URL salah (cek: $gatewayBase)\n";
-    echo "3. Port berbeda (default: 8000)\n";
-    echo "4. PHP CURL tidak bisa akses localhost (coba jalankan test_curl.php untuk diagnosa)\n";
-    echo "5. Firewall/antivirus memblokir koneksi PHP\n";
-} else {
-    echo "Response: $result\n";
-    
-    if ($httpCode == 200) {
-        $response = json_decode($result, true);
-        if (isset($response['status']) && $response['status']) {
-            echo "✅ SUCCESS: Pesan berhasil dikirim!\n";
-        } else {
-            echo "⚠️  WARNING: HTTP 200 tapi status false\n";
-        }
+} elseif ($httpCode == 404) {
+    echo "❌ ERROR: Endpoint tidak ditemukan (404)!\n";
+    echo "URL yang digunakan: $gatewayUrl\n";
+    echo "\nKemungkinan masalah:\n";
+    echo "1. URL di database salah atau endpoint tidak ada\n";
+    echo "2. Wagateway tidak running di server tersebut\n";
+    echo "3. Path endpoint berbeda (cek dokumentasi wagateway)\n";
+    echo "\nCoba cek:\n";
+    echo "- Base URL di database: " . get_konfigurasi('url_group') . "\n";
+    echo "- Pastikan wagateway running dan bisa diakses\n";
+} elseif ($httpCode == 200) {
+    $response = json_decode($result, true);
+    if (isset($response['status']) && $response['status']) {
+        echo "✅ SUCCESS: Pesan berhasil dikirim ke WhatsApp!\n";
     } else {
-        $response = json_decode($result, true);
-        $errorMsg = isset($response['message']) ? $response['message'] : 'Unknown error';
+        echo "⚠️  WARNING: HTTP 200 tapi status false\n";
+        echo "Response: " . substr($result, 0, 500) . "\n";
+    }
+} else {
+    $response = json_decode($result, true);
+    if ($response && isset($response['message'])) {
+        $errorMsg = is_array($response['message']) ? json_encode($response['message']) : $response['message'];
         echo "❌ ERROR: $errorMsg\n";
+    } else {
+        echo "❌ ERROR: HTTP $httpCode\n";
+        echo "Response: " . substr($result, 0, 500) . "\n";
     }
 }
 ?>
