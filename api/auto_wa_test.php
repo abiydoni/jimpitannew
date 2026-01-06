@@ -2,9 +2,9 @@
 // Ambil konfigurasi dari database
 include 'get_konfigurasi.php';
 
-$groupId = get_konfigurasi('group_id2');
-$gatewayBase = get_konfigurasi('url_group');
-$filePesan = get_konfigurasi('report3');
+$groupId = get_konfigurasi('group_id2'); //120363398680818900@g.us
+$gatewayBase = get_konfigurasi('url_group'); //http://localhost:8000/send-group-message
+$filePesan = get_konfigurasi('report3'); //ambil_data_ultah.php
 
 // Ambil pesan dari file jika ada
 $message = '';
