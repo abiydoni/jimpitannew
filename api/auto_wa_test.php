@@ -34,11 +34,23 @@ if (empty($groupId)) {
     exit;
 }
 
+// Validasi URL gateway tidak kosong
+if (empty($gatewayBase)) {
+    error_log("auto_wa_test.php: URL gateway kosong, tidak dapat mengirim pesan");
+    exit;
+}
+
 // Normalisasi group ID
 $groupId = trim((string)$groupId);
 
-// URL WAGateway API (sudah lengkap dari database)
-$url = rtrim((string)$gatewayBase, '/');
+// URL WAGateway API
+// Jika URL belum mengandung endpoint, tambahkan /send-group-message
+$gatewayBase = rtrim((string)$gatewayBase, '/');
+if (strpos($gatewayBase, '/send-group-message') === false) {
+    $url = $gatewayBase . '/send-group-message';
+} else {
+    $url = $gatewayBase;
+}
 
 // Siapkan data untuk WAGateway
 // WAGateway menerima 'id' (group ID) atau 'name' (nama group)
@@ -46,6 +58,9 @@ $data = [
     'id' => $groupId,
     'message' => $message
 ];
+
+// Log data yang akan dikirim (untuk debugging)
+error_log("auto_wa_test.php: Mengirim ke URL: $url, Group ID: $groupId, Message length: " . strlen($message));
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -62,6 +77,9 @@ curl_close($ch);
 // Parse response
 $response = json_decode($result, true);
 
+// Log detail untuk debugging
+error_log("auto_wa_test.php: URL: $url, HTTP Code: $httpCode, Response: " . substr($result, 0, 500));
+
 // Log error jika gagal
 if ($httpCode != 200) {
     $errorMsg = 'Unknown error';
@@ -72,11 +90,13 @@ if ($httpCode != 200) {
     } elseif ($result) {
         $errorMsg = $result;
     }
-    error_log("auto_wa_test.php: Gagal kirim. HTTP: $httpCode, Error: $errorMsg, Group ID: $groupId");
+    error_log("auto_wa_test.php: Gagal kirim. HTTP: $httpCode, Error: $errorMsg, Group ID: $groupId, URL: $url");
 } else {
-    // Log sukses jika diperlukan
+    // Log sukses
     if ($response && isset($response['status']) && $response['status']) {
         error_log("auto_wa_test.php: Pesan berhasil dikirim ke group ID: $groupId");
+    } else {
+        error_log("auto_wa_test.php: HTTP 200 tapi status false. Response: " . json_encode($response));
     }
 }
 ?>
