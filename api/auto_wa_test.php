@@ -37,8 +37,8 @@ if (empty($groupId)) {
 // Normalisasi group ID
 $groupId = trim((string)$groupId);
 
-// Bangun URL WAGateway API
-$url = rtrim((string)$gatewayBase, '/') . '/send-group-message';
+// URL WAGateway API (sudah lengkap dari database)
+$url = rtrim((string)$gatewayBase, '/');
 
 // Siapkan data untuk WAGateway
 // WAGateway menerima 'id' (group ID) atau 'name' (nama group)
