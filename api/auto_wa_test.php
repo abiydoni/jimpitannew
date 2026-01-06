@@ -1,13 +1,43 @@
 <?php
-// Konfigurasi - GANTI dengan nilai Anda
-$groupId = '120363123456789012@g.us'; // Group ID WhatsApp
-$gatewayBase = 'http://127.0.0.1:8000'; // URL wagateway (gunakan 127.0.0.1 jika localhost tidak work)
-$message = 'Test pesan - ' . date('Y-m-d H:i:s');
+// Ambil konfigurasi dari database
+include 'get_konfigurasi.php';
 
-// Langsung kirim pesan (endpoint akan return error jika belum ready)
+$groupId = get_konfigurasi('group_id2');
+$gatewayBase = get_konfigurasi('url_group');
+$filePesan = get_konfigurasi('report3');
 
-// 3. Kirim pesan jika sudah ready
-$gatewayUrl = rtrim($gatewayBase, '/') . '/send-group-message';
+// Ambil pesan dari file jika ada
+$message = '';
+if (!empty($filePesan)) {
+    if (!file_exists($filePesan)) {
+        $filePesan = __DIR__ . '/' . $filePesan;
+    }
+    if (file_exists($filePesan)) {
+        include $filePesan;
+        $message = isset($pesan) ? trim((string)$pesan) : '';
+    }
+}
+
+// Jika pesan kosong, gunakan pesan default
+if (empty($message)) {
+    $message = 'Test pesan - ' . date('Y-m-d H:i:s');
+}
+
+// Validasi
+if (empty($groupId)) {
+    die("ERROR: Group ID kosong!\n");
+}
+if (empty($gatewayBase)) {
+    die("ERROR: URL gateway kosong!\n");
+}
+
+// Bangun URL - jika sudah ada endpoint, jangan tambahkan lagi
+$gatewayBase = rtrim($gatewayBase, '/');
+if (strpos($gatewayBase, '/send-group-message') === false) {
+    $gatewayUrl = $gatewayBase . '/send-group-message';
+} else {
+    $gatewayUrl = $gatewayBase;
+}
 $data = [
     'id' => $groupId,
     'message' => $message
@@ -20,11 +50,13 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); // Force IPv4
+// Jangan force IPv4, biarkan CURL pilih sendiri
+// curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
 $result = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
+$curlErrno = curl_errno($ch);
 curl_close($ch);
 
 // Output hasil
@@ -35,11 +67,13 @@ echo "HTTP Code: $httpCode\n";
 if ($httpCode == 0) {
     echo "❌ ERROR: Tidak bisa connect ke wagateway!\n";
     echo "CURL Error: " . ($curlError ?: 'Connection failed') . "\n";
+    echo "CURL Errno: $curlErrno\n";
     echo "\nKemungkinan penyebab:\n";
     echo "1. Wagateway belum running (jalankan: npm start di folder WAGATEWAY)\n";
     echo "2. URL salah (cek: $gatewayBase)\n";
     echo "3. Port berbeda (default: 8000)\n";
-    echo "4. Firewall memblokir koneksi\n";
+    echo "4. PHP CURL tidak bisa akses localhost (coba jalankan test_curl.php untuk diagnosa)\n";
+    echo "5. Firewall/antivirus memblokir koneksi PHP\n";
 } else {
     echo "Response: $result\n";
     
